@@ -1,10 +1,11 @@
 {
   "name": "paw-project-jadwalin",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "AI Powered Smart Course Scheduling - PAW Project TI UMY",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,17 @@
   "bugs": {
     "url": "https://github.com/nurrizqifp/PAW-Project-Jadwalin/issues"
   },
-  "homepage": "https://github.com/nurrizqifp/PAW-Project-Jadwalin#readme"
+  "homepage": "https://github.com/nurrizqifp/PAW-Project-Jadwalin#readme",
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "ejs": "^7.0.2",
+    "express": "^5.3.0",
+    "pg": "^8.23.1",
+    "sequelize": "^6.37.8",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "sequelize-cli": "^6.6.5"
+  }
 }

@@ -1,0 +1,554 @@
+<%- include('partials/head', { judul: judul }) %>
+<%- include('partials/navbar') %>
+
+<main class="flex-grow">
+  <!-- Hero Section -->
+  <section id="beranda" class="relative overflow-hidden bg-gradient-to-b from-brand-50/60 via-white to-slate-50 pt-16 pb-20 border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-100/80 text-brand-700 text-xs font-semibold mb-6 shadow-sm border border-brand-200">
+          <span class="flex h-2 w-2 rounded-full bg-brand-600 animate-ping"></span>
+          <span>Sistem Penjadwalan Kuliah Berbasis AI & MVC Express</span>
+        </div>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
+          Susun Jadwal Kuliah Cepat, <span class="bg-gradient-to-r from-brand-600 to-accent-500 bg-clip-text text-transparent">Nol Bentrok</span> dengan AI.
+        </h1>
+        <p class="mt-6 text-lg text-slate-600 leading-relaxed">
+          Mengubah proses penyusunan jadwal manual prodi Teknologi Informasi UMY dari 5–7 hari kerja menjadi <strong>kurang dari 15 menit</strong> dengan kepastian 100% praktikum di laboratorium yang sesuai.
+        </p>
+
+        <!-- CTA Action Buttons -->
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <a href="#produk" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5">
+            Jelajahi Modul & Produk Backend
+          </a>
+          <a href="#demo" class="px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm border border-slate-300 shadow-sm transition-all">
+            Lihat Demo Wireframe & Jadwal
+          </a>
+        </div>
+
+        <!-- Target Metrik PRD -->
+        <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
+          <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+            <span class="text-xs text-slate-500 font-medium">Target Waktu (M-01)</span>
+            <p class="text-2xl font-bold text-brand-600">&lt; 15 Menit</p>
+            <p class="text-[11px] text-slate-400">Dari 5-7 hari manual</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+            <span class="text-xs text-slate-500 font-medium">Beban Konflik (M-02)</span>
+            <p class="text-2xl font-bold text-emerald-600">0 Bentrok</p>
+            <p class="text-[11px] text-slate-400">Dosen & ruang terisolasi</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+            <span class="text-xs text-slate-500 font-medium">Matching Lab (M-03)</span>
+            <p class="text-2xl font-bold text-indigo-600">100%</p>
+            <p class="text-[11px] text-slate-400">Praktikum masuk lab</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
+            <span class="text-xs text-slate-500 font-medium">Kepuasan Dosen (M-04)</span>
+            <p class="text-2xl font-bold text-amber-600">&ge; 85%</p>
+            <p class="text-[11px] text-slate-400">Preferensi waktu terpenuhi</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Server Monitor Widget -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
+    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <span class="flex h-3 w-3 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+        </span>
+        <div>
+          <h2 class="text-sm font-bold text-slate-800">Status Server & Middleware Logger</h2>
+          <p class="text-xs text-slate-500">
+            Setiap request HTTP tercatat otomatis di <code class="font-mono bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded">logs/logger.md</code>
+          </p>
+        </div>
+      </div>
+
+      <div id="server-status-pill" class="flex items-center space-x-4 text-xs font-mono bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
+        <span class="text-slate-500">Uptime: <span id="uptime-text" class="text-slate-800 font-semibold">Memuat...</span></span>
+        <span class="text-slate-300">|</span>
+        <span class="text-slate-500">Waktu: <span id="server-time" class="text-slate-800 font-semibold"><%= currentDate %></span></span>
+        <button onclick="checkServerStatus()" class="ml-2 text-xs text-brand-600 hover:text-brand-800 font-semibold underline">
+          Refresh
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 1: Produk & Modul (Data berasal dari Model Backend) -->
+  <section id="produk" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+      <div>
+        <span class="text-xs uppercase tracking-wider font-bold text-brand-600">Model Data Backend</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Daftar Modul & Layanan Produk Jadwalin</h2>
+        <p class="text-slate-600 text-sm mt-2 max-w-xl">
+          Data berikut dikelola secara terstruktur melalui <code class="font-mono bg-slate-100 text-brand-700 px-1.5 py-0.5 rounded">models/produkModel.js</code> dan dirender langsung oleh controller melalui template engine EJS.
+        </p>
+      </div>
+      <div class="mt-4 md:mt-0 flex items-center gap-2">
+        <a href="/api/produk" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 shadow transition-colors">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+          </svg>
+          Buka JSON /api/produk
+        </a>
+      </div>
+    </div>
+
+    <!-- Grid Produk EJS Loop -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% if (produk && produk.length > 0) { %>
+        <% produk.forEach(function(item) { %>
+          <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group hover:border-brand-300">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2.5 py-1 text-[11px] font-semibold rounded-md bg-brand-50 text-brand-700 border border-brand-100">
+                  <%= item.kategori %>
+                </span>
+                <% if (item.badge) { %>
+                  <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                    <%= item.badge %>
+                  </span>
+                <% } %>
+              </div>
+
+              <h3 class="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
+                <%= item.nama %>
+              </h3>
+
+              <p class="mt-2.5 text-xs text-slate-600 leading-relaxed">
+                <%= item.deskripsi %>
+              </p>
+
+              <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 space-y-1.5">
+                <div class="flex items-center justify-between">
+                  <span>Kapasitas / Stok:</span>
+                  <span class="font-semibold text-slate-700"><%= item.stok %> Unit</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span>Fitur:</span>
+                  <span class="font-medium text-slate-600 text-right truncate max-w-[180px]" title="<%= item.fiturUtama %>">
+                    <%= item.fiturUtama %>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+              <div>
+                <span class="text-[10px] text-slate-400 block font-medium uppercase">Estimasi Nilai</span>
+                <span class="text-base font-extrabold text-slate-900">
+                  <%= formatRupiah(item.harga) %>
+                </span>
+              </div>
+              <button onclick="previewProdukDetail(<%= JSON.stringify(item) %>)" class="px-3.5 py-1.5 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 text-xs font-semibold transition-colors">
+                Detail
+              </button>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="col-span-full py-12 text-center text-slate-400">
+          Belum ada produk yang tersedia di model.
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- Section 2: Demo Wireframe & Interactive Scheduling Preview -->
+  <section id="demo" class="bg-slate-100/70 py-16 border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs uppercase tracking-wider font-bold text-brand-600">Representasi UI PRD & Wireframe</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Interaktif Wireframe Jadwalin</h2>
+        <p class="text-slate-600 text-sm mt-2">
+          Sesuai sketsa dan wireframe pada dokumen PRD (<code class="font-mono text-xs text-brand-700">docs/images/</code>): Card Jadwal Aktif, Countdown waktu tersisa, dan Onboarding Mahasiswa.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <!-- Wireframe 1: Tampilan Card Kuliah Hari Ini (Wireframe WhatsApp Image at 13.53.02 & 13.53.14) -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-300/80 shadow-md">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+            <div>
+              <h3 class="text-xl font-bold text-slate-900">Selamat Pagi, Andi Pratama!</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Jadwal kamu saat ini. [Affirmative text by AI: <em>"Semangat kuliahnya!"</em>]</p>
+            </div>
+            <span class="px-2.5 py-1 text-[10px] font-semibold bg-emerald-100 text-emerald-800 rounded-lg">Terpublikasi</span>
+          </div>
+
+          <!-- Active Class Card -->
+          <div class="rounded-2xl border-2 border-brand-500 bg-brand-50/40 p-5 mb-5 relative overflow-hidden shadow-sm">
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-2xl font-black text-slate-900 tracking-tight font-mono">08:50 – 11:30</span>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-600 text-white font-mono animate-pulse">
+                42:15 left
+              </span>
+            </div>
+            <h4 class="text-lg font-extrabold text-slate-900 mb-3">Pengembangan Aplikasi Web</h4>
+            <div class="flex flex-wrap items-center gap-3 text-sm">
+              <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-slate-300 font-bold text-slate-800">
+                B
+              </span>
+              <span class="font-semibold text-slate-800 bg-white/80 px-2.5 py-1 rounded-md border border-slate-200">
+                Ruang: F6.003
+              </span>
+              <span class="text-slate-600 text-xs sm:text-sm">
+                Ir. Asroni, S.T., M.Eng.
+              </span>
+            </div>
+          </div>
+
+          <!-- Upcoming Classes (Wireframe 13.53.14) -->
+          <div class="space-y-3">
+            <div class="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+              <span>Jadwal Berikutnya Hari Ini</span>
+              <span>3 Mata Kuliah Total</span>
+            </div>
+
+            <% jadwal.slice(1, 3).forEach(function(item) { %>
+              <div class="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-colors flex items-center justify-between">
+                <div>
+                  <div class="flex items-center space-x-2">
+                    <span class="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
+                      <%= item.jamMulai %> – <%= item.jamSelesai %>
+                    </span>
+                    <span class="text-xs font-semibold text-brand-600">Kelas <%= item.kelas %></span>
+                  </div>
+                  <h5 class="text-sm font-bold text-slate-800 mt-1"><%= item.mataKuliah %></h5>
+                  <p class="text-xs text-slate-500"><%= item.dosen %> • <%= item.ruang %></p>
+                </div>
+                <span class="text-xs font-medium text-slate-400 px-2.5 py-1 rounded bg-slate-50 border border-slate-100">
+                  <%= item.jenis %>
+                </span>
+              </div>
+            <% }); %>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-200 flex justify-between items-center">
+            <button onclick="toggleModal('modal-jadwal-lengkap')" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-colors shadow">
+              Buka Jadwal Lengkap Semester
+            </button>
+          </div>
+        </div>
+
+        <!-- Wireframe 2: Onboarding Flow Simulation (Wireframe WhatsApp Image at 13.52.50) -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-300/80 shadow-md">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
+            <div>
+              <h3 class="text-xl font-bold text-slate-900">Simulasi Onboarding Mahasiswa</h3>
+              <p class="text-xs text-slate-500 mt-0.5">Aturan validasi input sesuai wireframe dokumen</p>
+            </div>
+            <span class="px-2.5 py-1 text-[10px] font-semibold bg-brand-100 text-brand-800 rounded-lg">Step-by-Step</span>
+          </div>
+
+          <form id="onboardingForm" onsubmit="handleOnboardingSubmit(event)" class="space-y-4 text-xs">
+            <!-- 1. Semester Picker -->
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">
+                1. Semester saat ini? <span class="text-slate-400 font-normal">(Integer 1–12, tanpa dropdown)</span>
+              </label>
+              <div class="flex items-center space-x-2">
+                <button type="button" onclick="adjustSemester(-1)" class="w-9 h-9 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-sm text-slate-700">-</button>
+                <input id="input-semester" type="number" min="1" max="12" value="4" required class="w-20 text-center font-bold text-sm py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                <button type="button" onclick="adjustSemester(1)" class="w-9 h-9 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-sm text-slate-700">+</button>
+                <span class="text-slate-500 text-[11px] ml-2">Validasi: Hanya angka 1 s.d. 12</span>
+              </div>
+            </div>
+
+            <!-- 2. Angkatan Year Picker -->
+            <div>
+              <label class="block font-semibold text-slate-700 mb-1">
+                2. Angkatan berapa? <span class="text-slate-400 font-normal">(Year Picker)</span>
+              </label>
+              <input id="input-angkatan" type="number" min="2018" max="2026" value="2024" class="w-36 font-semibold py-2 px-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none" oninput="updateNimPreview()">
+            </div>
+
+            <!-- 3. Nama & NIM -->
+            <div class="space-y-2">
+              <label class="block font-semibold text-slate-700">
+                3. Nama & NIM Mahasiswa
+              </label>
+              <input id="input-nama" type="text" placeholder="NAMA LENGKAP" required class="w-full uppercase font-medium py-2 px-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none" oninput="this.value = this.value.toUpperCase()">
+              <p class="text-[10px] text-slate-400">Aturan: Otomatis huruf kapital, minimal 3 karakter.</p>
+
+              <div class="flex items-center space-x-2">
+                <span id="nim-prefix" class="font-mono bg-slate-100 px-3 py-2 rounded-lg border border-slate-300 text-slate-600 font-bold">20240140</span>
+                <input id="input-nim-suffix" type="text" maxlength="3" placeholder="093" value="093" required class="w-20 font-mono font-bold py-2 px-3 text-center rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none" oninput="this.value = this.value.replace(/[^0-9]/g, ''); updateNimPreview()">
+              </div>
+              <p class="text-[10px] text-slate-400">Aturan: Hanya input 3 digit belakang NIM. Prefix otomatis: [angkatan]0140[3NIM].</p>
+            </div>
+
+            <!-- 4. Pra-KRS Mock -->
+            <div class="pt-2">
+              <label class="block font-semibold text-slate-700 mb-1">
+                4. Pra-KRS Semester Ini (AI Auto-Mapping Grid)
+              </label>
+              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5 text-[11px]">
+                <div class="flex justify-between font-semibold text-slate-700 pb-1 border-b border-slate-200">
+                  <span>Mata Kuliah Terpilih</span>
+                  <span>Saran AI</span>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                  <span>Pengembangan Aplikasi Web</span>
+                  <span class="text-brand-600 font-semibold">Kelas B (F6.003)</span>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                  <span>Pengembangan Web Service</span>
+                  <span class="text-brand-600 font-semibold">Kelas A (F6.003)</span>
+                </div>
+                <div class="flex justify-between text-slate-600">
+                  <span>WAN dan Teknologi Jaringan</span>
+                  <span class="text-brand-600 font-semibold">Kelas C (Lab F6.004)</span>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-colors mt-2">
+              Simpan & Uji Validasi Onboarding
+            </button>
+            <div id="onboarding-feedback" class="hidden p-3 rounded-lg text-xs"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: Dokumentasi API & Console Uji Langsung -->
+  <section id="api" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="max-w-3xl mb-10">
+      <span class="text-xs uppercase tracking-wider font-bold text-brand-600">Dokumentasi & Uji Coba API</span>
+      <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Endpoint REST API Jadwalin</h2>
+      <p class="text-slate-600 text-sm mt-2">
+        Sesuai checklist tugas: Endpoint <code class="font-mono bg-slate-100 text-brand-600 px-1 rounded">/api/status</code> dan <code class="font-mono bg-slate-100 text-brand-600 px-1 rounded">/api/produk</code> siap diakses dengan response JSON berstruktur baku.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Card Endpoint 1: /api/status -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="flex items-center space-x-2 mb-3">
+            <span class="px-2.5 py-1 text-xs font-mono font-bold bg-emerald-100 text-emerald-800 rounded">GET</span>
+            <span class="font-mono font-bold text-sm text-slate-800">/api/status</span>
+          </div>
+          <p class="text-xs text-slate-600 mb-4">
+            Mengembalikan status operasional server, nama aplikasi, uptime dalam detik, dan waktu server saat ini.
+          </p>
+          <div class="bg-slate-900 rounded-xl p-4 text-emerald-400 font-mono text-xs overflow-x-auto max-h-48" id="json-status">
+            // Klik tombol di bawah untuk fetch live response
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+          <button onclick="fetchApi('/api/status', 'json-status')" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs transition-colors">
+            Tes /api/status
+          </button>
+          <a href="/api/status" target="_blank" class="text-xs text-slate-500 hover:text-slate-800 underline">
+            Buka Tab Baru
+          </a>
+        </div>
+      </div>
+
+      <!-- Card Endpoint 2: /api/produk -->
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="flex items-center space-x-2 mb-3">
+            <span class="px-2.5 py-1 text-xs font-mono font-bold bg-brand-100 text-brand-800 rounded">GET</span>
+            <span class="font-mono font-bold text-sm text-slate-800">/api/produk</span>
+          </div>
+          <p class="text-xs text-slate-600 mb-4">
+            Mengembalikan data produk dan modul layanan penjadwalan dalam bentuk array JSON dari backend Model.
+          </p>
+          <div class="bg-slate-900 rounded-xl p-4 text-cyan-400 font-mono text-xs overflow-x-auto max-h-48" id="json-produk">
+            // Klik tombol di bawah untuk fetch live response
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+          <button onclick="fetchApi('/api/produk', 'json-produk')" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs transition-colors">
+            Tes /api/produk
+          </button>
+          <a href="/api/produk" target="_blank" class="text-xs text-slate-500 hover:text-slate-800 underline">
+            Buka Tab Baru
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Modal Detail Produk -->
+<div id="modal-detail" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 transform transition-all">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+      <h3 id="modal-title" class="text-lg font-bold text-slate-900"></h3>
+      <button onclick="toggleModal('modal-detail')" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+    </div>
+    <div class="py-4 space-y-3 text-xs text-slate-600">
+      <p id="modal-desc" class="text-sm leading-relaxed text-slate-700"></p>
+      <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+        <div class="flex justify-between">
+          <span class="font-medium text-slate-500">Kategori:</span>
+          <span id="modal-kategori" class="font-semibold text-slate-800"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-medium text-slate-500">Fitur Utama:</span>
+          <span id="modal-fitur" class="font-semibold text-slate-800 text-right"></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="font-medium text-slate-500">Estimasi Nilai:</span>
+          <span id="modal-harga" class="font-bold text-brand-600 text-sm"></span>
+        </div>
+      </div>
+    </div>
+    <div class="pt-2 flex justify-end">
+      <button onclick="toggleModal('modal-detail')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs rounded-lg">
+        Tutup
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Jadwal Lengkap -->
+<div id="modal-jadwal-lengkap" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 transform transition-all max-h-[85vh] overflow-y-auto">
+    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+      <div>
+        <h3 class="text-lg font-bold text-slate-900">Jadwal Kuliah Semester Ini (TI UMY)</h3>
+        <p class="text-xs text-slate-500">Data hasil penjadwalan bebas bentrok</p>
+      </div>
+      <button onclick="toggleModal('modal-jadwal-lengkap')" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+    </div>
+
+    <div class="py-4 space-y-3">
+      <% jadwal.forEach(function(item) { %>
+        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 rounded bg-brand-100 text-brand-800 font-mono text-xs font-bold"><%= item.hari %></span>
+              <span class="font-mono text-xs font-semibold text-slate-700"><%= item.jamMulai %> – <%= item.jamSelesai %></span>
+              <span class="text-xs font-bold text-brand-700">Kelas <%= item.kelas %></span>
+            </div>
+            <h4 class="text-sm font-bold text-slate-900 mt-1"><%= item.mataKuliah %></h4>
+            <p class="text-xs text-slate-500"><%= item.dosen %> • Ruang: <%= item.ruang %></p>
+          </div>
+          <span class="text-[11px] font-medium text-slate-600 px-2.5 py-1 rounded bg-white border border-slate-200 self-start sm:self-center">
+            <%= item.jenis %>
+          </span>
+        </div>
+      <% }); %>
+    </div>
+
+    <div class="pt-3 border-t border-slate-100 flex justify-end">
+      <button onclick="toggleModal('modal-jadwal-lengkap')" class="px-4 py-2 bg-slate-900 text-white font-semibold text-xs rounded-lg">
+        Tutup
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Frontend Script Interactive -->
+<script>
+  // Cek Status Server saat load
+  async function checkServerStatus() {
+    const uptimeEl = document.getElementById('uptime-text');
+    try {
+      uptimeEl.innerText = 'Memeriksa...';
+      const res = await fetch('/api/status');
+      const data = await res.json();
+      uptimeEl.innerText = `${data.uptimeDetik} detik (${data.status.toUpperCase()})`;
+    } catch (e) {
+      uptimeEl.innerText = 'Offline';
+    }
+  }
+
+  // Fetch API Helper
+  async function fetchApi(url, targetId) {
+    const el = document.getElementById(targetId);
+    el.innerText = 'Mengambil data dari ' + url + '...';
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      el.innerText = JSON.stringify(data, null, 2);
+    } catch (err) {
+      el.innerText = 'Error: ' + err.message;
+    }
+  }
+
+  // Modal handler
+  function toggleModal(id) {
+    const m = document.getElementById(id);
+    m.classList.toggle('hidden');
+  }
+
+  function previewProdukDetail(p) {
+    document.getElementById('modal-title').innerText = p.nama;
+    document.getElementById('modal-desc').innerText = p.deskripsi;
+    document.getElementById('modal-kategori').innerText = p.kategori;
+    document.getElementById('modal-fitur').innerText = p.fiturUtama;
+    document.getElementById('modal-harga').innerText = 'Rp ' + Number(p.harga).toLocaleString('id-ID');
+    toggleModal('modal-detail');
+  }
+
+  // Onboarding Helpers
+  function adjustSemester(delta) {
+    const input = document.getElementById('input-semester');
+    let val = parseInt(input.value || 1, 10) + delta;
+    if (val < 1) val = 1;
+    if (val > 12) val = 12;
+    input.value = val;
+  }
+
+  function updateNimPreview() {
+    const angkatan = document.getElementById('input-angkatan').value || '2024';
+    document.getElementById('nim-prefix').innerText = angkatan + '0140';
+  }
+
+  function handleOnboardingSubmit(e) {
+    e.preventDefault();
+    const semester = parseInt(document.getElementById('input-semester').value, 10);
+    const nama = document.getElementById('input-nama').value.trim();
+    const suffix = document.getElementById('input-nim-suffix').value.trim();
+    const feedback = document.getElementById('onboarding-feedback');
+
+    if (semester < 1 || semester > 12 || isNaN(semester)) {
+      feedback.className = 'p-3 rounded-lg text-xs bg-red-100 text-red-700 border border-red-200';
+      feedback.innerText = 'Error: Semester hanya boleh bilangan bulat 1 sampai 12.';
+      feedback.classList.remove('hidden');
+      return;
+    }
+
+    if (nama.length < 3) {
+      feedback.className = 'p-3 rounded-lg text-xs bg-red-100 text-red-700 border border-red-200';
+      feedback.innerText = 'Error: Nama harus minimal 3 huruf.';
+      feedback.classList.remove('hidden');
+      return;
+    }
+
+    if (suffix.length !== 3) {
+      feedback.className = 'p-3 rounded-lg text-xs bg-red-100 text-red-700 border border-red-200';
+      feedback.innerText = 'Error: NIM harus terdiri dari 3 digit angka belakang.';
+      feedback.classList.remove('hidden');
+      return;
+    }
+
+    const angkatan = document.getElementById('input-angkatan').value;
+    const fullNim = `${angkatan}0140${suffix}`;
+
+    feedback.className = 'p-3 rounded-lg text-xs bg-emerald-100 text-emerald-800 border border-emerald-200';
+    feedback.innerText = `Validasi Sukses! Mahasiswa ${nama} (NIM: ${fullNim}) siap menggunakan sistem Jadwalin semester ${semester}.`;
+    feedback.classList.remove('hidden');
+  }
+
+  // Jalankan status saat halaman dibuka
+  document.addEventListener('DOMContentLoaded', () => {
+    checkServerStatus();
+  });
+</script>
+
+<%- include('partials/footer') %>
