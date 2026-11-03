@@ -45,9 +45,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
+    :root {
+      --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+      --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+      --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+    }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", sans-serif;
       letter-spacing: -0.011em;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
     }
     .no-scrollbar::-webkit-scrollbar {
       display: none;
@@ -55,6 +63,62 @@
     .no-scrollbar {
       -ms-overflow-style: none;
       scrollbar-width: none;
+    }
+    /* Pressable button feedback (140ms strong ease-out, GPU-only transform) */
+    .btn-press {
+      transition: transform 140ms var(--ease-out), background-color 150ms ease, color 150ms ease, opacity 150ms ease;
+    }
+    .btn-press:active {
+      transform: scale(0.97);
+    }
+    /* Hover states gated for pointer devices */
+    @media (hover: hover) and (pointer: fine) {
+      .hover-surface:hover {
+        background-color: #f4f4f5;
+      }
+    }
+    /* Modal Backdrop & Dialog (200ms strong ease-out, scale 0.96 -> 1) */
+    .modal-backdrop {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms var(--ease-out);
+    }
+    .modal-backdrop[data-open="true"] {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-panel {
+      opacity: 0;
+      transform: scale(0.96) translateY(4px);
+      transform-origin: center;
+      transition: transform 200ms var(--ease-out), opacity 200ms var(--ease-out);
+    }
+    .modal-backdrop[data-open="true"] .modal-panel {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    /* Interruptible Toast Notification */
+    .app-toast {
+      opacity: 0;
+      transform: translateY(12px) scale(0.97);
+      pointer-events: none;
+      transition: transform 220ms var(--ease-out), opacity 220ms var(--ease-out);
+    }
+    .app-toast[data-visible="true"] {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    /* Reduced Motion Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      .btn-press:active {
+        transform: none;
+      }
+      .modal-panel,
+      .app-toast {
+        transform: none !important;
+        transition: opacity 150ms ease !important;
+      }
     }
   </style>
 </head>

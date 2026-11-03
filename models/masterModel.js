@@ -1,88 +1,838 @@
 /**
- * Model Data Master Akademik (PRD F-01 & US-01)
- * Mengelola 20 Dosen, 45 Mata Kuliah, dan 8 Ruangan (Teori & Laboratorium).
+ * Model Data Master Akademik TI UMY
+ * Dataset Bersih: Kurikulum Semester 1-8, MK Pilihan Peminatan (PR, DA, NE, UX),
+ * MKWU (Mata Kuliah Wajib Universitas), Dosen Riil, dan Ruangan Gedung F4 & F6.
  */
 
 const daftarDosen = [
-  { id: 1, nidn: '0512017801', nama: 'Ir. Asroni, S.T., M.Eng.', keahlian: 'Rekayasa Web & Komputasi', bebanSks: 9 },
-  { id: 2, nidn: '0515088202', nama: 'Dr. Ir. Dwijoko Purbohadi, M.T.', keahlian: 'Arsitektur Perangkat Lunak', bebanSks: 8 },
-  { id: 3, nidn: '0520038503', nama: 'Ir. Eko Prasetyo, M.Eng., Ph.D.', keahlian: 'Jaringan Komputer & Cyber Security', bebanSks: 10 },
-  { id: 4, nidn: '0511048604', nama: 'Dr. Budi Santoso, S.Kom., M.Cs.', keahlian: 'Kecerdasan Buatan & Data Science', bebanSks: 8 },
-  { id: 5, nidn: '0502098805', nama: 'Rina Wulandari, S.T., M.Eng.', keahlian: 'Sistem Informasi Akademik', bebanSks: 6 },
-  { id: 6, nidn: '0514068906', nama: 'Hendra Setiawan, S.T., M.T.', keahlian: 'Pemrograman Bergerak', bebanSks: 9 },
-  { id: 7, nidn: '0525118707', nama: 'Siti Aminah, S.Kom., M.Kom.', keahlian: 'Basis Data Lanjut', bebanSks: 9 },
-  { id: 8, nidn: '0518048408', nama: 'Ahmad Fauzi, S.T., M.Eng.', keahlian: 'Cloud Computing & DevOps', bebanSks: 9 },
-  { id: 9, nidn: '0509078909', nama: 'Nurul Hidayah, S.Kom., M.T.', keahlian: 'UI/UX & Human Computer Interaction', bebanSks: 6 },
-  { id: 10, nidn: '0522039010', nama: 'Bambang Sudarsono, M.Kom.', keahlian: 'Sistem Operasi', bebanSks: 8 },
-  { id: 11, nidn: '0517059111', nama: 'Dian Permatasari, M.Cs.', keahlian: 'Machine Learning', bebanSks: 8 },
-  { id: 12, nidn: '0529088612', nama: 'Fajar Nugroho, S.T., M.Eng.', keahlian: 'Internet of Things', bebanSks: 9 },
-  { id: 13, nidn: '0506128513', nama: 'Ratna Dewi, S.Kom., M.T.', keahlian: 'Struktur Data & Algoritma', bebanSks: 9 },
-  { id: 14, nidn: '0519098914', nama: 'Yusuf Maulana, M.Eng.', keahlian: 'Kriptografi & Keamanan Informasi', bebanSks: 8 },
-  { id: 15, nidn: '0503028815', nama: 'Dewi Lestari, S.T., M.Cs.', keahlian: 'Pemrosesan Bahasa Alami', bebanSks: 8 },
-  { id: 16, nidn: '0528048716', nama: 'Agus Triyono, S.Kom., M.Kom.', keahlian: 'Etika Profesi & Manajemen Proyek', bebanSks: 6 },
-  { id: 17, nidn: '0516089017', nama: 'Mega Wulandari, S.T., M.Eng.', keahlian: 'Interaksi Komputer Manusia', bebanSks: 8 },
-  { id: 18, nidn: '0524058918', nama: 'Rizki Pratama, M.Kom.', keahlian: 'Jaringan Nirkabel & Sensor', bebanSks: 8 },
-  { id: 19, nidn: '0507119119', nama: 'Anisa Rahmawati, S.Kom., M.Cs.', keahlian: 'Visi Komputer', bebanSks: 6 },
-  { id: 20, nidn: '0512108820', nama: 'Tri Haryanto, S.T., M.T.', keahlian: 'Rekayasa Kebutuhan Perangkat Lunak', bebanSks: 8 },
+  {
+    "id": 1,
+    "inisial": "AS",
+    "nama": "Ir. Asroni, S.T., M.Eng",
+    "keahlian": "Rekayasa Web & Komputasi",
+    "bebanSks": 12
+  },
+  {
+    "id": 2,
+    "inisial": "DP",
+    "nama": "Dr. Ir. Dwijoko Purbohadi, M.T.",
+    "keahlian": "Arsitektur Perangkat Lunak",
+    "bebanSks": 19
+  },
+  {
+    "id": 3,
+    "inisial": "EP",
+    "nama": "Ir. Eko Prasetyo, M.Eng., Ph.D.",
+    "keahlian": "Jaringan Komputer & Cyber Security",
+    "bebanSks": 19
+  },
+  {
+    "id": 4,
+    "inisial": "HQ",
+    "nama": "Muhammad Abdul Haq, S.Tr.T., M.Eng. Ph.D.",
+    "keahlian": "Kecerdasan Buatan & Data Science",
+    "bebanSks": 24
+  },
+  {
+    "id": 5,
+    "inisial": "WS",
+    "nama": "Winny Setyonugroho, S.Ked., MT., Ph.D",
+    "keahlian": "Sistem Informasi Akademik",
+    "bebanSks": 12
+  },
+  {
+    "id": 6,
+    "inisial": "HS",
+    "nama": "Haris Setyawan, S.T., M.Eng.",
+    "keahlian": "Pemrograman Bergerak & IoT",
+    "bebanSks": 25
+  },
+  {
+    "id": 7,
+    "inisial": "AK",
+    "nama": "Aprilia Kurnianti, ST. M. Eng.",
+    "keahlian": "Basis Data Lanjut",
+    "bebanSks": 16
+  },
+  {
+    "id": 8,
+    "inisial": "AG",
+    "nama": "Dr. Nasy’an Taufiq Al Ghifari, S.T., M.T.",
+    "keahlian": "Cloud Computing & DevOps",
+    "bebanSks": 18
+  },
+  {
+    "id": 9,
+    "inisial": "RG",
+    "nama": "Dr. Reza Giga Isnanda, S.T., M.Sc.",
+    "keahlian": "UI/UX & Human Computer Interaction",
+    "bebanSks": 18
+  },
+  {
+    "id": 10,
+    "inisial": "CO",
+    "nama": "Chayadi Oktomy N S, S.T., M.Eng., Ph.D.",
+    "keahlian": "Sistem Operasi & Tata Kelola",
+    "bebanSks": 12
+  },
+  {
+    "id": 11,
+    "inisial": "QA",
+    "nama": "Qodri Aziz, S.Kom., M.Eng",
+    "keahlian": "Machine Learning & Web Service",
+    "bebanSks": 19
+  },
+  {
+    "id": 12,
+    "inisial": "FF",
+    "nama": "Muhammad Fadilah Alfarizy, B.Sc., M.Sc.",
+    "keahlian": "Internet of Things",
+    "bebanSks": 19
+  },
+  {
+    "id": 13,
+    "inisial": "NA",
+    "nama": "Nurwahyu Alamsyah, S.Kom., M.Kom., M.IM., Ph.D",
+    "keahlian": "Jaringan Nirkabel & Sensor",
+    "bebanSks": 15
+  },
+  {
+    "id": 14,
+    "inisial": "AM",
+    "nama": "Ahmad Musthafa Masyhur, S,Kom. PhD (Cand)",
+    "keahlian": "Keamanan Jaringan",
+    "bebanSks": 12
+  },
+  {
+    "id": 15,
+    "inisial": "AL",
+    "nama": "Laila Ma’rifatul Azizah, S.Kom., M.I.M.",
+    "keahlian": "Pemrosesan Bahasa Alami",
+    "bebanSks": 6
+  },
+  {
+    "id": 16,
+    "inisial": "TA",
+    "nama": "Tri Andi, S.T., M.Kom.",
+    "keahlian": "Rekayasa Perangkat Lunak",
+    "bebanSks": 21
+  },
+  {
+    "id": 17,
+    "inisial": "CD",
+    "nama": "Cahya Damarjati, S.T. M. Eng., Ph.D.",
+    "keahlian": "Interaksi Komputer Manusia",
+    "bebanSks": 12
+  },
+  {
+    "id": 18,
+    "inisial": "EI",
+    "nama": "Dr. Etik Irijanti, S.T., M.Sc.",
+    "keahlian": "Technopreneurship & Inovasi",
+    "bebanSks": 10
+  },
+  {
+    "id": 19,
+    "inisial": "SR",
+    "nama": "Prof. Ir. Slamet Riyadi, S.T., M.Sc., Ph.D.",
+    "keahlian": "Visi Komputer & Data",
+    "bebanSks": 9
+  },
+  {
+    "id": 20,
+    "inisial": "AD",
+    "nama": "Annisa Divayu Andriyani, S,Kom. PhD (Cand)",
+    "keahlian": "Analisis & Desain Sistem",
+    "bebanSks": 15
+  },
+  {
+    "id": 21,
+    "inisial": "TW",
+    "nama": "Titis Wisnu Wijaya, S. Pd., M. Pd.",
+    "keahlian": "Bahasa Inggris untuk TI",
+    "bebanSks": 44
+  }
 ];
-
 const daftarRuangan = [
-  { id: 1, kode: 'F6.002', nama: 'Ruang Teori F6.002', kapasitas: 45, jenis: 'Kelas Teori' },
-  { id: 2, kode: 'F6.003', nama: 'Ruang Teori F6.003', kapasitas: 45, jenis: 'Kelas Teori' },
-  { id: 3, kode: 'F6.004', nama: 'Ruang Teori F6.004', kapasitas: 40, jenis: 'Kelas Teori' },
-  { id: 4, kode: 'F6.005', nama: 'Ruang Teori F6.005', kapasitas: 40, jenis: 'Kelas Teori' },
-  { id: 5, kode: 'Lab.Kom', nama: 'Laboratorium Komputasi F6', kapasitas: 35, jenis: 'Laboratorium' },
-  { id: 6, kode: 'Lab.Net', nama: 'Laboratorium Jaringan & WAN', kapasitas: 35, jenis: 'Laboratorium' },
-  { id: 7, kode: 'Lab.Cyber', nama: 'Laboratorium Cyber Security', kapasitas: 35, jenis: 'Laboratorium' },
-  { id: 8, kode: 'Lab.RPL', nama: 'Laboratorium Rekayasa Perangkat Lunak', kapasitas: 35, jenis: 'Laboratorium' },
+  {
+    "id": 1,
+    "kode": "F6.001",
+    "nama": "Ruang Kuliah Besar F6.001",
+    "gedung": "F6",
+    "tipe": "Ruang Kuliah Besar",
+    "kapasitas": 80
+  },
+  {
+    "id": 2,
+    "kode": "F6.002",
+    "nama": "Ruang Teori F6.002",
+    "gedung": "F6",
+    "tipe": "Reguler",
+    "kapasitas": 45
+  },
+  {
+    "id": 3,
+    "kode": "F6.003",
+    "nama": "Ruang Teori F6.003",
+    "gedung": "F6",
+    "tipe": "Reguler",
+    "kapasitas": 45
+  },
+  {
+    "id": 4,
+    "kode": "F6.004",
+    "nama": "Ruang Teori F6.004",
+    "gedung": "F6",
+    "tipe": "Reguler",
+    "kapasitas": 40
+  },
+  {
+    "id": 5,
+    "kode": "F6.101",
+    "nama": "Ruang Kuliah F6.101",
+    "gedung": "F6",
+    "tipe": "Reguler",
+    "kapasitas": 40
+  },
+  {
+    "id": 6,
+    "kode": "F6.102",
+    "nama": "Ruang Kuliah F6.102",
+    "gedung": "F6",
+    "tipe": "Reguler",
+    "kapasitas": 40
+  },
+  {
+    "id": 7,
+    "kode": "F6.103",
+    "nama": "Ruang Kuliah F6.103",
+    "gedung": "F6",
+    "tipe": "Reguler",
+    "kapasitas": 40
+  },
+  {
+    "id": 8,
+    "kode": "F6.202",
+    "nama": "Ruang Kuliah F6.202",
+    "gedung": "F6",
+    "tipe": "Reguler",
+    "kapasitas": 35
+  },
+  {
+    "id": 9,
+    "kode": "F6.203",
+    "nama": "Ruang Kuliah F6.203",
+    "gedung": "F6",
+    "tipe": "Reguler",
+    "kapasitas": 35
+  },
+  {
+    "id": 10,
+    "kode": "F4.001",
+    "nama": "Ruang Kuliah F4.001",
+    "gedung": "F4",
+    "tipe": "Reguler",
+    "kapasitas": 40
+  },
+  {
+    "id": 11,
+    "kode": "F4.002",
+    "nama": "Ruang Kuliah F4.002",
+    "gedung": "F4",
+    "tipe": "Reguler",
+    "kapasitas": 40
+  },
+  {
+    "id": 12,
+    "kode": "F4.003",
+    "nama": "Ruang Kuliah F4.003",
+    "gedung": "F4",
+    "tipe": "Reguler",
+    "kapasitas": 40
+  }
 ];
-
-const daftarMataKuliah = [
-  { id: 1, kode: 'TI401', nama: 'Pengembangan Aplikasi Web', sks: 3, semester: 4, jenis: 'Teori & Praktik', butuhLab: true },
-  { id: 2, kode: 'TI402', nama: 'Pengembangan Web Service', sks: 2, semester: 4, jenis: 'Teori', butuhLab: false },
-  { id: 3, kode: 'TI403', nama: 'WAN dan Teknologi Jaringan', sks: 2, semester: 4, jenis: 'Praktikum', butuhLab: true },
-  { id: 4, kode: 'TI404', nama: 'Kecerdasan Buatan', sks: 2, semester: 4, jenis: 'Teori', butuhLab: false },
-  { id: 5, kode: 'TI405', nama: 'Praktikum Basis Data Lanjut', sks: 3, semester: 4, jenis: 'Praktikum', butuhLab: true },
-  { id: 6, kode: 'TI406', nama: 'Keamanan Siber & Jaringan', sks: 3, semester: 6, jenis: 'Praktikum', butuhLab: true },
-  { id: 7, kode: 'TI407', nama: 'Machine Learning', sks: 3, semester: 6, jenis: 'Praktikum', butuhLab: true },
-  { id: 8, kode: 'TI408', nama: 'Cloud Computing & DevOps', sks: 3, semester: 6, jenis: 'Praktikum', butuhLab: true },
-  { id: 9, kode: 'TI409', nama: 'Pemrograman Bergerak', sks: 3, semester: 6, jenis: 'Praktikum', butuhLab: true },
-  { id: 10, kode: 'TI410', nama: 'Rekayasa Perangkat Lunak', sks: 3, semester: 4, jenis: 'Teori', butuhLab: false },
-  { id: 11, kode: 'TI411', nama: 'Struktur Data & Algoritma', sks: 3, semester: 2, jenis: 'Praktikum', butuhLab: true },
-  { id: 12, kode: 'TI412', nama: 'Sistem Operasi', sks: 3, semester: 2, jenis: 'Praktikum', butuhLab: true },
-  { id: 13, kode: 'TI413', nama: 'Jaringan Komputer Dasar', sks: 3, semester: 2, jenis: 'Praktikum', butuhLab: true },
-  { id: 14, kode: 'TI414', nama: 'Matematika Diskrit', sks: 2, semester: 2, jenis: 'Teori', butuhLab: false },
-  { id: 15, kode: 'TI415', nama: 'Arsitektur Komputer', sks: 2, semester: 2, jenis: 'Teori', butuhLab: false },
-  { id: 16, kode: 'TI416', nama: 'Etika Profesi TI', sks: 2, semester: 6, jenis: 'Teori', butuhLab: false },
-  { id: 17, kode: 'TI417', nama: 'Manajemen Proyek TI', sks: 2, semester: 6, jenis: 'Teori', butuhLab: false },
-  { id: 18, kode: 'TI418', nama: 'Interaksi Manusia & Komputer', sks: 2, semester: 4, jenis: 'Teori', butuhLab: false },
-  { id: 19, kode: 'TI419', nama: 'Internet of Things', sks: 3, semester: 6, jenis: 'Praktikum', butuhLab: true },
-  { id: 20, kode: 'TI420', nama: 'Kriptografi Terapan', sks: 2, semester: 6, jenis: 'Teori', butuhLab: false },
-  { id: 21, kode: 'TI421', nama: 'Sistem Terdistribusi', sks: 3, semester: 6, jenis: 'Teori', butuhLab: false },
-  { id: 22, kode: 'TI422', nama: 'Pengolahan Citra Digital', sks: 3, semester: 6, jenis: 'Praktikum', butuhLab: true },
-  { id: 23, kode: 'TI423', nama: 'Pemrograman Python untuk AI', sks: 3, semester: 4, jenis: 'Praktikum', butuhLab: true },
-  { id: 24, kode: 'TI424', nama: 'Pemrograman Web Lanjut', sks: 3, semester: 6, jenis: 'Praktikum', butuhLab: true },
-  { id: 25, kode: 'TI425', nama: 'Administrasi Server & Jaringan', sks: 3, semester: 4, jenis: 'Praktikum', butuhLab: true },
-  { id: 26, kode: 'TI426', nama: 'Statistika & Probabilitas', sks: 2, semester: 2, jenis: 'Teori', butuhLab: false },
-  { id: 27, kode: 'TI427', nama: 'Kalkulus Informatika', sks: 2, semester: 2, jenis: 'Teori', butuhLab: false },
-  { id: 28, kode: 'TI428', nama: 'Aljabar Linier', sks: 2, semester: 2, jenis: 'Teori', butuhLab: false },
-  { id: 29, kode: 'TI429', nama: 'Basis Data Dasar', sks: 3, semester: 2, jenis: 'Praktikum', butuhLab: true },
-  { id: 30, kode: 'TI430', nama: 'Algoritma & Pemrograman 1', sks: 3, semester: 1, jenis: 'Praktikum', butuhLab: true },
-  { id: 31, kode: 'TI431', nama: 'Algoritma & Pemrograman 2', sks: 3, semester: 2, jenis: 'Praktikum', butuhLab: true },
-  { id: 32, kode: 'TI432', nama: 'Pengantar Teknologi Informasi', sks: 2, semester: 1, jenis: 'Teori', butuhLab: false },
-  { id: 33, kode: 'TI433', nama: 'Logika Matematika', sks: 2, semester: 1, jenis: 'Teori', butuhLab: false },
-  { id: 34, kode: 'TI434', nama: 'Bahasa Inggris untuk TI', sks: 2, semester: 1, jenis: 'Teori', butuhLab: false },
-  { id: 35, kode: 'TI435', nama: 'Kewirausahaan Berbasis Teknologi', sks: 2, semester: 6, jenis: 'Teori', butuhLab: false },
-  { id: 36, kode: 'TI436', nama: 'Metodologi Penelitian TI', sks: 2, semester: 6, jenis: 'Teori', butuhLab: false },
-  { id: 37, kode: 'TI437', nama: 'Data Warehouse & Mining', sks: 3, semester: 6, jenis: 'Praktikum', butuhLab: true },
-  { id: 38, kode: 'TI438', nama: 'Big Data Analytics', sks: 3, semester: 6, jenis: 'Praktikum', butuhLab: true },
-  { id: 39, kode: 'TI439', nama: 'Pengujian Perangkat Lunak', sks: 2, semester: 4, jenis: 'Teori', butuhLab: false },
-  { id: 40, kode: 'TI440', nama: 'Analisis dan Desain Sistem', sks: 3, semester: 4, jenis: 'Teori', butuhLab: false },
-  { id: 41, kode: 'TI441', nama: 'Pemodelan Perangkat Lunak', sks: 2, semester: 4, jenis: 'Teori', butuhLab: false },
-  { id: 42, kode: 'TI442', nama: 'Forensik Digital', sks: 3, semester: 6, jenis: 'Praktikum', butuhLab: true },
-  { id: 43, kode: 'TI443', nama: 'Audit Sistem Informasi', sks: 2, semester: 6, jenis: 'Teori', butuhLab: false },
-  { id: 44, kode: 'TI444', nama: 'Proyek Komputasi Terapan', sks: 3, semester: 6, jenis: 'Praktikum', butuhLab: true },
-  { id: 45, kode: 'TI445', nama: 'Kapita Selekta TI', sks: 2, semester: 6, jenis: 'Teori', butuhLab: false },
+const kurikulumSemester = [
+  {
+    "semester": 1,
+    "kode": "TI101",
+    "nama": "Fisika dan Elektronika Teknologi Informasi",
+    "sks": 2,
+    "kategori": "Basic Science"
+  },
+  {
+    "semester": 1,
+    "kode": "TI102",
+    "nama": "Matematika Teknologi Informasi 1",
+    "sks": 3,
+    "kategori": "Basic Science"
+  },
+  {
+    "semester": 1,
+    "kode": "TI103",
+    "nama": "Dasar Teknologi Informasi",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 1,
+    "kode": "TI104",
+    "nama": "Logika Teknik Pemrograman",
+    "sks": 2,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 1,
+    "kode": "TI105",
+    "nama": "Perancangan Basis Data",
+    "sks": 2,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 1,
+    "kode": "TI106",
+    "nama": "Rekayasa Kebutuhan",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 1,
+    "kode": "MKWU06",
+    "nama": "Pancasila",
+    "sks": 2,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 1,
+    "kode": "MKWU01",
+    "nama": "Al-Islam dan Kemuhammadiyahan 1 (Kemanusiaan dan Keimanan)",
+    "sks": 2,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 1,
+    "kode": "TI109",
+    "nama": "Bahasa Inggris Dasar",
+    "sks": 1,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 2,
+    "kode": "TI201",
+    "nama": "Matematika Teknologi Informasi 2",
+    "sks": 3,
+    "kategori": "Basic Science"
+  },
+  {
+    "semester": 2,
+    "kode": "TI202",
+    "nama": "Algoritma dan Struktur Data",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 2,
+    "kode": "TI203",
+    "nama": "Pemrograman Dasar",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 2,
+    "kode": "TI204",
+    "nama": "Administrasi Basis Data",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 2,
+    "kode": "TI205",
+    "nama": "Dasar Jaringan",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 2,
+    "kode": "MKWU07",
+    "nama": "Kewarganegaraan",
+    "sks": 2,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 2,
+    "kode": "MKWU02",
+    "nama": "Al-Islam dan Kemuhammadiyahan 2 (Ibadah dan Muamalah)",
+    "sks": 2,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 2,
+    "kode": "TI208",
+    "nama": "Bahasa Inggris Menengah",
+    "sks": 1,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 3,
+    "kode": "TI301",
+    "nama": "Probabilitas dan Statistika",
+    "sks": 3,
+    "kategori": "Basic Science"
+  },
+  {
+    "semester": 3,
+    "kode": "TI302",
+    "nama": "Pemrograman Multiplatform",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 3,
+    "kode": "TI303",
+    "nama": "Implementasi Basis Data",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 3,
+    "kode": "TI304",
+    "nama": "Switching dan Wireless",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 3,
+    "kode": "TI305",
+    "nama": "Teknologi Server",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 3,
+    "kode": "TI306",
+    "nama": "Perancangan Berorientasi Objek",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 3,
+    "kode": "MKWU03",
+    "nama": "Al-Islam dan Kemuhammadiyahan 3 (Kemuhammadiyahan)",
+    "sks": 2,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 3,
+    "kode": "TI308",
+    "nama": "Bahasa Inggris Lanjut",
+    "sks": 1,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 4,
+    "kode": "TI401",
+    "nama": "Pengembangan Desain Web",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 4,
+    "kode": "TI402",
+    "nama": "Pengembangan Aplikasi Basis Data",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 4,
+    "kode": "TI403",
+    "nama": "Routing dan Keamanan Jaringan",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 4,
+    "kode": "TI404",
+    "nama": "Keamanan Siber",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 4,
+    "kode": "TI405",
+    "nama": "Interaksi Manusia Komputer",
+    "sks": 2,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 4,
+    "kode": "TI406",
+    "nama": "Pengujian dan Penjaminan Mutu Perangkat Lunak",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 4,
+    "kode": "MKWU04",
+    "nama": "Al-Islam dan Kemuhammadiyahan 4 (Islam dan Ilmu Pengetahuan)",
+    "sks": 2,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 4,
+    "kode": "TI408",
+    "nama": "Bahasa Inggris untuk Profesional Bidang Teknologi Informasi",
+    "sks": 1,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 4,
+    "kode": "TI409",
+    "nama": "Praktik Profesional",
+    "sks": 2,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 5,
+    "kode": "TI501",
+    "nama": "Pengembangan Aplikasi Web",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 5,
+    "kode": "TI502",
+    "nama": "Pengembangan Aplikasi Mobile",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 5,
+    "kode": "TI503",
+    "nama": "Pengembangan Web Service",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 5,
+    "kode": "TI504",
+    "nama": "WAN dan Teknologi Jaringan",
+    "sks": 2,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 5,
+    "kode": "TI505",
+    "nama": "Tata Kelola Teknologi Informasi",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 5,
+    "kode": "TI506",
+    "nama": "Manajemen Proyek",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 5,
+    "kode": "TI507",
+    "nama": "Bahasa Inggris untuk Membaca Naskah Akademik",
+    "sks": 1,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 5,
+    "kode": "TI508",
+    "nama": "Technopreneurship",
+    "sks": 2,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 6,
+    "kode": "TI601",
+    "nama": "Capstone Project 1 (Analisis dan Perancangan)",
+    "sks": 3,
+    "kategori": "Capstone"
+  },
+  {
+    "semester": 6,
+    "kode": "TI602",
+    "nama": "Kerja Praktek/Magang",
+    "sks": 2,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 6,
+    "kode": "TI603",
+    "nama": "Deployment Perangkat Lunak",
+    "sks": 3,
+    "kategori": "Teknologi Informasi"
+  },
+  {
+    "semester": 6,
+    "kode": "TI604",
+    "nama": "Metode Penelitian",
+    "sks": 2,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 6,
+    "kode": "TI605",
+    "nama": "Persiapan TOEFL",
+    "sks": 1,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 6,
+    "kode": "TIxxx-1",
+    "nama": "Mata Kuliah Pilihan 1",
+    "sks": 3,
+    "kategori": "Pilihan"
+  },
+  {
+    "semester": 6,
+    "kode": "TIxxx-2",
+    "nama": "Mata Kuliah Pilihan 2",
+    "sks": 3,
+    "kategori": "Pilihan"
+  },
+  {
+    "semester": 6,
+    "kode": "TIxxx-3",
+    "nama": "Mata Kuliah Pilihan 3",
+    "sks": 3,
+    "kategori": "Pilihan"
+  },
+  {
+    "semester": 7,
+    "kode": "TI701",
+    "nama": "Capstone Project 2 (Implementasi dan Pengujian)",
+    "sks": 3,
+    "kategori": "Capstone"
+  },
+  {
+    "semester": 7,
+    "kode": "TI702",
+    "nama": "Kuliah Kerja Nyata",
+    "sks": 3,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 7,
+    "kode": "MKWU05",
+    "nama": "Bahasa Indonesia dan Penulisan Ilmiah",
+    "sks": 2,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 7,
+    "kode": "TI704",
+    "nama": "Bahasa Inggris untuk Penulisan Naskah Akademik",
+    "sks": 1,
+    "kategori": "General Education"
+  },
+  {
+    "semester": 7,
+    "kode": "TIxxx-4",
+    "nama": "Mata Kuliah Pilihan 4",
+    "sks": 3,
+    "kategori": "Pilihan"
+  },
+  {
+    "semester": 7,
+    "kode": "TIxxx-5",
+    "nama": "Mata Kuliah Pilihan 5",
+    "sks": 3,
+    "kategori": "Pilihan"
+  },
+  {
+    "semester": 8,
+    "kode": "TI801",
+    "nama": "Tugas Akhir",
+    "sks": 6,
+    "kategori": "Tugas Akhir"
+  }
+];
+const matkulPeminatan = [
+  {
+    "kode": "TIPR01",
+    "nama": "Pengembangan Game",
+    "sks": 3,
+    "semesterPenawaran": "Ganjil",
+    "kodePeminatan": "PR",
+    "peminatan": "Programming",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIPR02",
+    "nama": "Teknologi Multimedia",
+    "sks": 3,
+    "semesterPenawaran": "Ganjil",
+    "kodePeminatan": "PR",
+    "peminatan": "Programming",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIDA01",
+    "nama": "Computer Vision",
+    "sks": 3,
+    "semesterPenawaran": "Ganjil",
+    "kodePeminatan": "DA",
+    "peminatan": "Data",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIDA02",
+    "nama": "Kecerdasan Buatan Terapan",
+    "sks": 3,
+    "semesterPenawaran": "Ganjil",
+    "kodePeminatan": "DA",
+    "peminatan": "Data",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TINE01",
+    "nama": "Blockchain",
+    "sks": 3,
+    "semesterPenawaran": "Ganjil",
+    "kodePeminatan": "NE",
+    "peminatan": "Network",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TINE02",
+    "nama": "CyberOps",
+    "sks": 3,
+    "semesterPenawaran": "Ganjil",
+    "kodePeminatan": "NE",
+    "peminatan": "Network",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIUX01",
+    "nama": "Serious Game",
+    "sks": 3,
+    "semesterPenawaran": "Ganjil",
+    "kodePeminatan": "UX",
+    "peminatan": "User Experience",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIUX02",
+    "nama": "Prototyping",
+    "sks": 3,
+    "semesterPenawaran": "Ganjil",
+    "kodePeminatan": "UX",
+    "peminatan": "User Experience",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIPR03",
+    "nama": "Pemrograman Web Framework",
+    "sks": 3,
+    "semesterPenawaran": "Genap",
+    "kodePeminatan": "PR",
+    "peminatan": "Programming",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIPR04",
+    "nama": "Pengembangan Aplikasi Mobile Lanjut",
+    "sks": 3,
+    "semesterPenawaran": "Genap",
+    "kodePeminatan": "PR",
+    "peminatan": "Programming",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIPR05",
+    "nama": "Pemrograman Internet of Things",
+    "sks": 3,
+    "semesterPenawaran": "Genap",
+    "kodePeminatan": "PR",
+    "peminatan": "Programming",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIDA03",
+    "nama": "Analisis Big Data",
+    "sks": 3,
+    "semesterPenawaran": "Genap",
+    "kodePeminatan": "DA",
+    "peminatan": "Data",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIDA04",
+    "nama": "Basis Data Awan",
+    "sks": 3,
+    "semesterPenawaran": "Genap",
+    "kodePeminatan": "DA",
+    "peminatan": "Data",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIDA05",
+    "nama": "Pusat Data",
+    "sks": 3,
+    "semesterPenawaran": "Genap",
+    "kodePeminatan": "DA",
+    "peminatan": "Data",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TINE03",
+    "nama": "Core Network",
+    "sks": 3,
+    "semesterPenawaran": "Genap",
+    "kodePeminatan": "NE",
+    "peminatan": "Network",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TINE04",
+    "nama": "Programmable Infrastructure",
+    "sks": 3,
+    "semesterPenawaran": "Genap",
+    "kodePeminatan": "NE",
+    "peminatan": "Network",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TINE05",
+    "nama": "Routing Lanjut",
+    "sks": 3,
+    "semesterPenawaran": "Genap",
+    "kodePeminatan": "NE",
+    "peminatan": "Network",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIUX03",
+    "nama": "Aplikasi Multimedia",
+    "sks": 3,
+    "semesterPenawaran": "Genap",
+    "kodePeminatan": "UX",
+    "peminatan": "User Experience",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIUX04",
+    "nama": "Desain Game",
+    "sks": 3,
+    "semesterPenawaran": "Genap",
+    "kodePeminatan": "UX",
+    "peminatan": "User Experience",
+    "jenis": "Teori"
+  },
+  {
+    "kode": "TIUX05",
+    "nama": "Evaluasi Pengguna",
+    "sks": 3,
+    "semesterPenawaran": "Genap",
+    "kodePeminatan": "UX",
+    "peminatan": "User Experience",
+    "jenis": "Teori"
+  }
 ];
 
 const MasterModel = {
@@ -92,19 +842,104 @@ const MasterModel = {
   getRuangan() {
     return daftarRuangan;
   },
+  getKurikulum(semester = null) {
+    if (!semester) return kurikulumSemester;
+    return kurikulumSemester.filter(k => k.semester === Number(semester));
+  },
+  getPeminatan(kodePeminatan = null) {
+    if (!kodePeminatan) return matkulPeminatan;
+    return matkulPeminatan.filter(p => p.kodePeminatan.toUpperCase() === String(kodePeminatan).toUpperCase());
+  },
   getMataKuliah() {
-    return daftarMataKuliah;
+    const list = [...kurikulumSemester];
+    matkulPeminatan.forEach(p => {
+      if (!list.some(m => m.kode === p.kode)) {
+        list.push({
+          semester: p.semesterPenawaran === 'Ganjil' ? 5 : 6,
+          kode: p.kode,
+          nama: p.nama,
+          sks: p.sks,
+          kategori: 'Pilihan (' + p.peminatan + ')',
+          kodePeminatan: p.kodePeminatan
+        });
+      }
+    });
+    return list;
+  },
+  getMatkulForMahasiswa(semester = 4, kodePeminatan = 'PR') {
+    const sem = Number(semester);
+    const mkList = kurikulumSemester.filter(k => k.semester === sem);
+    const resolved = [];
+    const pilihanPeminatan = matkulPeminatan.filter(p => !kodePeminatan || p.kodePeminatan.toUpperCase() === String(kodePeminatan).toUpperCase());
+
+    let pilIdx = 0;
+    for (const mk of mkList) {
+      if (mk.kode.startsWith('TIxxx')) {
+        const pick = pilihanPeminatan[pilIdx % pilihanPeminatan.length];
+        pilIdx++;
+        if (pick) {
+          resolved.push({
+            ...mk,
+            kodeAsli: mk.kode,
+            kode: pick.kode,
+            nama: pick.nama + ' (Pilihan ' + pick.peminatan + ')',
+            peminatan: pick.peminatan,
+            isPilihan: true
+          });
+        } else {
+          resolved.push(mk);
+        }
+      } else {
+        resolved.push(mk);
+      }
+    }
+    return resolved;
+  },
+  addDosen({ inisial, nidn, nama, keahlian, bebanSks }) {
+    const item = {
+      id: daftarDosen.length + 1,
+      inisial: (inisial || 'TI').toUpperCase(),
+      nidn: nidn || String(Date.now()).slice(-10),
+      nama,
+      keahlian: keahlian || 'Teknologi Informasi',
+      bebanSks: Number(bebanSks) || 8
+    };
+    daftarDosen.push(item);
+    return item;
+  },
+  addMataKuliah({ kode, nama, sks, semester, kategori }) {
+    const item = {
+      semester: Number(semester),
+      kode: kode.toUpperCase(),
+      nama,
+      sks: Number(sks),
+      kategori: kategori || 'Teknologi Informasi'
+    };
+    kurikulumSemester.push(item);
+    return item;
+  },
+  addRuangan({ kode, nama, kapasitas, gedung, tipe }) {
+    const item = {
+      id: daftarRuangan.length + 1,
+      kode,
+      nama: nama || ('Ruang ' + kode),
+      gedung: gedung || (kode.startsWith('F6') ? 'F6' : 'F4'),
+      tipe: tipe || 'Reguler',
+      kapasitas: Number(kapasitas) || 40
+    };
+    daftarRuangan.push(item);
+    return item;
   },
   getSummary() {
     return {
       totalDosen: daftarDosen.length,
-      totalMatkul: daftarMataKuliah.length,
+      totalMatkul: kurikulumSemester.length,
+      totalPeminatan: matkulPeminatan.length,
       totalRuangan: daftarRuangan.length,
-      ruangLab: daftarRuangan.filter((r) => r.jenis === 'Laboratorium').length,
-      ruangTeori: daftarRuangan.filter((r) => r.jenis === 'Kelas Teori').length,
+      ruangF6: daftarRuangan.filter(r => r.gedung === 'F6').length,
+      ruangF4: daftarRuangan.filter(r => r.gedung === 'F4').length
     };
-  },
+  }
 };
 
 module.exports = MasterModel;
-

@@ -10,9 +10,16 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Global Middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Global Middlewares & Security Headers
+app.disable('x-powered-by');
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  next();
+});
+app.use(express.json({ limit: '16kb' }));
+app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware Logger untuk mencatat semua HTTP Request ke logs/logger.md
@@ -49,10 +56,12 @@ app.use((req, res) => {
   `);
 });
 
-// Menjalankan Server
-app.listen(config.port, () => {
-  console.log(`[Jadwalin Server] Running on http://localhost:${config.port} (${config.nodeEnv})`);
-  console.log(`[Jadwalin Logger] Writing to ${config.logDir}/${config.logFile}`);
-});
+// Menjalankan Server jika dieksekusi langsung
+if (require.main === module) {
+  app.listen(config.port, () => {
+    console.log(`[Jadwalin Server] Running on http://localhost:${config.port} (${config.nodeEnv})`);
+    console.log(`[Jadwalin Logger] Writing to ${config.logDir}/${config.logFile}`);
+  });
+}
 
 module.exports = app;

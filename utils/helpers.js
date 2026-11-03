@@ -15,7 +15,10 @@ const formatDate = (date = new Date()) => {
 };
 
 const escapeMarkdown = (teks) => {
-  return String(teks || '').replace(/\|/g, '%7C').replace(/\r?\n/g, ' ');
+  return String(teks || '')
+    .replace(/\|/g, '%7C')
+    .replace(/[\r\n\t]+/g, ' ')
+    .slice(0, 200);
 };
 
 const sendResponse = (res, statusCode, success, message, data = null) => {
@@ -35,4 +38,3 @@ module.exports = {
   escapeMarkdown,
   sendResponse,
 };
-

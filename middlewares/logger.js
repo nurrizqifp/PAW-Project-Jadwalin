@@ -27,9 +27,11 @@ module.exports = (req, res, next) => {
   res.on('finish', () => {
     const durasiMs = Number(process.hrtime.bigint() - mulai) / 1e6;
     const waktuWIB = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || req.ip || '-';
+    const rawIp = req.headers['x-forwarded-for']
+      ? String(req.headers['x-forwarded-for']).split(',')[0].trim()
+      : req.socket.remoteAddress || req.ip || '-';
 
-    const baris = `| ${waktuWIB} | ${req.method} | ${escapeMarkdown(req.originalUrl)} | ${res.statusCode} | ${durasiMs.toFixed(1)} ms | ${escapeMarkdown(ip)} |\n`;
+    const baris = `| ${waktuWIB} | ${req.method} | ${escapeMarkdown(req.originalUrl)} | ${res.statusCode} | ${durasiMs.toFixed(1)} ms | ${escapeMarkdown(rawIp)} |\n`;
 
     fs.appendFile(logPath, baris, (err) => {
       if (err) console.error('Gagal menulis ke file log:', err.message);
@@ -38,4 +40,3 @@ module.exports = (req, res, next) => {
 
   next();
 };
-
