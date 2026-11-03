@@ -1,0 +1,20 @@
+{
+  "name": "paw-project-jadwalin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nurrizqifp/PAW-Project-Jadwalin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nurrizqifp/PAW-Project-Jadwalin/issues"
+  },
+  "homepage": "https://github.com/nurrizqifp/PAW-Project-Jadwalin#readme"
+}
