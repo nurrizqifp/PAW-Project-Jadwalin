@@ -2748,7 +2748,7 @@ const JadwalModel = {
   getAll() {
     return jadwalKuliah;
   },
-  filter({ dosen, ruang, kelas, hari, semester, peminatan } = {}) {
+  filter({ dosen, ruang, kelas, hari, semester, peminatan, kodeList } = {}) {
     return jadwalKuliah.filter(j => {
       if (dosen && !j.dosen.toLowerCase().includes(String(dosen).toLowerCase()) && !j.dosenInisial.toLowerCase().includes(String(dosen).toLowerCase())) return false;
       if (ruang && !j.ruang.toLowerCase().includes(String(ruang).toLowerCase())) return false;
@@ -2758,8 +2758,70 @@ const JadwalModel = {
       }
       if (hari && hari !== 'Semua' && j.hari.toLowerCase() !== String(hari).toLowerCase()) return false;
       if (peminatan && j.isPilihan && j.peminatanKode && j.peminatanKode.toUpperCase() !== String(peminatan).toUpperCase()) return false;
+      if (Array.isArray(kodeList) && kodeList.length > 0) {
+        const normJ = j.kodeMatkul.replace(/^TI2610([1-9])$/, 'TI10$1');
+        if (!kodeList.includes(j.kodeMatkul) && !kodeList.includes(normJ)) return false;
+      }
       return true;
     });
+  },
+  rekomendasiPraKrs({ kodeMatkulList = [], prefKelas = 'B', prefHari = 'Semua', prefWaktu = 'Semua', variasiIndex = 0 } = {}) {
+    const urutanKelas = ['A', 'B', 'C', 'D', 'E', 'F'];
+    const baseIdx = Math.max(0, urutanKelas.indexOf(String(prefKelas).toUpperCase()));
+    const targetKelas = urutanKelas[(baseIdx + Number(variasiIndex || 0)) % urutanKelas.length];
+
+    const normalizedCodes = kodeMatkulList.map(k => String(k).trim().toUpperCase());
+    const hasilSesi = [];
+    const tidakTersediaDiSemesterGanjil = [];
+
+    for (const kode of normalizedCodes) {
+      const aliasKode = kode.replace(/^TI10([1-9])$/, 'TI2610$1');
+      const kandidat = jadwalKuliah.filter(j => j.kodeMatkul === kode || j.kodeMatkul === aliasKode);
+      if (kandidat.length === 0) {
+        tidakTersediaDiSemesterGanjil.push(kode);
+        continue;
+      }
+
+      // Cari yang sesuai kelas target, hari, dan waktu jika memungkinkan
+      const skorKandidat = kandidat.map(s => {
+        let skor = 0;
+        if (s.kelasList.includes(targetKelas) || s.kelas === targetKelas) skor += 10;
+        if (prefHari === 'Semua' || s.hari === prefHari) skor += 5;
+        const jam = parseInt(s.jamMulai.split(':')[0], 10);
+        if (prefWaktu === 'Pagi' && jam < 12) skor += 4;
+        if (prefWaktu === 'Siang' && jam >= 12 && jam < 15) skor += 4;
+        if (prefWaktu === 'Sore' && jam >= 15) skor += 4;
+        return { sesi: s, skor };
+      });
+
+      skorKandidat.sort((a, b) => b.skor - a.skor);
+      // Pilih kandidat dengan skor tertinggi yang tidak bentrok dengan hasilSesi yang sudah dipilih
+      let terpilih = skorKandidat[0].sesi;
+      for (const item of skorKandidat) {
+        const s = item.sesi;
+        const bentrok = hasilSesi.some(h => h.hari === s.hari && keMenit(h.jamMulai) < keMenit(s.jamSelesai) && keMenit(s.jamMulai) < keMenit(h.jamSelesai));
+        if (!bentrok) {
+          terpilih = s;
+          break;
+        }
+      }
+      hasilSesi.push(terpilih);
+    }
+
+    const konflikInternal = cekKonflikJadwal(hasilSesi);
+    const aiFeedback = hasilSesi.length > 0
+      ? `AI memetakan ${hasilSesi.length} sesi perkuliahan ke prioritas Kelas ${targetKelas} (Variasi #${(Number(variasiIndex) % 6) + 1}) dengan ${konflikInternal.length} bentrok waktu.`
+      : `Mata kuliah semester genap/MKWU yang dipilih mengikuti jadwal universitas; menampilkan saran jadwal kelas ${targetKelas} yang relevan.`;
+
+    return {
+      targetKelas,
+      variasiKe: (Number(variasiIndex) % 6) + 1,
+      totalDipetakan: hasilSesi.length,
+      tidakTersediaDiSemesterGanjil,
+      konflikCount: konflikInternal.length,
+      aiFeedback,
+      rekomendasiSesi: hasilSesi
+    };
   },
   getByDosen(dosenNama) {
     return this.filter({ dosen: dosenNama });

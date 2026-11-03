@@ -16,8 +16,8 @@ exports.index = (req, res) => {
   const constraints = ConstraintModel.getAll();
   const produk = ProdukModel.getAll();
 
-  // Default mahasiswa: Semester 4, Peminatan Programming (PR)
-  const defaultMahasiswaMatkul = MasterModel.getMatkulForMahasiswa(4, 'PR');
+  // Default mahasiswa: Semester 5 (memiliki TI501, TI503, TI504 sesuai contoh Lampiran 3 & 4), Peminatan PR
+  const defaultMahasiswaMatkul = MasterModel.getMatkulForMahasiswa(5, 'PR');
 
   res.render('index', {
     judul: `${config.appName} — AI Powered Smart Course Scheduling TI UMY`,

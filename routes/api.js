@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('/status', apiController.status);
 router.get('/jadwal', apiController.jadwal);
+router.post('/jadwal/prakrs', apiController.rekomendasiPrakrs);
 router.post('/jadwal/revisi', apiController.revisiJadwal);
 router.post('/jadwal/publish', apiController.publishJadwal);
 router.get('/master', apiController.master);

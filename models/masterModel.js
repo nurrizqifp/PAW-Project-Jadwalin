@@ -866,7 +866,7 @@ const MasterModel = {
     });
     return list;
   },
-  getMatkulForMahasiswa(semester = 4, kodePeminatan = 'PR') {
+  getMatkulForMahasiswa(semester = 5, kodePeminatan = 'PR') {
     const sem = Number(semester);
     const mkList = kurikulumSemester.filter(k => k.semester === sem);
     const resolved = [];
@@ -874,6 +874,7 @@ const MasterModel = {
 
     let pilIdx = 0;
     for (const mk of mkList) {
+      const aliasJadwal = mk.kode.replace(/^TI10([1-9])$/, 'TI2610$1');
       if (mk.kode.startsWith('TIxxx')) {
         const pick = pilihanPeminatan[pilIdx % pilihanPeminatan.length];
         pilIdx++;
@@ -882,15 +883,20 @@ const MasterModel = {
             ...mk,
             kodeAsli: mk.kode,
             kode: pick.kode,
-            nama: pick.nama + ' (Pilihan ' + pick.peminatan + ')',
+            kodeJadwal: pick.kode,
+            nama: pick.nama,
             peminatan: pick.peminatan,
             isPilihan: true
           });
         } else {
-          resolved.push(mk);
+          resolved.push({ ...mk, kodeJadwal: mk.kode });
         }
       } else {
-        resolved.push(mk);
+        resolved.push({
+          ...mk,
+          kodeJadwal: aliasJadwal,
+          isMkwu: mk.kode.startsWith('MKWU')
+        });
       }
     }
     return resolved;
