@@ -1,136 +1,120 @@
 # Jadwalin — AI Powered Smart Course Scheduling
 
-Aplikasi web penjadwalan kuliah cerdas berbasis **Express.js (Arsitektur MVC)**, **EJS Template Engine**, dan **Tailwind CSS** untuk Program Studi Teknologi Informasi (TI) Universitas Muhammadiyah Yogyakarta (UMY).
+Aplikasi web penjadwalan kuliah cerdas berbasis Express.js (Arsitektur MVC), EJS Template Engine, dan Tailwind CSS untuk Program Studi Teknologi Informasi (TI) Fakultas Teknik, Universitas Muhammadiyah Yogyakarta (UMY).
 
 ---
 
-## 📌 Ringkasan Proyek
+## Ringkasan Sistem (Berdasarkan PRD)
 
-Penyusunan jadwal kuliah manual di prodi TI (20 dosen, 45 mata kuliah, 8 ruangan) memakan waktu 5–7 hari kerja dan rawan bentrok. **Jadwalin** dirancang untuk:
-1. **Memangkas waktu penyusunan** dari 5–7 hari menjadi **&lt; 15 menit**.
-2. **0 bentrok (Zero Clash)** dosen dan ruangan pada jadwal final.
-3. **100% praktikum** ditempatkan pada laboratorium yang sesuai.
-4. **&ge; 85% preferensi waktu** mengajar dosen terakomodasi.
+Penyusunan jadwal kuliah manual di prodi TI (20 dosen, 45 mata kuliah, 8 ruangan) memakan waktu 5–7 hari kerja dan rawan bentrok dosen/ruangan. Sistem **Jadwalin** dirancang secara khusus untuk:
+1. **Memangkas waktu penyusunan**: Dari 5–7 hari menjadi **kurang dari 15 menit** (Metrik M-01).
+2. **Nol Bentrok**: 0 bentrok dosen dan ruangan pada jadwal final (Metrik M-02).
+3. **100% Lab Matching**: Seluruh mata kuliah praktikum ditempatkan pada laboratorium yang sesuai (Metrik M-03).
+4. **Kepuasan Dosen**: Minimal 85% preferensi waktu mengajar dosen terakomodasi (Metrik M-04).
 
 ---
 
-## 📂 Struktur Folder & Tanggung Jawab (MVC)
-
-Sesuai ketentuan standar arsitektur Express.js:
+## Struktur Folder & Arsitektur MVC
 
 ```text
 PAW-Project-Jadwalin/
-├── config/             # Pengaturan aplikasi (port, env, logger, koneksi database)
-│   ├── database.js     # Setup & koneksi PostgreSQL Sequelize
-│   └── index.js        # Konfigurasi aplikasi & environment variables
-├── controllers/        # Logika pemrosesan request & response
-│   ├── apiController.js   # Handler endpoint REST API (/api/status, /api/produk, /api/jadwal)
-│   └── homeController.js  # Handler render halaman frontend EJS (/)
-├── docs/               # PRD, sketsa wireframe UI, & dokumentasi proyek
+├── config/                 # Pengaturan environment, port, dan koneksi database
+│   ├── database.js         # Setup PostgreSQL Sequelize
+│   └── index.js            # Konfigurasi aplikasi
+├── controllers/            # Controller pemrosesan logika & response
+│   ├── apiController.js    # Handler REST API (/api/*)
+│   └── homeController.js   # Handler render Single Page App (/)
+├── docs/                   # Dokumen PRD dan sketsa wireframe antarmuka
 │   ├── PRD-Kelompok5-TakeHome.docx.md
 │   └── images/
-├── middlewares/        # Middleware Express.js
-│   └── logger.js       # Logger HTTP request otomatis ke file Markdown (logs/logger.md)
-├── models/             # Pengelolaan data & operasi bisnis
-│   ├── jadwalModel.js  # Data model jadwal kuliah
-│   └── produkModel.js  # Data model produk & modul layanan Jadwalin (statis in-memory)
-├── routes/             # Pemetaan endpoint URL ke controller
-│   ├── api.js          # Rute /api/*
-│   ├── index.js        # Entry agregasi routing
-│   └── web.js          # Rute web frontend (/)
-├── utils/              # Fungsi bantuan (helpers) reusable
-│   └── helpers.js      # Format Rupiah, format tanggal, sanitasi markdown, response helper
-├── views/              # Template frontend EJS & styling Tailwind CDN
-│   ├── index.ejs       # Halaman utama landing page & dashboard preview
-│   └── partials/       # Komponen template (head, navbar, footer)
+├── middlewares/            # Middleware aplikasi
+│   └── logger.js           # Pencatatan request HTTP ke logs/logger.md
+├── models/                 # Model domain akademik sesuai PRD
+│   ├── masterModel.js      # Data master 20 dosen, 45 mata kuliah, 8 ruangan
+│   ├── constraintModel.js  # Aturan Hard Constraints & Soft Constraints
+│   ├── jadwalModel.js      # Jadwal hasil generate AI & solver
+│   └── produkModel.js      # Pemetaan spesifikasi fitur PRD (F-01 s/d F-08)
+├── routes/                 # Definisi rute Express.js
+│   ├── api.js              # Endpoint REST API
+│   ├── index.js            # Router agregator
+│   └── web.js              # Rute frontend web
+├── utils/                  # Helper fungsi reusable
+│   └── helpers.js          # Formatter & response helper
+├── views/                  # Template frontend EJS (Apple Monochrome Design)
+│   ├── index.ejs           # Antarmuka Single Page App (Mahasiswa, Staf, Dosen, Sistem)
+│   └── partials/           # Komponen layout (head, navbar, footer)
 │       ├── footer.ejs
 │       ├── head.ejs
 │       └── navbar.ejs
-├── logs/               # Catatan aktivitas request HTTP
-│   └── logger.md       # Format tabel markdown request log
-├── app.js              # Entry point Express.js & server bootstrap
-├── package.json        # Manifest dependensi & script runner
-├── .env.example        # Template konfigurasi environment
-├── .gitignore          # Daftar file/folder yang diabaikan Git
-└── README.md           # Dokumentasi proyek
+├── logs/                   # Log aktivitas request
+│   └── logger.md           # Format tabel Markdown request log
+├── app.js                  # Entry point bootstrap Express.js
+├── package.json            # Dependensi & script runner
+├── .env.example            # Template konfigurasi environment
+├── .gitignore              # Konfigurasi Git ignore
+└── README.md               # Dokumentasi sistem
 ```
 
 ---
 
-## 🛠️ Stack Teknologi & Dependensi
+## Fitur & Hak Akses Persona (PRD)
 
-| Paket | Tipe | Fungsi |
-|---|---|---|
-| **express** | Core | Framework backend web & REST API |
-| **ejs** | Template Engine | Merender halaman frontend terintegrasi dengan backend |
-| **dotenv** | Config | Mengelola konfigurasi environment variable (.env) |
-| **zod** | Utility | Validasi skema input data & request body |
-| **pg** & **sequelize** | ORM / DB | Fondasi koneksi database PostgreSQL untuk milestone lanjutan |
-| **nodemon** | Dev Tool | Auto-reload server saat pengembangan |
-| **Tailwind CSS (CDN)** | Styling UI | Utility-first CSS responsif tanpa overhead build step |
+1. **Mahasiswa (Andi Pratama)**
+   - Akses jadwal kuliah real-time dengan countdown sesi aktif (`08:50 - 11:30 | 42:15 left`).
+   - Jadwal lengkap semester bebas bentrok dengan filter hari.
+   - Konfigurasi profil & Pra-KRS dengan validasi angka semester (1–12), angkatan, nama, dan NIM.
+
+2. **Staf Administrasi Akademik (Rina Wulandari)**
+   - Pengelolaan data master: 20 Dosen, 45 Mata Kuliah, 8 Ruangan (Kelas Teori & Laboratorium).
+   - Pengaturan Hard Constraints (0 bentrok, 100% lab matching) dan Soft Constraints (preferensi dosen).
+   - Generator jadwal otomatis AI 1-klik (&lt; 15 menit) dan publikasi jadwal.
+
+3. **Dosen (Dr. Budi Santoso)**
+   - Jadwal mengajar pribadi per semester.
+   - Form preferensi waktu mengajar dan hari riset (misal: hari Jumat bebas mengajar untuk penelitian).
 
 ---
 
-## 🚀 Cara Menjalankan Aplikasi
+## Cara Menjalankan Aplikasi
 
-### 1. Prasyarat
-- Node.js (v18+)
-- NPM
-
-### 2. Instalasi
 ```bash
-# Clone repository (jika belum)
-git clone https://github.com/nurrizqifp/PAW-Project-Jadwalin.git
-cd PAW-Project-Jadwalin
-
 # Salin konfigurasi environment
 cp .env.example .env
 
 # Install dependensi
 npm install
-```
 
-### 3. Menjalankan Server
-```bash
-# Mode Development (Auto-reload dengan nodemon)
+# Jalankan mode development
 npm run dev
 
-# Mode Production
+# Atau jalankan mode production
 npm start
 ```
 
-Buka browser di: **`http://localhost:3000`**
+Akses aplikasi di: **`http://localhost:3000`**
 
 ---
 
-## 🌐 Endpoint API
+## Endpoint REST API
 
-| Method | Endpoint | Deskripsi | Format Response |
+| Method | Endpoint | Deskripsi | Format |
 |---|---|---|---|
-| `GET` | `/` | Halaman landing page & preview jadwal interaktif | HTML (EJS) |
-| `GET` | `/api/status` | Informasi status server, uptime, & waktu server | JSON |
-| `GET` | `/api/produk` | Daftar modul dan produk layanan Jadwalin | JSON Array |
-| `GET` | `/api/jadwal` | Data contoh jadwal perkuliahan TI UMY | JSON Array |
+| `GET` | `/` | Antarmuka Single Page App Sistem Penjadwalan | HTML (EJS) |
+| `GET` | `/api/status` | Status server, zero-clash metrics, uptime | JSON |
+| `GET` | `/api/jadwal` | Data jadwal perkuliahan terpublikasi (filter dosen/ruang/kelas) | JSON |
+| `GET` | `/api/master` | Data master 20 dosen, 45 mata kuliah, 8 ruangan | JSON |
+| `GET` | `/api/constraints` | Konfigurasi Hard & Soft Constraints | JSON |
+| `POST` | `/api/generate` | Trigger AI solver penjadwalan otomatis | JSON |
+| `GET` | `/api/produk` | Spesifikasi modul & fitur sistem PRD (F-01 s/d F-08) | JSON |
 
 ---
 
-## 📝 Request Logger
+## Request Logger
 
-Setiap request HTTP dicatat secara otomatis ke **`logs/logger.md`** dengan format tabel Markdown:
+Setiap request HTTP dicatat ke `logs/logger.md` dalam format tabel Markdown:
 - Timestamp (WIB)
-- HTTP Method (`GET`, `POST`, dll.)
+- HTTP Method (`GET`, `POST`)
 - URL Request
-- Status Code (`200`, `404`, dll.)
+- Status Code (`200`, `404`)
 - Durasi respons (ms)
 - Alamat IP Client
-
----
-
-## 👥 Tim Pengembang — Kelompok 5 (TI UMY)
-
-- **Nur Rizqi Febriansyah Putra** (20240140056)
-- **Nisrina Hanifah Ramadhani** (20240140075)
-- **Bima Eka Setiawan** (20240140089)
-- **Resya Glamoda Suhendri** (20240140091)
-- **Haidar Yahya Mudhofar** (20240140093)
-- **A. Muh. Fadil Asytar** (20240140133)
