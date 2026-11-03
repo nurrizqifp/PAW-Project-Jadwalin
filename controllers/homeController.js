@@ -21,3 +21,4 @@ exports.index = (req, res) => {
     currentDate: formatDate(),
   });
 };
+

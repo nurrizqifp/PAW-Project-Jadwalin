@@ -34,3 +34,4 @@ exports.jadwal = (req, res) => {
     data,
   });
 };
+
