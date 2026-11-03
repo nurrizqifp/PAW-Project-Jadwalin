@@ -44,3 +44,4 @@ module.exports = {
   connectDatabase,
   getSequelize: () => sequelize,
 };
+

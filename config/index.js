@@ -9,3 +9,4 @@ module.exports = {
   logDir: path.join(__dirname, '..', process.env.LOG_DIR || 'logs'),
   logFile: process.env.LOG_FILE || 'logger.md',
 };
+

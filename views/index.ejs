@@ -2,485 +2,787 @@
 <%- include('partials/navbar') %>
 
 <main class="flex-grow">
-  <!-- Hero Section -->
-  <section id="beranda" class="relative overflow-hidden bg-gradient-to-b from-brand-50/60 via-white to-slate-50 pt-16 pb-20 border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  
+  <!-- ==================== HERO SECTION ==================== -->
+  <section id="beranda" class="relative overflow-hidden bg-gradient-to-b from-brand-50/70 via-white to-surface-50 pt-14 pb-20 sm:pt-20 sm:pb-24 border-b border-slate-200/80">
+    <!-- Background glow decorations -->
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 pointer-events-none overflow-hidden opacity-40">
+      <div class="absolute -top-32 left-1/4 w-96 h-96 rounded-full bg-brand-300 blur-3xl"></div>
+      <div class="absolute -top-24 right-1/4 w-96 h-96 rounded-full bg-accent-300 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="text-center max-w-3xl mx-auto">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-100/80 text-brand-700 text-xs font-semibold mb-6 shadow-sm border border-brand-200">
-          <span class="flex h-2 w-2 rounded-full bg-brand-600 animate-ping"></span>
-          <span>Sistem Penjadwalan Kuliah Berbasis AI & MVC Express</span>
+        
+        <!-- Live Pill Tag -->
+        <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md text-brand-700 text-xs font-bold mb-6 shadow-sm border border-brand-100 hover:border-brand-300 transition-all">
+          <span class="flex h-2.5 w-2.5 rounded-full bg-emerald-500 relative">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          </span>
+          <span>Sistem Penjadwalan Cerdas TI UMY • Express.js MVC</span>
+          <span class="text-slate-300">|</span>
+          <span class="text-slate-500 font-mono text-[11px]">Week 8</span>
         </div>
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
-          Susun Jadwal Kuliah Cepat, <span class="bg-gradient-to-r from-brand-600 to-accent-500 bg-clip-text text-transparent">Nol Bentrok</span> dengan AI.
+
+        <!-- Main Headline -->
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.12]">
+          Susun Jadwal Kuliah Cerdas, <br class="hidden sm:inline">
+          <span class="bg-gradient-to-r from-brand-600 via-brand-500 to-accent-500 bg-clip-text text-transparent">
+            Nol Bentrok
+          </span> Berbasis AI.
         </h1>
-        <p class="mt-6 text-lg text-slate-600 leading-relaxed">
-          Mengubah proses penyusunan jadwal manual prodi Teknologi Informasi UMY dari 5–7 hari kerja menjadi <strong>kurang dari 15 menit</strong> dengan kepastian 100% praktikum di laboratorium yang sesuai.
+
+        <!-- Subheadline -->
+        <p class="mt-6 text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto font-normal">
+          Mengotomatisasi penyusunan 45 mata kuliah, 20 dosen, dan 8 ruang laboratorium dari <strong>5–7 hari kerja manual</strong> menjadi <strong>kurang dari 15 menit</strong> dengan garansi 100% praktikum di lab yang tepat.
         </p>
 
         <!-- CTA Action Buttons -->
-        <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <a href="#produk" class="px-6 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-lg shadow-brand-500/25 transition-all transform hover:-translate-y-0.5">
-            Jelajahi Modul & Produk Backend
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3.5 sm:gap-4">
+          <a href="#simulator" class="px-6 py-3.5 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>Uji Coba Simulator Wireframe</span>
           </a>
-          <a href="#demo" class="px-6 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm border border-slate-300 shadow-sm transition-all">
-            Lihat Demo Wireframe & Jadwal
+          <a href="#produk" class="px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm border border-slate-200/90 shadow-sm hover:border-slate-300 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
+            <span>Daftar Modul Produk</span>
+            <span class="w-5 h-5 rounded-full bg-slate-100 text-slate-600 text-xs flex items-center justify-center font-bold">6</span>
           </a>
         </div>
 
-        <!-- Target Metrik PRD -->
-        <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
-          <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
-            <span class="text-xs text-slate-500 font-medium">Target Waktu (M-01)</span>
-            <p class="text-2xl font-bold text-brand-600">&lt; 15 Menit</p>
-            <p class="text-[11px] text-slate-400">Dari 5-7 hari manual</p>
+        <!-- Metric Badges PRD -->
+        <div class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-4 text-left">
+          <div class="bg-white/80 backdrop-blur-sm p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Metrik M-01</span>
+              <span class="w-2 h-2 rounded-full bg-brand-500"></span>
+            </div>
+            <p class="text-2xl sm:text-3xl font-extrabold text-brand-700 tracking-tight">&lt; 15 Menit</p>
+            <p class="text-xs text-slate-500 mt-1">AI Smart Solver</p>
           </div>
-          <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
-            <span class="text-xs text-slate-500 font-medium">Beban Konflik (M-02)</span>
-            <p class="text-2xl font-bold text-emerald-600">0 Bentrok</p>
-            <p class="text-[11px] text-slate-400">Dosen & ruang terisolasi</p>
+
+          <div class="bg-white/80 backdrop-blur-sm p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Metrik M-02</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            </div>
+            <p class="text-2xl sm:text-3xl font-extrabold text-emerald-600 tracking-tight">0 Bentrok</p>
+            <p class="text-xs text-slate-500 mt-1">Dosen & Ruang Bebas Konflik</p>
           </div>
-          <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
-            <span class="text-xs text-slate-500 font-medium">Matching Lab (M-03)</span>
-            <p class="text-2xl font-bold text-indigo-600">100%</p>
-            <p class="text-[11px] text-slate-400">Praktikum masuk lab</p>
+
+          <div class="bg-white/80 backdrop-blur-sm p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Metrik M-03</span>
+              <span class="w-2 h-2 rounded-full bg-accent-500"></span>
+            </div>
+            <p class="text-2xl sm:text-3xl font-extrabold text-accent-600 tracking-tight">100%</p>
+            <p class="text-xs text-slate-500 mt-1">Praktikum Masuk Lab Sesuai</p>
           </div>
-          <div class="bg-white p-4 rounded-xl border border-slate-200/80 shadow-sm">
-            <span class="text-xs text-slate-500 font-medium">Kepuasan Dosen (M-04)</span>
-            <p class="text-2xl font-bold text-amber-600">&ge; 85%</p>
-            <p class="text-[11px] text-slate-400">Preferensi waktu terpenuhi</p>
+
+          <div class="bg-white/80 backdrop-blur-sm p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] uppercase tracking-wider text-slate-400 font-bold">Metrik M-04</span>
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            </div>
+            <p class="text-2xl sm:text-3xl font-extrabold text-amber-600 tracking-tight">&ge; 85%</p>
+            <p class="text-xs text-slate-500 mt-1">Preferensi Dosen Terakomodir</p>
           </div>
         </div>
+
       </div>
     </div>
   </section>
 
-  <!-- Live Server Monitor Widget -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
-    <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center space-x-3">
-        <span class="flex h-3 w-3 relative">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-        </span>
+  <!-- ==================== LIVE STATUS & LOGGER HEALTHBAR ==================== -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-7 relative z-20">
+    <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-3.5 w-full md:w-auto">
+        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200/60 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
         <div>
-          <h2 class="text-sm font-bold text-slate-800">Status Server & Middleware Logger</h2>
-          <p class="text-xs text-slate-500">
-            Setiap request HTTP tercatat otomatis di <code class="font-mono bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded">logs/logger.md</code>
+          <div class="flex items-center gap-2">
+            <h2 class="text-sm font-bold text-slate-800">Status Server & Logger HTTP</h2>
+            <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded-md">Online</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">
+            Setiap request dicatat ke <code class="font-mono bg-slate-100 text-brand-700 px-1 py-0.5 rounded font-semibold">logs/logger.md</code>
           </p>
         </div>
       </div>
 
-      <div id="server-status-pill" class="flex items-center space-x-4 text-xs font-mono bg-slate-50 px-4 py-2 rounded-xl border border-slate-200">
-        <span class="text-slate-500">Uptime: <span id="uptime-text" class="text-slate-800 font-semibold">Memuat...</span></span>
-        <span class="text-slate-300">|</span>
-        <span class="text-slate-500">Waktu: <span id="server-time" class="text-slate-800 font-semibold"><%= currentDate %></span></span>
-        <button onclick="checkServerStatus()" class="ml-2 text-xs text-brand-600 hover:text-brand-800 font-semibold underline">
-          Refresh
+      <div class="flex flex-wrap items-center gap-3 text-xs w-full md:w-auto justify-end">
+        <div class="bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 flex items-center gap-3 font-mono">
+          <span class="text-slate-500">Uptime: <strong id="uptime-text" class="text-slate-800">0s</strong></span>
+          <span class="text-slate-300">|</span>
+          <span class="text-slate-500">WIB: <span class="text-slate-700 font-semibold"><%= currentDate %></span></span>
+        </div>
+        <button onclick="checkServerStatus()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition-colors flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+          </svg>
+          <span>Ping Server</span>
         </button>
       </div>
     </div>
   </section>
 
-  <!-- Section 1: Produk & Modul (Data berasal dari Model Backend) -->
-  <section id="produk" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+  <!-- ==================== SECTION 1: MODUL & PRODUK JADWALIN ==================== -->
+  <section id="produk" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    
+    <!-- Section Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
       <div>
-        <span class="text-xs uppercase tracking-wider font-bold text-brand-600">Model Data Backend</span>
-        <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Daftar Modul & Layanan Produk Jadwalin</h2>
-        <p class="text-slate-600 text-sm mt-2 max-w-xl">
-          Data berikut dikelola secara terstruktur melalui <code class="font-mono bg-slate-100 text-brand-700 px-1.5 py-0.5 rounded">models/produkModel.js</code> dan dirender langsung oleh controller melalui template engine EJS.
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="w-2 h-2 rounded-full bg-brand-600"></span>
+          <span class="text-xs uppercase tracking-wider font-extrabold text-brand-600">Model Backend Integration</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Katalog Modul & Produk Jadwalin</h2>
+        <p class="text-slate-600 text-sm mt-2 max-w-2xl leading-relaxed">
+          Seluruh data produk di bawah ini dikelola secara dinamis melalui <code class="font-mono text-xs bg-slate-100 text-brand-700 px-1.5 py-0.5 rounded font-bold">models/produkModel.js</code>, dikirim melalui controller, dan dirender menggunakan template engine EJS.
         </p>
       </div>
-      <div class="mt-4 md:mt-0 flex items-center gap-2">
-        <a href="/api/produk" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 shadow transition-colors">
-          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+
+      <!-- Quick Category Filter & Search -->
+      <div class="flex items-center gap-2">
+        <div class="relative">
+          <input type="text" id="productSearch" oninput="filterProducts()" placeholder="Cari modul..." class="text-xs pl-8 pr-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 w-44 sm:w-56">
+          <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
-          Buka JSON /api/produk
+        </div>
+        <a href="/api/produk" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-sm">
+          <span>JSON API</span>
+          <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          </svg>
         </a>
       </div>
     </div>
 
-    <!-- Grid Produk EJS Loop -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Category Pills -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 text-xs font-semibold no-scrollbar">
+      <button onclick="setCategoryFilter('all')" class="cat-pill active px-3.5 py-1.5 rounded-full bg-brand-600 text-white shadow-sm transition-all" data-cat="all">
+        Semua Modul (<%= produk.length %>)
+      </button>
+      <button onclick="setCategoryFilter('Core AI Engine')" class="cat-pill px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" data-cat="Core AI Engine">
+        Core AI
+      </button>
+      <button onclick="setCategoryFilter('Manajemen Data')" class="cat-pill px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" data-cat="Manajemen Data">
+        Data Master
+      </button>
+      <button onclick="setCategoryFilter('Optimasi Jadwal')" class="cat-pill px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" data-cat="Optimasi Jadwal">
+        Constraint Solver
+      </button>
+      <button onclick="setCategoryFilter('Distribusi Jadwal')" class="cat-pill px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" data-cat="Distribusi Jadwal">
+        Preview & Publish
+      </button>
+      <button onclick="setCategoryFilter('Portal Dosen')" class="cat-pill px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" data-cat="Portal Dosen">
+        Portal Dosen
+      </button>
+      <button onclick="setCategoryFilter('Komunikasi')" class="cat-pill px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" data-cat="Komunikasi">
+        Notifikasi Real-time
+      </button>
+    </div>
+
+    <!-- Product Cards Grid (EJS Looping) -->
+    <div id="productGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <% if (produk && produk.length > 0) { %>
         <% produk.forEach(function(item) { %>
-          <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group hover:border-brand-300">
+          <div class="product-card bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-card-hover hover:border-brand-300 transition-all duration-300 flex flex-col justify-between group relative overflow-hidden" 
+               data-nama="<%= item.nama.toLowerCase() %>" 
+               data-kategori="<%= item.kategori %>">
+            
+            <!-- Top Card Header -->
             <div>
-              <div class="flex items-center justify-between mb-3">
-                <span class="px-2.5 py-1 text-[11px] font-semibold rounded-md bg-brand-50 text-brand-700 border border-brand-100">
+              <div class="flex items-center justify-between mb-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-xl text-[11px] font-bold bg-brand-50 text-brand-700 border border-brand-200/50">
                   <%= item.kategori %>
                 </span>
+                
                 <% if (item.badge) { %>
-                  <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+                  <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide bg-amber-50 text-amber-700 border border-amber-200">
+                    <svg class="w-3 h-3 text-amber-500 fill-current" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                    </svg>
                     <%= item.badge %>
                   </span>
                 <% } %>
               </div>
 
-              <h3 class="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
+              <!-- Product Title -->
+              <h3 class="text-lg sm:text-xl font-black text-slate-900 group-hover:text-brand-600 transition-colors leading-snug">
                 <%= item.nama %>
               </h3>
 
-              <p class="mt-2.5 text-xs text-slate-600 leading-relaxed">
+              <!-- Description -->
+              <p class="mt-2.5 text-xs text-slate-600 leading-relaxed line-clamp-3">
                 <%= item.deskripsi %>
               </p>
 
-              <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-500 space-y-1.5">
-                <div class="flex items-center justify-between">
-                  <span>Kapasitas / Stok:</span>
-                  <span class="font-semibold text-slate-700"><%= item.stok %> Unit</span>
+              <!-- Feature Bullet -->
+              <div class="mt-5 pt-4 border-t border-slate-100 space-y-2 text-xs">
+                <div class="flex items-start gap-2 text-slate-600">
+                  <svg class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span class="font-medium text-[11px]"><%= item.fiturUtama %></span>
                 </div>
-                <div class="flex items-center justify-between">
-                  <span>Fitur:</span>
-                  <span class="font-medium text-slate-600 text-right truncate max-w-[180px]" title="<%= item.fiturUtama %>">
-                    <%= item.fiturUtama %>
-                  </span>
+                <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                  <span>Kapasitas Lisensi:</span>
+                  <span class="font-bold text-slate-800"><%= item.stok %> Kuota Semester</span>
                 </div>
               </div>
             </div>
 
+            <!-- Card Bottom: Pricing & Action -->
             <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
               <div>
-                <span class="text-[10px] text-slate-400 block font-medium uppercase">Estimasi Nilai</span>
-                <span class="text-base font-extrabold text-slate-900">
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Estimasi Investasi</span>
+                <span class="text-base sm:text-lg font-black text-slate-900 tracking-tight">
                   <%= formatRupiah(item.harga) %>
                 </span>
               </div>
-              <button onclick="previewProdukDetail(<%= JSON.stringify(item) %>)" class="px-3.5 py-1.5 rounded-lg bg-slate-100 hover:bg-brand-50 hover:text-brand-700 text-slate-700 text-xs font-semibold transition-colors">
-                Detail
+              
+              <button onclick="previewProdukDetail(<%= JSON.stringify(item) %>)" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 group-hover:bg-brand-600 group-hover:text-white text-slate-800 text-xs font-bold transition-all duration-200">
+                <span>Detail</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
               </button>
             </div>
+
           </div>
         <% }); %>
       <% } else { %>
-        <div class="col-span-full py-12 text-center text-slate-400">
-          Belum ada produk yang tersedia di model.
+        <div class="col-span-full py-16 text-center bg-white rounded-3xl border border-dashed border-slate-300">
+          <p class="text-slate-400 font-medium text-sm">Tidak ada produk ditemukan di Model.</p>
         </div>
       <% } %>
     </div>
+
   </section>
 
-  <!-- Section 2: Demo Wireframe & Interactive Scheduling Preview -->
-  <section id="demo" class="bg-slate-100/70 py-16 border-y border-slate-200">
+  <!-- ==================== SECTION 2: SIMULATOR WIREFRAME INTERAKTIF ==================== -->
+  <section id="simulator" class="bg-gradient-to-b from-slate-100/90 to-slate-200/70 py-20 border-y border-slate-200/90">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <span class="text-xs uppercase tracking-wider font-bold text-brand-600">Representasi UI PRD & Wireframe</span>
-        <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Interaktif Wireframe Jadwalin</h2>
-        <p class="text-slate-600 text-sm mt-2">
-          Sesuai sketsa dan wireframe pada dokumen PRD (<code class="font-mono text-xs text-brand-700">docs/images/</code>): Card Jadwal Aktif, Countdown waktu tersisa, dan Onboarding Mahasiswa.
+      
+      <!-- Section Title -->
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="px-3.5 py-1 text-xs font-extrabold uppercase tracking-wider rounded-full bg-brand-100 text-brand-800 border border-brand-200">
+          Wireframe & UX Fidelity
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-3">
+          Simulator Antarmuka Jadwalin
+        </h2>
+        <p class="text-slate-600 text-sm mt-2.5 max-w-xl mx-auto leading-relaxed">
+          Mengimplementasikan langsung 4 sketsa wireframe dokumen (<code class="font-mono text-xs text-brand-700 font-bold">docs/images/</code>): Welcome Gate, Onboarding 4 Langkah, Card Kuliah Aktif, dan Jadwal Lengkap.
+        </p>
+
+        <!-- Stepper Selector Bar -->
+        <div class="mt-8 inline-flex items-center p-1.5 rounded-2xl bg-white border border-slate-300/80 shadow-sm gap-1 text-xs font-bold">
+          <button onclick="openWireframeStep('step-welcome')" id="btn-tab-welcome" class="wf-tab px-4 py-2 rounded-xl bg-brand-600 text-white transition-all">
+            1. Welcome Gate
+          </button>
+          <button onclick="openWireframeStep('step-onboarding')" id="btn-tab-onboarding" class="wf-tab px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition-all">
+            2. Onboarding
+          </button>
+          <button onclick="openWireframeStep('step-active-card')" id="btn-tab-active" class="wf-tab px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition-all">
+            3. Jadwal Saat Ini
+          </button>
+          <button onclick="openWireframeStep('step-full-schedule')" id="btn-tab-full" class="wf-tab px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition-all">
+            4. Jadwal Lengkap
+          </button>
+        </div>
+      </div>
+
+      <!-- Simulator Device Frame (Centered Mobile/Tablet Mockup) -->
+      <div class="max-w-md sm:max-w-xl mx-auto">
+        <div class="bg-white rounded-[2.5rem] p-4 sm:p-6 shadow-2xl border-4 sm:border-8 border-slate-900 relative">
+          
+          <!-- Mockup Speaker Notch -->
+          <div class="w-24 sm:w-28 h-4 bg-slate-900 rounded-b-xl mx-auto mb-4 -mt-4 sm:-mt-6 flex items-center justify-center">
+            <div class="w-8 h-1 bg-slate-700 rounded-full"></div>
+          </div>
+
+          <!-- Inside Screen Wrapper -->
+          <div class="bg-surface-50 rounded-3xl p-5 sm:p-7 min-h-[520px] flex flex-col justify-between border border-slate-200 overflow-hidden relative">
+
+            <!-- ================= SUB-SCREEN 1: WELCOME GATE (Sketsa 1: WhatsApp Image 13.52.34) ================= -->
+            <div id="step-welcome" class="wf-screen flex-1 flex flex-col justify-center items-center text-center py-8">
+              <div class="w-16 h-16 rounded-3xl bg-gradient-to-tr from-brand-600 to-accent-500 flex items-center justify-center text-white text-3xl font-black shadow-xl shadow-brand-500/30 mb-6">
+                J
+              </div>
+              <h3 class="text-3xl font-black text-slate-900 tracking-tight mb-2">
+                Jadwalin
+              </h3>
+              <p class="text-xs text-slate-500 max-w-xs mb-8">
+                Smart Course Scheduling & Zero-Clash Automation untuk Mahasiswa dan Dosen TI UMY.
+              </p>
+
+              <!-- Buttons from wireframe -->
+              <div class="w-full max-w-xs space-y-3">
+                <button onclick="openWireframeStep('step-active-card')" class="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-900 font-extrabold text-sm border-2 border-slate-900 shadow-sm transition-transform active:scale-95">
+                  Login
+                </button>
+                
+                <button onclick="openWireframeStep('step-onboarding')" class="w-full py-3.5 px-4 rounded-2xl bg-slate-900 hover:bg-brand-600 text-white font-extrabold text-sm border-2 border-slate-900 shadow-lg shadow-slate-900/20 transition-all active:scale-95 flex items-center justify-center gap-2">
+                  <span>Coba demo</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                  </svg>
+                </button>
+
+                <p class="text-xs text-slate-500 pt-3">
+                  Belum punya akun? <a href="javascript:void(0)" onclick="openWireframeStep('step-onboarding')" class="text-brand-600 font-bold hover:underline">Register</a>
+                </p>
+              </div>
+
+              <!-- Note from Wireframe 1 -->
+              <div class="mt-8 p-3 rounded-xl bg-amber-50 border border-amber-200/80 text-[11px] text-amber-800 text-left max-w-xs flex gap-2">
+                <span class="text-base shrink-0">💡</span>
+                <span><strong>Catatan Sketsa:</strong> Demo memiliki tutorial step-by-step onboarding untuk membimbing mahasiswa memilih mata kuliah.</span>
+              </div>
+            </div>
+
+            <!-- ================= SUB-SCREEN 2: ONBOARDING STEPPER (Sketsa 2: WhatsApp Image 13.52.50) ================= -->
+            <div id="step-onboarding" class="wf-screen hidden flex-1 flex flex-col justify-between py-2">
+              <div>
+                <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-4">
+                  <div class="flex items-center gap-2">
+                    <button onclick="openWireframeStep('step-welcome')" class="p-1 rounded-lg hover:bg-slate-200 text-slate-600">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+                      </svg>
+                    </button>
+                    <h4 class="text-base font-black text-slate-900">Onboarding Mahasiswa</h4>
+                  </div>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-100 text-brand-700">4 Aturan Input</span>
+                </div>
+
+                <form id="simulatorForm" onsubmit="handleSimulatorSubmit(event)" class="space-y-4 text-xs">
+                  
+                  <!-- 1. Semester Picker -->
+                  <div class="bg-white p-3.5 rounded-2xl border border-slate-200">
+                    <label class="block font-bold text-slate-800 mb-1">
+                      1. Kamu saat ini semester berapa?
+                    </label>
+                    <p class="text-[10px] text-slate-400 mb-2">Hanya integer 1–12 (bisa klik atas-bawah, bukan dropdown).</p>
+                    <div class="flex items-center space-x-2">
+                      <button type="button" onclick="adjustSimSemester(-1)" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 font-black text-slate-700 text-sm">-</button>
+                      <input id="sim-semester" type="number" min="1" max="12" value="4" required class="w-16 text-center font-black text-base py-1.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+                      <button type="button" onclick="adjustSimSemester(1)" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 font-black text-slate-700 text-sm">+</button>
+                      <span class="text-[11px] text-slate-500 font-medium ml-2">Semester Aktif</span>
+                    </div>
+                  </div>
+
+                  <!-- 2. Angkatan Year Picker -->
+                  <div class="bg-white p-3.5 rounded-2xl border border-slate-200">
+                    <label class="block font-bold text-slate-800 mb-1">
+                      2. Angkatan berapa?
+                    </label>
+                    <p class="text-[10px] text-slate-400 mb-2">Year picker tahun masuk perkuliahan.</p>
+                    <input id="sim-angkatan" type="number" min="2018" max="2026" value="2024" class="w-32 font-bold py-1.5 px-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none" oninput="updateSimNim()">
+                  </div>
+
+                  <!-- 3. Nama & NIM -->
+                  <div class="bg-white p-3.5 rounded-2xl border border-slate-200 space-y-2">
+                    <label class="block font-bold text-slate-800">
+                      3. Nama dan NIM Mahasiswa
+                    </label>
+                    <div>
+                      <input id="sim-nama" type="text" placeholder="NAMA LENGKAP" value="ANDI PRATAMA" required class="w-full font-bold uppercase py-1.5 px-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none" oninput="this.value = this.value.toUpperCase()">
+                      <p class="text-[10px] text-slate-400 mt-1">Otomatis huruf besar, minimal 3 karakter.</p>
+                    </div>
+                    
+                    <div class="flex items-center space-x-2 pt-1">
+                      <span id="sim-nim-prefix" class="font-mono text-xs font-bold bg-slate-100 px-3 py-2 rounded-xl border border-slate-300 text-slate-700">20240140</span>
+                      <input id="sim-nim-suffix" type="text" maxlength="3" value="093" required class="w-16 font-mono font-black py-2 text-center rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none text-xs" oninput="this.value = this.value.replace(/[^0-9]/g, ''); updateSimNim()">
+                    </div>
+                    <p class="text-[10px] text-slate-400">Input 3 digit belakang NIM (format: [angkatan]0140[3NIM]).</p>
+                  </div>
+
+                  <!-- 4. Pra KRS Grid Mapping -->
+                  <div class="bg-white p-3.5 rounded-2xl border border-slate-200">
+                    <label class="block font-bold text-slate-800 mb-1">
+                      4. Pra-KRS Semester Ini (AI Suggestion)
+                    </label>
+                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5 text-[11px]">
+                      <div class="flex justify-between font-bold text-slate-700 pb-1 border-b border-slate-200">
+                        <span>Mata Kuliah Pilihan</span>
+                        <span>Saran AI</span>
+                      </div>
+                      <div class="flex justify-between items-center text-slate-600">
+                        <span>Pengembangan Aplikasi Web</span>
+                        <span class="font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded">Kelas B (F6.003)</span>
+                      </div>
+                      <div class="flex justify-between items-center text-slate-600">
+                        <span>Pengembangan Web Service</span>
+                        <span class="font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded">Kelas A (F6.003)</span>
+                      </div>
+                      <div class="flex justify-between items-center text-slate-600">
+                        <span>WAN & Teknologi Jaringan</span>
+                        <span class="font-bold text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded">Lab Jaringan F6.004</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="w-full py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-extrabold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-2">
+                    <span>Selesai & Masuk ke Jadwal Saya</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                  </button>
+                  <div id="sim-feedback" class="hidden p-2.5 rounded-xl text-xs"></div>
+                </form>
+              </div>
+            </div>
+
+            <!-- ================= SUB-SCREEN 3: CARD KULIAH SAAT INI (Sketsa 3: WhatsApp Image 13.53.02) ================= -->
+            <div id="step-active-card" class="wf-screen hidden flex-1 flex flex-col justify-between py-2">
+              <div>
+                <!-- Greeting Header from Sketch 3 -->
+                <div class="mb-5">
+                  <h3 id="user-greeting" class="text-2xl font-black text-slate-900 tracking-tight">
+                    Selamat Pagi, Andi Pratama!
+                  </h3>
+                  <p class="text-xs text-slate-500 mt-1">
+                    Jadwal kamu saat ini. <span class="text-brand-600 font-semibold">[Affirmative text by AI: "Tetap fokus dan serap materinya!"]</span>
+                  </p>
+                </div>
+
+                <!-- Big Prominent Active Class Card from Sketch 3 -->
+                <div class="rounded-3xl border-2 sm:border-3 border-slate-900 bg-white p-5 sm:p-6 shadow-xl relative overflow-hidden mb-5">
+                  
+                  <!-- Top Row: Time & Countdown -->
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
+                      08:50 – 11:30
+                    </span>
+                    <span id="countdown-badge" class="px-3 py-1 rounded-full bg-slate-900 text-white font-mono text-xs font-bold animate-pulse">
+                      42:15 left
+                    </span>
+                  </div>
+
+                  <!-- Course Name -->
+                  <h4 class="text-lg sm:text-xl font-black text-slate-900 mb-4 leading-tight">
+                    Pengembangan Aplikasi Web
+                  </h4>
+
+                  <!-- Details Row from Sketch 3: [B] | F6.003 | Lecturer -->
+                  <div class="flex items-center space-x-3 text-xs sm:text-sm pt-2 border-t border-slate-200">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl border-2 border-slate-900 font-black text-slate-900 text-sm bg-slate-100">
+                      B
+                    </span>
+                    <span class="font-extrabold text-slate-900 text-sm">
+                      F6.003
+                    </span>
+                    <span class="text-slate-300">|</span>
+                    <span class="text-slate-600 font-medium truncate">
+                      Ir. Asroni, S.T., M.Eng.
+                    </span>
+                  </div>
+
+                  <!-- Progress Bar -->
+                  <div class="w-full bg-slate-100 h-2 rounded-full mt-4 overflow-hidden">
+                    <div class="bg-brand-600 h-full rounded-full" style="width: 68%;"></div>
+                  </div>
+                </div>
+
+                <!-- Next Classes Quick Glance -->
+                <div class="space-y-2 mb-4">
+                  <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Kuliah Hari Ini Berikutnya</span>
+                  <div class="p-3 bg-white rounded-2xl border border-slate-200 flex items-center justify-between text-xs">
+                    <div>
+                      <span class="font-mono font-bold text-slate-800">13:20 – 15:00</span>
+                      <p class="font-bold text-slate-900 text-xs mt-0.5">Pengembangan Web Service (Kelas A)</p>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 font-semibold text-[11px]">Ruang F6.003</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Button to Full Schedule from Sketch 3 -->
+              <div class="pt-2">
+                <button onclick="openWireframeStep('step-full-schedule')" class="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-xs sm:text-sm border-2 border-slate-900 shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2">
+                  <span>Jadwal Lengkap</span>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- ================= SUB-SCREEN 4: JADWAL LENGKAP (Sketsa 4: WhatsApp Image 13.53.14) ================= -->
+            <div id="step-full-schedule" class="wf-screen hidden flex-1 flex flex-col justify-between py-2">
+              <div>
+                <!-- Header from Sketch 4 -->
+                <div class="mb-4">
+                  <h3 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                    Jadwal Kuliah Kamu, Andi!
+                  </h3>
+                  <p class="text-xs text-slate-500 mt-1">
+                    [Affirmative text by AI: <em>"Semua jadwal hari ini 0 bentrok & terverifikasi."</em>]
+                  </p>
+                </div>
+
+                <!-- 3 Lecture Cards Stack from Sketch 4 -->
+                <div class="space-y-3 overflow-y-auto max-h-[360px] pr-1">
+                  
+                  <!-- Card 1 -->
+                  <div class="rounded-2xl border-2 border-slate-900 bg-white p-4 shadow-sm relative">
+                    <div class="flex justify-between items-baseline mb-1">
+                      <span class="text-lg font-black text-slate-900 font-mono">08:50 – 11:30</span>
+                      <span class="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[10px] font-bold">Sedang Berlangsung</span>
+                    </div>
+                    <h5 class="text-sm font-extrabold text-slate-900 mb-2">Pengembangan Aplikasi Web</h5>
+                    <div class="flex items-center space-x-2 text-xs text-slate-600">
+                      <span class="w-6 h-6 rounded-md border border-slate-900 font-bold flex items-center justify-center text-xs">B</span>
+                      <span class="font-bold text-slate-800">F6.003</span>
+                      <span>|</span>
+                      <span class="truncate">Ir. Asroni, S.T., M.Eng.</span>
+                    </div>
+                  </div>
+
+                  <!-- Card 2 -->
+                  <div class="rounded-2xl border-2 border-slate-900 bg-white p-4 shadow-sm relative">
+                    <div class="flex justify-between items-baseline mb-1">
+                      <span class="text-lg font-black text-slate-900 font-mono">13:20 – 15:00</span>
+                      <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold">Akan Datang</span>
+                    </div>
+                    <h5 class="text-sm font-extrabold text-slate-900 mb-2">Pengembangan Web Service</h5>
+                    <div class="flex items-center space-x-2 text-xs text-slate-600">
+                      <span class="w-6 h-6 rounded-md border border-slate-900 font-bold flex items-center justify-center text-xs">A</span>
+                      <span class="font-bold text-slate-800">F6.003</span>
+                      <span>|</span>
+                      <span class="truncate">Dr. Ir. Dwijoko Purbohadi, M.T.</span>
+                    </div>
+                  </div>
+
+                  <!-- Card 3 -->
+                  <div class="rounded-2xl border-2 border-slate-900 bg-white p-4 shadow-sm relative">
+                    <div class="flex justify-between items-baseline mb-1">
+                      <span class="text-lg font-black text-slate-900 font-mono">16:20 – 18:00</span>
+                      <span class="px-2 py-0.5 rounded-md bg-cyan-100 text-cyan-800 text-[10px] font-bold">Lab Jaringan</span>
+                    </div>
+                    <h5 class="text-sm font-extrabold text-slate-900 mb-2">WAN dan Teknologi Jaringan</h5>
+                    <div class="flex items-center space-x-2 text-xs text-slate-600">
+                      <span class="w-6 h-6 rounded-md border border-slate-900 font-bold flex items-center justify-center text-xs">C</span>
+                      <span class="font-bold text-slate-800">F6.004</span>
+                      <span>|</span>
+                      <span class="truncate">Ir. Eko Prasetyo, M.Eng., Ph.D.</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Button 'Kembali' from Sketch 4 -->
+              <div class="pt-3">
+                <button onclick="openWireframeStep('step-active-card')" class="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-xs sm:text-sm border-2 border-slate-900 shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                  </svg>
+                  <span>Kembali</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== SECTION 3: API EXPLORER & LOGGER INSPECTOR ==================== -->
+  <section id="api" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+      <div>
+        <span class="text-xs uppercase tracking-wider font-extrabold text-brand-600">Developer Tools</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-1">REST API Explorer & Inspector</h2>
+        <p class="text-slate-600 text-sm mt-2 max-w-xl">
+          Uji seluruh endpoint secara interaktif langsung dari antarmuka ini. Setiap request akan tercatat otomatis di middleware logger.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        <!-- Wireframe 1: Tampilan Card Kuliah Hari Ini (Wireframe WhatsApp Image at 13.53.02 & 13.53.14) -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-300/80 shadow-md">
-          <div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
-            <div>
-              <h3 class="text-xl font-bold text-slate-900">Selamat Pagi, Andi Pratama!</h3>
-              <p class="text-xs text-slate-500 mt-0.5">Jadwal kamu saat ini. [Affirmative text by AI: <em>"Semangat kuliahnya!"</em>]</p>
-            </div>
-            <span class="px-2.5 py-1 text-[10px] font-semibold bg-emerald-100 text-emerald-800 rounded-lg">Terpublikasi</span>
-          </div>
-
-          <!-- Active Class Card -->
-          <div class="rounded-2xl border-2 border-brand-500 bg-brand-50/40 p-5 mb-5 relative overflow-hidden shadow-sm">
-            <div class="flex justify-between items-start mb-2">
-              <span class="text-2xl font-black text-slate-900 tracking-tight font-mono">08:50 – 11:30</span>
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand-600 text-white font-mono animate-pulse">
-                42:15 left
-              </span>
-            </div>
-            <h4 class="text-lg font-extrabold text-slate-900 mb-3">Pengembangan Aplikasi Web</h4>
-            <div class="flex flex-wrap items-center gap-3 text-sm">
-              <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-white border border-slate-300 font-bold text-slate-800">
-                B
-              </span>
-              <span class="font-semibold text-slate-800 bg-white/80 px-2.5 py-1 rounded-md border border-slate-200">
-                Ruang: F6.003
-              </span>
-              <span class="text-slate-600 text-xs sm:text-sm">
-                Ir. Asroni, S.T., M.Eng.
-              </span>
-            </div>
-          </div>
-
-          <!-- Upcoming Classes (Wireframe 13.53.14) -->
-          <div class="space-y-3">
-            <div class="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
-              <span>Jadwal Berikutnya Hari Ini</span>
-              <span>3 Mata Kuliah Total</span>
-            </div>
-
-            <% jadwal.slice(1, 3).forEach(function(item) { %>
-              <div class="p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition-colors flex items-center justify-between">
-                <div>
-                  <div class="flex items-center space-x-2">
-                    <span class="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
-                      <%= item.jamMulai %> – <%= item.jamSelesai %>
-                    </span>
-                    <span class="text-xs font-semibold text-brand-600">Kelas <%= item.kelas %></span>
-                  </div>
-                  <h5 class="text-sm font-bold text-slate-800 mt-1"><%= item.mataKuliah %></h5>
-                  <p class="text-xs text-slate-500"><%= item.dosen %> • <%= item.ruang %></p>
-                </div>
-                <span class="text-xs font-medium text-slate-400 px-2.5 py-1 rounded bg-slate-50 border border-slate-100">
-                  <%= item.jenis %>
-                </span>
-              </div>
-            <% }); %>
-          </div>
-
-          <div class="mt-6 pt-4 border-t border-slate-200 flex justify-between items-center">
-            <button onclick="toggleModal('modal-jadwal-lengkap')" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-colors shadow">
-              Buka Jadwal Lengkap Semester
-            </button>
-          </div>
-        </div>
-
-        <!-- Wireframe 2: Onboarding Flow Simulation (Wireframe WhatsApp Image at 13.52.50) -->
-        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-300/80 shadow-md">
-          <div class="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
-            <div>
-              <h3 class="text-xl font-bold text-slate-900">Simulasi Onboarding Mahasiswa</h3>
-              <p class="text-xs text-slate-500 mt-0.5">Aturan validasi input sesuai wireframe dokumen</p>
-            </div>
-            <span class="px-2.5 py-1 text-[10px] font-semibold bg-brand-100 text-brand-800 rounded-lg">Step-by-Step</span>
-          </div>
-
-          <form id="onboardingForm" onsubmit="handleOnboardingSubmit(event)" class="space-y-4 text-xs">
-            <!-- 1. Semester Picker -->
-            <div>
-              <label class="block font-semibold text-slate-700 mb-1">
-                1. Semester saat ini? <span class="text-slate-400 font-normal">(Integer 1–12, tanpa dropdown)</span>
-              </label>
-              <div class="flex items-center space-x-2">
-                <button type="button" onclick="adjustSemester(-1)" class="w-9 h-9 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-sm text-slate-700">-</button>
-                <input id="input-semester" type="number" min="1" max="12" value="4" required class="w-20 text-center font-bold text-sm py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none">
-                <button type="button" onclick="adjustSemester(1)" class="w-9 h-9 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-sm text-slate-700">+</button>
-                <span class="text-slate-500 text-[11px] ml-2">Validasi: Hanya angka 1 s.d. 12</span>
-              </div>
-            </div>
-
-            <!-- 2. Angkatan Year Picker -->
-            <div>
-              <label class="block font-semibold text-slate-700 mb-1">
-                2. Angkatan berapa? <span class="text-slate-400 font-normal">(Year Picker)</span>
-              </label>
-              <input id="input-angkatan" type="number" min="2018" max="2026" value="2024" class="w-36 font-semibold py-2 px-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none" oninput="updateNimPreview()">
-            </div>
-
-            <!-- 3. Nama & NIM -->
-            <div class="space-y-2">
-              <label class="block font-semibold text-slate-700">
-                3. Nama & NIM Mahasiswa
-              </label>
-              <input id="input-nama" type="text" placeholder="NAMA LENGKAP" required class="w-full uppercase font-medium py-2 px-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none" oninput="this.value = this.value.toUpperCase()">
-              <p class="text-[10px] text-slate-400">Aturan: Otomatis huruf kapital, minimal 3 karakter.</p>
-
-              <div class="flex items-center space-x-2">
-                <span id="nim-prefix" class="font-mono bg-slate-100 px-3 py-2 rounded-lg border border-slate-300 text-slate-600 font-bold">20240140</span>
-                <input id="input-nim-suffix" type="text" maxlength="3" placeholder="093" value="093" required class="w-20 font-mono font-bold py-2 px-3 text-center rounded-lg border border-slate-300 focus:ring-2 focus:ring-brand-500 focus:outline-none" oninput="this.value = this.value.replace(/[^0-9]/g, ''); updateNimPreview()">
-              </div>
-              <p class="text-[10px] text-slate-400">Aturan: Hanya input 3 digit belakang NIM. Prefix otomatis: [angkatan]0140[3NIM].</p>
-            </div>
-
-            <!-- 4. Pra-KRS Mock -->
-            <div class="pt-2">
-              <label class="block font-semibold text-slate-700 mb-1">
-                4. Pra-KRS Semester Ini (AI Auto-Mapping Grid)
-              </label>
-              <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1.5 text-[11px]">
-                <div class="flex justify-between font-semibold text-slate-700 pb-1 border-b border-slate-200">
-                  <span>Mata Kuliah Terpilih</span>
-                  <span>Saran AI</span>
-                </div>
-                <div class="flex justify-between text-slate-600">
-                  <span>Pengembangan Aplikasi Web</span>
-                  <span class="text-brand-600 font-semibold">Kelas B (F6.003)</span>
-                </div>
-                <div class="flex justify-between text-slate-600">
-                  <span>Pengembangan Web Service</span>
-                  <span class="text-brand-600 font-semibold">Kelas A (F6.003)</span>
-                </div>
-                <div class="flex justify-between text-slate-600">
-                  <span>WAN dan Teknologi Jaringan</span>
-                  <span class="text-brand-600 font-semibold">Kelas C (Lab F6.004)</span>
-                </div>
-              </div>
-            </div>
-
-            <button type="submit" class="w-full py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-colors mt-2">
-              Simpan & Uji Validasi Onboarding
-            </button>
-            <div id="onboarding-feedback" class="hidden p-3 rounded-lg text-xs"></div>
-          </form>
-        </div>
+      <!-- Quick Tab Switcher -->
+      <div class="flex items-center gap-2 p-1 bg-slate-100 rounded-xl text-xs font-bold">
+        <button onclick="switchApiTab('status')" id="tab-btn-status" class="px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition-all">
+          /api/status
+        </button>
+        <button onclick="switchApiTab('produk')" id="tab-btn-produk" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
+          /api/produk
+        </button>
+        <button onclick="switchApiTab('jadwal')" id="tab-btn-jadwal" class="px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
+          /api/jadwal
+        </button>
       </div>
     </div>
-  </section>
 
-  <!-- Section 3: Dokumentasi API & Console Uji Langsung -->
-  <section id="api" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="max-w-3xl mb-10">
-      <span class="text-xs uppercase tracking-wider font-bold text-brand-600">Dokumentasi & Uji Coba API</span>
-      <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Endpoint REST API Jadwalin</h2>
-      <p class="text-slate-600 text-sm mt-2">
-        Sesuai checklist tugas: Endpoint <code class="font-mono bg-slate-100 text-brand-600 px-1 rounded">/api/status</code> dan <code class="font-mono bg-slate-100 text-brand-600 px-1 rounded">/api/produk</code> siap diakses dengan response JSON berstruktur baku.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Card Endpoint 1: /api/status -->
-      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
-        <div>
-          <div class="flex items-center space-x-2 mb-3">
-            <span class="px-2.5 py-1 text-xs font-mono font-bold bg-emerald-100 text-emerald-800 rounded">GET</span>
-            <span class="font-mono font-bold text-sm text-slate-800">/api/status</span>
-          </div>
-          <p class="text-xs text-slate-600 mb-4">
-            Mengembalikan status operasional server, nama aplikasi, uptime dalam detik, dan waktu server saat ini.
-          </p>
-          <div class="bg-slate-900 rounded-xl p-4 text-emerald-400 font-mono text-xs overflow-x-auto max-h-48" id="json-status">
-            // Klik tombol di bawah untuk fetch live response
-          </div>
-        </div>
-        <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
-          <button onclick="fetchApi('/api/status', 'json-status')" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs transition-colors">
-            Tes /api/status
-          </button>
-          <a href="/api/status" target="_blank" class="text-xs text-slate-500 hover:text-slate-800 underline">
-            Buka Tab Baru
-          </a>
-        </div>
-      </div>
-
-      <!-- Card Endpoint 2: /api/produk -->
-      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
-        <div>
-          <div class="flex items-center space-x-2 mb-3">
-            <span class="px-2.5 py-1 text-xs font-mono font-bold bg-brand-100 text-brand-800 rounded">GET</span>
-            <span class="font-mono font-bold text-sm text-slate-800">/api/produk</span>
-          </div>
-          <p class="text-xs text-slate-600 mb-4">
-            Mengembalikan data produk dan modul layanan penjadwalan dalam bentuk array JSON dari backend Model.
-          </p>
-          <div class="bg-slate-900 rounded-xl p-4 text-cyan-400 font-mono text-xs overflow-x-auto max-h-48" id="json-produk">
-            // Klik tombol di bawah untuk fetch live response
-          </div>
-        </div>
-        <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
-          <button onclick="fetchApi('/api/produk', 'json-produk')" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs transition-colors">
-            Tes /api/produk
-          </button>
-          <a href="/api/produk" target="_blank" class="text-xs text-slate-500 hover:text-slate-800 underline">
-            Buka Tab Baru
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-<!-- Modal Detail Produk -->
-<div id="modal-detail" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 transform transition-all">
-    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-      <h3 id="modal-title" class="text-lg font-bold text-slate-900"></h3>
-      <button onclick="toggleModal('modal-detail')" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
-    </div>
-    <div class="py-4 space-y-3 text-xs text-slate-600">
-      <p id="modal-desc" class="text-sm leading-relaxed text-slate-700"></p>
-      <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
-        <div class="flex justify-between">
-          <span class="font-medium text-slate-500">Kategori:</span>
-          <span id="modal-kategori" class="font-semibold text-slate-800"></span>
-        </div>
-        <div class="flex justify-between">
-          <span class="font-medium text-slate-500">Fitur Utama:</span>
-          <span id="modal-fitur" class="font-semibold text-slate-800 text-right"></span>
-        </div>
-        <div class="flex justify-between">
-          <span class="font-medium text-slate-500">Estimasi Nilai:</span>
-          <span id="modal-harga" class="font-bold text-brand-600 text-sm"></span>
-        </div>
-      </div>
-    </div>
-    <div class="pt-2 flex justify-end">
-      <button onclick="toggleModal('modal-detail')" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs rounded-lg">
-        Tutup
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Jadwal Lengkap -->
-<div id="modal-jadwal-lengkap" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 transform transition-all max-h-[85vh] overflow-y-auto">
-    <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-      <div>
-        <h3 class="text-lg font-bold text-slate-900">Jadwal Kuliah Semester Ini (TI UMY)</h3>
-        <p class="text-xs text-slate-500">Data hasil penjadwalan bebas bentrok</p>
-      </div>
-      <button onclick="toggleModal('modal-jadwal-lengkap')" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
-    </div>
-
-    <div class="py-4 space-y-3">
-      <% jadwal.forEach(function(item) { %>
-        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-          <div>
-            <div class="flex items-center space-x-2">
-              <span class="px-2 py-0.5 rounded bg-brand-100 text-brand-800 font-mono text-xs font-bold"><%= item.hari %></span>
-              <span class="font-mono text-xs font-semibold text-slate-700"><%= item.jamMulai %> – <%= item.jamSelesai %></span>
-              <span class="text-xs font-bold text-brand-700">Kelas <%= item.kelas %></span>
-            </div>
-            <h4 class="text-sm font-bold text-slate-900 mt-1"><%= item.mataKuliah %></h4>
-            <p class="text-xs text-slate-500"><%= item.dosen %> • Ruang: <%= item.ruang %></p>
-          </div>
-          <span class="text-[11px] font-medium text-slate-600 px-2.5 py-1 rounded bg-white border border-slate-200 self-start sm:self-center">
-            <%= item.jenis %>
+    <!-- API Console Card -->
+    <div class="bg-surface-900 rounded-3xl p-6 sm:p-8 text-white border border-slate-800 shadow-xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+        <div class="flex items-center space-x-3">
+          <span id="api-method-pill" class="px-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 font-mono text-xs font-bold border border-emerald-500/30">
+            GET
+          </span>
+          <span id="api-url-text" class="font-mono text-sm sm:text-base font-bold text-slate-200">
+            /api/status
           </span>
         </div>
-      <% }); %>
+
+        <div class="flex items-center space-x-3">
+          <span id="api-latency-pill" class="text-xs font-mono text-slate-400 hidden sm:inline">
+            Response: <span class="text-emerald-400 font-semibold" id="api-ms">- ms</span>
+          </span>
+          <button onclick="executeCurrentApi()" class="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-xs transition-all flex items-center gap-1.5 shadow-md shadow-brand-500/25">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+            </svg>
+            <span>Eksekusi Request</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- JSON Viewer Terminal -->
+      <div class="mt-4 relative">
+        <pre id="api-console-output" class="bg-surface-950 p-4 sm:p-5 rounded-2xl font-mono text-xs text-emerald-400 overflow-x-auto max-h-80 leading-relaxed border border-slate-800/80">
+// Klik tombol "Eksekusi Request" di atas untuk mengambil live response JSON
+        </pre>
+        <button onclick="copyApiOutput()" class="absolute top-3 right-3 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-mono transition-colors">
+          Salin JSON
+        </button>
+      </div>
+
+      <div class="mt-4 pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-slate-400 gap-2">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>Logger middleware otomatis mencatat response ini ke <strong class="text-slate-300">logs/logger.md</strong></span>
+        </div>
+        <a id="api-direct-link" href="/api/status" target="_blank" class="text-brand-400 hover:text-brand-300 font-semibold underline">
+          Buka di tab baru ↗
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==================== MODAL DETAIL PRODUK ==================== -->
+<div id="modal-detail" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-200 transform transition-all">
+    <div class="flex items-start justify-between pb-3 border-b border-slate-100">
+      <div>
+        <span id="modal-kategori-badge" class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-brand-50 text-brand-700 mb-1 inline-block"></span>
+        <h3 id="modal-title" class="text-xl font-black text-slate-900"></h3>
+      </div>
+      <button onclick="toggleModal('modal-detail')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold text-lg transition-colors">
+        &times;
+      </button>
     </div>
 
-    <div class="pt-3 border-t border-slate-100 flex justify-end">
-      <button onclick="toggleModal('modal-jadwal-lengkap')" class="px-4 py-2 bg-slate-900 text-white font-semibold text-xs rounded-lg">
+    <div class="py-5 space-y-4 text-xs">
+      <p id="modal-desc" class="text-slate-600 text-sm leading-relaxed"></p>
+
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2.5">
+        <div class="flex justify-between items-center">
+          <span class="font-medium text-slate-500">Kategori Modul:</span>
+          <span id="modal-kategori" class="font-bold text-slate-800"></span>
+        </div>
+        <div class="flex justify-between items-start gap-4">
+          <span class="font-medium text-slate-500 shrink-0">Fitur Kunci:</span>
+          <span id="modal-fitur" class="font-semibold text-slate-700 text-right"></span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="font-medium text-slate-500">Status Lisensi:</span>
+          <span id="modal-stok" class="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded"></span>
+        </div>
+        <div class="flex justify-between items-center pt-2 border-t border-slate-200">
+          <span class="font-bold text-slate-700">Estimasi Nilai Investasi:</span>
+          <span id="modal-harga" class="font-black text-brand-600 text-base"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-2 flex justify-end gap-2">
+      <button onclick="toggleModal('modal-detail')" class="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-colors">
         Tutup
       </button>
     </div>
   </div>
 </div>
 
-<!-- Frontend Script Interactive -->
+<!-- ==================== FRONTEND CLIENT LOGIC ==================== -->
 <script>
-  // Cek Status Server saat load
+  // State API Console
+  let activeApiEndpoint = '/api/status';
+
+  // Cek Status Server saat pertama load
   async function checkServerStatus() {
     const uptimeEl = document.getElementById('uptime-text');
+    const badgeEl = document.getElementById('nav-status-badge');
     try {
-      uptimeEl.innerText = 'Memeriksa...';
+      uptimeEl.innerText = 'Ping...';
       const res = await fetch('/api/status');
       const data = await res.json();
-      uptimeEl.innerText = `${data.uptimeDetik} detik (${data.status.toUpperCase()})`;
+      uptimeEl.innerText = `${data.uptimeDetik}s (${data.status.toUpperCase()})`;
+      if (badgeEl) badgeEl.innerText = 'API Aktif (' + data.uptimeDetik + 's)';
     } catch (e) {
       uptimeEl.innerText = 'Offline';
+      if (badgeEl) badgeEl.innerText = 'API Offline';
     }
   }
 
-  // Fetch API Helper
-  async function fetchApi(url, targetId) {
-    const el = document.getElementById(targetId);
-    el.innerText = 'Mengambil data dari ' + url + '...';
+  // API Console Switcher
+  function switchApiTab(key) {
+    document.querySelectorAll('[id^="tab-btn-"]').forEach(btn => {
+      btn.className = 'px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all';
+    });
+    const activeBtn = document.getElementById('tab-btn-' + key);
+    if (activeBtn) {
+      activeBtn.className = 'px-3.5 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition-all';
+    }
+
+    if (key === 'status') activeApiEndpoint = '/api/status';
+    if (key === 'produk') activeApiEndpoint = '/api/produk';
+    if (key === 'jadwal') activeApiEndpoint = '/api/jadwal';
+
+    document.getElementById('api-url-text').innerText = activeApiEndpoint;
+    document.getElementById('api-direct-link').href = activeApiEndpoint;
+    executeCurrentApi();
+  }
+
+  async function executeCurrentApi() {
+    const outputEl = document.getElementById('api-console-output');
+    const msEl = document.getElementById('api-ms');
+    outputEl.innerText = '// Memuat request dari ' + activeApiEndpoint + '...';
+    
+    const t0 = performance.now();
     try {
-      const res = await fetch(url);
+      const res = await fetch(activeApiEndpoint);
       const data = await res.json();
-      el.innerText = JSON.stringify(data, null, 2);
+      const t1 = performance.now();
+      msEl.innerText = (t1 - t0).toFixed(1) + ' ms';
+      outputEl.innerText = JSON.stringify(data, null, 2);
     } catch (err) {
-      el.innerText = 'Error: ' + err.message;
+      outputEl.innerText = 'Error: ' + err.message;
+      msEl.innerText = 'Gagal';
     }
   }
 
-  // Modal handler
+  function copyApiOutput() {
+    const text = document.getElementById('api-console-output').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      alert('JSON berhasil disalin ke clipboard!');
+    });
+  }
+
+  // Modal Detail Handler
   function toggleModal(id) {
     const m = document.getElementById(id);
     m.classList.toggle('hidden');
@@ -489,65 +791,139 @@
   function previewProdukDetail(p) {
     document.getElementById('modal-title').innerText = p.nama;
     document.getElementById('modal-desc').innerText = p.deskripsi;
+    document.getElementById('modal-kategori-badge').innerText = p.kategori;
     document.getElementById('modal-kategori').innerText = p.kategori;
     document.getElementById('modal-fitur').innerText = p.fiturUtama;
+    document.getElementById('modal-stok').innerText = p.stok + ' Kuota Tersedia';
     document.getElementById('modal-harga').innerText = 'Rp ' + Number(p.harga).toLocaleString('id-ID');
     toggleModal('modal-detail');
   }
 
-  // Onboarding Helpers
-  function adjustSemester(delta) {
-    const input = document.getElementById('input-semester');
+  // Filter Produk by Search & Category
+  function filterProducts() {
+    const query = document.getElementById('productSearch').value.toLowerCase();
+    const cards = document.querySelectorAll('.product-card');
+    cards.forEach(card => {
+      const nama = card.getAttribute('data-nama');
+      if (nama.includes(query)) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  }
+
+  function setCategoryFilter(cat) {
+    document.querySelectorAll('.cat-pill').forEach(btn => {
+      btn.className = 'cat-pill px-3.5 py-1.5 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all';
+    });
+    const activeBtn = document.querySelector(`.cat-pill[data-cat="${cat}"]`);
+    if (activeBtn) {
+      activeBtn.className = 'cat-pill active px-3.5 py-1.5 rounded-full bg-brand-600 text-white shadow-sm transition-all';
+    }
+
+    const cards = document.querySelectorAll('.product-card');
+    cards.forEach(card => {
+      const cardCat = card.getAttribute('data-kategori');
+      if (cat === 'all' || cardCat === cat) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  }
+
+  // ================= WIREFRAME SIMULATOR LOGIC =================
+  function openWireframeStep(stepId) {
+    // Hide all sub-screens
+    document.querySelectorAll('.wf-screen').forEach(el => el.classList.add('hidden'));
+    
+    // Show selected
+    const target = document.getElementById(stepId);
+    if (target) target.classList.remove('hidden');
+
+    // Update tab styles
+    document.querySelectorAll('.wf-tab').forEach(tab => {
+      tab.className = 'wf-tab px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition-all';
+    });
+
+    if (stepId === 'step-welcome') document.getElementById('btn-tab-welcome').className = 'wf-tab px-4 py-2 rounded-xl bg-brand-600 text-white transition-all';
+    if (stepId === 'step-onboarding') document.getElementById('btn-tab-onboarding').className = 'wf-tab px-4 py-2 rounded-xl bg-brand-600 text-white transition-all';
+    if (stepId === 'step-active-card') document.getElementById('btn-tab-active').className = 'wf-tab px-4 py-2 rounded-xl bg-brand-600 text-white transition-all';
+    if (stepId === 'step-full-schedule') document.getElementById('btn-tab-full').className = 'wf-tab px-4 py-2 rounded-xl bg-brand-600 text-white transition-all';
+  }
+
+  function adjustSimSemester(delta) {
+    const input = document.getElementById('sim-semester');
     let val = parseInt(input.value || 1, 10) + delta;
     if (val < 1) val = 1;
     if (val > 12) val = 12;
     input.value = val;
   }
 
-  function updateNimPreview() {
-    const angkatan = document.getElementById('input-angkatan').value || '2024';
-    document.getElementById('nim-prefix').innerText = angkatan + '0140';
+  function updateSimNim() {
+    const angkatan = document.getElementById('sim-angkatan').value || '2024';
+    document.getElementById('sim-nim-prefix').innerText = angkatan + '0140';
   }
 
-  function handleOnboardingSubmit(e) {
+  function handleSimulatorSubmit(e) {
     e.preventDefault();
-    const semester = parseInt(document.getElementById('input-semester').value, 10);
-    const nama = document.getElementById('input-nama').value.trim();
-    const suffix = document.getElementById('input-nim-suffix').value.trim();
-    const feedback = document.getElementById('onboarding-feedback');
+    const semester = parseInt(document.getElementById('sim-semester').value, 10);
+    const nama = document.getElementById('sim-nama').value.trim();
+    const suffix = document.getElementById('sim-nim-suffix').value.trim();
+    const feedback = document.getElementById('sim-feedback');
 
     if (semester < 1 || semester > 12 || isNaN(semester)) {
-      feedback.className = 'p-3 rounded-lg text-xs bg-red-100 text-red-700 border border-red-200';
-      feedback.innerText = 'Error: Semester hanya boleh bilangan bulat 1 sampai 12.';
+      feedback.className = 'p-3 rounded-xl text-xs bg-red-100 text-red-700 border border-red-200';
+      feedback.innerText = 'Validasi Gagal: Semester harus integer 1 s.d. 12.';
       feedback.classList.remove('hidden');
       return;
     }
 
     if (nama.length < 3) {
-      feedback.className = 'p-3 rounded-lg text-xs bg-red-100 text-red-700 border border-red-200';
-      feedback.innerText = 'Error: Nama harus minimal 3 huruf.';
+      feedback.className = 'p-3 rounded-xl text-xs bg-red-100 text-red-700 border border-red-200';
+      feedback.innerText = 'Validasi Gagal: Nama minimal 3 karakter huruf kapital.';
       feedback.classList.remove('hidden');
       return;
     }
 
     if (suffix.length !== 3) {
-      feedback.className = 'p-3 rounded-lg text-xs bg-red-100 text-red-700 border border-red-200';
-      feedback.innerText = 'Error: NIM harus terdiri dari 3 digit angka belakang.';
+      feedback.className = 'p-3 rounded-xl text-xs bg-red-100 text-red-700 border border-red-200';
+      feedback.innerText = 'Validasi Gagal: NIM harus 3 digit angka belakang.';
       feedback.classList.remove('hidden');
       return;
     }
 
-    const angkatan = document.getElementById('input-angkatan').value;
-    const fullNim = `${angkatan}0140${suffix}`;
+    // Set greeting on active card screen
+    document.getElementById('user-greeting').innerText = `Selamat Pagi, ${nama}!`;
 
-    feedback.className = 'p-3 rounded-lg text-xs bg-emerald-100 text-emerald-800 border border-emerald-200';
-    feedback.innerText = `Validasi Sukses! Mahasiswa ${nama} (NIM: ${fullNim}) siap menggunakan sistem Jadwalin semester ${semester}.`;
+    feedback.className = 'p-3 rounded-xl text-xs bg-emerald-100 text-emerald-800 border border-emerald-200';
+    feedback.innerText = `Validasi Sukses! Membuka dashboard jadwal untuk ${nama}...`;
     feedback.classList.remove('hidden');
+
+    setTimeout(() => {
+      openWireframeStep('step-active-card');
+      feedback.classList.add('hidden');
+    }, 700);
   }
 
-  // Jalankan status saat halaman dibuka
+  // Live countdown timer ticker (42:15 left ticking down)
+  let countdownSeconds = 42 * 60 + 15;
+  setInterval(() => {
+    if (countdownSeconds > 0) {
+      countdownSeconds--;
+      const m = Math.floor(countdownSeconds / 60);
+      const s = countdownSeconds % 60;
+      const formatted = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} left`;
+      const badge = document.getElementById('countdown-badge');
+      if (badge) badge.innerText = formatted;
+    }
+  }, 1000);
+
+  // Inisialisasi saat halaman dibuka
   document.addEventListener('DOMContentLoaded', () => {
     checkServerStatus();
+    executeCurrentApi();
   });
 </script>
 
