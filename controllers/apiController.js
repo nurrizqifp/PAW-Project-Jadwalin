@@ -10,7 +10,7 @@ exports.status = (req, res) => {
   res.json({
     status: 'ok',
     aplikasi: config.appName,
-    deskripsi: 'AI Powered Smart Course Scheduling - TI UMY',
+    deskripsi: 'Smart Course Scheduling System',
     uptimeDetik: Math.round(process.uptime()),
     waktuServer: new Date().toISOString(),
     environment: config.nodeEnv,
@@ -34,4 +34,3 @@ exports.jadwal = (req, res) => {
     data,
   });
 };
-

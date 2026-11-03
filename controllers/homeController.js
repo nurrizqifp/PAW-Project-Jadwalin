@@ -12,7 +12,7 @@ exports.index = (req, res) => {
   const jadwal = JadwalModel.getAll();
 
   res.render('index', {
-    judul: `${config.appName} - AI Powered Smart Course Scheduling`,
+    judul: `${config.appName} — Penjadwalan Cerdas`,
     appName: config.appName,
     produk,
     jadwal,
@@ -21,4 +21,3 @@ exports.index = (req, res) => {
     currentDate: formatDate(),
   });
 };
-
