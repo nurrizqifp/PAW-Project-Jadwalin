@@ -22,7 +22,7 @@ PAW-Project-Jadwalin/
 │   ├── database.js         # Setup PostgreSQL Sequelize
 │   └── index.js            # Konfigurasi aplikasi
 ├── controllers/            # Controller pemrosesan logika & response
-│   ├── apiController.js    # Handler REST API (/api/*)
+│   ├── apiController.js    # Handler REST API (/api/*) dengan validasi Zod
 │   └── homeController.js   # Handler render Single Page App (/)
 ├── docs/                   # Dokumen PRD dan sketsa wireframe antarmuka
 │   ├── PRD-Kelompok5-TakeHome.docx.md
@@ -32,7 +32,7 @@ PAW-Project-Jadwalin/
 ├── models/                 # Model domain akademik sesuai PRD
 │   ├── masterModel.js      # Data master 20 dosen, 45 mata kuliah, 8 ruangan
 │   ├── constraintModel.js  # Aturan Hard Constraints & Soft Constraints
-│   ├── jadwalModel.js      # Jadwal hasil generate AI & solver
+│   ├── jadwalModel.js      # Jadwal hasil generate AI, deteksi konflik, & notifikasi
 │   └── produkModel.js      # Pemetaan spesifikasi fitur PRD (F-01 s/d F-08)
 ├── routes/                 # Definisi rute Express.js
 │   ├── api.js              # Endpoint REST API
@@ -61,17 +61,17 @@ PAW-Project-Jadwalin/
 
 1. **Mahasiswa (Andi Pratama)**
    - Akses jadwal kuliah real-time dengan countdown sesi aktif (`08:50 - 11:30 | 42:15 left`).
-   - Jadwal lengkap semester bebas bentrok dengan filter hari.
+   - Jadwal lengkap semester bebas bentrok dengan filter hari dan banner notifikasi perubahan jadwal (US-07, US-08).
    - Konfigurasi profil & Pra-KRS dengan validasi angka semester (1–12), angkatan, nama, dan NIM.
 
 2. **Staf Administrasi Akademik (Rina Wulandari)**
-   - Pengelolaan data master: 20 Dosen, 45 Mata Kuliah, 8 Ruangan (Kelas Teori & Laboratorium).
-   - Pengaturan Hard Constraints (0 bentrok, 100% lab matching) dan Soft Constraints (preferensi dosen).
-   - Generator jadwal otomatis AI 1-klik (&lt; 15 menit) dan publikasi jadwal.
+   - Pengelolaan & penambahan data master: 20 Dosen, 45 Mata Kuliah, 8 Ruangan dengan pencarian dan validasi (US-01).
+   - Pengaturan Hard Constraints (0 bentrok, 100% lab matching) dan Soft Constraints (preferensi dosen) (US-02).
+   - Generator jadwal otomatis AI 1-klik (&lt; 15 menit), deteksi laporan konflik beserta saran perbaikan (US-03), serta preview multi-filter & publikasi jadwal (US-04).
 
 3. **Dosen (Dr. Budi Santoso)**
-   - Jadwal mengajar pribadi per semester.
-   - Form preferensi waktu mengajar dan hari riset (misal: hari Jumat bebas mengajar untuk penelitian).
+   - Jadwal mengajar pribadi per semester & notifikasi perubahan jadwal (US-06).
+   - Form preferensi waktu mengajar dan hari riset (misal: hari Jumat bebas mengajar untuk penelitian) yang tersinkronisasi ke panel Staf Akademik (US-05).
 
 ---
 
@@ -101,10 +101,15 @@ Akses aplikasi di: **`http://localhost:3000`**
 |---|---|---|---|
 | `GET` | `/` | Antarmuka Single Page App Sistem Penjadwalan | HTML (EJS) |
 | `GET` | `/api/status` | Status server, zero-clash metrics, uptime | JSON |
-| `GET` | `/api/jadwal` | Data jadwal perkuliahan terpublikasi (filter dosen/ruang/kelas) | JSON |
+| `GET` | `/api/jadwal` | Data jadwal terpublikasi (mendukung filter kombinasi `dosen`, `ruang`, `kelas`, `hari`) | JSON |
+| `POST` | `/api/jadwal/revisi` | Revisi slot jadwal, deteksi konflik otomatis, dan pencatatan notifikasi perubahan | JSON |
+| `POST` | `/api/jadwal/publish` | Validasi zero-clash dan publikasi jadwal ke seluruh civitas | JSON |
 | `GET` | `/api/master` | Data master 20 dosen, 45 mata kuliah, 8 ruangan | JSON |
+| `POST` | `/api/master` | Tambah data dosen, mata kuliah, atau ruangan dengan validasi skema Zod | JSON |
 | `GET` | `/api/constraints` | Konfigurasi Hard & Soft Constraints | JSON |
-| `POST` | `/api/generate` | Trigger AI solver penjadwalan otomatis | JSON |
+| `POST` | `/api/constraints/preferensi` | Simpan preferensi hari bebas mengajar dosen | JSON |
+| `POST` | `/api/constraints/hard` | Aktifkan/nonaktifkan aturan Hard Constraint | JSON |
+| `POST` | `/api/generate` | Trigger AI solver penjadwalan otomatis & resolusi konflik | JSON |
 | `GET` | `/api/produk` | Spesifikasi modul & fitur sistem PRD (F-01 s/d F-08) | JSON |
 
 ---
@@ -115,6 +120,6 @@ Setiap request HTTP dicatat ke `logs/logger.md` dalam format tabel Markdown:
 - Timestamp (WIB)
 - HTTP Method (`GET`, `POST`)
 - URL Request
-- Status Code (`200`, `404`)
+- Status Code (`200`, `201`, `400`, `404`, `422`)
 - Durasi respons (ms)
 - Alamat IP Client

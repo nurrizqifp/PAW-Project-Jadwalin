@@ -1,4 +1,4 @@
-<header class="sticky top-0 z-40 bg-white/85 backdrop-blur-xl border-b border-app-border transition-all">
+<header class="sticky top-0 z-40 bg-white/85 backdrop-blur-xl border-b border-app-border">
   <div class="max-w-6xl mx-auto px-4 sm:px-6">
     <div class="flex items-center justify-between h-14 sm:h-16">
       
@@ -20,9 +20,9 @@
         </a>
       </div>
 
-      <!-- Center: macOS Segmented Control based on PRD User Roles -->
+      <!-- Center: macOS Segmented Control based on PRD User Roles (Instant 100+/day switch) -->
       <nav class="hidden md:flex items-center bg-zinc-100 p-1 rounded-xl border border-zinc-200/80 text-xs font-semibold text-zinc-600">
-        <button onclick="switchView('view-mahasiswa')" id="nav-btn-mahasiswa" class="nav-segment px-3.5 py-1.5 rounded-lg bg-white text-zinc-900 shadow-sm transition-all flex items-center gap-1.5">
+        <button onclick="switchView('view-mahasiswa')" id="nav-btn-mahasiswa" class="nav-segment px-3.5 py-1.5 rounded-lg bg-white text-zinc-900 shadow-sm flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>
@@ -32,7 +32,7 @@
           <span>Mahasiswa</span>
         </button>
 
-        <button onclick="switchView('view-akademik')" id="nav-btn-akademik" class="nav-segment px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 transition-all flex items-center gap-1.5">
+        <button onclick="switchView('view-akademik')" id="nav-btn-akademik" class="nav-segment px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -40,7 +40,7 @@
           <span>Staf Akademik</span>
         </button>
 
-        <button onclick="switchView('view-dosen')" id="nav-btn-dosen" class="nav-segment px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 transition-all flex items-center gap-1.5">
+        <button onclick="switchView('view-dosen')" id="nav-btn-dosen" class="nav-segment px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
@@ -48,7 +48,7 @@
           <span>Dosen</span>
         </button>
 
-        <button onclick="switchView('view-system')" id="nav-btn-system" class="nav-segment px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 transition-all flex items-center gap-1.5">
+        <button onclick="switchView('view-system')" id="nav-btn-system" class="nav-segment px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
           </svg>
@@ -58,9 +58,9 @@
 
       <!-- Right: Active Schedule Status -->
       <div class="flex items-center space-x-3 text-xs">
-        <div class="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-zinc-100 text-zinc-800 border border-zinc-200 font-medium text-[11px]">
+        <div id="navZeroClashPill" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-zinc-100 text-zinc-800 border border-zinc-200 font-medium text-[11px]">
           <span class="w-1.5 h-1.5 rounded-full bg-zinc-900"></span>
-          <span>Zero Clash Active</span>
+          <span id="navZeroClashText">Zero Clash Active</span>
         </div>
 
         <div class="hidden sm:flex items-center space-x-2 pl-2">

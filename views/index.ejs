@@ -3,37 +3,64 @@
 
 <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
 
-  <!-- ==================== PANEL 1: MAHASISWA (ANDI PRATAMA - PRD US-07, US-08, F-07) ==================== -->
+  <!-- ==================== BANNER NOTIFIKASI PERUBAHAN JADWAL ==================== -->
+  <div id="notifBanner" class="mb-6 bg-white rounded-2xl p-4 border border-app-border shadow-mac flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+    <div class="flex items-start sm:items-center gap-3">
+      <span class="px-2 py-1 rounded-lg bg-zinc-900 text-white font-mono font-bold text-[10px] uppercase tracking-wider shrink-0">
+        Notifikasi TI UMY
+      </span>
+      <div>
+        <div class="font-bold text-zinc-900" id="notifTitle">
+          <%= notifikasiList[0] ? `${notifikasiList[0].kodeMatkul} — ${notifikasiList[0].mataKuliah}` : 'Sistem Jadwal Aktif' %>
+        </div>
+        <p class="text-zinc-500 mt-0.5" id="notifDesc">
+          <%= notifikasiList[0] ? notifikasiList[0].perubahan : 'Belum ada perubahan jadwal baru.' %>
+        </p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 self-end sm:self-center shrink-0">
+      <span class="font-mono text-[11px] text-zinc-400 tabular-nums" id="notifTime">
+        <%= notifikasiList[0] ? notifikasiList[0].waktu : '-' %>
+      </span>
+      <button onclick="openModal('modal-riwayat-notif')" class="btn-press px-3 py-1.5 rounded-xl bg-zinc-100 hover-surface text-zinc-800 font-semibold">
+        Riwayat (<span id="notifCountBadge" class="tabular-nums"><%= notifikasiList.length %></span>)
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== PANEL 1: MAHASISWA (ANDI PRATAMA) ==================== -->
   <section id="view-mahasiswa" class="spa-view space-y-6">
     
-    <!-- Header Banner -->
+    <!-- Header Banner Profil & Pra-KRS -->
     <div class="bg-white rounded-2xl p-6 border border-app-border shadow-mac flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <div class="flex items-center space-x-2 text-xs text-zinc-500 font-medium mb-1">
+        <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-500 font-medium mb-1">
           <span class="w-2 h-2 rounded-full bg-zinc-900"></span>
-          <span>Semester 4</span>
+          <span id="mhsSemesterText">Semester 4</span>
           <span>&middot;</span>
-          <span class="font-mono">NIM: 20240140093</span>
+          <span id="mhsKelasBadge" class="px-2 py-0.5 rounded bg-zinc-100 font-bold text-zinc-900">Kelas B</span>
           <span>&middot;</span>
-          <span class="text-zinc-900 font-semibold"><%= jadwalStatus.status %></span>
+          <span id="mhsPeminatanBadge" class="px-2 py-0.5 rounded bg-zinc-900 text-white font-mono text-[11px]">Peminatan: Programming (PR)</span>
+          <span>&middot;</span>
+          <span id="mhsNimText" class="font-mono tabular-nums">NIM: 20240140093</span>
         </div>
         <h1 id="mhsGreeting" class="text-2xl font-bold tracking-tight text-zinc-900">
           Selamat Pagi, Andi Pratama
         </h1>
         <p class="text-xs text-zinc-500 mt-1">
-          Jadwal perkuliahan kamu telah diverifikasi dengan 0 bentrok dosen dan ruangan.
+          Jadwal perkuliahan TI UMY telah disinkronkan dengan 0 bentrok dosen dan ruangan.
         </p>
       </div>
 
       <div class="flex items-center space-x-2">
-        <button onclick="openModal('modal-prakrs')" class="px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-900 text-xs font-semibold transition-all flex items-center space-x-1.5 active:scale-[0.98]">
+        <button onclick="openModal('modal-prakrs')" class="btn-press px-3.5 py-2 rounded-xl bg-zinc-100 hover-surface text-zinc-900 text-xs font-semibold flex items-center space-x-1.5">
           <svg class="w-3.5 h-3.5 text-zinc-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
           </svg>
-          <span>Konfigurasi Pra-KRS</span>
+          <span>Ubah Semester & Peminatan</span>
         </button>
 
-        <button onclick="scrollToFullSchedule()" class="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-semibold transition-all flex items-center space-x-1.5 active:scale-[0.98]">
+        <button onclick="scrollToFullSchedule()" class="btn-press px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-semibold flex items-center space-x-1.5">
           <span>Semua Sesi</span>
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M19 9l-7 7-7-7"></path>
@@ -48,24 +75,24 @@
       <!-- Prominent Active Card (2 cols) -->
       <div class="lg:col-span-2 bg-white rounded-2xl p-6 sm:p-7 border border-app-border shadow-mac flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between pb-4 border-b border-zinc-100">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-zinc-100">
             <div class="flex items-center space-x-2">
-              <span class="inline-block w-2 h-2 rounded-full bg-zinc-900 animate-pulse"></span>
+              <span class="inline-block w-2 h-2 rounded-full bg-zinc-900"></span>
               <span class="text-xs font-bold text-zinc-900 uppercase tracking-wider">
                 Sesi Berlangsung Sekarang
               </span>
             </div>
 
             <div class="flex items-center space-x-2">
-              <span class="text-sm font-bold font-mono text-zinc-900">08:50 &ndash; 11:30</span>
-              <span id="countdownTicker" class="px-2.5 py-1 rounded-lg bg-zinc-900 text-white font-mono text-xs font-bold">
+              <span class="text-sm font-bold font-mono tabular-nums text-zinc-900">08:50 &ndash; 11:30</span>
+              <span id="countdownTicker" class="px-2.5 py-1 rounded-lg bg-zinc-900 text-white font-mono tabular-nums text-xs font-bold">
                 42:15 left
               </span>
             </div>
           </div>
 
           <div class="py-5">
-            <div class="text-xs font-medium text-zinc-400 font-mono">TI401 &middot; 3 SKS &middot; Teori & Praktik</div>
+            <div class="text-xs font-medium text-zinc-400 font-mono">TI501 &middot; 3 SKS &middot; Teori</div>
             <h2 class="text-2xl font-bold tracking-tight text-zinc-900 mt-1">
               Pengembangan Aplikasi Web
             </h2>
@@ -82,7 +109,7 @@
             </div>
             <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-zinc-100 border border-zinc-200">
               <span class="text-zinc-500">Dosen</span>
-              <span class="font-semibold text-zinc-900">Ir. Asroni, S.T., M.Eng.</span>
+              <span class="font-semibold text-zinc-900">Ir. Asroni, S.T., M.Eng</span>
             </div>
           </div>
         </div>
@@ -90,97 +117,103 @@
         <div class="pt-6 mt-6 border-t border-zinc-100">
           <div class="flex justify-between text-xs text-zinc-500 font-medium mb-1.5">
             <span>Durasi Berjalan</span>
-            <span class="font-bold text-zinc-900">68%</span>
+            <span class="font-bold text-zinc-900 tabular-nums">68%</span>
           </div>
           <div class="w-full bg-zinc-100 h-1.5 rounded-full overflow-hidden">
-            <div class="bg-zinc-900 h-full rounded-full transition-all" style="width: 68%;"></div>
+            <div class="bg-zinc-900 h-full rounded-full" style="width: 68%;"></div>
           </div>
         </div>
       </div>
 
-      <!-- Upcoming Sessions (1 col) -->
+      <!-- Paket Rencana Studi Semester Terpilih (KRS & Peminatan) -->
       <div class="bg-white rounded-2xl p-6 border border-app-border shadow-mac flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between pb-3 border-b border-zinc-100 mb-4">
+          <div class="flex items-center justify-between pb-3 border-b border-zinc-100 mb-3">
             <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-500">
-              Sesi Hari Ini Berikutnya
+              Kurikulum Semester Aktif
             </h3>
-            <span class="text-xs font-bold text-zinc-900">Senin</span>
+            <span id="mhsTotalSksBadge" class="text-xs font-bold font-mono text-zinc-900">20 SKS</span>
           </div>
 
-          <div class="space-y-3">
-            <div class="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200/80 text-xs">
-              <div class="flex justify-between items-baseline mb-1">
-                <span class="font-mono font-bold text-zinc-900">13:20 &ndash; 15:00</span>
-                <span class="font-semibold text-zinc-500">Kelas A</span>
+          <div id="mhsPlanContainer" class="space-y-2 max-h-60 overflow-y-auto text-xs pr-1">
+            <% defaultMahasiswaMatkul.forEach(function(m) { %>
+              <div class="p-2.5 rounded-xl bg-zinc-50 border border-zinc-200/80 flex items-center justify-between">
+                <div>
+                  <div class="font-bold text-zinc-900"><%= m.nama %></div>
+                  <div class="font-mono text-[11px] text-zinc-500"><%= m.kode %> &middot; <%= m.kategori %></div>
+                </div>
+                <span class="font-mono font-bold text-zinc-700 tabular-nums shrink-0 ml-2"><%= m.sks %> SKS</span>
               </div>
-              <div class="font-bold text-zinc-900 text-sm">Pengembangan Web Service</div>
-              <div class="text-zinc-500 mt-1">Dr. Ir. Dwijoko Purbohadi &middot; Ruang F6.003</div>
-            </div>
-
-            <div class="p-3.5 rounded-xl bg-zinc-50 border border-zinc-200/80 text-xs">
-              <div class="flex justify-between items-baseline mb-1">
-                <span class="font-mono font-bold text-zinc-900">16:20 &ndash; 18:00</span>
-                <span class="font-semibold text-zinc-500">Kelas C</span>
-              </div>
-              <div class="font-bold text-zinc-900 text-sm">WAN dan Teknologi Jaringan</div>
-              <div class="text-zinc-500 mt-1">Ir. Eko Prasetyo &middot; Lab.Net F6.004</div>
-            </div>
+            <% }); %>
           </div>
         </div>
 
-        <button onclick="scrollToFullSchedule()" class="w-full mt-4 py-2 text-xs font-semibold text-zinc-600 hover:text-zinc-900 text-center transition-colors">
-          Lihat Seluruh Tabel Sesi &darr;
+        <button onclick="openModal('modal-prakrs')" class="w-full mt-4 py-2 rounded-xl bg-zinc-100 hover-surface text-xs font-semibold text-zinc-800 text-center">
+          Sesuaikan Peminatan &rarr;
         </button>
       </div>
 
     </div>
 
-    <!-- Complete Semester Timetable -->
+    <!-- Complete Semester Timetable (Senin - Sabtu) -->
     <div id="fullScheduleTable" class="bg-white rounded-2xl p-6 border border-app-border shadow-mac space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-zinc-100 gap-3">
         <div>
           <h3 class="text-lg font-bold tracking-tight text-zinc-900">
-            Jadwal Perkuliahan Terpublikasi
+            Jadwal Perkuliahan Terpublikasi (111 Sesi TI UMY)
           </h3>
           <p class="text-xs text-zinc-500">
-            Daftar sesi semester aktif yang telah terbebas dari bentrok dosen dan ruangan.
+            Jadwal perkuliahan di Gedung F4 & F6 bebas bentrok dosen dan ruangan.
           </p>
         </div>
 
-        <div class="flex items-center bg-zinc-100 p-1 rounded-xl text-xs font-semibold text-zinc-600">
-          <button onclick="filterDay('Semua')" class="filter-day-btn px-3 py-1.5 rounded-lg bg-white text-zinc-900 shadow-sm" data-day="Semua">
+        <div class="flex items-center bg-zinc-100 p-1 rounded-xl text-xs font-semibold text-zinc-600 overflow-x-auto no-scrollbar">
+          <button onclick="filterDay('Semua')" class="filter-day-btn px-3 py-1.5 rounded-lg bg-white text-zinc-900 shadow-sm whitespace-nowrap" data-day="Semua">
             Semua
           </button>
-          <button onclick="filterDay('Senin')" class="filter-day-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900" data-day="Senin">
+          <button onclick="filterDay('Senin')" class="filter-day-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 whitespace-nowrap" data-day="Senin">
             Senin
           </button>
-          <button onclick="filterDay('Selasa')" class="filter-day-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900" data-day="Selasa">
+          <button onclick="filterDay('Selasa')" class="filter-day-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 whitespace-nowrap" data-day="Selasa">
             Selasa
           </button>
-          <button onclick="filterDay('Rabu')" class="filter-day-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900" data-day="Rabu">
+          <button onclick="filterDay('Rabu')" class="filter-day-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 whitespace-nowrap" data-day="Rabu">
             Rabu
           </button>
-          <button onclick="filterDay('Kamis')" class="filter-day-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900" data-day="Kamis">
+          <button onclick="filterDay('Kamis')" class="filter-day-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 whitespace-nowrap" data-day="Kamis">
             Kamis
+          </button>
+          <button onclick="filterDay('Jumat')" class="filter-day-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 whitespace-nowrap" data-day="Jumat">
+            Jumat
+          </button>
+          <button onclick="filterDay('Sabtu')" class="filter-day-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 whitespace-nowrap" data-day="Sabtu">
+            Sabtu
           </button>
         </div>
       </div>
 
-      <div class="divide-y divide-zinc-100">
+      <div id="mhsScheduleContainer" class="divide-y divide-zinc-100">
         <% jadwal.forEach(function(item) { %>
-          <div class="schedule-item-row py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs" data-day="<%= item.hari %>">
+          <div class="schedule-item-row py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs" data-day="<%= item.hari %>" data-id="<%= item.id %>" data-kelas="<%= item.kelas %>" data-peminatan="<%= item.peminatanKode || '' %>">
             <div class="space-y-1">
-              <div class="flex items-center space-x-2">
-                <span class="px-2 py-0.5 rounded bg-zinc-100 text-zinc-800 font-semibold text-[11px]">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-zinc-100 text-zinc-800 font-semibold text-[11px] row-hari">
                   <%= item.hari %>
                 </span>
-                <span class="font-mono font-bold text-zinc-900">
+                <span class="font-mono tabular-nums font-bold text-zinc-900 row-jam">
                   <%= item.jamMulai %> &ndash; <%= item.jamSelesai %>
                 </span>
-                <% if (item.isActiveNow) { %>
-                  <span class="px-2 py-0.5 rounded bg-zinc-900 text-white font-bold text-[10px]">
-                    Sesi Aktif
+                <span class="font-mono text-[11px] text-zinc-400">
+                  <%= item.kodeMatkul %>
+                </span>
+                <% if (item.isPilihan) { %>
+                  <span class="px-2 py-0.5 rounded bg-zinc-900 text-white font-mono text-[10px]">
+                    MK Pilihan (<%= item.peminatanKode %>)
+                  </span>
+                <% } %>
+                <% if (item.melewatiIstirahat) { %>
+                  <span class="px-1.5 py-0.5 rounded border border-zinc-300 text-zinc-600 text-[10px]">
+                    Jeda <%= item.melewatiIstirahat %>
                   </span>
                 <% } %>
               </div>
@@ -192,104 +225,185 @@
               </div>
             </div>
 
-            <div class="flex items-center space-x-3 self-start sm:self-center">
-              <span class="px-2.5 py-1 rounded-lg bg-zinc-50 border border-zinc-200 font-mono font-bold text-zinc-800">
-                Ruang <%= item.ruang %>
+            <div class="flex flex-wrap items-center gap-2 self-start sm:self-center">
+              <span class="px-2.5 py-1 rounded-lg bg-zinc-50 border border-zinc-200 font-mono font-bold text-zinc-800 row-ruang">
+                <%= item.ruang %> (<%= item.gedung %>)
               </span>
-              <span class="w-6 h-6 rounded-lg bg-zinc-100 border border-zinc-200 font-bold flex items-center justify-center text-zinc-900">
-                <%= item.kelas %>
+              <span class="px-2 py-1 rounded-lg bg-zinc-100 border border-zinc-200 font-bold text-zinc-900">
+                Kelas <%= item.kelas %>
               </span>
-              <span class="text-zinc-400 font-mono">
+              <span class="text-zinc-400 font-mono tabular-nums">
                 <%= item.sks %> SKS
               </span>
             </div>
           </div>
         <% }); %>
       </div>
+
+      <div id="emptyScheduleDay" class="hidden py-8 text-center text-xs text-zinc-500 bg-zinc-50 rounded-xl border border-dashed border-zinc-200">
+        <p class="font-semibold text-zinc-800">Tidak ada perkuliahan pada filter yang dipilih.</p>
+      </div>
     </div>
 
   </section>
 
-  <!-- ==================== PANEL 2: STAF AKADEMIK (RINA WULANDARI - PRD US-01, US-02, US-03, US-04, F-01 S/D F-05) ==================== -->
+  <!-- ==================== PANEL 2: STAF AKADEMIK ==================== -->
   <section id="view-akademik" class="spa-view hidden space-y-6">
     
-    <!-- Top AI Generator Bar (PRD F-03 & F-05) -->
+    <!-- Top AI Generator Bar -->
     <div class="bg-white rounded-2xl p-6 border border-app-border shadow-mac flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <div class="flex items-center space-x-2 text-xs text-zinc-500 font-medium mb-1">
+        <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-500 font-medium mb-1">
           <span class="w-2 h-2 rounded-full bg-zinc-900"></span>
           <span>Panel Staf Akademik: Rina Wulandari</span>
           <span>&middot;</span>
           <span id="genStatusBadge" class="font-semibold text-zinc-900"><%= jadwalStatus.status %></span>
         </div>
         <h2 class="text-2xl font-bold tracking-tight text-zinc-900">
-          Otomatisasi Penjadwalan & Master Data
+          Otomatisasi Penjadwalan TI UMY (111 Sesi Pertemuan)
         </h2>
         <p class="text-xs text-zinc-500 mt-1">
-          Penyusunan jadwal otomatis berbasis constraint AI selesai dalam &lt; 15 menit dengan 0 bentrok dosen dan ruangan.
+          Sistem solver berbasis constraint menghasilkan 0 bentrok dosen & ruangan pada seluruh Gedung F4 & F6.
         </p>
       </div>
 
-      <div class="flex items-center space-x-2.5">
-        <button onclick="runAIGenerate()" id="btnGenerateAI" class="px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-bold transition-all flex items-center space-x-2 active:scale-[0.98]">
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="simulasiKonflik()" class="btn-press px-3 py-2.5 rounded-xl bg-zinc-100 hover-surface text-zinc-700 text-xs font-semibold">
+          Uji Konflik
+        </button>
+
+        <button onclick="runAIGenerate()" id="btnGenerateAI" class="btn-press px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-bold flex items-center space-x-2">
           <svg class="w-4 h-4 text-zinc-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
           </svg>
           <span>Generate Jadwal (AI)</span>
         </button>
 
-        <button onclick="publishSchedule()" class="px-3.5 py-2.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-900 text-xs font-semibold transition-all">
+        <button onclick="publishSchedule()" class="btn-press px-3.5 py-2.5 rounded-xl bg-zinc-100 hover-surface text-zinc-900 text-xs font-semibold">
           Publikasikan
         </button>
       </div>
     </div>
 
-    <!-- AI Quality Indicators (PRD Metrics M-01 s/d M-04) -->
+    <!-- AI Quality Indicators -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <div class="bg-white p-4 rounded-xl border border-app-border shadow-mac text-xs">
         <span class="text-zinc-400 font-medium block">Waktu Generate (M-01)</span>
-        <span class="text-lg font-bold text-zinc-900 mt-0.5 block">&lt; 15 Menit</span>
+        <span class="text-lg font-bold text-zinc-900 mt-0.5 block tabular-nums">&lt; 15 Menit</span>
         <span class="text-[11px] text-zinc-500">Real-time solver: 1.2 detik</span>
       </div>
 
       <div class="bg-white p-4 rounded-xl border border-app-border shadow-mac text-xs">
         <span class="text-zinc-400 font-medium block">Bentrok Dosen/Ruang (M-02)</span>
-        <span class="text-lg font-bold text-zinc-900 mt-0.5 block" id="valTotalKonflik">0 Bentrok</span>
-        <span class="text-[11px] text-zinc-500">Hard constraints terpenuhi</span>
+        <span class="text-lg font-bold text-zinc-900 mt-0.5 block tabular-nums" id="valTotalKonflik">0 Bentrok</span>
+        <span class="text-[11px] text-zinc-500" id="subTotalKonflik">Hard constraints terpenuhi</span>
       </div>
 
       <div class="bg-white p-4 rounded-xl border border-app-border shadow-mac text-xs">
-        <span class="text-zinc-400 font-medium block">Lab Matching (M-03)</span>
-        <span class="text-lg font-bold text-zinc-900 mt-0.5 block">100%</span>
-        <span class="text-[11px] text-zinc-500">Praktikum masuk lab</span>
+        <span class="text-zinc-400 font-medium block">Total Sesi Terjadwal</span>
+        <span class="text-lg font-bold text-zinc-900 mt-0.5 block tabular-nums"><%= jadwal.length %> Sesi</span>
+        <span class="text-[11px] text-zinc-500">Gedung F4 & F6</span>
       </div>
 
       <div class="bg-white p-4 rounded-xl border border-app-border shadow-mac text-xs">
         <span class="text-zinc-400 font-medium block">Preferensi Dosen (M-04)</span>
-        <span class="text-lg font-bold text-zinc-900 mt-0.5 block">88.5%</span>
+        <span class="text-lg font-bold text-zinc-900 mt-0.5 block tabular-nums">92.4%</span>
         <span class="text-[11px] text-zinc-500">Target &ge; 85% terlampaui</span>
       </div>
     </div>
 
-    <!-- Master Data Management Tables (PRD US-01, F-01) -->
+    <!-- Preview & Filter Jadwal Multi-Dimensi -->
+    <div class="bg-white rounded-2xl p-6 border border-app-border shadow-mac space-y-4 text-xs">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-100">
+        <div>
+          <h3 class="text-lg font-bold tracking-tight text-zinc-900">
+            Preview & Filter Jadwal Perkuliahan
+          </h3>
+          <p class="text-xs text-zinc-500">
+            Filter multi-dimensi per dosen, ruang F4/F6, atau kelas.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <input id="previewFilterDosen" type="text" placeholder="Cari dosen / inisial..." oninput="applyPreviewFilter()" class="py-1.5 px-3 rounded-xl border border-zinc-300 bg-zinc-50 text-xs w-36">
+          <select id="previewFilterRuang" onchange="applyPreviewFilter()" class="py-1.5 px-3 rounded-xl border border-zinc-300 bg-zinc-50 text-xs font-medium">
+            <option value="">Semua Ruangan</option>
+            <% ruanganList.forEach(function(r) { %>
+              <option value="<%= r.kode %>"><%= r.kode %> (<%= r.gedung %>)</option>
+            <% }); %>
+          </select>
+          <select id="previewFilterKelas" onchange="applyPreviewFilter()" class="py-1.5 px-3 rounded-xl border border-zinc-300 bg-zinc-50 text-xs font-medium">
+            <option value="">Semua Kelas</option>
+            <option value="A">Kelas A</option>
+            <option value="B">Kelas B</option>
+            <option value="C">Kelas C</option>
+            <option value="D">Kelas D</option>
+            <option value="E">Kelas E</option>
+            <option value="F">Kelas F</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto max-h-96">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-zinc-50 text-zinc-600 font-bold border-b border-zinc-200 sticky top-0">
+            <tr>
+              <th class="p-3">Hari & Jam</th>
+              <th class="p-3">Mata Kuliah</th>
+              <th class="p-3">Dosen</th>
+              <th class="p-3">Kelas</th>
+              <th class="p-3">Ruangan</th>
+              <th class="p-3 text-right">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="previewTableBody" class="divide-y divide-zinc-100">
+            <% jadwal.forEach(function(item) { %>
+              <tr class="preview-row hover:bg-zinc-50/50" data-id="<%= item.id %>" data-dosen="<%= item.dosen.toLowerCase() %> <%= item.dosenInisial.toLowerCase() %>" data-ruang="<%= item.ruang.toLowerCase() %>" data-kelas="<%= item.kelas.toLowerCase() %>">
+                <td class="p-3 font-mono tabular-nums whitespace-nowrap">
+                  <span class="font-bold text-zinc-900 preview-hari"><%= item.hari %></span>
+                  <span class="text-zinc-500 ml-1 preview-jam"><%= item.jamMulai %>&ndash;<%= item.jamSelesai %></span>
+                </td>
+                <td class="p-3">
+                  <span class="font-bold text-zinc-900"><%= item.mataKuliah %></span>
+                  <span class="text-zinc-400 font-mono ml-1">(<%= item.kodeMatkul %>)</span>
+                </td>
+                <td class="p-3 text-zinc-700"><%= item.dosen %></td>
+                <td class="p-3 font-bold text-zinc-900"><%= item.kelas %></td>
+                <td class="p-3 font-mono font-semibold text-zinc-900 preview-ruang"><%= item.ruang %></td>
+                <td class="p-3 text-right">
+                  <button onclick="openRevisiModal('<%= item.id %>', '<%= item.mataKuliah %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.jamSelesai %>', '<%= item.ruang %>')" class="btn-press px-2.5 py-1 rounded-lg bg-zinc-100 hover-surface text-zinc-800 font-semibold">
+                    Ubah
+                  </button>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Master Data Management Tables: Dosen, Kurikulum Semester 1-8, Peminatan, Ruangan -->
     <div class="bg-white rounded-2xl p-6 border border-app-border shadow-mac space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-zinc-100 gap-3">
         <div>
           <h3 class="text-lg font-bold tracking-tight text-zinc-900">
-            Data Master Akademik
+            Data Master Kurikulum & Akademik TI UMY
           </h3>
           <p class="text-xs text-zinc-500">
-            Total <%= masterSummary.totalDosen %> Dosen, <%= masterSummary.totalMatkul %> Mata Kuliah, dan <%= masterSummary.totalRuangan %> Ruangan (<%= masterSummary.ruangLab %> Lab, <%= masterSummary.ruangTeori %> Kelas).
+            Total <%= masterSummary.totalDosen %> Dosen Riil, <%= masterSummary.totalMatkul %> Kurikulum Sem 1-8, <%= masterSummary.totalPeminatan %> MK Pilihan Peminatan, dan <%= masterSummary.totalRuangan %> Ruangan.
           </p>
         </div>
 
-        <div class="flex items-center space-x-2">
+        <div class="flex flex-wrap items-center gap-2">
           <div class="flex items-center bg-zinc-100 p-1 rounded-xl text-xs font-semibold text-zinc-600">
-            <button onclick="switchMasterTab('dosen')" id="m-tab-dosen" class="master-tab-btn px-3 py-1.5 rounded-lg bg-white text-zinc-900 shadow-sm">
-              Dosen (<%= masterSummary.totalDosen %>)
+            <button onclick="switchMasterTab('kurikulum')" id="m-tab-kurikulum" class="master-tab-btn px-3 py-1.5 rounded-lg bg-white text-zinc-900 shadow-sm">
+              Kurikulum Sem 1-8 (<%= masterSummary.totalMatkul %>)
             </button>
-            <button onclick="switchMasterTab('matkul')" id="m-tab-matkul" class="master-tab-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900">
-              Mata Kuliah (<%= masterSummary.totalMatkul %>)
+            <button onclick="switchMasterTab('peminatan')" id="m-tab-peminatan" class="master-tab-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900">
+              Peminatan (<%= masterSummary.totalPeminatan %>)
+            </button>
+            <button onclick="switchMasterTab('dosen')" id="m-tab-dosen" class="master-tab-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900">
+              Dosen (<%= masterSummary.totalDosen %>)
             </button>
             <button onclick="switchMasterTab('ruangan')" id="m-tab-ruangan" class="master-tab-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900">
               Ruangan (<%= masterSummary.totalRuangan %>)
@@ -298,55 +412,29 @@
         </div>
       </div>
 
-      <!-- Master Subtable: Dosen (20 Dosen) -->
-      <div id="subtable-dosen" class="master-subtable overflow-x-auto">
-        <table class="w-full text-left text-xs">
-          <thead class="bg-zinc-50 text-zinc-600 font-bold border-b border-zinc-200">
-            <tr>
-              <th class="p-3">NIDN</th>
-              <th class="p-3">Nama Dosen</th>
-              <th class="p-3">Bidang Keahlian</th>
-              <th class="p-3 text-right">Beban SKS</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-zinc-100">
-            <% dosenList.forEach(function(d) { %>
-              <tr class="hover:bg-zinc-50/50">
-                <td class="p-3 font-mono text-zinc-500"><%= d.nidn %></td>
-                <td class="p-3 font-semibold text-zinc-900"><%= d.nama %></td>
-                <td class="p-3 text-zinc-600"><%= d.keahlian %></td>
-                <td class="p-3 text-right font-mono text-zinc-700"><%= d.bebanSks %> SKS</td>
-              </tr>
-            <% }); %>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Master Subtable: Mata Kuliah (45 Matkul) -->
-      <div id="subtable-matkul" class="master-subtable hidden overflow-x-auto max-h-96">
+      <!-- Master Subtable: Kurikulum Semester 1-8 -->
+      <div id="subtable-kurikulum" class="master-subtable overflow-x-auto max-h-96">
         <table class="w-full text-left text-xs">
           <thead class="bg-zinc-50 text-zinc-600 font-bold border-b border-zinc-200 sticky top-0">
             <tr>
-              <th class="p-3">Kode</th>
-              <th class="p-3">Mata Kuliah</th>
-              <th class="p-3">SKS</th>
               <th class="p-3">Semester</th>
-              <th class="p-3">Alokasi Ruang</th>
+              <th class="p-3">Kode MK</th>
+              <th class="p-3">Nama Mata Kuliah</th>
+              <th class="p-3 font-mono">SKS</th>
+              <th class="p-3">Kategori</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-zinc-100">
-            <% matkulList.forEach(function(m) { %>
+            <% kurikulumList.forEach(function(m) { %>
               <tr class="hover:bg-zinc-50/50">
+                <td class="p-3 font-mono font-bold text-zinc-900">Sem <%= m.semester %></td>
                 <td class="p-3 font-mono text-zinc-500"><%= m.kode %></td>
                 <td class="p-3 font-semibold text-zinc-900"><%= m.nama %></td>
-                <td class="p-3 font-mono text-zinc-700"><%= m.sks %></td>
-                <td class="p-3 font-mono text-zinc-500">Sem <%= m.semester %></td>
+                <td class="p-3 font-mono text-zinc-700 tabular-nums"><%= m.sks %> SKS</td>
                 <td class="p-3">
-                  <% if (m.butuhLab) { %>
-                    <span class="px-2 py-0.5 rounded bg-zinc-900 text-white font-mono text-[10px]">Wajib Lab</span>
-                  <% } else { %>
-                    <span class="px-2 py-0.5 rounded bg-zinc-100 text-zinc-700 font-mono text-[10px]">Kelas Teori</span>
-                  <% } %>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono <%= m.kode.startsWith('MKWU') ? 'bg-zinc-900 text-white' : 'bg-zinc-100 text-zinc-700' %>">
+                    <%= m.kategori %>
+                  </span>
                 </td>
               </tr>
             <% }); %>
@@ -354,14 +442,67 @@
         </table>
       </div>
 
-      <!-- Master Subtable: Ruangan (8 Ruang) -->
+      <!-- Master Subtable: Peminatan (PR, DA, NE, UX) -->
+      <div id="subtable-peminatan" class="master-subtable hidden overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-zinc-50 text-zinc-600 font-bold border-b border-zinc-200">
+            <tr>
+              <th class="p-3">Jalur Peminatan</th>
+              <th class="p-3">Kode MK</th>
+              <th class="p-3">Nama Mata Kuliah</th>
+              <th class="p-3">SKS</th>
+              <th class="p-3">Penawaran</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-100">
+            <% peminatanList.forEach(function(p) { %>
+              <tr class="hover:bg-zinc-50/50">
+                <td class="p-3 font-bold text-zinc-900"><%= p.peminatan %> (<%= p.kodePeminatan %>)</td>
+                <td class="p-3 font-mono text-zinc-500"><%= p.kode %></td>
+                <td class="p-3 font-semibold text-zinc-900"><%= p.nama %></td>
+                <td class="p-3 font-mono tabular-nums text-zinc-700"><%= p.sks %> SKS</td>
+                <td class="p-3 font-mono text-zinc-500">Semester <%= p.semesterPenawaran %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Master Subtable: Dosen Riil TI -->
+      <div id="subtable-dosen" class="master-subtable hidden overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-zinc-50 text-zinc-600 font-bold border-b border-zinc-200">
+            <tr>
+              <th class="p-3">Inisial</th>
+              <th class="p-3">NIDN</th>
+              <th class="p-3">Nama Dosen</th>
+              <th class="p-3">Bidang Keahlian</th>
+              <th class="p-3 text-right">Beban SKS Aktual</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-100">
+            <% dosenList.forEach(function(d) { %>
+              <tr class="hover:bg-zinc-50/50">
+                <td class="p-3 font-mono font-bold text-zinc-900"><%= d.inisial %></td>
+                <td class="p-3 font-mono text-zinc-500"><%= d.nidn %></td>
+                <td class="p-3 font-semibold text-zinc-900"><%= d.nama %></td>
+                <td class="p-3 text-zinc-600"><%= d.keahlian %></td>
+                <td class="p-3 text-right font-mono text-zinc-700 tabular-nums"><%= d.bebanSks %> SKS</td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Master Subtable: Ruangan F4 & F6 -->
       <div id="subtable-ruangan" class="master-subtable hidden overflow-x-auto">
         <table class="w-full text-left text-xs">
           <thead class="bg-zinc-50 text-zinc-600 font-bold border-b border-zinc-200">
             <tr>
-              <th class="p-3">Kode</th>
+              <th class="p-3">Kode Ruang</th>
               <th class="p-3">Nama Ruangan</th>
-              <th class="p-3">Jenis Ruang</th>
+              <th class="p-3">Gedung</th>
+              <th class="p-3">Tipe</th>
               <th class="p-3 text-right">Kapasitas</th>
             </tr>
           </thead>
@@ -370,10 +511,9 @@
               <tr class="hover:bg-zinc-50/50">
                 <td class="p-3 font-mono font-bold text-zinc-900"><%= r.kode %></td>
                 <td class="p-3 font-semibold text-zinc-900"><%= r.nama %></td>
-                <td class="p-3">
-                  <span class="px-2 py-0.5 rounded bg-zinc-100 text-zinc-800 text-[11px] font-medium"><%= r.jenis %></span>
-                </td>
-                <td class="p-3 text-right font-mono text-zinc-700"><%= r.kapasitas %> Kursi</td>
+                <td class="p-3 font-bold text-zinc-700"><%= r.gedung %></td>
+                <td class="p-3 text-zinc-600"><%= r.tipe %></td>
+                <td class="p-3 text-right font-mono text-zinc-700 tabular-nums"><%= r.kapasitas %> Kursi</td>
               </tr>
             <% }); %>
           </tbody>
@@ -381,133 +521,102 @@
       </div>
     </div>
 
-    <!-- Hard & Soft Constraint Rules (PRD F-02) -->
-    <div class="bg-white rounded-2xl p-6 border border-app-border shadow-mac space-y-4">
-      <h3 class="text-lg font-bold tracking-tight text-zinc-900 pb-3 border-b border-zinc-100">
-        Konfigurasi Hard & Soft Constraints
-      </h3>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <!-- Hard Constraints -->
-        <div class="p-4 rounded-xl bg-zinc-50 border border-zinc-200 space-y-3">
-          <span class="text-xs font-bold text-zinc-900 uppercase tracking-wider block">Hard Constraints (Wajib 100%)</span>
-          <% constraints.hardConstraints.forEach(function(hc) { %>
-            <div class="p-3 rounded-lg bg-white border border-zinc-200/80 space-y-1">
-              <div class="flex justify-between items-center font-bold text-zinc-900">
-                <span><%= hc.nama %></span>
-                <span class="text-[10px] px-2 py-0.5 rounded bg-zinc-900 text-white font-mono">Aktif</span>
-              </div>
-              <p class="text-zinc-500 text-[11px]"><%= hc.deskripsi %></p>
-            </div>
-          <% }); %>
-        </div>
-
-        <!-- Soft Constraints -->
-        <div class="p-4 rounded-xl bg-zinc-50 border border-zinc-200 space-y-3">
-          <span class="text-xs font-bold text-zinc-900 uppercase tracking-wider block">Soft Constraints (Preferensi Dosen &ge; 85%)</span>
-          <% constraints.softConstraints.forEach(function(sc) { %>
-            <div class="p-3 rounded-lg bg-white border border-zinc-200/80 space-y-1">
-              <div class="flex justify-between items-center font-semibold text-zinc-900">
-                <span><%= sc.dosenNama %></span>
-                <span class="text-[10px] px-2 py-0.5 rounded bg-zinc-100 text-zinc-800 font-mono">Terakomodir</span>
-              </div>
-              <p class="text-zinc-500 text-[11px]">
-                <% if (sc.hariOff) { %>
-                  Hari Off: <strong><%= sc.hariOff %></strong> (<%= sc.alasan %>)
-                <% } else { %>
-                  <%= sc.preferensiWaktu %>
-                <% } %>
-              </p>
-            </div>
-          <% }); %>
-        </div>
-      </div>
-    </div>
-
   </section>
 
-  <!-- ==================== PANEL 3: DOSEN (BUDI SANTOSO - PRD US-05, US-06, F-06, F-07) ==================== -->
+  <!-- ==================== PANEL 3: DOSEN ==================== -->
   <section id="view-dosen" class="spa-view hidden space-y-6">
-    
     <div class="bg-white rounded-2xl p-6 border border-app-border shadow-mac flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
-        <div class="flex items-center space-x-2 text-xs text-zinc-500 font-medium mb-1">
+        <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-500 font-medium mb-1">
           <span class="w-2 h-2 rounded-full bg-zinc-900"></span>
-          <span>Dosen: Dr. Budi Santoso, S.Kom., M.Cs.</span>
+          <span>Dosen: Muhammad Abdul Haq, S.Tr.T., M.Eng. Ph.D. (HQ)</span>
           <span>&middot;</span>
-          <span class="font-mono">NIDN: 0511048604</span>
+          <span class="font-mono tabular-nums">NIDN: 0511048604</span>
         </div>
         <h2 class="text-2xl font-bold tracking-tight text-zinc-900">
-          Jadwal Mengajar & Form Preferensi
+          Jadwal Mengajar & Preferensi Riset
         </h2>
         <p class="text-xs text-zinc-500 mt-1">
           Atur hari riset dan preferensi waktu mengajar agar diakomodasi oleh AI solver.
         </p>
       </div>
 
-      <button onclick="openModal('modal-preferensi-dosen')" class="px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-semibold transition-all">
+      <button onclick="openModal('modal-preferensi-dosen')" class="btn-press px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-semibold">
         Edit Preferensi Mengajar
       </button>
     </div>
 
-    <!-- Personal Teaching Schedule -->
+    <!-- Personal Schedule -->
     <div class="bg-white rounded-2xl p-6 border border-app-border shadow-mac space-y-4">
       <h3 class="text-lg font-bold tracking-tight text-zinc-900 pb-3 border-b border-zinc-100">
-        Jadwal Mengajar Saya
+        Jadwal Mengajar Saya (Muhammad Abdul Haq, Ph.D. / Inisial HQ)
       </h3>
 
       <div class="space-y-3">
         <div class="p-4 rounded-xl border border-zinc-200 bg-zinc-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div class="space-y-1">
             <div class="flex items-center space-x-2">
-              <span class="px-2 py-0.5 rounded bg-zinc-200 text-zinc-800 font-bold">Selasa</span>
-              <span class="font-mono font-bold text-zinc-900">07:00 &ndash; 08:40</span>
-              <span class="px-2 py-0.5 rounded bg-zinc-100 text-zinc-700">Kelas A</span>
+              <span class="px-2 py-0.5 rounded bg-zinc-200 text-zinc-800 font-bold">Senin</span>
+              <span class="font-mono tabular-nums font-bold text-zinc-900">08:50 &ndash; 11:30</span>
+              <span class="px-2 py-0.5 rounded bg-zinc-100 text-zinc-700">Kelas D</span>
             </div>
-            <div class="text-sm font-bold text-zinc-900">Kecerdasan Buatan (TI404)</div>
-            <div class="text-zinc-500">Ruang F6.002 &middot; 2 SKS &middot; Teori</div>
+            <div class="text-sm font-bold text-zinc-900">Manajemen Proyek (TI506)</div>
+            <div class="text-zinc-500">Ruang F6.102 &middot; 3 SKS &middot; Team: HQ;WS</div>
           </div>
           <span class="px-3 py-1 rounded-lg bg-zinc-900 text-white font-mono text-xs self-start sm:self-center">
-            Terpublikasi
+            Terjadwal
           </span>
         </div>
 
-        <div class="p-4 rounded-xl border border-dashed border-zinc-300 bg-white text-xs text-zinc-500">
-          Hari <strong>Jumat</strong> telah dikonfigurasi sebagai hari bebas mengajar untuk kegiatan riset laboratorium.
+        <div class="p-4 rounded-xl border border-zinc-200 bg-zinc-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div class="space-y-1">
+            <div class="flex items-center space-x-2">
+              <span class="px-2 py-0.5 rounded bg-zinc-200 text-zinc-800 font-bold">Selasa</span>
+              <span class="font-mono tabular-nums font-bold text-zinc-900">07:50 &ndash; 10:30</span>
+              <span class="px-2 py-0.5 rounded bg-zinc-100 text-zinc-700">Kelas A</span>
+            </div>
+            <div class="text-sm font-bold text-zinc-900">Manajemen Proyek (TI506)</div>
+            <div class="text-zinc-500">Ruang F4.001 &middot; 3 SKS</div>
+          </div>
+          <span class="px-3 py-1 rounded-lg bg-zinc-900 text-white font-mono text-xs self-start sm:self-center">
+            Terjadwal
+          </span>
+        </div>
+
+        <div id="dosenOffDayBanner" class="p-4 rounded-xl border border-dashed border-zinc-300 bg-white text-xs text-zinc-600">
+          Hari <strong id="dosenOffDayLabel">Jumat</strong> telah dikonfigurasi sebagai hari bebas mengajar (<span id="dosenOffReasonLabel">Alokasi Waktu Riset & Penelitian Laboratorium</span>).
         </div>
       </div>
     </div>
-
   </section>
 
-  <!-- ==================== PANEL 4: SISTEM & REST API (PRD ARSITEKTUR & LOGGER) ==================== -->
+  <!-- ==================== PANEL 4: SISTEM & REST API ==================== -->
   <section id="view-system" class="spa-view hidden space-y-6">
-    
     <div class="bg-white rounded-2xl p-6 border border-app-border shadow-mac flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h2 class="text-2xl font-bold tracking-tight text-zinc-900">
-          Status Sistem & Endpoints API
+          Status Sistem & REST Endpoints
         </h2>
         <p class="text-xs text-zinc-500 mt-1">
-          Spesifikasi antarmuka terhubung langsung ke Express.js router dan middleware request logger (<code class="font-mono text-[11px] bg-zinc-100 px-1 py-0.5 rounded">logs/logger.md</code>).
+          Dataset riil TI UMY terhubung ke REST API (<code class="font-mono text-[11px] bg-zinc-100 px-1 py-0.5 rounded">logs/logger.md</code>).
         </p>
       </div>
 
-      <div class="flex items-center space-x-2 text-xs">
-        <button onclick="testApiEndpoint('/api/status')" class="px-3 py-1.5 rounded-lg bg-zinc-900 text-white font-semibold">
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <button onclick="testApiEndpoint('/api/status')" class="btn-press px-3 py-1.5 rounded-lg bg-zinc-900 text-white font-semibold">
           /api/status
         </button>
-        <button onclick="testApiEndpoint('/api/jadwal')" class="px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-semibold">
+        <button onclick="testApiEndpoint('/api/jadwal')" class="btn-press px-3 py-1.5 rounded-lg bg-zinc-100 hover-surface text-zinc-800 font-semibold">
           /api/jadwal
         </button>
-        <button onclick="testApiEndpoint('/api/master')" class="px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-semibold">
+        <button onclick="testApiEndpoint('/api/master')" class="btn-press px-3 py-1.5 rounded-lg bg-zinc-100 hover-surface text-zinc-800 font-semibold">
           /api/master
         </button>
-        <button onclick="testApiEndpoint('/api/constraints')" class="px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-semibold">
+        <button onclick="testApiEndpoint('/api/constraints')" class="btn-press px-3 py-1.5 rounded-lg bg-zinc-100 hover-surface text-zinc-800 font-semibold">
           /api/constraints
         </button>
-        <button onclick="testApiEndpoint('/api/produk')" class="px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-semibold">
-          /api/produk (Fitur PRD)
+        <button onclick="testApiEndpoint('/api/produk')" class="btn-press px-3 py-1.5 rounded-lg bg-zinc-100 hover-surface text-zinc-800 font-semibold">
+          /api/produk
         </button>
       </div>
     </div>
@@ -518,98 +627,99 @@
         <div class="flex items-center space-x-2">
           <span class="text-white font-bold" id="sys-endpoint-url">/api/status</span>
           <span class="text-zinc-600">|</span>
-          <span class="text-[11px] text-zinc-500" id="sys-response-time">- ms</span>
+          <span class="text-[11px] text-zinc-500 tabular-nums" id="sys-response-time">- ms</span>
         </div>
-        <button onclick="copySysOutput()" class="text-zinc-400 hover:text-white transition-colors text-[11px]">
+        <button onclick="copySysOutput()" class="btn-press text-zinc-400 hover:text-white text-[11px]">
           Salin JSON
         </button>
       </div>
 
-      <pre id="sys-json-output" class="overflow-x-auto max-h-80 leading-relaxed text-zinc-200">
-// Memuat response...
-      </pre>
+      <pre id="sys-json-output" class="overflow-x-auto max-h-80 leading-relaxed text-zinc-200">// Memuat response...</pre>
     </div>
-
-    <!-- MoSCoW Feature Contract Summary (PRD Section 6) -->
-    <div class="bg-white rounded-2xl p-6 border border-app-border shadow-mac space-y-4">
-      <h3 class="text-lg font-bold tracking-tight text-zinc-900 pb-3 border-b border-zinc-100">
-        Spesifikasi Fitur PRD (MoSCoW)
-      </h3>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <% produk.forEach(function(f) { %>
-          <div class="p-3.5 rounded-xl border border-zinc-200 bg-zinc-50 space-y-1">
-            <div class="flex justify-between items-center font-bold text-zinc-900">
-              <span><%= f.kode %> &middot; <%= f.nama %></span>
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono <%= f.prioritas === 'Must' ? 'bg-zinc-900 text-white' : 'bg-zinc-200 text-zinc-800' %>">
-                <%= f.prioritas %>
-              </span>
-            </div>
-            <p class="text-zinc-500 text-[11px]"><%= f.deskripsi %></p>
-            <div class="text-[10px] text-zinc-400 pt-1 font-mono">Terkait <%= f.terkaitUS %></div>
-          </div>
-        <% }); %>
-      </div>
-    </div>
-
   </section>
 
 </main>
 
-<!-- ==================== MODAL: ONBOARDING & PRA-KRS (Wireframe 2) ==================== -->
-<div id="modal-prakrs" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-mac-lg border border-zinc-200 space-y-4 text-xs">
+<!-- ==================== TOAST FEEDBACK ==================== -->
+<div id="appToast" role="status" aria-live="polite" class="app-toast fixed bottom-5 right-5 z-50 max-w-sm bg-zinc-900 text-white px-4 py-3 rounded-2xl shadow-mac-lg border border-zinc-800 flex items-center space-x-3 text-xs">
+  <span class="w-2 h-2 rounded-full bg-white shrink-0"></span>
+  <span id="appToastMessage" class="font-medium leading-snug">Perubahan disimpan.</span>
+</div>
+
+<!-- ==================== MODAL: PRA-KRS, SEMESTER & PEMINATAN ==================== -->
+<div id="modal-prakrs" data-open="false" class="modal-backdrop fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target === this) closeModal('modal-prakrs')">
+  <div class="modal-panel bg-white rounded-2xl max-w-lg w-full p-6 shadow-mac-lg border border-zinc-200 space-y-4 text-xs">
     <div class="flex justify-between items-center pb-2 border-b border-zinc-100">
-      <h3 class="text-base font-bold text-zinc-900">Konfigurasi Profil & Pra-KRS</h3>
-      <button onclick="closeModal('modal-prakrs')" class="text-zinc-400 hover:text-zinc-700 text-lg font-bold">&times;</button>
+      <h3 class="text-base font-bold text-zinc-900">Konfigurasi Profil, Semester & Peminatan</h3>
+      <button onclick="closeModal('modal-prakrs')" class="text-zinc-400 hover:text-zinc-700 text-lg font-bold leading-none">&times;</button>
     </div>
 
     <form onsubmit="savePrakrs(event)" class="space-y-4">
-      <!-- Semester -->
-      <div class="space-y-1">
-        <label class="font-bold text-zinc-800 block">Semester Saat Ini (Integer 1&ndash;12):</label>
-        <div class="flex items-center space-x-2">
-          <button type="button" onclick="stepSem(-1)" class="w-8 h-8 rounded-lg bg-zinc-100 font-bold hover:bg-zinc-200">-</button>
-          <input id="modal-sem" type="number" min="1" max="12" value="4" required class="w-16 text-center font-bold py-1.5 rounded-lg border border-zinc-300">
-          <button type="button" onclick="stepSem(1)" class="w-8 h-8 rounded-lg bg-zinc-100 font-bold hover:bg-zinc-200">+</button>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="font-bold text-zinc-800 block mb-1">Pilih Semester (1-8):</label>
+          <select id="modal-sem" class="w-full py-1.5 px-3 rounded-lg border border-zinc-300 font-bold bg-white">
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+            <option value="3">Semester 3</option>
+            <option value="4" selected>Semester 4</option>
+            <option value="5">Semester 5</option>
+            <option value="6">Semester 6</option>
+            <option value="7">Semester 7</option>
+            <option value="8">Semester 8</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="font-bold text-zinc-800 block mb-1">Kelas Mahasiswa:</label>
+          <select id="modal-kelas" class="w-full py-1.5 px-3 rounded-lg border border-zinc-300 font-bold bg-white">
+            <option value="A">Kelas A</option>
+            <option value="B" selected>Kelas B</option>
+            <option value="C">Kelas C</option>
+            <option value="D">Kelas D</option>
+            <option value="E">Kelas E</option>
+            <option value="F">Kelas F</option>
+          </select>
         </div>
       </div>
 
-      <!-- Angkatan -->
-      <div class="space-y-1">
-        <label class="font-bold text-zinc-800 block">Tahun Angkatan:</label>
-        <input id="modal-angkatan" type="number" min="2018" max="2026" value="2024" class="w-28 font-bold py-1.5 px-3 rounded-lg border border-zinc-300" oninput="updateModalNim()">
+      <div>
+        <label class="font-bold text-zinc-800 block mb-1">Jalur Peminatan (Untuk Matkul TIxxx):</label>
+        <select id="modal-peminatan" class="w-full py-2 px-3 rounded-lg border border-zinc-300 font-semibold bg-white">
+          <option value="PR" selected>Programming (Game Dev, Web Framework, Mobile, IoT)</option>
+          <option value="DA">Data & AI (Computer Vision, Big Data, Cloud DB, Data Center)</option>
+          <option value="NE">Network & Cyber (Blockchain, CyberOps, Core Network, Routing)</option>
+          <option value="UX">User Experience (Serious Game, Prototyping, Desain Game)</option>
+        </select>
       </div>
 
-      <!-- Nama & NIM -->
       <div class="space-y-2">
         <div>
-          <label class="font-bold text-zinc-800 block">Nama Lengkap (Otomatis Huruf Besar):</label>
-          <input id="modal-nama" type="text" value="ANDI PRATAMA" required class="w-full font-bold uppercase py-1.5 px-3 rounded-lg border border-zinc-300" oninput="this.value = this.value.toUpperCase()">
+          <label class="font-bold text-zinc-800 block">Nama Mahasiswa:</label>
+          <input id="modal-nama" type="text" value="ANDI PRATAMA" required class="w-full font-bold uppercase py-1.5 px-3 rounded-lg border border-zinc-300">
         </div>
         <div>
           <label class="font-bold text-zinc-800 block">3 Digit Belakang NIM:</label>
           <div class="flex items-center space-x-2">
-            <span id="modal-nim-prefix" class="font-mono font-bold bg-zinc-100 px-3 py-1.5 rounded-lg text-zinc-700">20240140</span>
-            <input id="modal-nim-suffix" type="text" maxlength="3" value="093" required class="w-16 font-mono font-bold text-center py-1.5 px-2 rounded-lg border border-zinc-300" oninput="this.value = this.value.replace(/[^0-9]/g, ''); updateModalNim()">
+            <span class="font-mono tabular-nums font-bold bg-zinc-100 px-3 py-1.5 rounded-lg text-zinc-700">20240140</span>
+            <input id="modal-nim-suffix" type="text" maxlength="3" value="093" required class="w-16 font-mono tabular-nums font-bold text-center py-1.5 px-2 rounded-lg border border-zinc-300">
           </div>
         </div>
       </div>
 
-      <button type="submit" class="w-full py-2.5 rounded-xl bg-zinc-900 text-white font-bold">
-        Simpan Perubahan
+      <button type="submit" class="btn-press w-full py-2.5 rounded-xl bg-zinc-900 text-white font-bold">
+        Simpan & Terapkan ke Jadwal
       </button>
-      <div id="modal-feedback" class="hidden p-2 rounded-lg text-[11px]"></div>
     </form>
   </div>
 </div>
 
-<!-- ==================== MODAL: PREFERENSI DOSEN (PRD US-05, F-06) ==================== -->
-<div id="modal-preferensi-dosen" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-mac-lg border border-zinc-200 space-y-4 text-xs">
+<!-- ==================== MODAL: PREFERENSI DOSEN ==================== -->
+<div id="modal-preferensi-dosen" data-open="false" class="modal-backdrop fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target === this) closeModal('modal-preferensi-dosen')">
+  <div class="modal-panel bg-white rounded-2xl max-w-sm w-full p-6 shadow-mac-lg border border-zinc-200 space-y-4 text-xs">
     <div class="flex justify-between items-center pb-2 border-b border-zinc-100">
       <h3 class="text-base font-bold text-zinc-900">Preferensi Waktu Mengajar</h3>
-      <button onclick="closeModal('modal-preferensi-dosen')" class="text-zinc-400 hover:text-zinc-700 text-lg font-bold">&times;</button>
+      <button onclick="closeModal('modal-preferensi-dosen')" class="text-zinc-400 hover:text-zinc-700 text-lg font-bold leading-none">&times;</button>
     </div>
 
     <form onsubmit="saveDosenPref(event)" class="space-y-3">
@@ -618,41 +728,131 @@
         <select id="pref-hari-off" class="w-full py-2 px-3 rounded-lg border border-zinc-300 bg-white font-semibold">
           <option value="Jumat" selected>Jumat (Kegiatan Riset)</option>
           <option value="Senin">Senin</option>
+          <option value="Selasa">Selasa</option>
+          <option value="Rabu">Rabu</option>
           <option value="Kamis">Kamis</option>
+          <option value="Sabtu">Sabtu</option>
         </select>
       </div>
 
       <div>
         <label class="font-bold text-zinc-800 block mb-1">Keterangan / Alasan:</label>
-        <input id="pref-alasan" type="text" value="Alokasi Waktu Riset & Penelitian Laboratorium" class="w-full py-2 px-3 rounded-lg border border-zinc-300">
+        <input id="pref-alasan" type="text" required minlength="3" value="Alokasi Waktu Riset & Penelitian Laboratorium" class="w-full py-2 px-3 rounded-lg border border-zinc-300">
       </div>
 
-      <button type="submit" class="w-full py-2.5 rounded-xl bg-zinc-900 text-white font-bold mt-2">
+      <button type="submit" class="btn-press w-full py-2.5 rounded-xl bg-zinc-900 text-white font-bold mt-2">
         Simpan Preferensi
       </button>
     </form>
   </div>
 </div>
 
+<!-- ==================== MODAL: REVISI SLOT JADWAL ==================== -->
+<div id="modal-revisi-jadwal" data-open="false" class="modal-backdrop fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target === this) closeModal('modal-revisi-jadwal')">
+  <div class="modal-panel bg-white rounded-2xl max-w-sm w-full p-6 shadow-mac-lg border border-zinc-200 space-y-4 text-xs">
+    <div class="flex justify-between items-center pb-2 border-b border-zinc-100">
+      <h3 class="text-base font-bold text-zinc-900">Revisi Sesi Jadwal</h3>
+      <button onclick="closeModal('modal-revisi-jadwal')" class="text-zinc-400 hover:text-zinc-700 text-lg font-bold leading-none">&times;</button>
+    </div>
+
+    <form onsubmit="submitRevisiJadwal(event)" class="space-y-3">
+      <input id="rev-id" type="hidden">
+      <div>
+        <span class="text-zinc-500 block">Mata Kuliah:</span>
+        <span id="rev-matkul-label" class="font-bold text-sm text-zinc-900"></span>
+      </div>
+
+      <div>
+        <label class="font-bold text-zinc-800 block mb-1">Hari:</label>
+        <select id="rev-hari" class="w-full py-1.5 px-3 rounded-lg border border-zinc-300 bg-white font-semibold">
+          <option value="Senin">Senin</option>
+          <option value="Selasa">Selasa</option>
+          <option value="Rabu">Rabu</option>
+          <option value="Kamis">Kamis</option>
+          <option value="Jumat">Jumat</option>
+          <option value="Sabtu">Sabtu</option>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="font-bold text-zinc-800 block mb-1">Jam Mulai:</label>
+          <input id="rev-mulai" type="text" required pattern="[0-2][0-9]:[0-5][0-9]" class="w-full py-1.5 px-3 rounded-lg border border-zinc-300 font-mono tabular-nums">
+        </div>
+        <div>
+          <label class="font-bold text-zinc-800 block mb-1">Jam Selesai:</label>
+          <input id="rev-selesai" type="text" required pattern="[0-2][0-9]:[0-5][0-9]" class="w-full py-1.5 px-3 rounded-lg border border-zinc-300 font-mono tabular-nums">
+        </div>
+      </div>
+
+      <div>
+        <label class="font-bold text-zinc-800 block mb-1">Ruangan:</label>
+        <select id="rev-ruang" class="w-full py-1.5 px-3 rounded-lg border border-zinc-300 bg-white font-mono">
+          <% ruanganList.forEach(function(r) { %>
+            <option value="<%= r.kode %>"><%= r.kode %> (<%= r.gedung %> - <%= r.tipe %>)</option>
+          <% }); %>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-press w-full py-2.5 rounded-xl bg-zinc-900 text-white font-bold">
+        Simpan Revisi
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== MODAL: RIWAYAT NOTIFIKASI ==================== -->
+<div id="modal-riwayat-notif" data-open="false" class="modal-backdrop fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target === this) closeModal('modal-riwayat-notif')">
+  <div class="modal-panel bg-white rounded-2xl max-w-md w-full p-6 shadow-mac-lg border border-zinc-200 space-y-4 text-xs">
+    <div class="flex justify-between items-center pb-2 border-b border-zinc-100">
+      <h3 class="text-base font-bold text-zinc-900">Riwayat Notifikasi Jadwal TI UMY</h3>
+      <button onclick="closeModal('modal-riwayat-notif')" class="text-zinc-400 hover:text-zinc-700 text-lg font-bold leading-none">&times;</button>
+    </div>
+
+    <div id="notifHistoryList" class="space-y-2.5 max-h-80 overflow-y-auto">
+      <% notifikasiList.forEach(function(n) { %>
+        <div class="p-3 rounded-xl bg-zinc-50 border border-zinc-200 space-y-1">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-zinc-900"><%= n.kodeMatkul %> &middot; <%= n.mataKuliah %></span>
+            <span class="font-mono text-[10px] text-zinc-400 tabular-nums"><%= n.waktu %></span>
+          </div>
+          <p class="text-zinc-600"><%= n.perubahan %></p>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+</div>
+
 <!-- ==================== CLIENT SPA CONTROLLER ==================== -->
 <script>
-  // Switch Persona / View
+  let toastTimer = null;
+
+  function showToast(message) {
+    const toast = document.getElementById('appToast');
+    const msgEl = document.getElementById('appToastMessage');
+    if (!toast || !msgEl) return;
+    msgEl.textContent = message;
+    toast.setAttribute('data-visible', 'true');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.setAttribute('data-visible', 'false');
+    }, 3200);
+  }
+
   function switchView(targetId) {
     document.querySelectorAll('.spa-view').forEach(v => v.classList.add('hidden'));
     const target = document.getElementById(targetId);
     if (target) target.classList.remove('hidden');
 
-    // Update Desktop Nav
     document.querySelectorAll('.nav-segment').forEach(b => {
-      b.className = 'nav-segment px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 transition-all flex items-center gap-1.5';
+      b.className = 'nav-segment px-3.5 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 flex items-center gap-1.5';
     });
     const key = targetId.replace('view-', '');
     const activeDesktop = document.getElementById('nav-btn-' + key);
     if (activeDesktop) {
-      activeDesktop.className = 'nav-segment px-3.5 py-1.5 rounded-lg bg-white text-zinc-900 shadow-sm transition-all flex items-center gap-1.5';
+      activeDesktop.className = 'nav-segment px-3.5 py-1.5 rounded-lg bg-white text-zinc-900 shadow-sm flex items-center gap-1.5';
     }
 
-    // Update Mobile Nav
     document.querySelectorAll('.mob-segment').forEach(b => {
       b.className = 'mob-segment flex-1 py-1.5 px-2 rounded-lg text-zinc-600 text-center whitespace-nowrap';
     });
@@ -661,13 +861,12 @@
       activeMobile.className = 'mob-segment flex-1 py-1.5 px-2 rounded-lg bg-white text-zinc-900 shadow-sm text-center whitespace-nowrap';
     }
 
-    // Persona text badge
     const badge = document.getElementById('activePersonaBadge');
     if (badge) {
-      if (key === 'mahasiswa') badge.innerText = 'Mahasiswa: Andi Pratama';
-      if (key === 'akademik') badge.innerText = 'Staf: Rina Wulandari';
-      if (key === 'dosen') badge.innerText = 'Dosen: Dr. Budi Santoso';
-      if (key === 'system') badge.innerText = 'Administrator Sistem';
+      if (key === 'mahasiswa') badge.textContent = 'Mahasiswa: Andi Pratama';
+      if (key === 'akademik') badge.textContent = 'Staf: Rina Wulandari';
+      if (key === 'dosen') badge.textContent = 'Dosen: Muhammad Abdul Haq, Ph.D.';
+      if (key === 'system') badge.textContent = 'Administrator Sistem';
     }
 
     if (targetId === 'view-system') {
@@ -681,7 +880,6 @@
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   }
 
-  // Master Data Subtabs
   function switchMasterTab(tabName) {
     document.querySelectorAll('.master-tab-btn').forEach(b => {
       b.className = 'master-tab-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900';
@@ -694,113 +892,238 @@
     if (target) target.classList.remove('hidden');
   }
 
-  // Filter Days
+  let currentFilterDay = 'Semua';
   function filterDay(day) {
+    currentFilterDay = day;
     document.querySelectorAll('.filter-day-btn').forEach(b => {
-      b.className = 'filter-day-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900';
+      b.className = 'filter-day-btn px-3 py-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 whitespace-nowrap';
     });
     const active = document.querySelector(`.filter-day-btn[data-day="${day}"]`);
-    if (active) active.className = 'filter-day-btn px-3 py-1.5 rounded-lg bg-white text-zinc-900 shadow-sm';
+    if (active) active.className = 'filter-day-btn px-3 py-1.5 rounded-lg bg-white text-zinc-900 shadow-sm whitespace-nowrap';
 
+    applyMahasiswaScheduleFilter();
+  }
+
+  function applyMahasiswaScheduleFilter() {
+    const kFilter = document.getElementById('modal-kelas')?.value || 'B';
+    const pemFilter = document.getElementById('modal-peminatan')?.value || 'PR';
+
+    let visibleCount = 0;
     document.querySelectorAll('.schedule-item-row').forEach(row => {
       const rowDay = row.getAttribute('data-day');
-      if (day === 'Semua' || rowDay === day) {
-        row.classList.remove('hidden');
-      } else {
-        row.classList.add('hidden');
-      }
+      const rowKelas = row.getAttribute('data-kelas') || '';
+      const rowPem = row.getAttribute('data-peminatan') || '';
+
+      const matchDay = (currentFilterDay === 'Semua' || rowDay === currentFilterDay);
+      // Kelas cocok jika kelas gabungan memuat kFilter atau sama persis
+      const matchKelas = rowKelas.includes(kFilter);
+      // Peminatan cocok jika bukan matkul pilihan atau peminatan sama
+      const matchPem = !rowPem || rowPem === pemFilter;
+
+      const show = matchDay && matchKelas && matchPem;
+      row.classList.toggle('hidden', !show);
+      if (show) visibleCount++;
+    });
+
+    const emptyEl = document.getElementById('emptyScheduleDay');
+    if (emptyEl) emptyEl.classList.toggle('hidden', visibleCount > 0);
+  }
+
+  function applyPreviewFilter() {
+    const qDosen = (document.getElementById('previewFilterDosen')?.value || '').toLowerCase().trim();
+    const qRuang = (document.getElementById('previewFilterRuang')?.value || '').toLowerCase().trim();
+    const qKelas = (document.getElementById('previewFilterKelas')?.value || '').toLowerCase().trim();
+
+    document.querySelectorAll('.preview-row').forEach(row => {
+      const d = row.getAttribute('data-dosen') || '';
+      const r = row.getAttribute('data-ruang') || '';
+      const k = row.getAttribute('data-kelas') || '';
+      const match = (!qDosen || d.includes(qDosen)) && (!qRuang || r.includes(qRuang)) && (!qKelas || k.includes(qKelas));
+      row.classList.toggle('hidden', !match);
     });
   }
 
-  // AI Generator Trigger (PRD F-03)
+  function openModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.setAttribute('data-open', 'true');
+  }
+  function closeModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.setAttribute('data-open', 'false');
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-backdrop[data-open="true"]').forEach(m => {
+        m.setAttribute('data-open', 'false');
+      });
+    }
+  });
+
+  // Pra-KRS & Peminatan
+  async function savePrakrs(e) {
+    e.preventDefault();
+    const sem = document.getElementById('modal-sem').value;
+    const kelas = document.getElementById('modal-kelas').value;
+    const peminatan = document.getElementById('modal-peminatan').value;
+    const nama = document.getElementById('modal-nama').value.trim();
+    const suffix = document.getElementById('modal-nim-suffix').value.padStart(3, '0');
+
+    document.getElementById('mhsGreeting').textContent = `Selamat Pagi, ${nama}`;
+    document.getElementById('mhsSemesterText').textContent = `Semester ${sem}`;
+    document.getElementById('mhsKelasBadge').textContent = `Kelas ${kelas}`;
+    document.getElementById('mhsPeminatanBadge').textContent = `Peminatan: ${peminatan}`;
+    document.getElementById('mhsNimText').textContent = `NIM: 20240140${suffix}`;
+
+    // Ambil daftar kurikulum semester terpilih
+    try {
+      const res = await fetch(`/api/master?semester=${sem}&peminatan=${peminatan}`);
+      const data = await res.json();
+      if (res.ok && Array.isArray(data.kurikulum)) {
+        const box = document.getElementById('mhsPlanContainer');
+        box.replaceChildren();
+        let totalSks = 0;
+        data.kurikulum.forEach(m => {
+          totalSks += m.sks;
+          const card = document.createElement('div');
+          card.className = 'p-2.5 rounded-xl bg-zinc-50 border border-zinc-200/80 flex items-center justify-between';
+          const left = document.createElement('div');
+          const title = document.createElement('div'); title.className = 'font-bold text-zinc-900'; title.textContent = m.nama;
+          const sub = document.createElement('div'); sub.className = 'font-mono text-[11px] text-zinc-500'; sub.textContent = `${m.kode} · ${m.kategori}`;
+          left.append(title, sub);
+          const right = document.createElement('span');
+          right.className = 'font-mono font-bold text-zinc-700 tabular-nums shrink-0 ml-2';
+          right.textContent = `${m.sks} SKS`;
+          card.append(left, right);
+          box.appendChild(card);
+        });
+        document.getElementById('mhsTotalSksBadge').textContent = `${totalSks} SKS`;
+      }
+    } catch (err) {
+      console.warn('Gagal memuat kurikulum semester:', err);
+    }
+
+    applyMahasiswaScheduleFilter();
+    closeModal('modal-prakrs');
+    showToast(`Rencana studi Semester ${sem} (Kelas ${kelas}, Peminatan ${peminatan}) berhasil diterapkan.`);
+  }
+
   async function runAIGenerate() {
     const btn = document.getElementById('btnGenerateAI');
-    const orig = btn.innerHTML;
-    btn.innerHTML = '<span>Menyusun Jadwal (AI)...</span>';
+    const spanText = btn.querySelector('span');
+    if (spanText) spanText.textContent = 'Menyusun Jadwal (AI)...';
     btn.disabled = true;
 
     try {
       const res = await fetch('/api/generate', { method: 'POST' });
       const data = await res.json();
-      btn.innerHTML = '<span>Jadwal Terbit (0 Bentrok)</span>';
-      document.getElementById('genStatusBadge').innerText = 'Terpublikasi';
-      document.getElementById('valTotalKonflik').innerText = '0 Bentrok';
-      setTimeout(() => {
-        btn.innerHTML = orig;
-        btn.disabled = false;
-        alert(data.result.message);
-      }, 1000);
+      document.getElementById('valTotalKonflik').textContent = '0 Bentrok';
+      document.getElementById('subTotalKonflik').textContent = 'Hard constraints terpenuhi';
+      showToast(data.result.message);
     } catch (err) {
-      btn.innerHTML = orig;
+      showToast('Gagal: ' + err.message);
+    } finally {
+      if (spanText) spanText.textContent = 'Generate Jadwal (AI)';
       btn.disabled = false;
-      alert('Gagal generate: ' + err.message);
     }
   }
 
-  function publishSchedule() {
-    document.getElementById('genStatusBadge').innerText = 'Terpublikasi';
-    alert('Jadwal perkuliahan berhasil dipublikasikan untuk seluruh mahasiswa dan dosen!');
+  function openRevisiModal(id, matkul, hari, mulai, selesai, ruang) {
+    document.getElementById('rev-id').value = id;
+    document.getElementById('rev-matkul-label').textContent = matkul;
+    document.getElementById('rev-hari').value = hari;
+    document.getElementById('rev-mulai').value = mulai;
+    document.getElementById('rev-selesai').value = selesai;
+    document.getElementById('rev-ruang').value = ruang;
+    openModal('modal-revisi-jadwal');
   }
 
-  // Modals
-  function openModal(id) {
-    document.getElementById(id).classList.remove('hidden');
-  }
-  function closeModal(id) {
-    document.getElementById(id).classList.add('hidden');
-  }
-
-  // Pra-KRS modal form
-  function stepSem(d) {
-    const el = document.getElementById('modal-sem');
-    let v = parseInt(el.value || 1, 10) + d;
-    if (v < 1) v = 1;
-    if (v > 12) v = 12;
-    el.value = v;
-  }
-  function updateModalNim() {
-    const ang = document.getElementById('modal-angkatan').value || '2024';
-    document.getElementById('modal-nim-prefix').innerText = ang + '0140';
-  }
-  function savePrakrs(e) {
+  async function submitRevisiJadwal(e) {
     e.preventDefault();
-    const nama = document.getElementById('modal-nama').value.trim();
-    document.getElementById('mhsGreeting').innerText = `Selamat Pagi, ${nama}`;
-    closeModal('modal-prakrs');
-    alert(`Data Pra-KRS mahasiswa ${nama} berhasil disimpan.`);
+    const id = Number(document.getElementById('rev-id').value);
+    const hari = document.getElementById('rev-hari').value;
+    const jamMulai = document.getElementById('rev-mulai').value;
+    const jamSelesai = document.getElementById('rev-selesai').value;
+    const ruang = document.getElementById('rev-ruang').value;
+
+    try {
+      const res = await fetch('/api/jadwal/revisi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, hari, jamMulai, jamSelesai, ruang })
+      });
+      const data = await res.json();
+      if (!res.ok) return showToast(data.pesan);
+
+      closeModal('modal-revisi-jadwal');
+      showToast(data.pesan);
+      setTimeout(() => location.reload(), 1000);
+    } catch (err) {
+      showToast('Gagal menyimpan revisi: ' + err.message);
+    }
   }
 
-  function saveDosenPref(e) {
+  async function saveDosenPref(e) {
     e.preventDefault();
-    closeModal('modal-preferensi-dosen');
-    alert('Preferensi hari riset dosen berhasil dicatat dan dipatuhi oleh solver AI.');
+    const hariOff = document.getElementById('pref-hari-off').value;
+    const alasan = document.getElementById('pref-alasan').value.trim();
+
+    try {
+      const res = await fetch('/api/constraints/preferensi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          dosenNama: 'Muhammad Abdul Haq, S.Tr.T., M.Eng. Ph.D.',
+          hariOff,
+          alasan
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) return showToast(data.pesan);
+
+      document.getElementById('dosenOffDayLabel').textContent = hariOff;
+      document.getElementById('dosenOffReasonLabel').textContent = alasan;
+      closeModal('modal-preferensi-dosen');
+      showToast(data.pesan);
+    } catch (err) {
+      showToast('Gagal: ' + err.message);
+    }
   }
 
-  // System API Inspector
+  async function publishSchedule() {
+    try {
+      const res = await fetch('/api/jadwal/publish', { method: 'POST' });
+      const data = await res.json();
+      showToast(data.pesan || data.message);
+    } catch (err) {
+      showToast('Gagal publikasi: ' + err.message);
+    }
+  }
+
   async function testApiEndpoint(ep) {
-    document.getElementById('sys-endpoint-url').innerText = ep;
+    document.getElementById('sys-endpoint-url').textContent = ep;
     const jsonEl = document.getElementById('sys-json-output');
     const msEl = document.getElementById('sys-response-time');
-    jsonEl.innerText = '// Memuat...';
+    jsonEl.textContent = '// Memuat...';
 
     const t0 = performance.now();
     try {
       const res = await fetch(ep);
       const data = await res.json();
       const t1 = performance.now();
-      msEl.innerText = (t1 - t0).toFixed(1) + ' ms';
-      jsonEl.innerText = JSON.stringify(data, null, 2);
+      msEl.textContent = (t1 - t0).toFixed(1) + ' ms';
+      jsonEl.textContent = JSON.stringify(data, null, 2);
     } catch (err) {
-      jsonEl.innerText = 'Error: ' + err.message;
+      jsonEl.textContent = 'Error: ' + err.message;
     }
   }
 
   function copySysOutput() {
-    const text = document.getElementById('sys-json-output').innerText;
+    const text = document.getElementById('sys-json-output').textContent;
     navigator.clipboard.writeText(text);
+    showToast('JSON disalin ke clipboard.');
   }
 
-  // Live countdown ticker
   let tickerSeconds = 42 * 60 + 15;
   setInterval(() => {
     if (tickerSeconds > 0) {
@@ -808,9 +1131,12 @@
       const m = Math.floor(tickerSeconds / 60);
       const s = tickerSeconds % 60;
       const el = document.getElementById('countdownTicker');
-      if (el) el.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} left`;
+      if (el) el.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} left`;
     }
   }, 1000);
+
+  // Jalankan filter awal
+  applyMahasiswaScheduleFilter();
 </script>
 
 <%- include('partials/footer') %>

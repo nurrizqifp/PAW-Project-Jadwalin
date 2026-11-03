@@ -6,7 +6,7 @@ const dbConfig = {
   port: parseInt(process.env.DB_PORT || '5432', 10),
   database: process.env.DB_NAME || 'jadwalin_db',
   username: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
+  password: process.env.DB_PASSWORD || '',
   dialect: 'postgres',
   logging: process.env.NODE_ENV === 'development' ? console.log : false,
 };
@@ -44,4 +44,3 @@ module.exports = {
   connectDatabase,
   getSequelize: () => sequelize,
 };
-

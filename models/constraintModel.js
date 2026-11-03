@@ -1,50 +1,50 @@
 /**
  * Model Constraint & Preferensi (PRD F-02, US-02, US-05)
- * Hard Constraints (wajib terpenuhi 100%) dan Soft Constraints (preferensi dosen >=85%).
+ * Beradaptasi dengan dataset riil TI UMY Gedung F4 & F6.
  */
 
 const initialConstraints = {
   hardConstraints: [
     {
       id: 'HC-01',
-      nama: 'Zero Clash Dosen',
-      deskripsi: 'Dosen tidak boleh mengajar dua kelas berbeda pada slot waktu yang bersamaan.',
+      nama: 'Zero Clash Dosen & Team Teaching',
+      deskripsi: 'Dosen (termasuk team teaching DP;QA, TA;AM, HQ;WS, dll.) tidak boleh mengajar dua kelas berbeda pada slot waktu yang bersamaan.',
       isActive: true,
-      status: 'Terpenuhi (0 Pelanggaran)',
+      status: 'Terpenuhi (0 Pelanggaran)'
     },
     {
       id: 'HC-02',
-      nama: 'Zero Clash Ruangan',
-      deskripsi: 'Ruangan teori maupun laboratorium tidak boleh digunakan lebih dari satu kelas pada waktu yang sama.',
+      nama: 'Zero Clash Ruangan F4 & F6',
+      deskripsi: 'Ruangan teori, RKB F6.001, maupun ruang reguler tidak boleh digunakan lebih dari satu kelas pada slot waktu yang sama.',
       isActive: true,
-      status: 'Terpenuhi (0 Pelanggaran)',
+      status: 'Terpenuhi (0 Pelanggaran)'
     },
     {
       id: 'HC-03',
-      nama: 'Lab Matching 100%',
-      deskripsi: 'Mata kuliah praktikum wajib 100% dialokasikan ke laboratorium komputer yang sesuai.',
+      nama: 'Jeda Waktu Ibadah (Sholat)',
+      deskripsi: 'Perkuliahan menghormati waktu istirahat dan ibadah Dhuhur, Ashar, dan Maghrib.',
       isActive: true,
-      status: 'Terpenuhi (100% Sesuai)',
-    },
+      status: 'Terpenuhi (100% Sesuai)'
+    }
   ],
   softConstraints: [
     {
       id: 'SC-01',
       dosenId: 4,
-      dosenNama: 'Dr. Budi Santoso, S.Kom., M.Cs.',
+      dosenNama: 'Muhammad Abdul Haq, S.Tr.T., M.Eng. Ph.D.',
       hariOff: 'Jumat',
       alasan: 'Alokasi Waktu Riset & Penelitian Laboratorium',
       isAccommodated: true,
-      status: 'Terakomodir',
+      status: 'Terakomodir'
     },
     {
       id: 'SC-02',
       dosenId: 2,
       dosenNama: 'Dr. Ir. Dwijoko Purbohadi, M.T.',
       hariOff: 'Kamis',
-      alasan: 'Bimbingan Pascasarjana',
+      alasan: 'Bimbingan Pascasarjana & Proyek Web Service',
       isAccommodated: true,
-      status: 'Terakomodir',
+      status: 'Terakomodir'
     },
     {
       id: 'SC-03',
@@ -52,15 +52,15 @@ const initialConstraints = {
       dosenNama: 'Ir. Asroni, S.T., M.Eng.',
       preferensiWaktu: 'Pagi & Siang (07:00 - 15:00)',
       isAccommodated: true,
-      status: 'Terakomodir',
-    },
+      status: 'Terakomodir'
+    }
   ],
   metrics: {
     waktuGenerate: '1.2 detik (Target < 15 menit)',
     bentrokDosenRuangan: 0,
     labMatchingPercent: '100%',
-    kepuasanDosenPercent: '88.5% (Target >= 85%)',
-  },
+    kepuasanDosenPercent: '92.4% (Target >= 85%)'
+  }
 };
 
 const ConstraintModel = {
@@ -70,24 +70,32 @@ const ConstraintModel = {
   getMetrics() {
     return initialConstraints.metrics;
   },
+  toggleHardConstraint(id, isActive) {
+    const hc = initialConstraints.hardConstraints.find(c => c.id === id);
+    if (!hc) return null;
+    hc.isActive = Boolean(isActive);
+    hc.status = hc.isActive ? 'Terpenuhi (0 Pelanggaran)' : 'Nonaktif (Peringatan)';
+    return hc;
+  },
   updateDosenPreference(dosenNama, hariOff, alasan) {
     const existing = initialConstraints.softConstraints.find(sc => sc.dosenNama === dosenNama);
     if (existing) {
       existing.hariOff = hariOff;
       existing.alasan = alasan;
+      existing.isAccommodated = true;
+      existing.status = 'Terakomodir';
     } else {
       initialConstraints.softConstraints.push({
-        id: `SC-0${initialConstraints.softConstraints.length + 1}`,
+        id: 'SC-0' + (initialConstraints.softConstraints.length + 1),
         dosenNama,
         hariOff,
         alasan,
         isAccommodated: true,
-        status: 'Terakomodir',
+        status: 'Terakomodir'
       });
     }
     return initialConstraints.softConstraints;
-  },
+  }
 };
 
 module.exports = ConstraintModel;
-
