@@ -19,7 +19,7 @@ const masterDosenSchema = z.object({
   nidn: z.string().trim().min(6).max(20).optional(),
   nama: z.string().trim().min(3, 'Nama dosen wajib diisi').max(120),
   keahlian: z.string().trim().min(3, 'Bidang keahlian wajib diisi').max(120),
-  bebanSks: z.coerce.number().int().min(1).max(30).optional()
+  bebanSks: z.coerce.number().int().min(1).max(60).optional()
 });
 
 const masterMatkulSchema = z.object({
@@ -59,6 +59,18 @@ const revisiJadwalSchema = z.object({
   ruang: z.string().trim().min(2).max(40).optional()
 });
 
+const prakrsSchema = z.object({
+  semester: z.coerce.number().int().min(1, 'Semester wajib integer 1-12').max(12, 'Semester wajib integer 1-12'),
+  angkatan: z.coerce.number().int().min(2015).max(2030),
+  nama: z.string().trim().regex(/^[A-Za-z\s'.]+$/, 'Nama hanya boleh berisi huruf').min(3, 'Nama minimal 3 huruf').max(100),
+  nimSuffix: z.string().trim().regex(/^[0-9]{3}$/, 'NIM belakang wajib 3 digit angka'),
+  kodeMatkulList: z.array(z.string().trim().min(2)).optional(),
+  prefKelas: z.enum(['A', 'B', 'C', 'D', 'E', 'F']).optional(),
+  prefHari: z.string().optional(),
+  prefWaktu: z.string().optional(),
+  variasiIndex: z.coerce.number().int().min(0).max(20).optional()
+});
+
 exports.status = (req, res) => {
   const jadwalStatus = JadwalModel.getStatus();
   res.json({
@@ -89,6 +101,37 @@ exports.jadwal = (req, res) => {
     notifikasi: JadwalModel.getNotifikasi(),
     jumlah: data.length,
     data
+  });
+};
+
+exports.rekomendasiPrakrs = (req, res) => {
+  const parsed = prakrsSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({
+      sukses: false,
+      pesan: parsed.error.issues[0]?.message || 'Input Onboarding / Pra-KRS tidak valid.'
+    });
+  }
+
+  const { semester, angkatan, nama, nimSuffix, kodeMatkulList, prefKelas, prefHari, prefWaktu, variasiIndex } = parsed.data;
+  const nimLengkap = `${angkatan}0140${nimSuffix}`;
+  const rekomendasi = JadwalModel.rekomendasiPraKrs({
+    kodeMatkulList: kodeMatkulList || MasterModel.getMatkulForMahasiswa(Math.min(semester, 8), 'PR').map(m => m.kode),
+    prefKelas: prefKelas || 'B',
+    prefHari: prefHari || 'Semua',
+    prefWaktu: prefWaktu || 'Semua',
+    variasiIndex: variasiIndex || 0
+  });
+
+  return res.json({
+    sukses: true,
+    profil: {
+      nama: nama.toUpperCase(),
+      nim: nimLengkap,
+      semester,
+      angkatan
+    },
+    ...rekomendasi
   });
 };
 
@@ -144,6 +187,7 @@ exports.master = (req, res) => {
     dosen: MasterModel.getDosen(),
     ruangan: MasterModel.getRuangan(),
     kurikulum: MasterModel.getKurikulum(semester),
+    kurikulumMahasiswa: semester ? MasterModel.getMatkulForMahasiswa(semester, peminatan || 'PR') : undefined,
     peminatan: MasterModel.getPeminatan(peminatan),
     mataKuliah: MasterModel.getMataKuliah()
   });
