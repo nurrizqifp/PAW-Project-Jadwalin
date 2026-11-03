@@ -1,23 +1,29 @@
-const ProdukModel = require('../models/produkModel');
+const MasterModel = require('../models/masterModel');
 const JadwalModel = require('../models/jadwalModel');
+const ConstraintModel = require('../models/constraintModel');
+const ProdukModel = require('../models/produkModel');
 const config = require('../config');
-const { formatRupiah, formatDate } = require('../utils/helpers');
-
-/**
- * Controller untuk halaman Frontend EJS
- */
 
 exports.index = (req, res) => {
-  const produk = ProdukModel.getAll();
   const jadwal = JadwalModel.getAll();
+  const jadwalStatus = JadwalModel.getStatus();
+  const masterSummary = MasterModel.getSummary();
+  const dosenList = MasterModel.getDosen();
+  const ruanganList = MasterModel.getRuangan();
+  const matkulList = MasterModel.getMataKuliah();
+  const constraints = ConstraintModel.getAll();
+  const produk = ProdukModel.getAll();
 
   res.render('index', {
-    judul: `${config.appName} — Penjadwalan Cerdas`,
+    judul: `${config.appName} — AI Powered Smart Course Scheduling`,
     appName: config.appName,
-    produk,
     jadwal,
-    formatRupiah,
-    formatDate,
-    currentDate: formatDate(),
+    jadwalStatus,
+    masterSummary,
+    dosenList,
+    ruanganList,
+    matkulList,
+    constraints,
+    produk,
   });
 };
