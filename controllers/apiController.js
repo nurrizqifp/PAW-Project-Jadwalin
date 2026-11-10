@@ -76,7 +76,7 @@ exports.status = (req, res) => {
   res.json({
     status: 'ok',
     aplikasi: config.appName,
-    deskripsi: 'Smart Course Scheduling System - TI UMY',
+    deskripsi: 'AI Powered Smart Course Scheduling System - TI UMY',
     uptimeDetik: Math.round(process.uptime()),
     waktuServer: new Date().toISOString(),
     statusJadwal: jadwalStatus.status,
@@ -280,7 +280,7 @@ exports.simpanPreferensiDosen = (req, res) => {
   JadwalModel.tambahNotifikasi({
     kodeMatkul: 'PREF-DOSEN',
     mataKuliah: `Preferensi ${dosenNama}`,
-    perubahan: `Hari bebas mengajar (${hariOff}) tercatat untuk "${alasan}" dan dipatuhi sistem solver.`,
+    perubahan: `Hari bebas mengajar (${hariOff}) tercatat untuk "${alasan}" dan dipatuhi AI solver.`,
     targetPersona: 'Dosen & Akademik'
   });
 

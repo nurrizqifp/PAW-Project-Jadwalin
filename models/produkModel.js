@@ -27,8 +27,8 @@ const daftarFiturPRD = [
   {
     id: 3,
     kode: 'F-03',
-    nama: 'Generate Jadwal Otomatis',
-    kategori: 'Constraint Solver',
+    nama: 'Generate Jadwal Otomatis (AI)',
+    kategori: 'Core AI Solver',
     terkaitUS: 'US-03',
     prioritas: 'Must',
     deskripsi: 'Penyusunan jadwal otomatis berbasis constraint solver dalam waktu kurang dari 15 menit.',
