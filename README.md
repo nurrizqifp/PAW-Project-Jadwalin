@@ -82,6 +82,27 @@ PAW-Project-Jadwalin/
 
 ---
 
+## Uji Coba Fitur CRUD Data Master Dosen (Praktikum Pekan 8)
+
+Sebagai pemenuhan capaian praktikum Pekan 8 untuk implementasi fitur **CRUD (Create, Read, Update, Delete)** penuh yang terintegrasi antara frontend (Single Page App) dan backend (Express.js REST API + Model), berikut dokumentasi tangkapan layar pengujian pada tabel **Dosen Resmi TI UMY**:
+
+### 1. Create — Penambahan Data Dosen Baru
+Formulir modal penambahan data master dosen dengan validasi schema Zod pada backend (`POST /api/master`). Data baru langsung ter-render di baris tabel secara dinamis tanpa perlu me-reload halaman.
+
+![Uji Coba Create Dosen](docs/images/create%20dosen.png)
+
+### 2. Update — Pengubahan Data Dosen
+Tombol **Edit** pada setiap baris dosen membuka modal dengan field terisi otomatis. Perubahan data dikirim melalui method `PUT /api/master/dosen/:id` dan atribut baris tabel langsung diperbarui secara instan.
+
+![Uji Coba Edit Dosen](docs/images/edit%20dosen.png)
+
+### 3. Delete — Penghapusan Data Dosen
+Tombol **Hapus** pada baris dosen memicu dialog konfirmasi interaktif. Setelah dikonfirmasi, sistem mengirim request `DELETE /api/master/dosen/:id`, menghapus elemen dari DOM, serta menata ulang nomor urut dan counter total dosen secara dinamis.
+
+![Uji Coba Delete Dosen](docs/images/delete%20dosen.png)
+
+---
+
 ## Cara Menjalankan Aplikasi
 
 ```bash
