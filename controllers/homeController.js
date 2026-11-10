@@ -18,6 +18,13 @@ exports.index = (req, res) => {
 
   // Default mahasiswa: Semester 5 (memiliki TI501, TI503, TI504 sesuai contoh Lampiran 3 & 4), Peminatan PR
   const defaultMahasiswaMatkul = MasterModel.getMatkulForMahasiswa(5, 'PR');
+  const defaultPrakrs = JadwalModel.rekomendasiPraKrs({
+    kodeMatkulList: defaultMahasiswaMatkul.map(m => m.kode),
+    prefKelas: 'B',
+    prefHari: 'Semua',
+    prefWaktu: 'Semua',
+    variasiIndex: 0
+  });
 
   res.render('index', {
     judul: `${config.appName} — AI Powered Smart Course Scheduling TI UMY`,
@@ -31,6 +38,7 @@ exports.index = (req, res) => {
     kurikulumList,
     peminatanList,
     defaultMahasiswaMatkul,
+    defaultPrakrs,
     constraints,
     produk
   });
