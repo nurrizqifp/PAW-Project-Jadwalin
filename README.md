@@ -4,6 +4,12 @@ Aplikasi web penjadwalan kuliah cerdas berbasis Express.js (Arsitektur MVC), EJS
 
 ---
 
+## Informasi
+
+Pesan commit sebelumnya seharusnya berformat Week7
+
+---
+
 ## Ringkasan Sistem (Berdasarkan PRD)
 
 Penyusunan jadwal kuliah manual di prodi TI (21 dosen resmi, 57 mata kuliah kurikulum Sem 1–8 + 20 mata kuliah pilihan peminatan, 12 ruangan F4 & F6, dan 111 sesi pertemuan) memakan waktu 5–7 hari kerja dan rawan bentrok dosen/ruangan. Sistem **Jadwalin** dirancang secara khusus untuk:
