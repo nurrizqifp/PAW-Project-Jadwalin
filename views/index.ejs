@@ -39,7 +39,7 @@
             Jadwalin
           </h1>
           <p class="text-xs text-zinc-500 max-w-xs mx-auto">
-            AI Powered Smart Course Scheduling &mdash; Program Studi Teknologi Informasi FT UMY
+            Smart Course Scheduling System &mdash; Program Studi Teknologi Informasi FT UMY
           </p>
         </div>
 
@@ -84,7 +84,7 @@
           <div id="ob-step-pill-1" class="p-2.5 rounded-xl bg-zinc-900 text-white text-center font-bold">1. Semester</div>
           <div id="ob-step-pill-2" class="p-2.5 rounded-xl bg-zinc-100 text-zinc-500 text-center">2. Angkatan</div>
           <div id="ob-step-pill-3" class="p-2.5 rounded-xl bg-zinc-100 text-zinc-500 text-center">3. Nama &amp; NIM</div>
-          <div id="ob-step-pill-4" class="p-2.5 rounded-xl bg-zinc-100 text-zinc-500 text-center">4. Pra-KRS &amp; AI</div>
+          <div id="ob-step-pill-4" class="p-2.5 rounded-xl bg-zinc-100 text-zinc-500 text-center">4. Pra-KRS &amp; Penjadwalan</div>
         </div>
 
         <!-- Info & Tutorial Banner saat Mode Demo Aktif (Lampiran 1) -->
@@ -94,7 +94,7 @@
             Mode Coba Demo (Tutorial Step-by-Step Read-Only):
           </div>
           <p id="demoStepGuideText" class="text-zinc-600 text-[11px]">
-            Input dikunci sesuai aturan demo. Cukup klik tombol <strong>Next &rarr;</strong> di bawah untuk mempelajari setiap langkah alur Onboarding hingga rekomendasi jadwal AI.
+            Input dikunci sesuai aturan demo. Cukup klik tombol <strong>Next &rarr;</strong> di bawah untuk mempelajari setiap langkah alur Onboarding hingga rekomendasi jadwal sistem.
           </p>
         </div>
 
@@ -182,7 +182,7 @@
             </div>
           </div>
 
-          <!-- STEP 4: PRA-KRS GRID PER KATEGORI + PREFERENSI + AI FEEDBACK & VARIASI LAIN -->
+          <!-- STEP 4: PRA-KRS GRID PER KATEGORI + PREFERENSI + REKOMENDASI SISTEM & VARIASI LAIN -->
           <div id="ob-panel-4" class="ob-step-panel hidden space-y-4 p-5 rounded-2xl bg-zinc-50 border border-zinc-200">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
@@ -190,7 +190,7 @@
                   4. Masukkan Pra-KRS Semester Ini (Grid per Kategori)
                 </div>
                 <p class="text-zinc-500 text-[11px]">
-                  Pilih mata kuliah berdasarkan kategori &amp; peminatan, masukkan preferensi, lalu dapatkan saran kelas &amp; variasi jadwal dari AI.
+                  Pilih mata kuliah berdasarkan kategori &amp; peminatan, masukkan preferensi, lalu dapatkan saran kelas &amp; variasi jadwal dari sistem.
                 </p>
               </div>
 
@@ -198,7 +198,7 @@
                 <label for="modal-peminatan" class="font-bold text-zinc-700 text-xs">Peminatan (TIxxx):</label>
                 <select id="modal-peminatan" onchange="loadPrakrsGrid()" class="py-1.5 px-2.5 rounded-xl border border-zinc-300 font-bold bg-white text-xs">
                   <option value="PR" selected>PR - Programming</option>
-                  <option value="DA">DA - Data &amp; AI</option>
+                  <option value="DA">DA - Sains Data</option>
                   <option value="NE">NE - Network</option>
                   <option value="UX">UX - User Experience</option>
                 </select>
@@ -242,25 +242,25 @@
               </div>
             </div>
 
-            <!-- Kotak Feedback AI & Tombol Variasi Lain -->
+            <!-- Kotak Feedback Sistem & Tombol Variasi Lain -->
             <div class="p-3.5 rounded-2xl bg-zinc-900 text-white space-y-2">
               <div class="flex items-center justify-between gap-2">
                 <span class="px-2 py-0.5 rounded bg-white text-zinc-900 font-mono font-bold text-[10px] uppercase">
-                  AI Smart Mapping Feedback
+                  Rekomendasi Pemetaan Jadwal
                 </span>
                 <button type="button" id="btnVariasiLain" onclick="cycleAiVariasi()" class="btn-press px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-white font-semibold text-[11px]">
                   Minta Variasi Lain &#8635;
                 </button>
               </div>
               <p id="aiPrakrsFeedbackText" class="text-zinc-200 text-xs leading-relaxed">
-                AI memetakan mata kuliah pilihan kamu ke Kelas B (Variasi #1) dengan 0 bentrok jadwal.
+                Sistem memetakan mata kuliah pilihan kamu ke Kelas B (Variasi #1) dengan 0 bentrok jadwal.
               </p>
             </div>
 
-            <!-- Pratinjau Sesi Terjadwal Hasil AI Mapping -->
+            <!-- Pratinjau Sesi Terjadwal Hasil Pemetaan -->
             <div class="p-3 rounded-2xl bg-white border border-zinc-200 space-y-2 text-xs">
               <div class="flex items-center justify-between font-bold text-zinc-900 text-[11px] uppercase tracking-wider">
-                <span>Pratinjau Sesi Terjadwal AI</span>
+                <span>Pratinjau Sesi Terjadwal Sistem</span>
                 <span id="prakrsAiPreviewCount" class="font-mono text-zinc-500 font-semibold">0 Sesi</span>
               </div>
               <div id="prakrsAiPreviewList" class="space-y-1.5 max-h-36 overflow-y-auto pr-1"></div>
@@ -310,7 +310,7 @@
               Selamat Pagi, ANDI PRATAMA!
             </h1>
             <p class="text-sm text-zinc-600 mt-1">
-              Jadwal kamu saat ini. <span id="mhsAffirmativeCurrent" class="font-medium text-zinc-900">AI memastikan 0 bentrok ruang &amp; dosen untuk sesi hari ini — tetap fokus dan semangat!</span>
+              Jadwal kamu saat ini. <span id="mhsAffirmativeCurrent" class="font-medium text-zinc-900">Sistem memastikan 0 bentrok ruang &amp; dosen untuk sesi hari ini — tetap fokus dan semangat!</span>
             </p>
           </div>
 
@@ -357,7 +357,7 @@
           <div class="flex items-center gap-3 text-xs text-zinc-500">
             <span>Total Paket Pra-KRS: <strong id="mhsTotalSksBadge" class="text-zinc-900 font-mono tabular-nums">20 SKS</strong></span>
             <span>&middot;</span>
-            <span id="mhsVariasiLabel" class="font-mono text-zinc-700">Saran AI: Kelas B (Variasi #1)</span>
+            <span id="mhsVariasiLabel" class="font-mono text-zinc-700">Rekomendasi: Kelas B (Variasi #1)</span>
           </div>
 
           <button onclick="showFullScheduleView()" class="btn-press self-end sm:self-auto px-5 py-2.5 rounded-xl border-2 border-zinc-900 bg-zinc-900 text-white text-xs sm:text-sm font-bold tracking-tight">
@@ -372,14 +372,14 @@
     <div id="mhs-subview-full" class="hidden space-y-6">
       <div class="bg-white rounded-2xl p-6 sm:p-8 border border-app-border shadow-mac space-y-6">
         
-        <!-- Header Lampiran 4: Jadwal Kuliah Kamu, [User]! + [Affirmative text by AI] -->
+        <!-- Header Lampiran 4: Jadwal Kuliah Kamu, [User]! + Motivasi Otomatis -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-zinc-100">
           <div>
             <h2 id="mhsFullTitle" class="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900">
               Jadwal Kuliah Kamu, ANDI PRATAMA!
             </h2>
             <p id="mhsAffirmativeFull" class="text-xs sm:text-sm text-zinc-600 mt-1">
-              Seluruh sesi telah disusun oleh AI bebas bentrok ruang &amp; dosen sesuai preferensi Pra-KRS kamu.
+              Seluruh sesi telah disusun otomatis bebas bentrok ruang &amp; dosen sesuai preferensi Pra-KRS kamu.
             </p>
           </div>
 
@@ -476,7 +476,7 @@
   <!-- ==================== PANEL 2: STAF AKADEMIK ==================== -->
   <section id="view-akademik" class="spa-view hidden space-y-6">
     
-    <!-- Top AI Generator Bar -->
+    <!-- Top Generator Bar -->
     <div class="bg-white rounded-2xl p-6 border border-app-border shadow-mac flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <div class="flex flex-wrap items-center gap-2 text-xs text-zinc-500 font-medium mb-1">
@@ -502,7 +502,7 @@
           <svg class="w-4 h-4 text-zinc-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
           </svg>
-          <span>Generate Jadwal (AI)</span>
+          <span>Generate Jadwal Otomatis</span>
         </button>
 
         <button onclick="publishSchedule()" class="btn-press px-3.5 py-2.5 rounded-xl bg-zinc-100 hover-surface text-zinc-900 text-xs font-semibold">
@@ -511,7 +511,7 @@
       </div>
     </div>
 
-    <!-- AI Quality Indicators -->
+    <!-- Quality Indicators -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <div class="bg-white p-4 rounded-xl border border-app-border shadow-mac text-xs">
         <span class="text-zinc-400 font-medium block">Waktu Generate (M-01)</span>
@@ -546,7 +546,7 @@
           <h3 class="text-base font-bold mt-1">Deteksi Pelanggaran Hard Constraint &amp; Saran Perbaikan</h3>
         </div>
         <button onclick="runAIGenerate()" class="btn-press px-3.5 py-2 rounded-xl bg-white text-zinc-900 font-bold self-start sm:self-center">
-          Resolusi Otomatis via AI Solver
+          Resolusi Bentrok Otomatis
         </button>
       </div>
       <div id="conflictListContainer" class="space-y-2.5"></div>
@@ -714,7 +714,7 @@
         </table>
       </div>
 
-      <!-- Master Subtable: Dosen Resmi TI -->
+      <!-- Master Subtable: Dosen Resmi TI (CRUD Lengkap) -->
       <div id="subtable-dosen" class="master-subtable hidden overflow-x-auto">
         <table class="w-full text-left text-xs">
           <thead class="bg-zinc-50 text-zinc-600 font-bold border-b border-zinc-200">
@@ -724,16 +724,29 @@
               <th class="p-3">Nama Dosen</th>
               <th class="p-3">Bidang Keahlian</th>
               <th class="p-3 text-right">Beban Mengajar</th>
+              <th class="p-3 text-right">Aksi</th>
             </tr>
           </thead>
           <tbody id="tbodyMasterDosen" class="divide-y divide-zinc-100">
             <% dosenList.forEach(function(d, idx) { %>
-              <tr class="master-row hover:bg-zinc-50/50">
-                <td class="p-3 font-mono text-zinc-400 tabular-nums"><%= idx + 1 %></td>
-                <td class="p-3 font-mono font-bold text-zinc-900"><%= d.inisial %></td>
-                <td class="p-3 font-semibold text-zinc-900"><%= d.nama %></td>
-                <td class="p-3 text-zinc-600"><%= d.keahlian %></td>
-                <td class="p-3 text-right font-mono text-zinc-700 tabular-nums"><%= d.bebanSks %> SKS</td>
+              <tr id="dosen-row-<%= d.id %>" class="master-row hover:bg-zinc-50/50" data-id="<%= d.id %>" data-inisial="<%= d.inisial %>" data-nama="<%= d.nama %>" data-keahlian="<%= d.keahlian %>" data-sks="<%= d.bebanSks %>">
+                <td class="p-3 font-mono text-zinc-400 tabular-nums cell-idx"><%= idx + 1 %></td>
+                <td class="p-3 font-mono font-bold text-zinc-900 cell-inisial"><%= d.inisial %></td>
+                <td class="p-3 font-semibold text-zinc-900 cell-nama"><%= d.nama %></td>
+                <td class="p-3 text-zinc-600 cell-keahlian"><%= d.keahlian %></td>
+                <td class="p-3 text-right font-mono text-zinc-700 tabular-nums cell-sks"><%= d.bebanSks %> SKS</td>
+                <td class="p-3 text-right whitespace-nowrap">
+                  <div class="inline-flex items-center gap-1.5 justify-end">
+                    <button type="button" onclick="openEditDosenModal(<%= d.id %>)" class="btn-press px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-semibold text-[11px] inline-flex items-center gap-1">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                      Edit
+                    </button>
+                    <button type="button" onclick="deleteDosenItem(<%= d.id %>)" class="btn-press px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-red-50 hover:text-red-700 text-zinc-600 font-semibold text-[11px] inline-flex items-center gap-1">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                      Hapus
+                    </button>
+                  </div>
+                </td>
               </tr>
             <% }); %>
           </tbody>
@@ -828,7 +841,7 @@
           Jadwal Mengajar &amp; Preferensi Riset
         </h2>
         <p class="text-xs text-zinc-500 mt-1">
-          Atur hari riset dan preferensi waktu mengajar agar diakomodasi oleh AI solver.
+          Atur hari riset dan preferensi waktu mengajar agar diakomodasi oleh sistem solver.
         </p>
       </div>
 
@@ -1032,6 +1045,55 @@
       <button type="submit" class="btn-press w-full py-2.5 rounded-xl bg-zinc-900 text-white font-bold">
         Simpan ke Data Master
       </button>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== MODAL: EDIT DATA DOSEN (CRUD) ==================== -->
+<div id="modal-edit-dosen" data-open="false" class="modal-backdrop fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target === this) closeModal('modal-edit-dosen')">
+  <div class="modal-panel bg-white rounded-2xl max-w-md w-full p-6 shadow-mac-lg border border-zinc-200 space-y-4 text-xs">
+    <div class="flex justify-between items-center pb-2 border-b border-zinc-100">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-zinc-900"></span>
+        <h3 class="text-base font-bold text-zinc-900">Edit Data Dosen</h3>
+      </div>
+      <button onclick="closeModal('modal-edit-dosen')" class="text-zinc-400 hover:text-zinc-700 text-lg font-bold leading-none">&times;</button>
+    </div>
+
+    <form onsubmit="submitEditDosen(event)" class="space-y-3">
+      <input type="hidden" id="edit-dosen-id">
+      
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="font-bold text-zinc-800 block mb-1">Inisial:</label>
+          <input id="edit-dosen-inisial" type="text" maxlength="5" required class="w-full py-1.5 px-3 rounded-lg border border-zinc-300 font-mono uppercase">
+        </div>
+        <div>
+          <label class="font-bold text-zinc-800 block mb-1">Beban SKS:</label>
+          <input id="edit-dosen-sks" type="number" min="1" max="48" required class="w-full py-1.5 px-3 rounded-lg border border-zinc-300 tabular-nums font-mono">
+        </div>
+      </div>
+
+      <div>
+        <label class="font-bold text-zinc-800 block mb-1">Nama Lengkap &amp; Gelar:</label>
+        <input id="edit-dosen-nama" type="text" required class="w-full py-1.5 px-3 rounded-lg border border-zinc-300">
+      </div>
+
+      <div>
+        <label class="font-bold text-zinc-800 block mb-1">Bidang Keahlian:</label>
+        <input id="edit-dosen-keahlian" type="text" required class="w-full py-1.5 px-3 rounded-lg border border-zinc-300">
+      </div>
+
+      <div id="editDosenError" class="hidden p-2.5 rounded-lg bg-zinc-100 border border-zinc-300 text-zinc-900 font-semibold text-[11px]"></div>
+
+      <div class="pt-2 flex items-center justify-end gap-2 border-t border-zinc-100">
+        <button type="button" onclick="closeModal('modal-edit-dosen')" class="btn-press px-4 py-2 rounded-xl bg-zinc-100 hover-surface text-zinc-800 font-semibold">
+          Batal
+        </button>
+        <button type="submit" id="btnSubmitEditDosen" class="btn-press px-5 py-2 rounded-xl bg-zinc-900 text-white font-bold">
+          Simpan Perubahan
+        </button>
+      </div>
     </form>
   </div>
 </div>
@@ -1319,7 +1381,7 @@
       } else if (currentObStep === 3) {
         guideText.innerHTML = '<strong>Langkah 3 dari 4 (Nama &amp; NIM):</strong> Nama dikunci pada "ANDI PRATAMA" dan akhiran NIM "093". Klik <strong>Next &rarr;</strong> untuk masuk ke pemilihan Pra-KRS.';
       } else if (currentObStep === 4) {
-        guideText.innerHTML = '<strong>Langkah 4 dari 4 (Pra-KRS &amp; AI Mapping):</strong> AI memetakan mata kuliah ke Kelas B (Variasi #1) bebas bentrok. Klik <strong>Selesai Demo &amp; Lihat Jadwal</strong> untuk melihat kartu jadwal kamu!';
+        guideText.innerHTML = '<strong>Langkah 4 dari 4 (Pra-KRS &amp; Penjadwalan):</strong> Sistem memetakan mata kuliah ke Kelas B (Variasi #1) bebas bentrok. Klik <strong>Selesai Demo &amp; Lihat Jadwal</strong> untuk melihat kartu jadwal kamu!';
       }
     }
 
@@ -1544,7 +1606,7 @@
         }
       }
     } catch (err) {
-      console.warn('Gagal meminta rekomendasi AI:', err);
+      console.warn('Gagal meminta rekomendasi sistem:', err);
     }
   }
 
@@ -1607,7 +1669,7 @@
     if (pEl) pEl.textContent = `Peminatan: ${peminatan}`;
     if (nEl) nEl.textContent = `NIM: ${angkatan}0140${suffix}`;
     if (tEl) tEl.textContent = `${totalSks} SKS`;
-    if (vEl) vEl.textContent = `Saran AI: Kelas ${kelas} (Variasi #${currentVariasiIdx + 1})`;
+    if (vEl) vEl.textContent = `Rekomendasi: Kelas ${kelas} (Variasi #${currentVariasiIdx + 1})`;
     if (pbEl) pbEl.textContent = `Mahasiswa: ${nama}`;
 
     await requestAiPrakrsMapping(currentVariasiIdx);
@@ -1659,7 +1721,7 @@
       return;
     }
 
-    // Render sesi dinamis hasil AI Pra-KRS mahasiswa
+    // Render sesi dinamis hasil pemetaan Pra-KRS mahasiswa
     const filtered = currentMahasiswaSessions.filter(s => currentFilterDay === 'Semua' || s.hari === currentFilterDay);
     container.replaceChildren();
 
@@ -1860,7 +1922,7 @@
   async function runAIGenerate() {
     const btn = document.getElementById('btnGenerateAI');
     const spanText = btn.querySelector('span');
-    if (spanText) spanText.textContent = 'Menyusun Jadwal (AI)...';
+    if (spanText) spanText.textContent = 'Menyusun Jadwal Otomatis...';
     btn.disabled = true;
 
     try {
@@ -1871,7 +1933,7 @@
     } catch (err) {
       showToast('Gagal: ' + err.message);
     } finally {
-      if (spanText) spanText.textContent = 'Generate Jadwal (AI)';
+      if (spanText) spanText.textContent = 'Generate Jadwal Otomatis';
       btn.disabled = false;
     }
   }
@@ -1942,11 +2004,189 @@
         errEl.classList.remove('hidden');
         return;
       }
+
+      // Jika menambah dosen, langsung perbarui tabel dosen di DOM
+      if (kategori === 'dosen' && data.item) {
+        appendDosenToTable(data.item);
+      }
+
+      // Reset form fields
+      if (kategori === 'dosen') {
+        document.getElementById('in-dosen-inisial').value = '';
+        document.getElementById('in-dosen-nama').value = '';
+        document.getElementById('in-dosen-keahlian').value = '';
+        document.getElementById('in-dosen-sks').value = '12';
+      }
+
       closeModal('modal-tambah-master');
       showToast(data.pesan);
     } catch (err) {
       showToast('Gagal menyimpan data master: ' + err.message);
     }
+  }
+
+  function appendDosenToTable(item) {
+    const tbody = document.getElementById('tbodyMasterDosen');
+    if (!tbody) return;
+    const currentRows = tbody.querySelectorAll('tr.master-row');
+    const newIdx = currentRows.length + 1;
+
+    const tr = document.createElement('tr');
+    tr.id = `dosen-row-${item.id}`;
+    tr.className = 'master-row hover:bg-zinc-50/50';
+    tr.setAttribute('data-id', item.id);
+    tr.setAttribute('data-inisial', item.inisial || '');
+    tr.setAttribute('data-nama', item.nama || '');
+    tr.setAttribute('data-keahlian', item.keahlian || '');
+    tr.setAttribute('data-sks', item.bebanSks || 12);
+
+    tr.innerHTML = `
+      <td class="p-3 font-mono text-zinc-400 tabular-nums cell-idx">${newIdx}</td>
+      <td class="p-3 font-mono font-bold text-zinc-900 cell-inisial">${escapeHtml(item.inisial || '')}</td>
+      <td class="p-3 font-semibold text-zinc-900 cell-nama">${escapeHtml(item.nama || '')}</td>
+      <td class="p-3 text-zinc-600 cell-keahlian">${escapeHtml(item.keahlian || '')}</td>
+      <td class="p-3 text-right font-mono text-zinc-700 tabular-nums cell-sks">${item.bebanSks || 12} SKS</td>
+      <td class="p-3 text-right whitespace-nowrap">
+        <div class="inline-flex items-center gap-1.5 justify-end">
+          <button type="button" onclick="openEditDosenModal(${item.id})" class="btn-press px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-semibold text-[11px] inline-flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            Edit
+          </button>
+          <button type="button" onclick="deleteDosenItem(${item.id})" class="btn-press px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-red-50 hover:text-red-700 text-zinc-600 font-semibold text-[11px] inline-flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            Hapus
+          </button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+
+    // Update count dosen
+    const countEl = document.getElementById('countDosen');
+    if (countEl) countEl.textContent = newIdx;
+  }
+
+  function openEditDosenModal(id) {
+    const row = document.getElementById(`dosen-row-${id}`);
+    if (!row) return;
+
+    document.getElementById('edit-dosen-id').value = id;
+    document.getElementById('edit-dosen-inisial').value = row.getAttribute('data-inisial') || '';
+    document.getElementById('edit-dosen-nama').value = row.getAttribute('data-nama') || '';
+    document.getElementById('edit-dosen-keahlian').value = row.getAttribute('data-keahlian') || '';
+    document.getElementById('edit-dosen-sks').value = row.getAttribute('data-sks') || '12';
+
+    const errEl = document.getElementById('editDosenError');
+    if (errEl) errEl.classList.add('hidden');
+
+    openModal('modal-edit-dosen');
+  }
+
+  async function submitEditDosen(e) {
+    e.preventDefault();
+    const id = document.getElementById('edit-dosen-id').value;
+    const inisial = document.getElementById('edit-dosen-inisial').value.trim();
+    const nama = document.getElementById('edit-dosen-nama').value.trim();
+    const keahlian = document.getElementById('edit-dosen-keahlian').value.trim();
+    const bebanSks = parseInt(document.getElementById('edit-dosen-sks').value, 10);
+    const errEl = document.getElementById('editDosenError');
+    const btnSubmit = document.getElementById('btnSubmitEditDosen');
+
+    if (errEl) errEl.classList.add('hidden');
+    if (btnSubmit) btnSubmit.disabled = true;
+
+    try {
+      const res = await fetch(`/api/master/dosen/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inisial, nama, keahlian, bebanSks })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        if (errEl) {
+          errEl.textContent = data.pesan || 'Gagal memperbarui data dosen.';
+          errEl.classList.remove('hidden');
+        }
+        return;
+      }
+
+      // Update row di DOM
+      const row = document.getElementById(`dosen-row-${id}`);
+      if (row) {
+        row.setAttribute('data-inisial', inisial);
+        row.setAttribute('data-nama', nama);
+        row.setAttribute('data-keahlian', keahlian);
+        row.setAttribute('data-sks', bebanSks);
+
+        const cInisial = row.querySelector('.cell-inisial');
+        const cNama = row.querySelector('.cell-nama');
+        const cKeahlian = row.querySelector('.cell-keahlian');
+        const cSks = row.querySelector('.cell-sks');
+
+        if (cInisial) cInisial.textContent = inisial;
+        if (cNama) cNama.textContent = nama;
+        if (cKeahlian) cKeahlian.textContent = keahlian;
+        if (cSks) cSks.textContent = `${bebanSks} SKS`;
+      }
+
+      closeModal('modal-edit-dosen');
+      showToast(data.pesan || 'Data dosen berhasil diperbarui.');
+    } catch (err) {
+      if (errEl) {
+        errEl.textContent = 'Gagal menyimpan: ' + err.message;
+        errEl.classList.remove('hidden');
+      }
+    } finally {
+      if (btnSubmit) btnSubmit.disabled = false;
+    }
+  }
+
+  async function deleteDosenItem(id) {
+    const row = document.getElementById(`dosen-row-${id}`);
+    const nama = row ? (row.getAttribute('data-nama') || `ID ${id}`) : `ID ${id}`;
+
+    if (!confirm(`Hapus data dosen "${nama}" dari Data Master?`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/master/dosen/${id}`, {
+        method: 'DELETE'
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        return showToast(data.pesan || 'Gagal menghapus dosen.');
+      }
+
+      // Hapus row dari DOM
+      if (row) row.remove();
+
+      // Re-index nomor urut tabel dosen
+      const tbody = document.getElementById('tbodyMasterDosen');
+      if (tbody) {
+        const rows = tbody.querySelectorAll('tr.master-row');
+        rows.forEach((r, idx) => {
+          const idxCell = r.querySelector('.cell-idx');
+          if (idxCell) idxCell.textContent = idx + 1;
+        });
+        const countEl = document.getElementById('countDosen');
+        if (countEl) countEl.textContent = rows.length;
+      }
+
+      showToast(data.pesan || `Dosen ${nama} berhasil dihapus.`);
+    } catch (err) {
+      showToast('Gagal menghapus dosen: ' + err.message);
+    }
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
   }
 
   function openRevisiModal(id, matkul, hari, mulai, selesai, ruang) {

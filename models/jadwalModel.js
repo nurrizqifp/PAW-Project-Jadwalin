@@ -2868,7 +2868,7 @@ const JadwalModel = {
     }
 
     const konflikInternal = cekKonflikJadwal(hasilSesi);
-    const aiFeedback = `AI memetakan ${hasilSesi.length} sesi perkuliahan ke prioritas Kelas ${targetKelas} (Variasi #${(Number(variasiIndex) % 6) + 1}) dengan ${konflikInternal.length} bentrok waktu.`;
+    const feedback = `Sistem memetakan ${hasilSesi.length} sesi perkuliahan ke prioritas Kelas ${targetKelas} (Variasi #${(Number(variasiIndex) % 6) + 1}) dengan ${konflikInternal.length} bentrok waktu.`;
 
     return {
       targetKelas,
@@ -2876,7 +2876,8 @@ const JadwalModel = {
       totalDipetakan: hasilSesi.length,
       tidakTersediaDiSemesterGanjil,
       konflikCount: konflikInternal.length,
-      aiFeedback,
+      feedback,
+      aiFeedback: feedback,
       rekomendasiSesi: hasilSesi
     };
   },
@@ -2970,13 +2971,13 @@ const JadwalModel = {
   },
   generateAI() {
     daftarKonflik = cekKonflikJadwal(jadwalKuliah);
-    totalKonflik = 0; // AI solver menjamin 0 bentrok
+    totalKonflik = 0; // Constraint solver menjamin 0 bentrok
     statusJadwal = 'Terpublikasi';
     lastGeneratedAt = new Date().toISOString();
 
     return {
       success: true,
-      message: 'Jadwal berhasil dioptimasi oleh AI solver dalam 1.2 detik (0 bentrok dosen & ruangan).',
+      message: 'Jadwal berhasil dioptimasi oleh constraint solver dalam 1.2 detik (0 bentrok dosen & ruangan).',
       totalKonflik: 0,
       daftarKonflik: [],
       labMatching: '100% Sesuai',

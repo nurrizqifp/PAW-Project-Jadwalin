@@ -1,7 +1,7 @@
 {
   "name": "paw-project-jadwalin",
   "version": "1.0.0",
-  "description": "AI Powered Smart Course Scheduling - PAW Project TI UMY",
+  "description": "Smart Course Scheduling System - PAW Project TI UMY",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

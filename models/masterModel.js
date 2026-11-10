@@ -903,7 +903,7 @@ const MasterModel = {
   },
   addDosen({ inisial, nidn, nama, keahlian, bebanSks }) {
     const item = {
-      id: daftarDosen.length + 1,
+      id: daftarDosen.length > 0 ? Math.max(...daftarDosen.map(d => d.id)) + 1 : 1,
       inisial: (inisial || 'TI').toUpperCase(),
       nidn: nidn || String(Date.now()).slice(-10),
       nama,
@@ -912,6 +912,22 @@ const MasterModel = {
     };
     daftarDosen.push(item);
     return item;
+  },
+  updateDosen(id, { inisial, nidn, nama, keahlian, bebanSks }) {
+    const idx = daftarDosen.findIndex(d => d.id === Number(id));
+    if (idx === -1) return null;
+    if (inisial !== undefined) daftarDosen[idx].inisial = inisial.toUpperCase();
+    if (nidn !== undefined) daftarDosen[idx].nidn = nidn;
+    if (nama !== undefined) daftarDosen[idx].nama = nama;
+    if (keahlian !== undefined) daftarDosen[idx].keahlian = keahlian;
+    if (bebanSks !== undefined) daftarDosen[idx].bebanSks = Number(bebanSks);
+    return daftarDosen[idx];
+  },
+  deleteDosen(id) {
+    const idx = daftarDosen.findIndex(d => d.id === Number(id));
+    if (idx === -1) return false;
+    daftarDosen.splice(idx, 1);
+    return true;
   },
   addMataKuliah({ kode, nama, sks, semester, kategori }) {
     const item = {
