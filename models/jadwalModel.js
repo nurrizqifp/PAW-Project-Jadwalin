@@ -5,6 +5,7 @@
  */
 
 let statusJadwal = 'Terpublikasi';
+const MasterModel = require('./masterModel');
 let lastGeneratedAt = new Date().toISOString();
 let totalKonflik = 0;
 let daftarKonflik = [];
@@ -2774,10 +2775,68 @@ const JadwalModel = {
     const hasilSesi = [];
     const tidakTersediaDiSemesterGanjil = [];
 
+    const standardPeriods = [
+      { hari: 'Senin', jamMulai: '08:50', jamSelesai: '11:30' },
+      { hari: 'Senin', jamMulai: '13:20', jamSelesai: '15:00' },
+      { hari: 'Selasa', jamMulai: '08:50', jamSelesai: '11:30' },
+      { hari: 'Selasa', jamMulai: '13:20', jamSelesai: '15:00' },
+      { hari: 'Rabu', jamMulai: '08:50', jamSelesai: '11:30' },
+      { hari: 'Rabu', jamMulai: '13:20', jamSelesai: '15:00' },
+      { hari: 'Kamis', jamMulai: '08:50', jamSelesai: '11:30' },
+      { hari: 'Kamis', jamMulai: '13:20', jamSelesai: '15:00' },
+      { hari: 'Jumat', jamMulai: '08:00', jamSelesai: '10:30' },
+      { hari: 'Jumat', jamMulai: '13:30', jamSelesai: '15:10' },
+      { hari: 'Sabtu', jamMulai: '08:50', jamSelesai: '11:30' }
+    ];
+
+    let synthOffset = Number(variasiIndex || 0);
+    const allMasterMk = MasterModel ? MasterModel.getMataKuliah() : [];
+    const masterRooms = MasterModel ? MasterModel.getRuangan() : [];
+    const masterLecturers = MasterModel ? MasterModel.getDosen() : [];
+
     for (const kode of normalizedCodes) {
       const aliasKode = kode.replace(/^TI10([1-9])$/, 'TI2610$1');
       const kandidat = jadwalKuliah.filter(j => j.kodeMatkul === kode || j.kodeMatkul === aliasKode);
       if (kandidat.length === 0) {
+        // Fallback untuk MK semester genap atau MK kurikulum yang belum ada di CSV ganjil
+        const mkObj = allMasterMk.find(m => m.kode === kode || m.kode === aliasKode) || { kode, nama: kode, sks: 3 };
+        let chosenPeriod = null;
+        for (let a = 0; a < standardPeriods.length; a++) {
+          const sp = standardPeriods[(synthOffset + a) % standardPeriods.length];
+          const clashing = hasilSesi.some(h => h.hari === sp.hari && keMenit(h.jamMulai) < keMenit(sp.jamSelesai) && keMenit(sp.jamMulai) < keMenit(h.jamSelesai));
+          if (!clashing) {
+            chosenPeriod = sp;
+            synthOffset = (synthOffset + a + 1) % standardPeriods.length;
+            break;
+          }
+        }
+        if (!chosenPeriod) chosenPeriod = standardPeriods[synthOffset % standardPeriods.length];
+
+        const roomObj = masterRooms.length > 0 ? masterRooms[(synthOffset) % masterRooms.length] : { kode: 'F6.001', gedung: 'F6', tipe: 'Reguler' };
+        const lecturerObj = masterLecturers.length > 0 ? masterLecturers[(synthOffset) % masterLecturers.length] : { inisial: 'AS', nama: 'Ir. Asroni, S.T., M.Eng' };
+
+        hasilSesi.push({
+          id: 8000 + hasilSesi.length + 1,
+          hari: chosenPeriod.hari,
+          jamMulai: chosenPeriod.jamMulai,
+          jamSelesai: chosenPeriod.jamSelesai,
+          kodeMatkul: kode,
+          mataKuliah: mkObj.nama,
+          sks: mkObj.sks || 3,
+          kelas: targetKelas,
+          kelasList: [targetKelas],
+          ruang: roomObj.kode,
+          gedung: roomObj.gedung || (roomObj.kode.startsWith('F6') ? 'F6' : 'F4'),
+          tipeRuang: roomObj.tipe || 'Reguler',
+          dosenInisial: lecturerObj.inisial,
+          dosen: lecturerObj.nama,
+          jenis: 'Teori',
+          totalSlot: mkObj.sks || 3,
+          melewatiIstirahat: null,
+          isPilihan: Boolean(mkObj.kodePeminatan),
+          peminatanKode: mkObj.kodePeminatan || null,
+          isLabValid: true
+        });
         tidakTersediaDiSemesterGanjil.push(kode);
         continue;
       }
@@ -2809,9 +2868,7 @@ const JadwalModel = {
     }
 
     const konflikInternal = cekKonflikJadwal(hasilSesi);
-    const aiFeedback = hasilSesi.length > 0
-      ? `AI memetakan ${hasilSesi.length} sesi perkuliahan ke prioritas Kelas ${targetKelas} (Variasi #${(Number(variasiIndex) % 6) + 1}) dengan ${konflikInternal.length} bentrok waktu.`
-      : `Mata kuliah semester genap/MKWU yang dipilih mengikuti jadwal universitas; menampilkan saran jadwal kelas ${targetKelas} yang relevan.`;
+    const aiFeedback = `AI memetakan ${hasilSesi.length} sesi perkuliahan ke prioritas Kelas ${targetKelas} (Variasi #${(Number(variasiIndex) % 6) + 1}) dengan ${konflikInternal.length} bentrok waktu.`;
 
     return {
       targetKelas,

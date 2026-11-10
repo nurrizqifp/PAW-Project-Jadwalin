@@ -4,7 +4,7 @@
 <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
 
   <!-- ==================== BANNER NOTIFIKASI PERUBAHAN JADWAL ==================== -->
-  <div id="notifBanner" class="mb-6 bg-white rounded-2xl p-4 border border-app-border shadow-mac flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+  <div id="notifBanner" class="hidden mb-6 bg-white rounded-2xl p-4 border border-app-border shadow-mac flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
     <div class="flex items-start sm:items-center gap-3">
       <span class="px-2 py-1 rounded-lg bg-zinc-900 text-white font-mono font-bold text-[10px] uppercase tracking-wider shrink-0">
         Notifikasi TI UMY
@@ -19,12 +19,6 @@
       </div>
     </div>
     <div class="flex items-center gap-3 self-end sm:self-center shrink-0">
-      <button onclick="openLandingOverlay()" class="btn-press px-3 py-1.5 rounded-xl bg-zinc-100 hover-surface text-zinc-900 font-semibold">
-        Layar Utama / Demo
-      </button>
-      <button onclick="openOnboarding(false)" class="btn-press px-3 py-1.5 rounded-xl bg-zinc-900 text-white font-semibold">
-        Onboarding & Pra-KRS
-      </button>
       <button onclick="openModal('modal-riwayat-notif')" class="btn-press px-3 py-1.5 rounded-xl bg-zinc-100 hover-surface text-zinc-800 font-semibold">
         Riwayat (<span id="notifCountBadge" class="tabular-nums"><%= notifikasiList.length %></span>)
       </button>
@@ -34,8 +28,266 @@
   <!-- ==================== PANEL 1: MAHASISWA (LAMPIRAN 1, 2, 3, 4) ==================== -->
   <section id="view-mahasiswa" class="spa-view space-y-6">
 
-    <!-- ==================== SUB-VIEW 1A: LAMPIRAN 3 — JADWAL SAAT INI ==================== -->
-    <div id="mhs-subview-current" class="space-y-6">
+    <!-- ==================== SUB-VIEW 1: LAMPIRAN 1 — LANDING JADWALIN ==================== -->
+    <div id="mhs-subview-landing" class="max-w-md mx-auto py-6 sm:py-12 space-y-6">
+      <div id="modal-landing" class="bg-white rounded-3xl p-8 sm:p-10 shadow-mac-lg border-2 border-zinc-900 text-center space-y-6">
+        <div class="space-y-3">
+          <div class="w-14 h-14 rounded-2xl bg-zinc-900 text-white font-extrabold text-2xl flex items-center justify-center mx-auto shadow-sm">
+            J
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-900">
+            Jadwalin
+          </h1>
+          <p class="text-xs text-zinc-500 max-w-xs mx-auto">
+            AI Powered Smart Course Scheduling &mdash; Program Studi Teknologi Informasi FT UMY
+          </p>
+        </div>
+
+        <div class="space-y-3 pt-2">
+          <button onclick="handleLandingLogin()" class="btn-press w-full py-3.5 px-6 rounded-2xl border-2 border-zinc-900 bg-zinc-900 text-white font-bold text-sm shadow-sm hover:bg-zinc-800">
+            Login
+          </button>
+
+          <button onclick="startDemoTutorial()" class="btn-press w-full py-3.5 px-6 rounded-2xl border-2 border-zinc-900 bg-white hover-surface text-zinc-900 font-bold text-sm">
+            Coba demo
+          </button>
+        </div>
+
+        <div class="pt-2 text-xs text-zinc-600">
+          Belum punya akun?
+          <button onclick="startRegisterOnboarding()" class="font-bold text-zinc-900 underline hover:text-zinc-700 ml-1">
+            Register
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SUB-VIEW 2: LAMPIRAN 2 — ONBOARDING 4-STEP ==================== -->
+    <div id="mhs-subview-onboarding" class="hidden max-w-2xl mx-auto space-y-5">
+      <div id="modal-prakrs" class="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200 shadow-mac-lg space-y-5">
+        
+        <!-- Header Onboarding -->
+        <div class="flex items-center justify-between pb-3 border-b border-zinc-100">
+          <div class="flex items-center gap-2.5">
+            <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900">Onboarding</h2>
+            <span id="onboardingModeBadge" class="px-2.5 py-0.5 rounded-full bg-zinc-900 text-white font-mono text-[10px] font-bold">
+              Mode Interaktif
+            </span>
+          </div>
+          <button type="button" onclick="showLandingView()" class="btn-press text-xs font-semibold text-zinc-500 hover:text-zinc-900">
+            &larr; Kembali ke Layar Awal
+          </button>
+        </div>
+
+        <!-- 4 Step Indicator Pills -->
+        <div class="grid grid-cols-4 gap-2 text-[11px] font-semibold">
+          <div id="ob-step-pill-1" class="p-2.5 rounded-xl bg-zinc-900 text-white text-center font-bold">1. Semester</div>
+          <div id="ob-step-pill-2" class="p-2.5 rounded-xl bg-zinc-100 text-zinc-500 text-center">2. Angkatan</div>
+          <div id="ob-step-pill-3" class="p-2.5 rounded-xl bg-zinc-100 text-zinc-500 text-center">3. Nama &amp; NIM</div>
+          <div id="ob-step-pill-4" class="p-2.5 rounded-xl bg-zinc-100 text-zinc-500 text-center">4. Pra-KRS &amp; AI</div>
+        </div>
+
+        <!-- Info & Tutorial Banner saat Mode Demo Aktif (Lampiran 1) -->
+        <div id="demoReadOnlyNotice" class="hidden p-3.5 rounded-2xl bg-zinc-100 border border-zinc-300 text-zinc-800 text-xs font-medium space-y-1">
+          <div class="font-bold text-zinc-900 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-zinc-900"></span>
+            Mode Coba Demo (Tutorial Step-by-Step Read-Only):
+          </div>
+          <p id="demoStepGuideText" class="text-zinc-600 text-[11px]">
+            Input dikunci sesuai aturan demo. Cukup klik tombol <strong>Next &rarr;</strong> di bawah untuk mempelajari setiap langkah alur Onboarding hingga rekomendasi jadwal AI.
+          </p>
+        </div>
+
+        <form id="formOnboarding" onsubmit="savePrakrs(event)" class="space-y-5">
+          <!-- STEP 1: SEMESTER INTEGER 1-12 (BUKAN DROPDOWN, BISA KLIK ATAS BAWAH & INPUT VALIDASI) -->
+          <div id="ob-panel-1" class="ob-step-panel space-y-3 p-5 rounded-2xl bg-zinc-50 border border-zinc-200">
+            <label for="modal-sem" class="text-sm font-bold text-zinc-900 block">
+              1. Kamu saat ini semester berapa?
+            </label>
+            <p class="text-zinc-500 text-[11px]">
+              Hanya menerima bilangan bulat (integer) <strong>1 &ndash; 12</strong>. Gunakan tombol panah atas/bawah atau ketik angka langsung (bukan dropdown).
+            </p>
+
+            <div class="flex items-center gap-3 pt-1">
+              <div class="inline-flex items-center rounded-xl border-2 border-zinc-900 bg-white overflow-hidden shadow-sm">
+                <input id="modal-sem" type="number" min="1" max="12" step="1" value="5" required
+                       oninput="validateSemesterInput(this)"
+                       class="w-20 text-center text-xl font-extrabold py-2.5 px-2 tabular-nums focus:outline-none">
+                <div class="flex flex-col border-l border-zinc-300">
+                  <button type="button" id="btnSemUp" onclick="stepSem(1)" aria-label="Naikkan Semester" class="btn-press px-3 py-1 bg-zinc-100 hover-surface text-zinc-900 font-bold border-b border-zinc-300 leading-none">&#9650;</button>
+                  <button type="button" id="btnSemDown" onclick="stepSem(-1)" aria-label="Turunkan Semester" class="btn-press px-3 py-1 bg-zinc-100 hover-surface text-zinc-900 font-bold leading-none">&#9660;</button>
+                </div>
+              </div>
+
+              <span id="semErrorMsg" class="text-zinc-900 font-semibold text-xs hidden">
+                Wajib berupa integer antara 1 sampai 12!
+              </span>
+            </div>
+          </div>
+
+          <!-- STEP 2: ANGKATAN PAKAI YEAR PICKER -->
+          <div id="ob-panel-2" class="ob-step-panel hidden space-y-3 p-5 rounded-2xl bg-zinc-50 border border-zinc-200">
+            <label class="text-sm font-bold text-zinc-900 block">
+              2. Angkatan berapa? (Pilih pakai Year Picker)
+            </label>
+            <p class="text-zinc-500 text-[11px]">
+              Pilih tahun angkatan masuk kuliah pada pemilih tahun di bawah ini. Tahun angkatan otomatis menentukan 4 digit awal NIM kamu.
+            </p>
+
+            <input id="modal-angkatan" type="hidden" value="2024">
+            <div id="yearPickerGrid" class="grid grid-cols-4 gap-2.5 pt-1">
+              <% [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026].forEach(function(yr) { %>
+                <button type="button" onclick="selectYearPicker('<%= yr %>')" data-year="<%= yr %>"
+                        class="year-picker-btn btn-press py-3 px-3 rounded-xl border font-mono font-bold text-sm tabular-nums <%= yr === 2024 ? 'bg-zinc-900 text-white border-zinc-900 shadow-sm' : 'bg-white text-zinc-800 border-zinc-300 hover-surface' %>">
+                  <%= yr %>
+                </button>
+              <% }); %>
+            </div>
+          </div>
+
+          <!-- STEP 3: NAMA (AUTO UPPERCASE, STRING ONLY, MIN 3 HURUF) & NIM (3 DIGIT BELAKANG) -->
+          <div id="ob-panel-3" class="ob-step-panel hidden space-y-4 p-5 rounded-2xl bg-zinc-50 border border-zinc-200">
+            <div class="text-sm font-bold text-zinc-900">
+              3. Nama dan NIM berapa?
+            </div>
+
+            <div class="space-y-1.5">
+              <label for="modal-nama" class="font-bold text-zinc-800 block text-xs">
+                Nama Lengkap (Hanya huruf, otomatis huruf besar, minimal 3 huruf):
+              </label>
+              <input id="modal-nama" type="text" value="ANDI PRATAMA" minlength="3" required
+                     oninput="sanitizeNamaInput(this)"
+                     placeholder="CONTOH: ANDI PRATAMA"
+                     class="w-full font-bold uppercase py-2.5 px-3 rounded-xl border border-zinc-300 bg-white text-sm tracking-wide">
+              <span id="namaErrorMsg" class="hidden text-[11px] font-semibold text-zinc-900">
+                Nama hanya boleh huruf dan minimal 3 karakter.
+              </span>
+            </div>
+
+            <div class="space-y-1.5">
+              <label for="modal-nim-suffix" class="font-bold text-zinc-800 block text-xs">
+                NIM Mahasiswa (Hanya input 3 digit belakang, format: <code class="font-mono">[angkatan]0140[3NIM]</code>):
+              </label>
+              <div class="flex items-center gap-2">
+                <span id="modal-nim-prefix" class="font-mono tabular-nums font-extrabold bg-zinc-200 px-3.5 py-2.5 rounded-xl text-zinc-900 text-sm">
+                  20240140
+                </span>
+                <input id="modal-nim-suffix" type="text" maxlength="3" minlength="3" value="093" required
+                       oninput="sanitizeNimSuffix(this)"
+                       class="w-20 font-mono tabular-nums font-extrabold text-center py-2.5 px-2 rounded-xl border-2 border-zinc-900 bg-white text-sm">
+                <span class="text-zinc-500 font-mono text-xs">
+                  &rarr; NIM Lengkap: <strong id="modal-nim-preview" class="text-zinc-900 tabular-nums">20240140093</strong>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4: PRA-KRS GRID PER KATEGORI + PREFERENSI + AI FEEDBACK & VARIASI LAIN -->
+          <div id="ob-panel-4" class="ob-step-panel hidden space-y-4 p-5 rounded-2xl bg-zinc-50 border border-zinc-200">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <div class="text-sm font-bold text-zinc-900">
+                  4. Masukkan Pra-KRS Semester Ini (Grid per Kategori)
+                </div>
+                <p class="text-zinc-500 text-[11px]">
+                  Pilih mata kuliah berdasarkan kategori &amp; peminatan, masukkan preferensi, lalu dapatkan saran kelas &amp; variasi jadwal dari AI.
+                </p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <label for="modal-peminatan" class="font-bold text-zinc-700 text-xs">Peminatan (TIxxx):</label>
+                <select id="modal-peminatan" onchange="loadPrakrsGrid()" class="py-1.5 px-2.5 rounded-xl border border-zinc-300 font-bold bg-white text-xs">
+                  <option value="PR" selected>PR - Programming</option>
+                  <option value="DA">DA - Data &amp; AI</option>
+                  <option value="NE">NE - Network</option>
+                  <option value="UX">UX - User Experience</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Grid View Mata Kuliah Dikelompokkan Berdasarkan Kategori -->
+            <div id="prakrsCategoryGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-56 overflow-y-auto pr-1"></div>
+
+            <!-- Preferensi Mahasiswa (Kelas / Hari / Jam) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-zinc-200 text-xs">
+              <div>
+                <label for="modal-kelas" class="font-bold text-zinc-700 block mb-1">Preferensi Kelas:</label>
+                <select id="modal-kelas" onchange="requestAiPrakrsMapping(0)" class="w-full py-1.5 px-2.5 rounded-xl border border-zinc-300 bg-white font-bold">
+                  <option value="A">Kelas A</option>
+                  <option value="B" selected>Kelas B</option>
+                  <option value="C">Kelas C</option>
+                  <option value="D">Kelas D</option>
+                  <option value="E">Kelas E</option>
+                  <option value="F">Kelas F</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="modal-pref-hari" class="font-bold text-zinc-700 block mb-1">Preferensi Hari:</label>
+                <select id="modal-pref-hari" onchange="requestAiPrakrsMapping(0)" class="w-full py-1.5 px-2.5 rounded-xl border border-zinc-300 bg-white font-semibold">
+                  <option value="Semua" selected>Semua Hari (Senin-Sabtu)</option>
+                  <option value="Senin">Prioritas Senin-Rabu</option>
+                  <option value="Kamis">Prioritas Rabu-Jumat</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="modal-pref-waktu" class="font-bold text-zinc-700 block mb-1">Preferensi Jam:</label>
+                <select id="modal-pref-waktu" onchange="requestAiPrakrsMapping(0)" class="w-full py-1.5 px-2.5 rounded-xl border border-zinc-300 bg-white font-semibold">
+                  <option value="Semua" selected>Semua Jam</option>
+                  <option value="Pagi">Pagi (07:00 - 11:30)</option>
+                  <option value="Siang">Siang (12:10 - 15:00)</option>
+                  <option value="Sore">Sore (15:30 - 18:00)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Kotak Feedback AI & Tombol Variasi Lain -->
+            <div class="p-3.5 rounded-2xl bg-zinc-900 text-white space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="px-2 py-0.5 rounded bg-white text-zinc-900 font-mono font-bold text-[10px] uppercase">
+                  AI Smart Mapping Feedback
+                </span>
+                <button type="button" id="btnVariasiLain" onclick="cycleAiVariasi()" class="btn-press px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-white font-semibold text-[11px]">
+                  Minta Variasi Lain &#8635;
+                </button>
+              </div>
+              <p id="aiPrakrsFeedbackText" class="text-zinc-200 text-xs leading-relaxed">
+                AI memetakan mata kuliah pilihan kamu ke Kelas B (Variasi #1) dengan 0 bentrok jadwal.
+              </p>
+            </div>
+
+            <!-- Pratinjau Sesi Terjadwal Hasil AI Mapping -->
+            <div class="p-3 rounded-2xl bg-white border border-zinc-200 space-y-2 text-xs">
+              <div class="flex items-center justify-between font-bold text-zinc-900 text-[11px] uppercase tracking-wider">
+                <span>Pratinjau Sesi Terjadwal AI</span>
+                <span id="prakrsAiPreviewCount" class="font-mono text-zinc-500 font-semibold">0 Sesi</span>
+              </div>
+              <div id="prakrsAiPreviewList" class="space-y-1.5 max-h-36 overflow-y-auto pr-1"></div>
+            </div>
+          </div>
+
+          <!-- STICKY ACTION FOOTER: Never clipped! -->
+          <div class="sticky bottom-0 bg-white/95 backdrop-blur-md pt-3 pb-1 border-t border-zinc-200 flex items-center justify-between">
+            <button type="button" id="btnObPrev" onclick="stepOnboarding(-1)" class="btn-press px-4 py-2.5 rounded-xl bg-zinc-100 hover-surface text-zinc-800 font-bold text-xs sm:text-sm hidden">
+              &larr; Sebelumnya
+            </button>
+            <div class="flex items-center gap-2 ml-auto">
+              <button type="button" id="btnObNext" onclick="stepOnboarding(1)" class="btn-press px-6 py-2.5 rounded-xl bg-zinc-900 text-white font-bold text-xs sm:text-sm shadow-sm hover:bg-zinc-800">
+                Next &rarr;
+              </button>
+              <button type="submit" id="btnObSubmit" class="btn-press px-6 py-2.5 rounded-xl bg-zinc-900 text-white font-bold text-xs sm:text-sm shadow-sm hover:bg-zinc-800 hidden">
+                Simpan &amp; Terapkan Jadwal
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== SUB-VIEW 3: LAMPIRAN 3 — JADWAL SAAT INI ==================== -->
+    <div id="mhs-subview-current" class="hidden space-y-6">
       <div class="bg-white rounded-2xl p-6 sm:p-8 border border-app-border shadow-mac space-y-6">
         
         <!-- Heading Lampiran 3: Selamat [Waktu], [User]! -->
@@ -63,10 +315,7 @@
           </div>
 
           <div class="flex items-center gap-2 shrink-0">
-            <button onclick="openOnboarding(true)" class="btn-press px-3 py-2 rounded-xl bg-zinc-100 hover-surface text-zinc-700 text-xs font-semibold">
-              Coba Demo
-            </button>
-            <button onclick="openOnboarding(false)" class="btn-press px-3.5 py-2 rounded-xl bg-zinc-100 hover-surface text-zinc-900 text-xs font-semibold">
+            <button onclick="showOnboardingView(false)" class="btn-press px-4 py-2 rounded-xl bg-zinc-100 hover-surface text-zinc-900 text-xs font-semibold">
               Atur Pra-KRS
             </button>
           </div>
@@ -146,10 +395,13 @@
           </div>
         </div>
 
-        <!-- Daftar Kartu Jadwal Vertikal Sesuai Lampiran 4 -->
-        <div id="mhsScheduleContainer" class="space-y-4">
+        <!-- Daftar Kartu Jadwal Vertikal Sesuai Lampiran 4 (Dinamis Sesuai Hasil Pra-KRS) -->
+        <div id="mhsScheduleContainer" class="space-y-4"></div>
+
+        <!-- Katalog Utuh 111 Sesi Perkuliahan Prodi TI UMY (Ditampilkan saat toggle mode aktif) -->
+        <div id="mhsStaticCatalogContainer" class="hidden space-y-4">
           <% jadwal.forEach(function(item) { %>
-            <div class="schedule-item-row rounded-2xl p-5 border border-zinc-300 bg-white hover-surface space-y-2.5"
+            <div class="schedule-item-row-static rounded-2xl p-5 border border-zinc-300 bg-white hover-surface space-y-2.5"
                  data-day="<%= item.hari %>"
                  data-id="<%= item.id %>"
                  data-kode="<%= item.kodeMatkul %>"
@@ -691,248 +943,6 @@
   <span id="appToastMessage" class="font-medium leading-snug">Perubahan disimpan.</span>
 </div>
 
-<!-- ==================== LAMPIRAN 1: MODAL LANDING (LOGIN, COBA DEMO, REGISTER) ==================== -->
-<div id="modal-landing" data-open="false" class="modal-backdrop fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target === this) closeModal('modal-landing')">
-  <div class="modal-panel bg-white rounded-3xl max-w-md w-full p-8 sm:p-10 shadow-mac-lg border-2 border-zinc-900 text-center space-y-6">
-    <div class="space-y-2">
-      <div class="w-12 h-12 rounded-2xl bg-zinc-900 text-white font-extrabold text-2xl flex items-center justify-center mx-auto">
-        J
-      </div>
-      <h2 class="text-3xl font-extrabold tracking-tight text-zinc-900">
-        Jadwalin
-      </h2>
-      <p class="text-xs text-zinc-500">
-        AI Powered Smart Course Scheduling &mdash; TI UMY
-      </p>
-    </div>
-
-    <div class="space-y-3 pt-2">
-      <button onclick="handleLandingLogin()" class="btn-press w-full py-3 px-6 rounded-2xl border-2 border-zinc-900 bg-zinc-900 text-white font-bold text-sm">
-        Login
-      </button>
-
-      <button onclick="startDemoTutorial()" class="btn-press w-full py-3 px-6 rounded-2xl border-2 border-zinc-900 bg-white hover-surface text-zinc-900 font-bold text-sm">
-        Coba demo
-      </button>
-    </div>
-
-    <div class="pt-2 text-xs text-zinc-600">
-      Belum punya akun?
-      <button onclick="startRegisterOnboarding()" class="font-bold text-zinc-900 underline hover:text-zinc-700 ml-1">
-        Register
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== LAMPIRAN 2: MODAL ONBOARDING & PRA-KRS (4 STEP + DEMO LOCK MODE) ==================== -->
-<div id="modal-prakrs" data-open="false" class="modal-backdrop fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target === this) closeModal('modal-prakrs')">
-  <div class="modal-panel bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-7 shadow-mac-lg border border-zinc-200 space-y-4 text-xs max-h-[92vh] overflow-y-auto">
-    
-    <!-- Header Onboarding -->
-    <div class="flex justify-between items-center pb-3 border-b border-zinc-100">
-      <div class="flex items-center gap-2.5">
-        <h3 class="text-lg font-extrabold text-zinc-900">Onboarding</h3>
-        <span id="onboardingModeBadge" class="px-2.5 py-0.5 rounded-full bg-zinc-900 text-white font-mono text-[10px] font-bold">
-          Mode Interaktif
-        </span>
-      </div>
-      <button onclick="closeModal('modal-prakrs')" class="text-zinc-400 hover:text-zinc-700 text-xl font-bold leading-none">&times;</button>
-    </div>
-
-    <!-- Step Indicator (Step 1 s/d Step 4) -->
-    <div class="grid grid-cols-4 gap-2 text-[11px] font-semibold">
-      <div id="ob-step-pill-1" class="p-2 rounded-xl bg-zinc-900 text-white text-center">1. Semester</div>
-      <div id="ob-step-pill-2" class="p-2 rounded-xl bg-zinc-100 text-zinc-500 text-center">2. Angkatan</div>
-      <div id="ob-step-pill-3" class="p-2 rounded-xl bg-zinc-100 text-zinc-500 text-center">3. Nama &amp; NIM</div>
-      <div id="ob-step-pill-4" class="p-2 rounded-xl bg-zinc-100 text-zinc-500 text-center">4. Pra-KRS &amp; AI</div>
-    </div>
-
-    <!-- Info Banner saat Mode Demo Aktif (Lampiran 1) -->
-    <div id="demoReadOnlyNotice" class="hidden p-3 rounded-xl bg-zinc-100 border border-zinc-300 text-zinc-800 text-[11px] font-medium">
-      <strong>Mode Coba Demo (Tutorial Step-by-Step):</strong> Input dikunci sesuai aturan demo. Klik tombol <strong>Next &rarr;</strong> di bawah untuk melihat simulasi tahapan Onboarding hingga rekomendasi jadwal AI.
-    </div>
-
-    <form id="formOnboarding" onsubmit="savePrakrs(event)" class="space-y-4">
-      
-      <!-- STEP 1: SEMESTER INTEGER 1-12 (BUKAN DROPDOWN, BISA KLIK ATAS BAWAH & INPUT VALIDASI) -->
-      <div id="ob-panel-1" class="ob-step-panel space-y-3 p-4 rounded-2xl bg-zinc-50 border border-zinc-200">
-        <label for="modal-sem" class="text-sm font-bold text-zinc-900 block">
-          1. Kamu saat ini semester berapa?
-        </label>
-        <p class="text-zinc-500 text-[11px]">
-          Hanya menerima bilangan bulat (integer) <strong>1 &ndash; 12</strong>. Gunakan tombol panah atas/bawah atau ketik angka langsung (bukan dropdown).
-        </p>
-
-        <div class="flex items-center gap-3 pt-1">
-          <div class="inline-flex items-center rounded-xl border-2 border-zinc-900 bg-white overflow-hidden">
-            <input id="modal-sem" type="number" min="1" max="12" step="1" value="5" required
-                   oninput="validateSemesterInput(this)"
-                   class="w-20 text-center text-xl font-extrabold py-2.5 px-2 tabular-nums focus:outline-none">
-            <div class="flex flex-col border-l border-zinc-300">
-              <button type="button" id="btnSemUp" onclick="stepSem(1)" aria-label="Naikkan Semester" class="btn-press px-3 py-1 bg-zinc-100 hover-surface text-zinc-900 font-bold border-b border-zinc-300 leading-none">&#9650;</button>
-              <button type="button" id="btnSemDown" onclick="stepSem(-1)" aria-label="Turunkan Semester" class="btn-press px-3 py-1 bg-zinc-100 hover-surface text-zinc-900 font-bold leading-none">&#9660;</button>
-            </div>
-          </div>
-
-          <span id="semErrorMsg" class="text-zinc-900 font-semibold text-xs hidden">
-            Wajib berupa integer antara 1 sampai 12!
-          </span>
-        </div>
-      </div>
-
-      <!-- STEP 2: ANGKATAN PAKAI YEAR PICKER -->
-      <div id="ob-panel-2" class="ob-step-panel hidden space-y-3 p-4 rounded-2xl bg-zinc-50 border border-zinc-200">
-        <label class="text-sm font-bold text-zinc-900 block">
-          2. Angkatan berapa? (Pilih pakai Year Picker)
-        </label>
-        <p class="text-zinc-500 text-[11px]">
-          Pilih tahun angkatan masuk kuliah pada pemilih tahun di bawah ini. Tahun angkatan otomatis menentukan 4 digit awal NIM kamu.
-        </p>
-
-        <input id="modal-angkatan" type="hidden" value="2024">
-        <div id="yearPickerGrid" class="grid grid-cols-4 gap-2 pt-1">
-          <% [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026].forEach(function(yr) { %>
-            <button type="button" onclick="selectYearPicker('<%= yr %>')" data-year="<%= yr %>"
-                    class="year-picker-btn btn-press py-2.5 px-3 rounded-xl border font-mono font-bold text-sm tabular-nums <%= yr === 2024 ? 'bg-zinc-900 text-white border-zinc-900' : 'bg-white text-zinc-800 border-zinc-300 hover-surface' %>">
-              <%= yr %>
-            </button>
-          <% }); %>
-        </div>
-      </div>
-
-      <!-- STEP 3: NAMA (AUTO UPPERCASE, STRING ONLY, MIN 3 HURUF) & NIM (3 DIGIT BELAKANG) -->
-      <div id="ob-panel-3" class="ob-step-panel hidden space-y-4 p-4 rounded-2xl bg-zinc-50 border border-zinc-200">
-        <div class="text-sm font-bold text-zinc-900">
-          3. Nama dan NIM berapa?
-        </div>
-
-        <div class="space-y-1.5">
-          <label for="modal-nama" class="font-bold text-zinc-800 block">
-            Nama Lengkap (Hanya huruf, otomatis huruf besar, minimal 3 huruf):
-          </label>
-          <input id="modal-nama" type="text" value="ANDI PRATAMA" minlength="3" required
-                 oninput="sanitizeNamaInput(this)"
-                 placeholder="CONTOH: ANDI PRATAMA"
-                 class="w-full font-bold uppercase py-2 px-3 rounded-xl border border-zinc-300 bg-white text-sm tracking-wide">
-          <span id="namaErrorMsg" class="hidden text-[11px] font-semibold text-zinc-900">
-            Nama hanya boleh huruf dan minimal 3 karakter.
-          </span>
-        </div>
-
-        <div class="space-y-1.5">
-          <label for="modal-nim-suffix" class="font-bold text-zinc-800 block">
-            NIM Mahasiswa (Hanya input 3 digit belakang, format: <code class="font-mono">[angkatan]0140[3NIM]</code>):
-          </label>
-          <div class="flex items-center gap-2">
-            <span id="modal-nim-prefix" class="font-mono tabular-nums font-extrabold bg-zinc-200 px-3.5 py-2 rounded-xl text-zinc-900 text-sm">
-              20240140
-            </span>
-            <input id="modal-nim-suffix" type="text" maxlength="3" minlength="3" value="093" required
-                   oninput="sanitizeNimSuffix(this)"
-                   class="w-20 font-mono tabular-nums font-extrabold text-center py-2 px-2 rounded-xl border-2 border-zinc-900 bg-white text-sm">
-            <span class="text-zinc-500 font-mono text-xs">
-              &rarr; NIM Lengkap: <strong id="modal-nim-preview" class="text-zinc-900 tabular-nums">20240140093</strong>
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <!-- STEP 4: PRA-KRS GRID PER KATEGORI + PREFERENSI + AI FEEDBACK & VARIASI LAIN -->
-      <div id="ob-panel-4" class="ob-step-panel hidden space-y-4 p-4 rounded-2xl bg-zinc-50 border border-zinc-200">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div>
-            <div class="text-sm font-bold text-zinc-900">
-              4. Masukkan Pra-KRS Semester Ini (Grid per Kategori)
-            </div>
-            <p class="text-zinc-500 text-[11px]">
-              Pilih mata kuliah berdasarkan kategori &amp; peminatan, masukkan preferensi, lalu dapatkan saran kelas &amp; variasi jadwal dari AI.
-            </p>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <label for="modal-peminatan" class="font-bold text-zinc-700">Peminatan (TIxxx):</label>
-            <select id="modal-peminatan" onchange="loadPrakrsGrid()" class="py-1.5 px-2.5 rounded-xl border border-zinc-300 font-bold bg-white text-xs">
-              <option value="PR" selected>PR - Programming</option>
-              <option value="DA">DA - Data &amp; AI</option>
-              <option value="NE">NE - Network</option>
-              <option value="UX">UX - User Experience</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Grid View Mata Kuliah Dikelompokkan Berdasarkan Kategori -->
-        <div id="prakrsCategoryGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-56 overflow-y-auto pr-1"></div>
-
-        <!-- Preferensi Mahasiswa (Kelas / Hari / Jam) -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t border-zinc-200">
-          <div>
-            <label for="modal-kelas" class="font-bold text-zinc-700 block mb-1">Preferensi Kelas:</label>
-            <select id="modal-kelas" onchange="requestAiPrakrsMapping(0)" class="w-full py-1.5 px-2.5 rounded-xl border border-zinc-300 bg-white font-bold">
-              <option value="A">Kelas A</option>
-              <option value="B" selected>Kelas B</option>
-              <option value="C">Kelas C</option>
-              <option value="D">Kelas D</option>
-              <option value="E">Kelas E</option>
-              <option value="F">Kelas F</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="modal-pref-hari" class="font-bold text-zinc-700 block mb-1">Preferensi Hari:</label>
-            <select id="modal-pref-hari" onchange="requestAiPrakrsMapping(0)" class="w-full py-1.5 px-2.5 rounded-xl border border-zinc-300 bg-white font-semibold">
-              <option value="Semua" selected>Semua Hari (Senin-Sabtu)</option>
-              <option value="Senin">Prioritas Senin-Rabu</option>
-              <option value="Kamis">Prioritas Rabu-Jumat</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="modal-pref-waktu" class="font-bold text-zinc-700 block mb-1">Preferensi Jam:</label>
-            <select id="modal-pref-waktu" onchange="requestAiPrakrsMapping(0)" class="w-full py-1.5 px-2.5 rounded-xl border border-zinc-300 bg-white font-semibold">
-              <option value="Semua" selected>Semua Jam</option>
-              <option value="Pagi">Pagi (07:00 - 11:30)</option>
-              <option value="Siang">Siang (12:10 - 15:00)</option>
-              <option value="Sore">Sore (15:30 - 18:00)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Kotak Feedback AI & Tombol Variasi Lain -->
-        <div class="p-3.5 rounded-xl bg-zinc-900 text-white space-y-2">
-          <div class="flex items-center justify-between gap-2">
-            <span class="px-2 py-0.5 rounded bg-white text-zinc-900 font-mono font-bold text-[10px] uppercase">
-              AI Smart Mapping Feedback
-            </span>
-            <button type="button" id="btnVariasiLain" onclick="cycleAiVariasi()" class="btn-press px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-white font-semibold text-[11px]">
-              Minta Variasi Lain &#8635;
-            </button>
-          </div>
-          <p id="aiPrakrsFeedbackText" class="text-zinc-200 text-xs leading-relaxed">
-            AI memetakan mata kuliah pilihan kamu ke Kelas B (Variasi #1) dengan 0 bentrok jadwal.
-          </p>
-        </div>
-      </div>
-
-      <!-- Navigasi Step Onboarding (Prev / Next / Selesai) -->
-      <div class="flex items-center justify-between pt-2 border-t border-zinc-100">
-        <button type="button" id="btnObPrev" onclick="stepOnboarding(-1)" class="btn-press px-4 py-2 rounded-xl bg-zinc-100 hover-surface text-zinc-800 font-bold hidden">
-          &larr; Sebelumnya
-        </button>
-        <div class="flex items-center gap-2 ml-auto">
-          <button type="button" id="btnObNext" onclick="stepOnboarding(1)" class="btn-press px-5 py-2.5 rounded-xl bg-zinc-900 text-white font-bold">
-            Next &rarr;
-          </button>
-          <button type="submit" id="btnObSubmit" class="btn-press px-5 py-2.5 rounded-xl bg-zinc-900 text-white font-bold hidden">
-            Simpan &amp; Terapkan Jadwal
-          </button>
-        </div>
-      </div>
-
-    </form>
-  </div>
-</div>
-
 <!-- ==================== MODAL: TAMBAH DATA MASTER (US-01) ==================== -->
 <div id="modal-tambah-master" data-open="false" class="modal-backdrop fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onclick="if(event.target === this) closeModal('modal-tambah-master')">
   <div class="modal-panel bg-white rounded-2xl max-w-md w-full p-6 shadow-mac-lg border border-zinc-200 space-y-4 text-xs">
@@ -1143,6 +1153,7 @@
   let currentVariasiIdx = 0;
   let showAllCatalogMode = false;
   let selectedCodesForSchedule = ['TI501', 'TI502', 'TI503', 'TI504', 'TI505', 'TI506', 'TI507', 'TI508'];
+  let currentMahasiswaSessions = <%- JSON.stringify((typeof defaultPrakrs !== 'undefined' && defaultPrakrs && defaultPrakrs.rekomendasiSesi) ? defaultPrakrs.rekomendasiSesi : []) %>;
 
   function getGreetingWaktu() {
     const hr = new Date().getHours();
@@ -1173,53 +1184,103 @@
     }, 3200);
   }
 
-  // Sub-view Navigasi Lampiran 3 <-> Lampiran 4
-  function showFullScheduleView() {
+  // 4 Layar Utama Mahasiswa (Lampiran 1 -> 2 -> 3 <-> 4)
+  function showLandingView() {
     switchView('view-mahasiswa');
-    document.getElementById('mhs-subview-current').classList.add('hidden');
-    document.getElementById('mhs-subview-full').classList.remove('hidden');
+    const lEl = document.getElementById('mhs-subview-landing');
+    const oEl = document.getElementById('mhs-subview-onboarding');
+    const cEl = document.getElementById('mhs-subview-current');
+    const fEl = document.getElementById('mhs-subview-full');
+    if (lEl) lEl.classList.remove('hidden');
+    if (oEl) oEl.classList.add('hidden');
+    if (cEl) cEl.classList.add('hidden');
+    if (fEl) fEl.classList.add('hidden');
+    const nb = document.getElementById('notifBanner');
+    if (nb) nb.classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showOnboardingView(demoMode = false) {
+    switchView('view-mahasiswa');
+    const lEl = document.getElementById('mhs-subview-landing');
+    const oEl = document.getElementById('mhs-subview-onboarding');
+    const cEl = document.getElementById('mhs-subview-current');
+    const fEl = document.getElementById('mhs-subview-full');
+    if (lEl) lEl.classList.add('hidden');
+    if (oEl) oEl.classList.remove('hidden');
+    if (cEl) cEl.classList.add('hidden');
+    if (fEl) fEl.classList.add('hidden');
+    const nb = document.getElementById('notifBanner');
+    if (nb) nb.classList.add('hidden');
+    setupOnboardingState(demoMode);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function showCurrentScheduleView() {
-    document.getElementById('mhs-subview-full').classList.add('hidden');
-    document.getElementById('mhs-subview-current').classList.remove('hidden');
+    switchView('view-mahasiswa');
+    const lEl = document.getElementById('mhs-subview-landing');
+    const oEl = document.getElementById('mhs-subview-onboarding');
+    const cEl = document.getElementById('mhs-subview-current');
+    const fEl = document.getElementById('mhs-subview-full');
+    if (lEl) lEl.classList.add('hidden');
+    if (oEl) oEl.classList.add('hidden');
+    if (cEl) cEl.classList.remove('hidden');
+    if (fEl) fEl.classList.add('hidden');
+    const nb = document.getElementById('notifBanner');
+    if (nb) nb.classList.remove('hidden');
+    applyMahasiswaScheduleFilter();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Lampiran 1: Landing Modal & Mode Demo vs Register
-  function openLandingOverlay() {
-    openModal('modal-landing');
+  function showFullScheduleView() {
+    switchView('view-mahasiswa');
+    const lEl = document.getElementById('mhs-subview-landing');
+    const oEl = document.getElementById('mhs-subview-onboarding');
+    const cEl = document.getElementById('mhs-subview-current');
+    const fEl = document.getElementById('mhs-subview-full');
+    if (lEl) lEl.classList.add('hidden');
+    if (oEl) oEl.classList.add('hidden');
+    if (cEl) cEl.classList.add('hidden');
+    if (fEl) fEl.classList.remove('hidden');
+    const nb = document.getElementById('notifBanner');
+    if (nb) nb.classList.remove('hidden');
+    applyMahasiswaScheduleFilter();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function handleLandingLogin() {
-    closeModal('modal-landing');
     showCurrentScheduleView();
     showToast('Login berhasil sebagai ANDI PRATAMA (20240140093).');
   }
 
   function startDemoTutorial() {
-    closeModal('modal-landing');
-    openOnboarding(true);
+    showOnboardingView(true);
   }
 
   function startRegisterOnboarding() {
-    closeModal('modal-landing');
-    openOnboarding(false);
+    showOnboardingView(false);
+  }
+
+  function openLandingOverlay() {
+    showLandingView();
   }
 
   function openOnboarding(demoMode = false) {
+    showOnboardingView(demoMode);
+  }
+
+  function setupOnboardingState(demoMode = false) {
     isDemoReadOnly = Boolean(demoMode);
     currentObStep = 1;
     const badge = document.getElementById('onboardingModeBadge');
     const demoNotice = document.getElementById('demoReadOnlyNotice');
 
     if (isDemoReadOnly) {
-      badge.textContent = 'Mode Coba Demo (Read-Only)';
-      demoNotice.classList.remove('hidden');
+      if (badge) badge.textContent = 'Mode Coba Demo (Read-Only)';
+      if (demoNotice) demoNotice.classList.remove('hidden');
     } else {
-      badge.textContent = 'Mode Interaktif';
-      demoNotice.classList.add('hidden');
+      if (badge) badge.textContent = 'Mode Interaktif';
+      if (demoNotice) demoNotice.classList.add('hidden');
     }
 
     // Kunci atau buka seluruh kontrol input sesuai spesifikasi Lampiran 1
@@ -1232,9 +1293,8 @@
       btn.disabled = isDemoReadOnly;
     });
 
-    loadPrakrsGrid();
     renderOnboardingStep();
-    openModal('modal-prakrs');
+    loadPrakrsGrid();
   }
 
   function renderOnboardingStep() {
@@ -1244,8 +1304,22 @@
       if (panel) panel.classList.toggle('hidden', i !== currentObStep);
       if (pill) {
         pill.className = i === currentObStep
-          ? 'p-2 rounded-xl bg-zinc-900 text-white text-center font-bold'
-          : (i < currentObStep ? 'p-2 rounded-xl bg-zinc-200 text-zinc-900 text-center font-semibold' : 'p-2 rounded-xl bg-zinc-100 text-zinc-500 text-center');
+          ? 'p-2.5 rounded-xl bg-zinc-900 text-white text-center font-bold'
+          : (i < currentObStep ? 'p-2.5 rounded-xl bg-zinc-200 text-zinc-900 text-center font-semibold' : 'p-2.5 rounded-xl bg-zinc-100 text-zinc-500 text-center');
+      }
+    }
+
+    // Callout text untuk Demo tutorial per langkah
+    const guideText = document.getElementById('demoStepGuideText');
+    if (guideText && isDemoReadOnly) {
+      if (currentObStep === 1) {
+        guideText.innerHTML = '<strong>Langkah 1 dari 4 (Semester):</strong> Input semester dikunci pada angka 5. Klik <strong>Next &rarr;</strong> di bawah untuk lanjut ke pemilihan Angkatan.';
+      } else if (currentObStep === 2) {
+        guideText.innerHTML = '<strong>Langkah 2 dari 4 (Angkatan):</strong> Tahun angkatan dikunci pada 2024 (awalan NIM: 20240140). Klik <strong>Next &rarr;</strong> untuk lanjut ke profil Nama &amp; NIM.';
+      } else if (currentObStep === 3) {
+        guideText.innerHTML = '<strong>Langkah 3 dari 4 (Nama &amp; NIM):</strong> Nama dikunci pada "ANDI PRATAMA" dan akhiran NIM "093". Klik <strong>Next &rarr;</strong> untuk masuk ke pemilihan Pra-KRS.';
+      } else if (currentObStep === 4) {
+        guideText.innerHTML = '<strong>Langkah 4 dari 4 (Pra-KRS &amp; AI Mapping):</strong> AI memetakan mata kuliah ke Kelas B (Variasi #1) bebas bentrok. Klik <strong>Selesai Demo &amp; Lihat Jadwal</strong> untuk melihat kartu jadwal kamu!';
       }
     }
 
@@ -1262,7 +1336,7 @@
   }
 
   function stepOnboarding(delta) {
-    if (delta > 0) {
+    if (delta > 0 && !isDemoReadOnly) {
       // Validasi step aktif sebelum lanjut
       if (currentObStep === 1) {
         const semVal = Number(document.getElementById('modal-sem').value);
@@ -1323,8 +1397,8 @@
     document.querySelectorAll('.year-picker-btn').forEach(btn => {
       const isSelected = btn.getAttribute('data-year') === String(yr);
       btn.className = isSelected
-        ? 'year-picker-btn btn-press py-2.5 px-3 rounded-xl border font-mono font-bold text-sm tabular-nums bg-zinc-900 text-white border-zinc-900'
-        : 'year-picker-btn btn-press py-2.5 px-3 rounded-xl border font-mono font-bold text-sm tabular-nums bg-white text-zinc-800 border-zinc-300 hover-surface';
+        ? 'year-picker-btn btn-press py-3 px-3 rounded-xl border font-mono font-bold text-sm tabular-nums bg-zinc-900 text-white border-zinc-900 shadow-sm'
+        : 'year-picker-btn btn-press py-3 px-3 rounded-xl border font-mono font-bold text-sm tabular-nums bg-white text-zinc-800 border-zinc-300 hover-surface';
     });
     updateNimPreview();
   }
@@ -1372,10 +1446,10 @@
       gridEl.replaceChildren();
       Object.keys(groups).forEach(katName => {
         const box = document.createElement('div');
-        box.className = 'p-3 rounded-xl bg-white border border-zinc-200 space-y-2';
+        box.className = 'p-3.5 rounded-2xl bg-white border border-zinc-200 space-y-2';
 
         const header = document.createElement('div');
-        header.className = 'font-bold text-zinc-900 text-[11px] uppercase tracking-wider pb-1 border-b border-zinc-100';
+        header.className = 'font-bold text-zinc-900 text-[11px] uppercase tracking-wider pb-1.5 border-b border-zinc-100';
         header.textContent = katName;
         box.appendChild(header);
 
@@ -1461,13 +1535,40 @@
         })
       });
       const data = await res.json();
-      if (res.ok) {
+      if (res.ok && data.sukses) {
         document.getElementById('aiPrakrsFeedbackText').textContent = data.aiFeedback;
         document.getElementById('modal-kelas').value = data.targetKelas;
+        if (Array.isArray(data.rekomendasiSesi)) {
+          currentMahasiswaSessions = data.rekomendasiSesi;
+          renderPrakrsAiPreview(data.rekomendasiSesi);
+        }
       }
     } catch (err) {
       console.warn('Gagal meminta rekomendasi AI:', err);
     }
+  }
+
+  function renderPrakrsAiPreview(sesiList = []) {
+    const previewList = document.getElementById('prakrsAiPreviewList');
+    const previewCount = document.getElementById('prakrsAiPreviewCount');
+    if (!previewList) return;
+    if (previewCount) previewCount.textContent = `${sesiList.length} Sesi`;
+    previewList.replaceChildren();
+
+    sesiList.forEach(s => {
+      const row = document.createElement('div');
+      row.className = 'flex items-center justify-between p-2 rounded-xl bg-zinc-50 border border-zinc-200 text-xs';
+      row.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-zinc-900 tabular-nums">${s.hari} ${s.jamMulai}-${s.jamSelesai}</span>
+          <span class="font-medium text-zinc-700 truncate max-w-[200px]">${s.mataKuliah}</span>
+        </div>
+        <span class="font-mono px-2 py-0.5 rounded bg-zinc-200 text-zinc-800 text-[10px] font-bold">
+          [${s.kelas}] ${s.ruang}
+        </span>
+      `;
+      previewList.appendChild(row);
+    });
   }
 
   function cycleAiVariasi() {
@@ -1478,7 +1579,7 @@
 
   // Simpan Pra-KRS & Terapkan ke Dashboard Lampiran 3 & 4
   async function savePrakrs(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     const sem = parseInt(document.getElementById('modal-sem').value || '5', 10);
     const angkatan = document.getElementById('modal-angkatan').value || '2024';
     const kelas = document.getElementById('modal-kelas').value || 'B';
@@ -1491,17 +1592,27 @@
     showAllCatalogMode = false;
 
     updatePersonalGreetings(nama);
-    document.getElementById('mhsSemesterText').textContent = `Semester ${sem}`;
-    document.getElementById('mhsAngkatanText').textContent = `Angkatan ${angkatan}`;
-    document.getElementById('mhsKelasBadge').textContent = `Kelas ${kelas}`;
-    document.getElementById('mhsPeminatanBadge').textContent = `Peminatan: ${peminatan}`;
-    document.getElementById('mhsNimText').textContent = `NIM: ${angkatan}0140${suffix}`;
-    document.getElementById('mhsTotalSksBadge').textContent = `${totalSks} SKS`;
-    document.getElementById('mhsVariasiLabel').textContent = `Saran AI: Kelas ${kelas} (Variasi #${currentVariasiIdx + 1})`;
-    document.getElementById('activePersonaBadge').textContent = `Mahasiswa: ${nama}`;
+    const sEl = document.getElementById('mhsSemesterText');
+    const aEl = document.getElementById('mhsAngkatanText');
+    const kEl = document.getElementById('mhsKelasBadge');
+    const pEl = document.getElementById('mhsPeminatanBadge');
+    const nEl = document.getElementById('mhsNimText');
+    const tEl = document.getElementById('mhsTotalSksBadge');
+    const vEl = document.getElementById('mhsVariasiLabel');
+    const pbEl = document.getElementById('activePersonaBadge');
 
+    if (sEl) sEl.textContent = `Semester ${sem}`;
+    if (aEl) aEl.textContent = `Angkatan ${angkatan}`;
+    if (kEl) kEl.textContent = `Kelas ${kelas}`;
+    if (pEl) pEl.textContent = `Peminatan: ${peminatan}`;
+    if (nEl) nEl.textContent = `NIM: ${angkatan}0140${suffix}`;
+    if (tEl) tEl.textContent = `${totalSks} SKS`;
+    if (vEl) vEl.textContent = `Saran AI: Kelas ${kelas} (Variasi #${currentVariasiIdx + 1})`;
+    if (pbEl) pbEl.textContent = `Mahasiswa: ${nama}`;
+
+    await requestAiPrakrsMapping(currentVariasiIdx);
     applyMahasiswaScheduleFilter();
-    closeModal('modal-prakrs');
+    showCurrentScheduleView();
     showToast(isDemoReadOnly ? 'Tutorial Coba Demo selesai!' : `Pra-KRS ${nama} (${angkatan}0140${suffix}) berhasil diterapkan.`);
   }
 
@@ -1523,78 +1634,94 @@
     if (btn) {
       btn.textContent = showAllCatalogMode ? 'Kembali ke Filter Pra-KRS Saya' : 'Tampilkan Semua 111 Sesi Prodi';
     }
+    const dynContainer = document.getElementById('mhsScheduleContainer');
+    const staticContainer = document.getElementById('mhsStaticCatalogContainer');
+    if (dynContainer) dynContainer.classList.toggle('hidden', showAllCatalogMode);
+    if (staticContainer) staticContainer.classList.toggle('hidden', !showAllCatalogMode);
     applyMahasiswaScheduleFilter();
   }
 
   function applyMahasiswaScheduleFilter() {
     const kFilter = document.getElementById('modal-kelas')?.value || 'B';
-    const pemFilter = document.getElementById('modal-peminatan')?.value || 'PR';
+    const container = document.getElementById('mhsScheduleContainer');
+    const emptyEl = document.getElementById('emptyScheduleDay');
+    if (!container) return;
 
-    let visibleCount = 0;
-    let firstVisibleRow = null;
+    if (showAllCatalogMode) {
+      let staticCount = 0;
+      document.querySelectorAll('.schedule-item-row-static').forEach(row => {
+        const rowDay = row.getAttribute('data-day');
+        const show = (currentFilterDay === 'Semua' || rowDay === currentFilterDay);
+        row.classList.toggle('hidden', !show);
+        if (show) staticCount++;
+      });
+      if (emptyEl) emptyEl.classList.toggle('hidden', staticCount > 0);
+      return;
+    }
 
-    document.querySelectorAll('.schedule-item-row').forEach(row => {
-      const rowDay = row.getAttribute('data-day');
-      const rowKelas = row.getAttribute('data-kelas') || '';
-      const rowPem = row.getAttribute('data-peminatan') || '';
-      const rowKode = row.getAttribute('data-kode') || '';
-      const normRowKode = rowKode.replace(/^TI2610([1-9])$/, 'TI10$1');
+    // Render sesi dinamis hasil AI Pra-KRS mahasiswa
+    const filtered = currentMahasiswaSessions.filter(s => currentFilterDay === 'Semua' || s.hari === currentFilterDay);
+    container.replaceChildren();
 
-      const matchDay = (currentFilterDay === 'Semua' || rowDay === currentFilterDay);
-      let show = false;
+    filtered.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'schedule-item-row rounded-2xl p-5 border border-zinc-300 bg-white hover-surface space-y-2.5';
+      card.setAttribute('data-day', item.hari);
+      card.setAttribute('data-id', item.id);
+      card.setAttribute('data-kode', item.kodeMatkul);
+      card.setAttribute('data-kelas', item.kelas);
+      card.setAttribute('data-peminatan', item.peminatanKode || '');
 
-      if (showAllCatalogMode) {
-        show = matchDay;
-      } else {
-        const matchKelas = rowKelas.split(';').map(s => s.trim()).includes(kFilter) || rowKelas === kFilter;
-        const matchPem = !rowPem || rowPem === pemFilter;
-        const matchSelectedCode = selectedCodesForSchedule.length === 0 ||
-          selectedCodesForSchedule.includes(rowKode) ||
-          selectedCodesForSchedule.includes(normRowKode);
-
-        show = matchDay && matchKelas && matchPem && matchSelectedCode;
-      }
-
-      row.classList.toggle('hidden', !show);
-      if (show) {
-        visibleCount++;
-        if (!firstVisibleRow) firstVisibleRow = row;
-      }
+      card.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="text-xl sm:text-2xl font-extrabold font-mono tabular-nums text-zinc-900 row-jam">
+              ${item.jamMulai} - ${item.jamSelesai}
+            </span>
+            <span class="px-2.5 py-0.5 rounded-lg bg-zinc-100 text-zinc-800 font-semibold text-xs row-hari">
+              ${item.hari}
+            </span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+            <span class="font-mono text-zinc-400">${item.kodeMatkul} &middot; ${item.sks} SKS</span>
+            ${item.isPilihan ? `<span class="px-2 py-0.5 rounded bg-zinc-900 text-white font-mono text-[10px]">Peminatan ${item.peminatanKode || ''}</span>` : ''}
+          </div>
+        </div>
+        <div class="text-base sm:text-lg font-bold text-zinc-900">
+          ${item.mataKuliah}
+        </div>
+        <div class="flex flex-wrap items-center gap-3 pt-1 text-xs sm:text-sm">
+          <span class="w-7 h-7 rounded-lg border-2 border-zinc-900 bg-zinc-50 font-mono font-bold text-zinc-900 flex items-center justify-center">
+            ${item.kelas}
+          </span>
+          <span class="font-mono font-bold text-zinc-900 row-ruang">
+            ${item.ruang}
+          </span>
+          <span class="text-zinc-300">|</span>
+          <span class="text-zinc-700 font-medium">
+            ${item.dosen}
+          </span>
+        </div>
+      `;
+      container.appendChild(card);
     });
 
-    // Jika semester yang dipilih adalah semester genap (misal Sem 2, 4, 6) yang tidak ada di CSV ganjil, fallback tampilkan sesi Kelas terpilih
-    if (visibleCount === 0 && !showAllCatalogMode) {
-      document.querySelectorAll('.schedule-item-row').forEach(row => {
-        const rowDay = row.getAttribute('data-day');
-        const rowKelas = row.getAttribute('data-kelas') || '';
-        const rowPem = row.getAttribute('data-peminatan') || '';
-        const matchDay = (currentFilterDay === 'Semua' || rowDay === currentFilterDay);
-        const matchKelas = rowKelas.split(';').map(s => s.trim()).includes(kFilter) || rowKelas === kFilter;
-        const matchPem = !rowPem || rowPem === pemFilter;
-        const show = matchDay && matchKelas && matchPem;
-        row.classList.toggle('hidden', !show);
-        if (show) {
-          visibleCount++;
-          if (!firstVisibleRow) firstVisibleRow = row;
-        }
-      });
-    }
+    if (emptyEl) emptyEl.classList.toggle('hidden', filtered.length > 0);
 
-    // Sinkronkan kartu aktif di Lampiran 3 dengan sesi relevan pertama jika kelas/semester berubah
-    if (firstVisibleRow) {
-      const jam = firstVisibleRow.querySelector('.row-jam')?.textContent.trim();
-      const title = firstVisibleRow.querySelector('.text-base')?.textContent.trim();
-      const ruang = firstVisibleRow.querySelector('.row-ruang')?.textContent.trim();
-      const dosen = firstVisibleRow.querySelector('.text-zinc-700')?.textContent.trim();
-      if (jam) document.getElementById('activeCardTime').textContent = jam;
-      if (title) document.getElementById('activeCardTitle').textContent = title;
-      if (ruang) document.getElementById('activeCardRuang').textContent = ruang;
-      if (dosen) document.getElementById('activeCardDosen').textContent = dosen;
-      document.getElementById('activeCardKelas').textContent = kFilter;
+    // Update Kartu Utama di Layar 3
+    const activeSession = currentMahasiswaSessions[0];
+    if (activeSession) {
+      const jamEl = document.getElementById('activeCardTime');
+      const titleEl = document.getElementById('activeCardTitle');
+      const ruangEl = document.getElementById('activeCardRuang');
+      const dosenEl = document.getElementById('activeCardDosen');
+      const kelasEl = document.getElementById('activeCardKelas');
+      if (jamEl) jamEl.textContent = `${activeSession.jamMulai} - ${activeSession.jamSelesai}`;
+      if (titleEl) titleEl.textContent = activeSession.mataKuliah;
+      if (ruangEl) ruangEl.textContent = activeSession.ruang;
+      if (dosenEl) dosenEl.textContent = activeSession.dosen;
+      if (kelasEl) kelasEl.textContent = activeSession.kelas;
     }
-
-    const emptyEl = document.getElementById('emptyScheduleDay');
-    if (emptyEl) emptyEl.classList.toggle('hidden', visibleCount > 0);
   }
 
   function switchView(targetId) {
@@ -1933,9 +2060,10 @@
     }
   }, 1000);
 
-  // Inisialisasi awal
+  // Inisialisasi awal: Buka Layar 1 (Landing Jadwalin) secara linear
   updatePersonalGreetings('ANDI PRATAMA');
   applyMahasiswaScheduleFilter();
+  showLandingView();
 </script>
 
 <%- include('partials/footer') %>
