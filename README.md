@@ -1,4 +1,4 @@
-# Jadwalin — Smart Course Scheduling System
+# Jadwalin — AI Powered Smart Course Scheduling
 
 Aplikasi web penjadwalan kuliah cerdas berbasis Express.js (Arsitektur MVC), EJS Template Engine, dan Tailwind CSS untuk Program Studi Teknologi Informasi (TI) Fakultas Teknik, Universitas Muhammadiyah Yogyakarta (UMY).
 
@@ -39,7 +39,7 @@ PAW-Project-Jadwalin/
 ├── models/                 # Model domain akademik sesuai PRD
 │   ├── masterModel.js      # Data master 21 dosen resmi, 57 MK kurikulum, 20 MK pilihan, 12 ruangan
 │   ├── constraintModel.js  # Aturan Hard Constraints & Soft Constraints
-│   ├── jadwalModel.js      # Jadwal hasil generate otomatis, deteksi konflik, & notifikasi
+│   ├── jadwalModel.js      # Jadwal hasil generate AI, deteksi konflik, & notifikasi
 │   └── produkModel.js      # Pemetaan spesifikasi fitur PRD (F-01 s/d F-08)
 ├── routes/                 # Definisi rute Express.js
 │   ├── api.js              # Endpoint REST API (termasuk CRUD Data Master)
@@ -69,12 +69,12 @@ PAW-Project-Jadwalin/
 1. **Mahasiswa (Ahmad Fauzi)**
    - Akses jadwal kuliah real-time dengan countdown sesi aktif (`08:50 - 11:30 | 00:42:15 left`) dan tampilan penuh (`Jadwal Lengkap`).
    - Jadwal lengkap semester bebas bentrok dengan filter hari dan banner notifikasi perubahan jadwal (US-07, US-08).
-   - Landing modal (`Login`, `Coba demo` tutorial read-only, `Register`) serta 4-Step Onboarding Pra-KRS (validasi integer semester 1–12 tanpa dropdown, Year Picker angkatan, input Nama huruf besar + builder NIM `[angkatan]0140[3NIM]`, dan Grid View Mata Kuliah per kategori dengan rekomendasi pemetaan jadwal & tombol `Minta Variasi Lain`).
+   - Landing modal (`Login`, `Coba demo` tutorial read-only, `Register`) serta 4-Step Onboarding Pra-KRS (validasi integer semester 1–12 tanpa dropdown, Year Picker angkatan, input Nama huruf besar + builder NIM `[angkatan]0140[3NIM]`, dan Grid View Mata Kuliah per kategori dengan AI Mapping & tombol `Minta Variasi Lain`).
 
 2. **Staf Administrasi Akademik (Rina Wulandari)**
    - Panel CRUD Data Master: kelola, tambah, edit, dan hapus 21 Dosen Resmi, 57 Mata Kuliah Kurikulum (Sem 1–8) + 20 MK Pilihan (`PR`, `DA`, `NE`, `UX`), dan 12 Ruangan (Gedung F4 & F6) dengan pencarian dan validasi (US-01).
    - Pengaturan Hard Constraints (0 bentrok, 100% lab matching) dan Soft Constraints (preferensi dosen) (US-02).
-   - Generator jadwal otomatis 1-klik (&lt; 15 menit), deteksi laporan konflik beserta saran perbaikan (US-03), serta preview multi-filter & publikasi jadwal (US-04).
+   - Generator jadwal otomatis AI 1-klik (&lt; 15 menit), deteksi laporan konflik beserta saran perbaikan (US-03), serta preview multi-filter & publikasi jadwal (US-04).
 
 3. **Dosen (Ir. Asroni, S.T., M.Eng)**
    - Jadwal mengajar pribadi per semester & notifikasi perubahan jadwal (US-06).
@@ -110,7 +110,7 @@ Akses aplikasi di: **`http://localhost:3000`**
 | `GET` | `/api/status` | Status server, zero-clash metrics, uptime | JSON |
 | `GET` | `/api/jadwal` | Data jadwal terpublikasi (mendukung filter kombinasi `dosen`, `ruang`, `kelas`, `hari`) | JSON |
 | `POST` | `/api/jadwal/revisi` | Revisi slot jadwal, deteksi konflik otomatis, dan pencatatan notifikasi perubahan | JSON |
-| `POST` | `/api/jadwal/prakrs` | Rekomendasi pemetaan kelas, variasi jadwal alternatif, dan validasi Onboarding Pra-KRS | JSON |
+| `POST` | `/api/jadwal/prakrs` | AI Mapping rekomendasi kelas, variasi jadwal alternatif, dan validasi Onboarding Pra-KRS | JSON |
 | `POST` | `/api/jadwal/publish` | Validasi zero-clash dan publikasi jadwal ke seluruh civitas | JSON |
 | `GET` | `/api/master` | Data master 21 dosen resmi, 57 MK kurikulum, 20 MK pilihan, 12 ruangan | JSON |
 | `POST` | `/api/master` | Tambah data dosen, mata kuliah, atau ruangan dengan validasi skema Zod | JSON |
@@ -119,7 +119,7 @@ Akses aplikasi di: **`http://localhost:3000`**
 | `GET` | `/api/constraints` | Konfigurasi Hard & Soft Constraints | JSON |
 | `POST` | `/api/constraints/preferensi` | Simpan preferensi hari bebas mengajar dosen | JSON |
 | `POST` | `/api/constraints/hard` | Aktifkan/nonaktifkan aturan Hard Constraint | JSON |
-| `POST` | `/api/generate` | Trigger solver penjadwalan otomatis & resolusi konflik | JSON |
+| `POST` | `/api/generate` | Trigger AI solver penjadwalan otomatis & resolusi konflik | JSON |
 | `GET` | `/api/produk` | Spesifikasi modul & fitur sistem PRD (F-01 s/d F-08) | JSON |
 
 ---

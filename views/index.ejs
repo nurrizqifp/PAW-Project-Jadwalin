@@ -39,7 +39,7 @@
             Jadwalin
           </h1>
           <p class="text-xs text-zinc-500 max-w-xs mx-auto">
-            Smart Course Scheduling System &mdash; Program Studi Teknologi Informasi FT UMY
+            AI Powered Smart Course Scheduling &mdash; Program Studi Teknologi Informasi FT UMY
           </p>
         </div>
 
@@ -84,7 +84,7 @@
           <div id="ob-step-pill-1" class="p-2.5 rounded-xl bg-zinc-900 text-white text-center font-bold">1. Semester</div>
           <div id="ob-step-pill-2" class="p-2.5 rounded-xl bg-zinc-100 text-zinc-500 text-center">2. Angkatan</div>
           <div id="ob-step-pill-3" class="p-2.5 rounded-xl bg-zinc-100 text-zinc-500 text-center">3. Nama &amp; NIM</div>
-          <div id="ob-step-pill-4" class="p-2.5 rounded-xl bg-zinc-100 text-zinc-500 text-center">4. Pra-KRS &amp; Penjadwalan</div>
+          <div id="ob-step-pill-4" class="p-2.5 rounded-xl bg-zinc-100 text-zinc-500 text-center">4. Pra-KRS &amp; AI Mapping</div>
         </div>
 
         <!-- Info & Tutorial Banner saat Mode Demo Aktif (Lampiran 1) -->
@@ -94,7 +94,7 @@
             Mode Coba Demo (Tutorial Step-by-Step Read-Only):
           </div>
           <p id="demoStepGuideText" class="text-zinc-600 text-[11px]">
-            Input dikunci sesuai aturan demo. Cukup klik tombol <strong>Next &rarr;</strong> di bawah untuk mempelajari setiap langkah alur Onboarding hingga rekomendasi jadwal sistem.
+            Input dikunci sesuai aturan demo. Cukup klik tombol <strong>Next &rarr;</strong> di bawah untuk mempelajari setiap langkah alur Onboarding hingga rekomendasi jadwal AI.
           </p>
         </div>
 
@@ -182,7 +182,7 @@
             </div>
           </div>
 
-          <!-- STEP 4: PRA-KRS GRID PER KATEGORI + PREFERENSI + REKOMENDASI SISTEM & VARIASI LAIN -->
+          <!-- STEP 4: PRA-KRS GRID PER KATEGORI + PREFERENSI + AI MAPPING & VARIASI LAIN -->
           <div id="ob-panel-4" class="ob-step-panel hidden space-y-4 p-5 rounded-2xl bg-zinc-50 border border-zinc-200">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
@@ -190,7 +190,7 @@
                   4. Masukkan Pra-KRS Semester Ini (Grid per Kategori)
                 </div>
                 <p class="text-zinc-500 text-[11px]">
-                  Pilih mata kuliah berdasarkan kategori &amp; peminatan, masukkan preferensi, lalu dapatkan saran kelas &amp; variasi jadwal dari sistem.
+                  Pilih mata kuliah berdasarkan kategori &amp; peminatan, masukkan preferensi, lalu dapatkan saran kelas &amp; variasi jadwal dari AI.
                 </p>
               </div>
 
@@ -198,7 +198,7 @@
                 <label for="modal-peminatan" class="font-bold text-zinc-700 text-xs">Peminatan (TIxxx):</label>
                 <select id="modal-peminatan" onchange="loadPrakrsGrid()" class="py-1.5 px-2.5 rounded-xl border border-zinc-300 font-bold bg-white text-xs">
                   <option value="PR" selected>PR - Programming</option>
-                  <option value="DA">DA - Sains Data</option>
+                  <option value="DA">DA - Data &amp; AI</option>
                   <option value="NE">NE - Network</option>
                   <option value="UX">UX - User Experience</option>
                 </select>
@@ -242,25 +242,25 @@
               </div>
             </div>
 
-            <!-- Kotak Feedback Sistem & Tombol Variasi Lain -->
+            <!-- Kotak Feedback AI Mapping & Tombol Variasi Lain -->
             <div class="p-3.5 rounded-2xl bg-zinc-900 text-white space-y-2">
               <div class="flex items-center justify-between gap-2">
                 <span class="px-2 py-0.5 rounded bg-white text-zinc-900 font-mono font-bold text-[10px] uppercase">
-                  Rekomendasi Pemetaan Jadwal
+                  AI Smart Mapping Feedback
                 </span>
                 <button type="button" id="btnVariasiLain" onclick="cycleAiVariasi()" class="btn-press px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-white font-semibold text-[11px]">
                   Minta Variasi Lain &#8635;
                 </button>
               </div>
               <p id="aiPrakrsFeedbackText" class="text-zinc-200 text-xs leading-relaxed">
-                Sistem memetakan mata kuliah pilihan kamu ke Kelas B (Variasi #1) dengan 0 bentrok jadwal.
+                AI memetakan mata kuliah pilihan kamu ke Kelas B (Variasi #1) dengan 0 bentrok jadwal.
               </p>
             </div>
 
-            <!-- Pratinjau Sesi Terjadwal Hasil Pemetaan -->
+            <!-- Pratinjau Sesi Terjadwal Hasil Pemetaan AI -->
             <div class="p-3 rounded-2xl bg-white border border-zinc-200 space-y-2 text-xs">
               <div class="flex items-center justify-between font-bold text-zinc-900 text-[11px] uppercase tracking-wider">
-                <span>Pratinjau Sesi Terjadwal Sistem</span>
+                <span>Pratinjau Sesi Terjadwal (AI Mapping)</span>
                 <span id="prakrsAiPreviewCount" class="font-mono text-zinc-500 font-semibold">0 Sesi</span>
               </div>
               <div id="prakrsAiPreviewList" class="space-y-1.5 max-h-36 overflow-y-auto pr-1"></div>
@@ -310,7 +310,7 @@
               Selamat Pagi, ANDI PRATAMA!
             </h1>
             <p class="text-sm text-zinc-600 mt-1">
-              Jadwal kamu saat ini. <span id="mhsAffirmativeCurrent" class="font-medium text-zinc-900">Sistem memastikan 0 bentrok ruang &amp; dosen untuk sesi hari ini — tetap fokus dan semangat!</span>
+              Jadwal kamu saat ini. <span id="mhsAffirmativeCurrent" class="font-medium text-zinc-900">Jadwal perkuliahan semester ganjil aktif bebas bentrok ruang &amp; dosen.</span>
             </p>
           </div>
 
@@ -357,7 +357,7 @@
           <div class="flex items-center gap-3 text-xs text-zinc-500">
             <span>Total Paket Pra-KRS: <strong id="mhsTotalSksBadge" class="text-zinc-900 font-mono tabular-nums">20 SKS</strong></span>
             <span>&middot;</span>
-            <span id="mhsVariasiLabel" class="font-mono text-zinc-700">Rekomendasi: Kelas B (Variasi #1)</span>
+            <span id="mhsVariasiLabel" class="font-mono text-zinc-700">Rekomendasi AI: Kelas B (Variasi #1)</span>
           </div>
 
           <button onclick="showFullScheduleView()" class="btn-press self-end sm:self-auto px-5 py-2.5 rounded-xl border-2 border-zinc-900 bg-zinc-900 text-white text-xs sm:text-sm font-bold tracking-tight">
@@ -502,7 +502,7 @@
           <svg class="w-4 h-4 text-zinc-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
           </svg>
-          <span>Generate Jadwal Otomatis</span>
+          <span>Generate Jadwal (AI)</span>
         </button>
 
         <button onclick="publishSchedule()" class="btn-press px-3.5 py-2.5 rounded-xl bg-zinc-100 hover-surface text-zinc-900 text-xs font-semibold">
@@ -546,7 +546,7 @@
           <h3 class="text-base font-bold mt-1">Deteksi Pelanggaran Hard Constraint &amp; Saran Perbaikan</h3>
         </div>
         <button onclick="runAIGenerate()" class="btn-press px-3.5 py-2 rounded-xl bg-white text-zinc-900 font-bold self-start sm:self-center">
-          Resolusi Bentrok Otomatis
+          Resolusi Otomatis via AI Solver
         </button>
       </div>
       <div id="conflictListContainer" class="space-y-2.5"></div>
@@ -841,7 +841,7 @@
           Jadwal Mengajar &amp; Preferensi Riset
         </h2>
         <p class="text-xs text-zinc-500 mt-1">
-          Atur hari riset dan preferensi waktu mengajar agar diakomodasi oleh sistem solver.
+          Atur hari riset dan preferensi waktu mengajar agar diakomodasi oleh AI solver.
         </p>
       </div>
 
@@ -1381,7 +1381,7 @@
       } else if (currentObStep === 3) {
         guideText.innerHTML = '<strong>Langkah 3 dari 4 (Nama &amp; NIM):</strong> Nama dikunci pada "ANDI PRATAMA" dan akhiran NIM "093". Klik <strong>Next &rarr;</strong> untuk masuk ke pemilihan Pra-KRS.';
       } else if (currentObStep === 4) {
-        guideText.innerHTML = '<strong>Langkah 4 dari 4 (Pra-KRS &amp; Penjadwalan):</strong> Sistem memetakan mata kuliah ke Kelas B (Variasi #1) bebas bentrok. Klik <strong>Selesai Demo &amp; Lihat Jadwal</strong> untuk melihat kartu jadwal kamu!';
+        guideText.innerHTML = '<strong>Langkah 4 dari 4 (Pra-KRS &amp; AI Mapping):</strong> AI memetakan mata kuliah ke Kelas B (Variasi #1) bebas bentrok. Klik <strong>Selesai Demo &amp; Lihat Jadwal</strong> untuk melihat kartu jadwal kamu!';
       }
     }
 
@@ -1606,7 +1606,7 @@
         }
       }
     } catch (err) {
-      console.warn('Gagal meminta rekomendasi sistem:', err);
+      console.warn('Gagal meminta rekomendasi AI:', err);
     }
   }
 
@@ -1669,7 +1669,7 @@
     if (pEl) pEl.textContent = `Peminatan: ${peminatan}`;
     if (nEl) nEl.textContent = `NIM: ${angkatan}0140${suffix}`;
     if (tEl) tEl.textContent = `${totalSks} SKS`;
-    if (vEl) vEl.textContent = `Rekomendasi: Kelas ${kelas} (Variasi #${currentVariasiIdx + 1})`;
+    if (vEl) vEl.textContent = `Rekomendasi AI: Kelas ${kelas} (Variasi #${currentVariasiIdx + 1})`;
     if (pbEl) pbEl.textContent = `Mahasiswa: ${nama}`;
 
     await requestAiPrakrsMapping(currentVariasiIdx);
@@ -1922,7 +1922,7 @@
   async function runAIGenerate() {
     const btn = document.getElementById('btnGenerateAI');
     const spanText = btn.querySelector('span');
-    if (spanText) spanText.textContent = 'Menyusun Jadwal Otomatis...';
+    if (spanText) spanText.textContent = 'Menyusun Jadwal (AI)...';
     btn.disabled = true;
 
     try {
@@ -1933,7 +1933,7 @@
     } catch (err) {
       showToast('Gagal: ' + err.message);
     } finally {
-      if (spanText) spanText.textContent = 'Generate Jadwal Otomatis';
+      if (spanText) spanText.textContent = 'Generate Jadwal (AI)';
       btn.disabled = false;
     }
   }
