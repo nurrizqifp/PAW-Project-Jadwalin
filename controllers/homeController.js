@@ -27,7 +27,7 @@ exports.index = (req, res) => {
   });
 
   res.render('index', {
-    judul: `${config.appName} — AI Powered Smart Course Scheduling TI UMY`,
+    judul: `${config.appName} — Smart Course Scheduling System TI UMY`,
     appName: config.appName,
     jadwal,
     jadwalStatus,
