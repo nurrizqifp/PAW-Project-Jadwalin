@@ -26,6 +26,7 @@ function getBaseData() {
 
   return {
     appName: config.appName,
+    appVersion: config.appVersion,
     jadwal,
     jadwalStatus,
     notifikasiList,
@@ -77,6 +78,7 @@ exports.mahasiswaDashboard = (req, res) => {
     ...getBaseData(),
     judul: `Dashboard Mahasiswa — ${config.appName}`,
     currentRole: 'mahasiswa',
+    activeMenu: 'dashboard',
     activeView: 'view-mahasiswa'
   });
 };
@@ -86,6 +88,7 @@ exports.mahasiswaJadwal = (req, res) => {
     ...getBaseData(),
     judul: `Jadwal Perkuliahan Lengkap — ${config.appName}`,
     currentRole: 'mahasiswa',
+    activeMenu: 'jadwal',
     activeView: 'view-mahasiswa'
   });
 };
@@ -95,6 +98,7 @@ exports.mahasiswaPrakrs = (req, res) => {
     ...getBaseData(),
     judul: `Onboarding & Wizard Pra-KRS — ${config.appName}`,
     currentRole: 'mahasiswa',
+    activeMenu: 'prakrs',
     activeView: 'view-mahasiswa'
   });
 };
@@ -104,6 +108,7 @@ exports.mahasiswaNotifikasi = (req, res) => {
     ...getBaseData(),
     judul: `Pusat Notifikasi Mahasiswa — ${config.appName}`,
     currentRole: 'mahasiswa',
+    activeMenu: 'notifikasi',
     activeView: 'view-mahasiswa'
   });
 };
@@ -116,6 +121,7 @@ exports.dosenDashboard = (req, res) => {
     ...getBaseData(),
     judul: `Portal Dosen — ${config.appName}`,
     currentRole: 'dosen',
+    activeMenu: 'dashboard',
     activeView: 'view-dosen'
   });
 };
@@ -125,6 +131,7 @@ exports.dosenJadwal = (req, res) => {
     ...getBaseData(),
     judul: `Jadwal Mengajar Dosen — ${config.appName}`,
     currentRole: 'dosen',
+    activeMenu: 'jadwal',
     activeView: 'view-dosen'
   });
 };
@@ -134,6 +141,7 @@ exports.dosenPreferensi = (req, res) => {
     ...getBaseData(),
     judul: `Formulir Preferensi Waktu Dosen — ${config.appName}`,
     currentRole: 'dosen',
+    activeMenu: 'preferensi',
     activeView: 'view-dosen'
   });
 };
@@ -143,6 +151,7 @@ exports.dosenNotifikasi = (req, res) => {
     ...getBaseData(),
     judul: `Pusat Notifikasi Dosen — ${config.appName}`,
     currentRole: 'dosen',
+    activeMenu: 'notifikasi',
     activeView: 'view-dosen'
   });
 };

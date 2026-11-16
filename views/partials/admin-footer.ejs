@@ -1,12 +1,15 @@
-<!-- Admin Panel Compact Footer -->
+<!-- App Panel Compact Footer (Role-Aware) -->
+<% const footerRole = (typeof currentRole !== 'undefined') ? currentRole : 'admin'; %>
 <footer class="border-t border-zinc-200/80 bg-white dark:border-zinc-800 dark:bg-zinc-900 py-3.5 px-4 mt-auto">
-  <div
-    class="mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-    <div class="flex items-center space-x-3 text-[11px] font-mono text-zinc-400">
-      <span>Staf Panel</span>
+  <div class="mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+    <div class="flex items-center space-x-2 text-[11px] font-mono text-zinc-400">
+      <span class="rounded bg-blue-50 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-blue-700 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+        <%= typeof appVersion !== 'undefined' ? appVersion : 'v.21' %>
+      </span>
+      <span>Prodi Teknologi Informasi · FT UMY</span>
     </div>
     <div class="flex items-center gap-2">
-      <span class="font-medium">&copy; 2026 Portal Staf Akademik TI UMY · Jadwalin</span>
+      <span class="font-medium">&copy; 2026 <%= typeof appName !== 'undefined' ? appName : 'Jadwalin' %> · Smart Course Scheduling System</span>
     </div>
   </div>
 </footer>

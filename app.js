@@ -28,6 +28,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Middleware Logger untuk mencatat semua HTTP Request ke logs/logger.md
 app.use(logger);
 
+// Global locals untuk view
+app.use((req, res, next) => {
+  res.locals.appName = config.appName;
+  res.locals.appVersion = config.appVersion;
+  next();
+});
+
 // Routing Aplikasi
 app.use('/', routes);
 

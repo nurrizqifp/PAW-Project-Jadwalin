@@ -1,7 +1,13 @@
 <%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Jadwal Mengajar Dosen — Jadwalin' }) %>
-<%- include('../partials/navbar') %>
 
-<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+<div class="flex-1 flex min-h-screen">
+  <%- include('../partials/admin-sidebar', { activeMenu: 'jadwal', currentRole: 'dosen' }) %>
+
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <%- include('../partials/admin-navbar') %>
+
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
+      <div class="max-w-7xl mx-auto space-y-6">
 
   <!-- Kop Resmi Khusus Cetak / Print A4 -->
   <div class="print-header hidden">
@@ -265,9 +271,12 @@
     </div>
   </div>
 
-</main>
+      </div>
+    </main>
 
-<%- include('../partials/footer') %>
+    <%- include('../partials/admin-footer') %>
+  </div>
+</div>
 
 <script>
   (function initDosenScheduleSwitcher() {

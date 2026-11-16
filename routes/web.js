@@ -13,6 +13,8 @@ router.get('/mahasiswa', homeController.mahasiswaDashboard);
 router.get('/mahasiswa/dashboard', homeController.mahasiswaDashboard);
 router.get('/mahasiswa/jadwal', homeController.mahasiswaJadwal);
 router.get('/mahasiswa/prakrs', homeController.mahasiswaPrakrs);
+router.get('/mahasiswa/simulasi', homeController.mahasiswaPrakrs);
+router.get('/simulasi', homeController.mahasiswaPrakrs);
 router.get('/mahasiswa/notifikasi', homeController.mahasiswaNotifikasi);
 
 // Dosen Routes

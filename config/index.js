@@ -3,6 +3,7 @@ require('dotenv').config();
 
 module.exports = {
   appName: process.env.APP_NAME || 'Jadwalin',
+  appVersion: process.env.APP_VERSION || 'v1.0.0',
   port: process.env.PORT || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
   appUrl: process.env.APP_URL || `http://localhost:${process.env.PORT || 3000}`,

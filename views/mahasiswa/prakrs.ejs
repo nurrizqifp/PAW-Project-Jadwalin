@@ -1,7 +1,13 @@
 <%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Onboarding & Wizard Pra-KRS — Jadwalin' }) %>
-<%- include('../partials/navbar') %>
 
-<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+<div class="flex-1 flex min-h-screen">
+  <%- include('../partials/admin-sidebar', { activeMenu: 'prakrs', currentRole: 'mahasiswa' }) %>
+
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <%- include('../partials/admin-navbar') %>
+
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
+      <div class="max-w-7xl mx-auto space-y-6">
 
   <!-- Breadcrumb & Header Navigasi -->
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200/80 pb-5 dark:border-zinc-800">
@@ -434,9 +440,12 @@
       </div>
     </section>
 
-  </div>
+      </div>
+    </main>
 
-</main>
+    <%- include('../partials/admin-footer') %>
+  </div>
+</div>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -672,5 +681,3 @@
     recalculateSks();
   });
 </script>
-
-<%- include('../partials/footer') %>
