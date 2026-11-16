@@ -203,3 +203,43 @@ flowchart TD
   - Wizard Pra-KRS 4-Step berjalan fleksibel tiap semester dengan tombol "Minta Variasi Lain".
   - Form preferensi dosen mencatat hari off riset dan langsung tersinkronisasi ke sistem.
   - Tampilan jadwal hybrid (Grid Mingguan & Agenda Harian) berjalan mulus di browser smartphone.
+
+---
+
+## 5. Instruksi Tambahan & Action Items Per Role Pasca-Audit Fase 1
+
+Berdasarkan hasil audit komprehensif fase 1, berikut adalah instruksi perbaikan mendesak yang wajib ditindaklanjuti oleh masing-masing developer di branch kerja masing-masing:
+
+### 👤 1. Bima Eka Setiawan (`bims` — Database, Auth & Seeder)
+- **Kolom Kode Mata Kuliah (Rencana Utama)**: Pastikan atribut `kode_mk` (misal: `TI26101`, `TI201`, `MKWU01`) selalu tersimpan dan terelasi kuat di tabel `mata_kuliahs` serta disalin sebagai foreign key di `jadwal_sesis` untuk mempermudah pencarian dan visualisasi.
+- **Persistensi Slot Jadwal**: Selesaikan endpoint `POST /api/jadwal/update-slot` dan `POST /api/jadwal/revisi` agar perubahan waktu/ruangan dari modal edit admin langsung tersimpan persisten ke tabel SQLite `jadwal_sesis`.
+- **Manajemen Periode & Semester**: Lengkapi CRUD tabel `periode_jadwals` (Tahun ajaran, Semester Ganjil/Genap, status aktif/terkunci). Sediakan query filter semester di endpoint jadwal.
+- **Transisi ke Model Sequelize**: Alihkan pembacaan data controller yang masih memakai file statis (`masterModel.js`) ke Sequelize model (`models/index.js`).
+- **Auth Guard & Session**: Tuntaskan middleware `middlewares/auth.js` dan `middlewares/rbac.js` agar login berbasis JWT/session benar-benar membatasi akses role panel (Admin, Dosen, Mahasiswa).
+
+### 👤 2. Nur Rizqi Febriansyah Putra (`nurrizqifp` — AI Solver & Validation)
+- **Output Kode Mata Kuliah**: Pastikan response JSON solver dari Gemini API memuat field `kodeMatkul` pada setiap slot array `jadwal_sesi[]`.
+- **Solver Fallback**: Tambahkan fallback generator berbasis constraint heuristic lokal jika kuota Gemini API rate-limited atau offline.
+- **Progress Tracking API**: Sediakan endpoint `GET /api/generate/status` yang mengembalikan persentase kalkulasi dan metrik zero-clash untuk ditampilkan di progress bar UI admin.
+- **Validasi Zero-Clash Post-Generate**: Pastikan parser menjamin 100% kepatuhan terhadap HC-03 (jeda sholat 11:30–12:10) sebelum jadwal disimpan.
+
+### 👤 3. A. Muh. Fadil Asytar (`fadil` — Jadwal, Publish & Notifikasi)
+- **API Payload Kode MK**: Pastikan seluruh endpoint jadwal (`GET /api/jadwal`, `POST /api/jadwal/prakrs`) menyertakan `kodeMatkul` di respon data.
+- **Persistensi Notifikasi**: Hubungkan aksi publikasi jadwal dengan penyisipan record ke tabel `notifikasis` agar drawer notifikasi membaca data riil dari database.
+- **Guard Publikasi Jadwal (PRD F-05)**: Nonaktifkan (disable) tombol publikasi jika total bentrok Hard Constraint > 0, dan catat riwayat versi jadwal (`v1.0`, `v1.1`, dst) saat publikasi berhasil.
+
+### 👤 4. Nisrina Hanifah Ramadhani (`nanaa` — Frontend Admin Panel)
+- **Tampilan Kode MK di Matriks Jadwal & Master**: Wajib menampilkan kolom `Kode MK` di tabel master matkul dan kartu kalender grid mingguan.
+- **Drawer CRUD Data Master & Constraint**: Gunakan drawer slide-over untuk form tambah/edit entitas master dan konfigurasi soft constraint.
+- **Gunakan Switch Toggle**: Gunakan toggle switch instan untuk pengaturan constraint tanpa tombol submit manual.
+
+### 👤 5. Resya Glamoda Suhendri (`resya` — Frontend Civitas)
+- **Kode MK di Kartu Jadwal Civitas**: Tampilkan badge `Kode MK` di setiap kartu jadwal kuliah mahasiswa dan jadwal mengajar dosen.
+- **Sinkronisasi Timer Countdown**: Sambungkan countdown waktu di dashboard mahasiswa dengan jam sesi riil matkul hari ini (misal 08:50–11:30).
+- **Integrasi Toggle Eye & Lupa Password**: Manfaatkan toggle eye password di form login dan arahkan tautan lupa sandi ke `/forgot-password`.
+
+### 👤 6. Haidar Yahya Mudhofar (`yuum` — UI System, Layout & Routing)
+- **Layout & Sidebar Fixed**: Menjamin seluruh halaman admin menggunakan struktur `admin-sidebar.ejs` sticky fixed dan `admin-footer.ejs` seragam.
+- **Role-Aware Civitas Navbar**: Menyediakan header navigasi khusus mahasiswa dan dosen dengan status badge peran dan akses cepat.
+- **Split View Auth Page**: Membangun tampilan split view modern untuk `/login` dan `/forgot-password`.
+- **Calendar Grid Multi-Role**: Menerapkan mode Calendar Grid mingguan di seluruh portal (Admin, Dosen, Mahasiswa).

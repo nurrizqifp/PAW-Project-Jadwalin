@@ -67,7 +67,6 @@ KonflikLog.belongsTo(PeriodeJadwal, { foreignKey: 'periode_id', as: 'periode' })
 const MasterModel = require('./masterModel');
 const JadwalModel = require('./jadwalModel');
 const ConstraintModel = require('./constraintModel');
-const ProdukModel = require('./produkModel');
 
 const db = {
   sequelize,
@@ -87,7 +86,6 @@ const db = {
   MasterModel,
   JadwalModel,
   ConstraintModel,
-  ProdukModel,
 };
 
 module.exports = db;

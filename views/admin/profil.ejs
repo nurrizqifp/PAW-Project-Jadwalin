@@ -1,0 +1,268 @@
+<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Profil Pengelola Akademik — Jadwalin' }) %>
+
+<div class="flex-1 flex min-h-screen">
+  <%- include('../partials/admin-sidebar', { activeMenu: 'profil' }) %>
+
+  <div class="flex-1 flex flex-col min-w-0">
+    <%- include('../partials/admin-navbar') %>
+
+    <main class="flex-1 p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
+      <div class="max-w-6xl mx-auto space-y-6">
+
+        <!-- Header -->
+        <div class="border-b border-zinc-200 pb-5 dark:border-zinc-800">
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-blue-900 dark:bg-blue-950 dark:text-blue-300">
+            Identitas Pengelola
+          </span>
+          <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-1">
+            Profil Staf Akademik
+          </h1>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400">
+            Informasi akun personal, data kontak penanggung jawab penjadwalan, dan keamanan kata sandi.
+          </p>
+        </div>
+
+        <!-- Profil Card Hero Utama -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#0c2b5e] text-white font-heading font-bold text-2xl shadow-sm border-2 border-amber-400/40">
+              RW
+            </div>
+            <div class="space-y-1 flex-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <h2 class="font-heading text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                  Rina Wulandari, S.T.
+                </h2>
+                <span class="rounded bg-emerald-100 px-2 py-0.5 text-[10px] font-mono font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                  Aktif · Super Admin
+                </span>
+              </div>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+                NIP: 19880415 201404 2 001 · Staf Kurikulum & Administrasi TI UMY
+              </p>
+              <p class="text-xs text-zinc-600 dark:text-zinc-300 pt-1">
+                Program Studi Teknologi Informasi — Fakultas Teknik, Universitas Muhammadiyah Yogyakarta
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Layout Tab Menu Vertikal di Halaman Profil -->
+        <div class="flex flex-col md:flex-row gap-6 items-start">
+          
+          <!-- SISI KIRI: Vertical Tabs Nav -->
+          <nav class="w-full md:w-56 shrink-0 space-y-1 rounded-xl border border-zinc-200 bg-white p-2 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 text-xs font-medium">
+            <button type="button" onclick="switchProfileVerticalTab('identitas')" id="prof-tab-btn-identitas"
+              class="profile-vtab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition-colors bg-[#0c2b5e] text-white font-semibold shadow-xs">
+              <i class="ph ph-user-circle text-base"></i>
+              <span>Data Pribadi & Kontak</span>
+            </button>
+
+            <button type="button" onclick="switchProfileVerticalTab('keamanan')" id="prof-tab-btn-keamanan"
+              class="profile-vtab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition-colors text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800">
+              <i class="ph ph-lock-key text-base"></i>
+              <span>Keamanan Kata Sandi</span>
+            </button>
+
+            <button type="button" onclick="switchProfileVerticalTab('akses')" id="prof-tab-btn-akses"
+              class="profile-vtab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition-colors text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800">
+              <i class="ph ph-shield-check text-base"></i>
+              <span>Hak Akses & Otorisasi</span>
+            </button>
+
+            <button type="button" onclick="switchProfileVerticalTab('aktivitas')" id="prof-tab-btn-aktivitas"
+              class="profile-vtab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition-colors text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800">
+              <i class="ph ph-clock-counter-clockwise text-base"></i>
+              <span>Riwayat Aktivitas</span>
+            </button>
+          </nav>
+
+          <!-- SISI KANAN: Tab Content Panels -->
+          <div class="flex-1 w-full space-y-6">
+
+            <!-- TAB 1: IDENTITAS & KONTAK -->
+            <div id="prof-panel-identitas" class="profile-vtab-pane space-y-5">
+              <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+                <h3 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-100 pb-3 dark:border-zinc-800">
+                  Informasi Pribadi & Kontak Resmi
+                </h3>
+
+                <form onsubmit="event.preventDefault(); window.showConfirmDialog('Profil Disimpan', 'Pembaruan data profil pengelola telah berhasil disimpan.', null, 'Selesai', true);" class="space-y-4 text-xs">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                      <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama Lengkap & Gelar</label>
+                      <input type="text" value="Rina Wulandari, S.T."
+                        class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+                    </div>
+
+                    <div class="space-y-1">
+                      <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nomor Induk Pegawai (NIP)</label>
+                      <input type="text" value="19880415 201404 2 001" readonly
+                        class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 font-mono text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800/60 dark:text-zinc-400">
+                    </div>
+
+                    <div class="space-y-1">
+                      <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Email Kampus</label>
+                      <input type="email" value="rina.wulandari@ft.umy.ac.id"
+                        class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+                    </div>
+
+                    <div class="space-y-1">
+                      <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nomor Telepon / WhatsApp</label>
+                      <input type="text" value="+62 812-3456-7890"
+                        class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+                    </div>
+                  </div>
+
+                  <div class="flex justify-end pt-2">
+                    <button type="submit"
+                      class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 font-semibold text-white shadow-xs transition-colors">
+                      <i class="ph ph-check text-amber-400"></i>
+                      <span>Simpan Perubahan</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- TAB 2: KEAMANAN KATA SANDI -->
+            <div id="prof-panel-keamanan" class="profile-vtab-pane hidden space-y-5">
+              <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+                <h3 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-100 pb-3 dark:border-zinc-800">
+                  Perubahan Kata Sandi
+                </h3>
+
+                <form onsubmit="event.preventDefault(); window.showConfirmDialog('Kata Sandi Diperbarui', 'Kata sandi akun Anda berhasil diperbarui dengan aman.', null, 'Selesai', true);" class="space-y-4 text-xs">
+                  <div class="space-y-1">
+                    <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Kata Sandi Saat Ini</label>
+                    <div class="relative">
+                      <input id="prof-tab-curr-pass" type="password" required placeholder="Masukkan kata sandi saat ini"
+                        class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white pl-3 pr-10 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+                      <button type="button" onclick="togglePassEye('prof-tab-curr-pass', 'prof-tab-eye-curr')"
+                        class="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 p-1">
+                        <i id="prof-tab-eye-curr" class="ph ph-eye text-base"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                      <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Kata Sandi Baru</label>
+                      <div class="relative">
+                        <input id="prof-tab-new-pass" type="password" required minlength="8" placeholder="Minimal 8 karakter"
+                          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white pl-3 pr-10 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+                        <button type="button" onclick="togglePassEye('prof-tab-new-pass', 'prof-tab-eye-new')"
+                          class="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 p-1">
+                          <i id="prof-tab-eye-new" class="ph ph-eye text-base"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="space-y-1">
+                      <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Konfirmasi Kata Sandi Baru</label>
+                      <div class="relative">
+                        <input id="prof-tab-conf-pass" type="password" required minlength="8" placeholder="Ulangi kata sandi baru"
+                          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white pl-3 pr-10 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+                        <button type="button" onclick="togglePassEye('prof-tab-conf-pass', 'prof-tab-eye-conf')"
+                          class="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 p-1">
+                          <i id="prof-tab-eye-conf" class="ph ph-eye text-base"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex justify-end pt-2">
+                    <button type="submit"
+                      class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-4 font-semibold text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-100 transition-colors shadow-xs">
+                      <i class="ph ph-lock-key"></i>
+                      <span>Perbarui Kata Sandi</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- TAB 3: HAK AKSES -->
+            <div id="prof-panel-akses" class="profile-vtab-pane hidden space-y-5">
+              <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-4 text-xs">
+                <h3 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-100 pb-3 dark:border-zinc-800">
+                  Hak Akses & Otorisasi Sistem
+                </h3>
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between p-3 rounded-lg border border-zinc-100 bg-zinc-50/60 dark:border-zinc-800 dark:bg-zinc-800/40">
+                    <div>
+                      <p class="font-semibold text-zinc-900 dark:text-zinc-100">Level Akses Utama</p>
+                      <p class="text-zinc-500">Super Administrator Akademik Program Studi TI</p>
+                    </div>
+                    <span class="font-mono text-emerald-600 dark:text-emerald-400 font-bold">FULL ACCESS</span>
+                  </div>
+                  <div class="flex items-center justify-between p-3 rounded-lg border border-zinc-100 bg-zinc-50/60 dark:border-zinc-800 dark:bg-zinc-800/40">
+                    <div>
+                      <p class="font-semibold text-zinc-900 dark:text-zinc-100">Otorisasi Solver AI</p>
+                      <p class="text-zinc-500">Pemicuan algoritma generate jadwal otomatis</p>
+                    </div>
+                    <span class="font-mono text-blue-600 dark:text-blue-400 font-bold">AKTIF</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 4: RIWAYAT AKTIVITAS -->
+            <div id="prof-panel-aktivitas" class="profile-vtab-pane hidden space-y-5">
+              <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+                <h3 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-100 pb-3 dark:border-zinc-800">
+                  Log Aktivitas Akun Ini
+                </h3>
+                <div class="divide-y divide-zinc-100 dark:divide-zinc-800 text-xs">
+                  <div class="py-2.5 flex items-center justify-between">
+                    <span class="text-zinc-700 dark:text-zinc-300">Publikasi Matriks Jadwal v1.0 Semester Ganjil</span>
+                    <span class="font-mono text-zinc-400 text-[11px]">Hari ini, 08:30 WIB</span>
+                  </div>
+                  <div class="py-2.5 flex items-center justify-between">
+                    <span class="text-zinc-700 dark:text-zinc-300">Eksekusi AI Solver (111 slot terselesaikan)</span>
+                    <span class="font-mono text-zinc-400 text-[11px]">Kemarin, 14:15 WIB</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+
+    <%- include('../partials/admin-footer') %>
+  </div>
+</div>
+
+<script>
+  function switchProfileVerticalTab(tabId) {
+    document.querySelectorAll('.profile-vtab-pane').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.profile-vtab-btn').forEach(btn => {
+      btn.className = 'profile-vtab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition-colors text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800';
+    });
+
+    const pane = document.getElementById(`prof-panel-${tabId}`);
+    const btn = document.getElementById(`prof-tab-btn-${tabId}`);
+
+    if (pane) pane.classList.remove('hidden');
+    if (btn) {
+      btn.className = 'profile-vtab-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-left transition-colors bg-[#0c2b5e] text-white font-semibold shadow-xs';
+    }
+  }
+
+  function togglePassEye(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    if (!input || !icon) return;
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.className = 'ph ph-eye-slash text-base text-zinc-700 dark:text-zinc-200';
+    } else {
+      input.type = 'password';
+      icon.className = 'ph ph-eye text-base text-zinc-400';
+    }
+  }
+</script>
