@@ -222,3 +222,21 @@ exports.adminJadwal = (req, res) => {
     activeMenu: 'jadwal'
   });
 };
+
+exports.adminProfil = (req, res) => {
+  res.render('admin/profil', {
+    ...getBaseData(),
+    judul: `Profil Pengelola Akademik — ${config.appName}`,
+    currentRole: 'admin',
+    activeMenu: 'profil'
+  });
+};
+
+exports.adminSettings = (req, res) => {
+  res.render('admin/settings', {
+    ...getBaseData(),
+    judul: `Pengaturan Sistem & Periode — ${config.appName}`,
+    currentRole: 'admin',
+    activeMenu: 'settings'
+  });
+};
