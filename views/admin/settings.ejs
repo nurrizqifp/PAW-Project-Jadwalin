@@ -1,0 +1,145 @@
+<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Pengaturan Sistem & Periode — Jadwalin' }) %>
+
+<div class="flex-1 flex overflow-hidden">
+  <%- include('../partials/sidebar', { activeMenu: 'settings' }) %>
+
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <%- include('../partials/admin-navbar') %>
+
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
+      <div class="max-w-4xl mx-auto space-y-6">
+
+        <!-- Header -->
+        <div class="border-b border-zinc-200 pb-5 dark:border-zinc-800">
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
+            Konfigurasi Sistem
+          </span>
+          <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-1">
+            Pengaturan Periode & Solver Jadwal
+          </h1>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400">
+            Sesuaikan parameter tahun akademik, siklus semester aktif, batas constraint solver, dan integrasi notifikasi.
+          </p>
+        </div>
+
+        <!-- Section 1: Periode Akademik Aktif -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-5">
+          <div class="border-b border-zinc-100 pb-3 dark:border-zinc-800">
+            <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">Periode Akademik & Kalender Perkuliahan</h3>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">Menentukan kalender acuan untuk pengacakan jadwal dan simulasi Pra-KRS</p>
+          </div>
+
+          <form onsubmit="event.preventDefault(); alert('Pengaturan periode akademik tersimpan!');" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Tahun Akademik</label>
+                <select class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+                  <option value="2026/2027" selected>2026/2027</option>
+                  <option value="2025/2026">2025/2026</option>
+                </select>
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Semester Berjalan</label>
+                <select class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+                  <option value="Ganjil" selected>Semester Ganjil (Gasal)</option>
+                  <option value="Genap">Semester Genap</option>
+                </select>
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Maksimum SKS Mahasiswa</label>
+                <input type="number" value="24" min="12" max="24"
+                  class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Batas Waktu Pra-KRS Mahasiswa</label>
+                <input type="date" value="2026-09-01"
+                  class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Status Portal Mahasiswa</label>
+                <select class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+                  <option value="open" selected>Dibuka (Mahasiswa Bebas Memilih Paket Pra-KRS)</option>
+                  <option value="locked">Terkunci (Hanya Mode Baca Jadwal)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+              <button type="submit"
+                class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white shadow-sm transition-colors">
+                <i class="ph ph-check text-amber-400"></i>
+                <span>Simpan Periode</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Section 2: Kebijakan AI Solver & Aturan Jadwal -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-5">
+          <div class="border-b border-zinc-100 pb-3 dark:border-zinc-800">
+            <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">Konfigurasi Aturan Solver Penjadwalan</h3>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">Aturan ketat dan preferensi optimasi yang diproses oleh AI solver</p>
+          </div>
+
+          <div class="space-y-4 text-xs">
+            <!-- Toggle 1: Sholat Dhuhur -->
+            <div class="flex items-center justify-between p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/40">
+              <div class="space-y-0.5 pr-4">
+                <p class="font-semibold text-zinc-900 dark:text-zinc-100">Hard Constraint HC-03: Jeda Sholat Dhuhur (11:30 - 12:10)</p>
+                <p class="text-zinc-500 dark:text-zinc-400">Menjamin tidak ada satupun sesi kuliah atau praktikum yang berlangsung di jam ibadah.</p>
+              </div>
+              <input type="checkbox" checked class="h-4 w-4 rounded border-zinc-300 text-blue-900 focus:ring-blue-800">
+            </div>
+
+            <!-- Toggle 2: Lab Kesesuaian -->
+            <div class="flex items-center justify-between p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/40">
+              <div class="space-y-0.5 pr-4">
+                <p class="font-semibold text-zinc-900 dark:text-zinc-100">Hard Constraint HC-02: Lab Matching Otomatis</p>
+                <p class="text-zinc-500 dark:text-zinc-400">Mata kuliah berjenis Praktikum hanya boleh ditempatkan di 4 Lab Komputer Gedung F4.</p>
+              </div>
+              <input type="checkbox" checked class="h-4 w-4 rounded border-zinc-300 text-blue-900 focus:ring-blue-800">
+            </div>
+
+            <!-- Slider / Number: Bobot Soft Constraint -->
+            <div class="space-y-2 p-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/40">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-zinc-900 dark:text-zinc-100">Bobot Penalti Soft Constraint Preferensi Dosen</span>
+                <span class="font-mono text-xs font-bold text-amber-600 dark:text-amber-400">Tinggi (Priority 1)</span>
+              </div>
+              <p class="text-zinc-500 dark:text-zinc-400">Solver akan meminimalkan penempatan jadwal pada hari di mana dosen mengajukan izin/riset.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Integrasi Notifikasi & Database -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+          <div class="border-b border-zinc-100 pb-3 dark:border-zinc-800">
+            <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">Pemeliharaan & Ekspor Sistem</h3>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">Manajemen basis data SQLite dan kanal pengumuman civitas</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <button type="button" onclick="alert('Cadangan basis data SQLite (jadwalin.db) berhasil diunduh!')"
+              class="inline-flex min-h-[38px] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
+              <i class="ph ph-database text-base"></i>
+              <span>Backup Database SQLite</span>
+            </button>
+            <button type="button" onclick="alert('Cache query dan template EJS berhasil dibersihkan!')"
+              class="inline-flex min-h-[38px] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
+              <i class="ph ph-arrow-clockwise text-base"></i>
+              <span>Bersihkan Cache Memori</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <%- include('../partials/admin-footer') %>
+  </div>
+</div>

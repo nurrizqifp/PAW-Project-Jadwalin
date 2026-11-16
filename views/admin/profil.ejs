@@ -1,0 +1,184 @@
+<%- include('../partials/head', { judul: typeof judul !=='undefined' ? judul : 'Profil Pengelola Akademik — Jadwalin' })
+  %>
+
+  <div class="flex-1 flex overflow-hidden">
+    <%- include('../partials/sidebar', { activeMenu: 'profil' }) %>
+
+      <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <%- include('../partials/admin-navbar') %>
+
+          <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
+            <div class="max-w-4xl mx-auto space-y-6">
+
+              <!-- Header -->
+              <div class="border-b border-zinc-200 pb-5 dark:border-zinc-800">
+                <span
+                  class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-blue-900 dark:bg-blue-950 dark:text-blue-300">
+                  Identitas Pengguna
+                </span>
+                <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-1">
+                  Profil Pengelola Akademik
+                </h1>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                  Kelola identitas staf, informasi kontak departemen, serta kredensial keamanan akun administrasi.
+                </p>
+              </div>
+
+              <!-- Profil Card Utama -->
+              <div
+                class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                  <div
+                    class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#0c2b5e] text-white font-heading font-bold text-2xl shadow-md border-2 border-amber-400/30">
+                    RW
+                  </div>
+                  <div class="space-y-1 flex-1">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <h2 class="font-heading text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                        Rina Wulandari, S.T.
+                      </h2>
+                    </div>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+                      NIP: 19880415 201404 2 001
+                    </p>
+                    <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+                      Staf Administrasi & Kurikulum TI
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form Informasi Kontak & Data Pribadi -->
+              <div
+                class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-5">
+                <div class="border-b border-zinc-100 pb-3 dark:border-zinc-800">
+                  <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">Informasi Pribadi &
+                    Kontak</h3>
+                  <p class="text-xs text-zinc-500 dark:text-zinc-400">Data digunakan untuk komunikasi resmi penjadwalan
+                    dan notifikasi sistem</p>
+                </div>
+
+                <form onsubmit="event.preventDefault(); alert('Perubahan profil berhasil disimpan!');"
+                  class="space-y-4">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                      <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Nama Lengkap &
+                        Gelar</label>
+                      <input type="text" value="Rina Wulandari, S.T."
+                        class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+                    </div>
+
+                    <div class="space-y-1">
+                      <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Nomor Induk Pegawai
+                        (NIP)</label>
+                      <input type="text" value="19880415 201404 2 001" readonly
+                        class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs font-mono text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800/60 dark:text-zinc-400">
+                    </div>
+
+                    <div class="space-y-1">
+                      <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Email Institusi
+                        UMY</label>
+                      <input type="email" value="rina.wulandari@ft.umy.ac.id"
+                        class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+                    </div>
+
+                    <div class="space-y-1">
+                      <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Nomor WhatsApp /
+                        Kantor</label>
+                      <input type="text" value="+62 812-3456-7890"
+                        class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+                    </div>
+                  </div>
+
+                  <div class="flex justify-end pt-2">
+                    <button type="submit"
+                      class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white shadow-sm transition-colors">
+                      <i class="ph ph-check text-amber-400"></i>
+                      <span>Simpan Informasi</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Form Ubah Password (Keamanan Akun) -->
+              <div
+                class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-5">
+                <div class="border-b border-zinc-100 pb-3 dark:border-zinc-800">
+                  <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">Keamanan & Kata Sandi
+                  </h3>
+                  <p class="text-xs text-zinc-500 dark:text-zinc-400">Perbarui kata sandi secara berkala untuk menjaga
+                    integritas sistem penjadwalan</p>
+                </div>
+
+                <form onsubmit="event.preventDefault(); alert('Kata sandi berhasil diperbarui!');" class="space-y-4">
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="space-y-1">
+                      <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Kata Sandi Saat
+                        Ini</label>
+                      <input type="password" placeholder="••••••••" required
+                        class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+                    </div>
+
+                    <div class="space-y-1">
+                      <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Kata Sandi
+                        Baru</label>
+                      <input type="password" placeholder="Minimal 8 karakter" required
+                        class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+                    </div>
+
+                    <div class="space-y-1">
+                      <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Konfirmasi Kata
+                        Sandi</label>
+                      <input type="password" placeholder="Ulangi kata sandi baru" required
+                        class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+                    </div>
+                  </div>
+
+                  <div class="flex justify-end pt-2">
+                    <button type="submit"
+                      class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-4 text-xs font-semibold text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-100 transition-colors">
+                      <i class="ph ph-lock-key"></i>
+                      <span>Perbarui Kata Sandi</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Riwayat Aktivitas Akun -->
+              <div
+                class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+                <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">Log Aktivitas Terbaru</h3>
+                <div class="divide-y divide-zinc-100 dark:divide-zinc-800 text-xs">
+                  <div class="py-2.5 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <i class="ph ph-broadcast text-emerald-600 text-base"></i>
+                      <span class="text-zinc-800 dark:text-zinc-200">Publikasi Matriks Jadwal Resmi v1.0 Semester
+                        Ganjil</span>
+                    </div>
+                    <span class="font-mono text-zinc-400 text-[11px]">Hari ini, 08:30 WIB</span>
+                  </div>
+                  <div class="py-2.5 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <i class="ph ph-cpu text-blue-600 text-base"></i>
+                      <span class="text-zinc-800 dark:text-zinc-200">Eksekusi AI Solver Jadwal Otomatis (111 slot
+                        terselesaikan)</span>
+                    </div>
+                    <span class="font-mono text-zinc-400 text-[11px]">Kemarin, 14:15 WIB</span>
+                  </div>
+                  <div class="py-2.5 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <i class="ph ph-sliders text-amber-600 text-base"></i>
+                      <span class="text-zinc-800 dark:text-zinc-200">Pembaruan Hard Constraint HC-03 Jeda Sholat
+                        Dhuhur</span>
+                    </div>
+                    <span class="font-mono text-zinc-400 text-[11px]">2 hari lalu</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </main>
+
+          <%- include('../partials/admin-footer') %>
+      </div>
+  </div>

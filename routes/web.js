@@ -32,5 +32,7 @@ router.get('/admin/constraints', homeController.adminConstraints);
 router.get('/admin/constraints/soft', homeController.adminConstraintsSoft);
 router.get('/admin/generate', homeController.adminGenerate);
 router.get('/admin/jadwal', homeController.adminJadwal);
+router.get('/admin/profil', homeController.adminProfil);
+router.get('/admin/settings', homeController.adminSettings);
 
 module.exports = router;
