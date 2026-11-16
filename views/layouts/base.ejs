@@ -7,7 +7,7 @@
 <% if (typeof isRoleAdmin !== 'undefined' && isRoleAdmin) { %>
   <!-- Layout Admin Panel with Collapsible Sidebar -->
   <div class="flex-1 flex overflow-hidden">
-    <%- include('../partials/sidebar') %>
+    <%- include('../partials/admin-sidebar') %>
     <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
       <div class="max-w-6xl mx-auto space-y-6">
         <%- body %>
