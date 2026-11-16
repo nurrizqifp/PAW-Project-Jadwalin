@@ -14,17 +14,35 @@ const router = express.Router();
  */
 function guardPanelRole(allowedRoles) {
   return (req, res, next) => {
-    const role = req.query.asRole || req.cookies?.userRole;
+    // 1. Dukung switch role langsung via query parameter ?asRole=... atau ?role=...
+    const switchTarget = req.query.asRole || req.query.role;
+    if (switchTarget) {
+      res.cookie('userRole', switchTarget, { maxAge: 604800000, path: '/' });
+      req.cookies = req.cookies || {};
+      req.cookies.userRole = switchTarget;
+    }
 
-    // Jika sudah ada cookie userRole dan mencoba masuk ke panel peran lain:
-    if (role && !allowedRoles.includes(role) && role !== 'admin') {
-      if (role === 'mahasiswa') {
-        return res.redirect('/mahasiswa/dashboard');
-      }
-      if (role === 'dosen') {
-        return res.redirect('/dosen/dashboard');
-      }
-      return res.redirect('/login');
+    const role = switchTarget || req.cookies?.userRole;
+
+    // 2. Jika belum ada cookie (guest demo), izinkan penjelajahan panel untuk keperluan pengujian
+    if (!role) {
+      return next();
+    }
+
+    // 3. Admin memiliki hak akses penuh ke semua panel
+    if (role === 'admin') {
+      return next();
+    }
+
+    // 4. Jika role tidak termasuk yang diizinkan untuk panel ini:
+    if (!allowedRoles.includes(role)) {
+      return res.status(403).render('errors/403', {
+        judul: '403 — Akses Dibatasi · Jadwalin',
+        roleDibutuhkan: allowedRoles,
+        roleUser: role,
+        appName: process.env.APP_NAME || 'Jadwalin',
+        appVersion: process.env.APP_VERSION || 'v.21'
+      });
     }
 
     next();
