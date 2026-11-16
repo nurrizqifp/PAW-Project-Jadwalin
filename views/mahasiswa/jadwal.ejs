@@ -36,23 +36,30 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2.5">
-          <!-- Print Button -->
+          <!-- CTA 1: Simulasi Pra-KRS -->
+          <a href="/mahasiswa/prakrs"
+            class="inline-flex min-h-[38px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-3.5 py-1.5 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
+            <i class="ph ph-sparkle text-amber-400 text-sm"></i>
+            <span>Simulasi Pra-KRS</span>
+          </a>
+
+          <!-- CTA 2: Print Button -->
           <button onclick="window.print()" type="button"
-            class="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 shadow-sm transition-colors">
+            class="inline-flex min-h-[38px] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 shadow-xs transition-colors">
             <i class="ph ph-printer text-base text-zinc-500"></i>
-            <span>Cetak PDF Resmi</span>
+            <span>Cetak PDF</span>
           </button>
 
-          <!-- View Mode Switcher: Grid vs Agenda -->
+          <!-- CTA 3: View Mode Switcher: Grid vs Agenda -->
           <div
-            class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800">
+            class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800/80">
             <button id="view-mode-grid" type="button"
-              class="inline-flex items-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100 transition-all">
-              <i class="ph ph-squares-four text-sm text-brand-blue dark:text-amber-400"></i>
+              class="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100 transition-all">
+              <i class="ph ph-squares-four text-sm text-[#0c2b5e] dark:text-amber-400"></i>
               <span>Grid Mingguan</span>
             </button>
             <button id="view-mode-agenda" type="button"
-              class="inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
+              class="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
               <i class="ph ph-list-dashes text-sm"></i>
               <span>Agenda Harian</span>
             </button>

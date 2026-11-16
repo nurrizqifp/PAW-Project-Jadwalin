@@ -212,7 +212,7 @@ Berdasarkan hasil audit komprehensif fase 1, berikut adalah instruksi perbaikan 
 
 ### 👤 1. Bima Eka Setiawan (`bims` — Database, Auth & Seeder)
 - **Kolom Kode Mata Kuliah (Rencana Utama)**: Pastikan atribut `kode_mk` (misal: `TI26101`, `TI201`, `MKWU01`) selalu tersimpan dan terelasi kuat di tabel `mata_kuliahs` serta disalin sebagai foreign key di `jadwal_sesis` untuk mempermudah pencarian dan visualisasi.
-- **Persistensi Slot Jadwal**: Selesaikan endpoint `POST /api/jadwal/update-slot` dan `POST /api/jadwal/revisi` agar perubahan waktu/ruangan dari modal edit admin langsung tersimpan persisten ke tabel SQLite `jadwal_sesis`.
+- **Persistensi Slot Jadwal**: Selesaikan endpoint `POST /api/jadwal/update-slot` dan `POST /api/jadwal/revisi` agar perubahan waktu/ruangan dari modal edit admin langsung tersimpan persisten ke tabel PostgreSQL `jadwal_sesis`.
 - **Manajemen Periode & Semester**: Lengkapi CRUD tabel `periode_jadwals` (Tahun ajaran, Semester Ganjil/Genap, status aktif/terkunci). Sediakan query filter semester di endpoint jadwal.
 - **Transisi ke Model Sequelize**: Alihkan pembacaan data controller yang masih memakai file statis (`masterModel.js`) ke Sequelize model (`models/index.js`).
 - **Auth Guard & Session**: Tuntaskan middleware `middlewares/auth.js` dan `middlewares/rbac.js` agar login berbasis JWT/session benar-benar membatasi akses role panel (Admin, Dosen, Mahasiswa).

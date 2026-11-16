@@ -70,6 +70,14 @@ exports.forgotPassword = (req, res) => {
   });
 };
 
+exports.info = (req, res) => {
+  res.render('info', {
+    ...getBaseData(),
+    judul: `Panduan & Info Akademik — ${config.appName}`,
+    currentRole: 'guest'
+  });
+};
+
 // --------------------------------------------------------
 // 2. MAHASISWA ROUTES
 // --------------------------------------------------------
