@@ -2876,6 +2876,7 @@ const JadwalModel = {
       totalDipetakan: hasilSesi.length,
       tidakTersediaDiSemesterGanjil,
       konflikCount: konflikInternal.length,
+      feedback: aiFeedback,
       aiFeedback,
       rekomendasiSesi: hasilSesi
     };

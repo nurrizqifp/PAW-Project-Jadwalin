@@ -32,6 +32,7 @@ PAW-Project-Jadwalin/
 │   └── homeController.js   # Handler render Single Page App (/)
 ├── docs/                   # Dokumen PRD dan sketsa wireframe antarmuka
 │   ├── PRD-Kelompok5-TakeHome.docx.md
+│   ├── design/             # Canvas dan spesifikasi desain antarmuka
 │   └── images/
 ├── middlewares/            # Middleware aplikasi
 │   └── logger.js           # Pencatatan request HTTP ke logs/logger.md
@@ -41,7 +42,7 @@ PAW-Project-Jadwalin/
 │   ├── jadwalModel.js      # Jadwal hasil generate AI, deteksi konflik, & notifikasi
 │   └── produkModel.js      # Pemetaan spesifikasi fitur PRD (F-01 s/d F-08)
 ├── routes/                 # Definisi rute Express.js
-│   ├── api.js              # Endpoint REST API
+│   ├── api.js              # Endpoint REST API (termasuk CRUD Data Master)
 │   ├── index.js            # Router agregator
 │   └── web.js              # Rute frontend web
 ├── utils/                  # Helper fungsi reusable
@@ -71,13 +72,34 @@ PAW-Project-Jadwalin/
    - Landing modal (`Login`, `Coba demo` tutorial read-only, `Register`) serta 4-Step Onboarding Pra-KRS (validasi integer semester 1–12 tanpa dropdown, Year Picker angkatan, input Nama huruf besar + builder NIM `[angkatan]0140[3NIM]`, dan Grid View Mata Kuliah per kategori dengan AI Mapping & tombol `Minta Variasi Lain`).
 
 2. **Staf Administrasi Akademik (Rina Wulandari)**
-   - Pengelolaan & penambahan data master: 21 Dosen Resmi, 57 Mata Kuliah Kurikulum (Sem 1–8) + 20 MK Pilihan (`PR`, `DA`, `NE`, `UX`), dan 12 Ruangan (Gedung F4 & F6) dengan pencarian dan validasi (US-01).
+   - Panel CRUD Data Master: kelola, tambah, edit, dan hapus 21 Dosen Resmi, 57 Mata Kuliah Kurikulum (Sem 1–8) + 20 MK Pilihan (`PR`, `DA`, `NE`, `UX`), dan 12 Ruangan (Gedung F4 & F6) dengan pencarian dan validasi (US-01).
    - Pengaturan Hard Constraints (0 bentrok, 100% lab matching) dan Soft Constraints (preferensi dosen) (US-02).
    - Generator jadwal otomatis AI 1-klik (&lt; 15 menit), deteksi laporan konflik beserta saran perbaikan (US-03), serta preview multi-filter & publikasi jadwal (US-04).
 
 3. **Dosen (Ir. Asroni, S.T., M.Eng)**
    - Jadwal mengajar pribadi per semester & notifikasi perubahan jadwal (US-06).
    - Form preferensi waktu mengajar dan hari riset (misal: hari Jumat bebas mengajar untuk penelitian) yang tersinkronisasi ke panel Staf Akademik (US-05).
+
+---
+
+## Uji Coba Fitur CRUD Data Master Dosen (Praktikum Pekan 8)
+
+Sebagai pemenuhan capaian praktikum Pekan 8 untuk implementasi fitur **CRUD (Create, Read, Update, Delete)** penuh yang terintegrasi antara frontend (Single Page App) dan backend (Express.js REST API + Model), berikut dokumentasi tangkapan layar pengujian pada tabel **Dosen Resmi TI UMY**:
+
+### 1. Create — Penambahan Data Dosen Baru
+Formulir modal penambahan data master dosen dengan validasi schema Zod pada backend (`POST /api/master`). Data baru langsung ter-render di baris tabel secara dinamis tanpa perlu me-reload halaman.
+
+![Uji Coba Create Dosen](docs/images/create%20dosen.png)
+
+### 2. Update — Pengubahan Data Dosen
+Tombol **Edit** pada setiap baris dosen membuka modal dengan field terisi otomatis. Perubahan data dikirim melalui method `PUT /api/master/dosen/:id` dan atribut baris tabel langsung diperbarui secara instan.
+
+![Uji Coba Edit Dosen](docs/images/edit%20dosen.png)
+
+### 3. Delete — Penghapusan Data Dosen
+Tombol **Hapus** pada baris dosen memicu dialog konfirmasi interaktif. Setelah dikonfirmasi, sistem mengirim request `DELETE /api/master/dosen/:id`, menghapus elemen dari DOM, serta menata ulang nomor urut dan counter total dosen secara dinamis.
+
+![Uji Coba Delete Dosen](docs/images/delete%20dosen.png)
 
 ---
 
@@ -113,6 +135,8 @@ Akses aplikasi di: **`http://localhost:3000`**
 | `POST` | `/api/jadwal/publish` | Validasi zero-clash dan publikasi jadwal ke seluruh civitas | JSON |
 | `GET` | `/api/master` | Data master 21 dosen resmi, 57 MK kurikulum, 20 MK pilihan, 12 ruangan | JSON |
 | `POST` | `/api/master` | Tambah data dosen, mata kuliah, atau ruangan dengan validasi skema Zod | JSON |
+| `PUT` | `/api/master/dosen/:id` | Update data dosen (inisial, nama, keahlian, beban SKS) | JSON |
+| `DELETE` | `/api/master/dosen/:id` | Hapus data dosen dari Data Master Akademik | JSON |
 | `GET` | `/api/constraints` | Konfigurasi Hard & Soft Constraints | JSON |
 | `POST` | `/api/constraints/preferensi` | Simpan preferensi hari bebas mengajar dosen | JSON |
 | `POST` | `/api/constraints/hard` | Aktifkan/nonaktifkan aturan Hard Constraint | JSON |
