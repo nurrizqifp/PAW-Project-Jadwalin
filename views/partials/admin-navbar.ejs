@@ -27,8 +27,8 @@
         <div class="h-4 w-px bg-zinc-200 dark:bg-zinc-800 hidden md:block"></div>
 
         <!-- Dark Mode Toggle Button -->
-        <button onclick="if(window.JadwalinUI) window.JadwalinUI.theme.toggle(); else document.documentElement.classList.toggle('dark');" aria-label="Ganti Mode Tampilan" class="h-8 w-8 rounded-md border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition-colors">
-          <i class="theme-toggle-icon ph ph-moon text-base"></i>
+        <button id="admin-theme-toggle-btn" data-toggle-theme type="button" onclick="window.toggleTheme ? window.toggleTheme() : (window.JadwalinUI ? window.JadwalinUI.theme.toggle() : document.documentElement.classList.toggle('dark'))" aria-label="Ganti Mode Tampilan" class="h-8 w-8 rounded-md border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition-colors">
+          <i id="admin-theme-icon" class="theme-toggle-icon ph ph-moon text-base"></i>
         </button>
 
         <!-- Exit to Public Site -->

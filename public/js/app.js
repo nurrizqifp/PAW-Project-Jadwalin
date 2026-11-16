@@ -35,11 +35,26 @@
       },
 
       updateIcon() {
-        const icons = document.querySelectorAll('.theme-toggle-icon, #navbarThemeIcon, #theme-icon');
         const isDark = document.documentElement.classList.contains('dark');
+        
+        // 1. Update semua button dengan selector theme toggle
+        const toggleButtons = document.querySelectorAll('[data-toggle-theme], #theme-toggle-btn, button[aria-label="Ganti Mode Tampilan"]');
+        toggleButtons.forEach(btn => {
+          const icon = btn.querySelector('i');
+          if (icon) {
+            icon.className = isDark 
+              ? 'theme-toggle-icon ph ph-sun text-base text-amber-400' 
+              : 'theme-toggle-icon ph ph-moon text-base text-zinc-700 dark:text-zinc-300';
+          }
+        });
+
+        // 2. Update standalone icons
+        const icons = document.querySelectorAll('.theme-toggle-icon, #navbarThemeIcon, #theme-icon');
         icons.forEach(icon => {
           if (icon) {
-            icon.className = isDark ? 'ph ph-sun text-base text-amber-400' : 'ph ph-moon text-base text-zinc-700 dark:text-zinc-300';
+            icon.className = isDark 
+              ? 'theme-toggle-icon ph ph-sun text-base text-amber-400' 
+              : 'theme-toggle-icon ph ph-moon text-base text-zinc-700 dark:text-zinc-300';
           }
         });
       }
@@ -267,13 +282,19 @@
     JadwalinUI.theme.init();
     checkUrlFlashMessage();
 
-    // Attach click events to all elements with data-toggle-theme
+    // Attach click events to all elements with data-toggle-theme safely
     document.querySelectorAll('[data-toggle-theme]').forEach(btn => {
-      btn.addEventListener('click', () => JadwalinUI.theme.toggle());
+      // Hapus inline onclick jika ada agar tidak double-fire
+      btn.removeAttribute('onclick');
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        JadwalinUI.theme.toggle();
+      });
     });
   });
 
   // Expose to window
   window.JadwalinUI = JadwalinUI;
+  window.toggleTheme = () => JadwalinUI.theme.toggle();
 
 })(window, document);

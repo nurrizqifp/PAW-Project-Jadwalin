@@ -71,15 +71,36 @@ code, kbd, samp, pre, .font-mono {
   min-width: 44px;
 }
 
+/* ========================================================
+ * PRECISION FORM CONTROLS & SELECT OVERRIDES (UI-KIT SPEC)
+ * ======================================================== */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem 1rem;
+  padding-right: 2.25rem !important;
+  cursor: pointer;
+}
+
+.dark select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
 /* Clean Select & Option Overrides for Dark Mode */
 select option {
   background-color: #ffffff;
   color: #18181b;
+  padding: 8px 12px;
 }
 
 .dark select option {
   background-color: #18181b;
   color: #fafafa;
+  padding: 8px 12px;
 }
 
 /* Modal Backdrop & Dialog (Interactions & Visibility) */
@@ -198,33 +219,70 @@ select option {
 }
 
 /* ========================================================
- * ANIMATED BRAND GRADIENT MESH (NAVY BLUE & GOLD AMBER)
+ * COSMIC AURORA HERO (MATCHING USER REFERENCE)
+ * Emerald Green Glow (Left) & Violet Purple Glow (Right)
+ * Base: Pitch Black (#000000)
  * ======================================================== */
-.hero-animated-mesh {
-  background: radial-gradient(at 15% 25%, rgba(12, 43, 94, 0.6) 0px, transparent 55%),
-              radial-gradient(at 85% 15%, rgba(245, 158, 11, 0.18) 0px, transparent 50%),
-              radial-gradient(at 50% 85%, rgba(30, 64, 175, 0.3) 0px, transparent 60%),
-              radial-gradient(at 80% 80%, rgba(251, 191, 36, 0.1) 0px, transparent 50%),
-              #070b13;
-  background-size: 180% 180%;
-  animation: mesh-aurora 14s ease-in-out infinite alternate;
+.hero-animated-mesh,
+.hero-cosmic-aurora {
+  position: relative;
+  background-color: #000000;
+  background-image: 
+    radial-gradient(at 0% 25%, rgba(34, 197, 94, 0.42) 0px, transparent 55%),
+    radial-gradient(at 100% 10%, rgba(139, 92, 246, 0.46) 0px, transparent 55%),
+    radial-gradient(at 50% 0%, rgba(99, 102, 241, 0.20) 0px, transparent 45%),
+    radial-gradient(at 0% 65%, rgba(16, 185, 129, 0.22) 0px, transparent 50%);
+  background-repeat: no-repeat;
+  overflow: hidden;
 }
 
-@keyframes mesh-aurora {
-  0% {
-    background-position: 0% 10%;
-  }
-  50% {
-    background-position: 100% 90%;
-  }
-  100% {
-    background-position: 20% 100%;
-  }
+.aurora-blob-green {
+  position: absolute;
+  top: -15%;
+  left: -15%;
+  width: 58vw;
+  height: 58vw;
+  max-width: 680px;
+  max-height: 680px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.55) 0%, rgba(16, 185, 129, 0.32) 40%, transparent 70%);
+  filter: blur(80px);
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 1;
+  animation: aurora-float-green 14s ease-in-out infinite alternate;
 }
 
-/* Reduced Motion for Accessibility */
+.aurora-blob-purple {
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 52vw;
+  height: 52vw;
+  max-width: 620px;
+  max-height: 620px;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.58) 0%, rgba(99, 102, 241, 0.32) 45%, transparent 70%);
+  filter: blur(85px);
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 1;
+  animation: aurora-float-purple 16s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-float-green {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.9; }
+  50% { transform: translate(5%, 7%) scale(1.08); opacity: 1; }
+  100% { transform: translate(-3%, 4%) scale(0.96); opacity: 0.85; }
+}
+
+@keyframes aurora-float-purple {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.9; }
+  50% { transform: translate(-6%, 5%) scale(1.06); opacity: 1; }
+  100% { transform: translate(4%, -3%) scale(0.95); opacity: 0.85; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hero-animated-mesh {
+  .aurora-blob-green,
+  .aurora-blob-purple {
     animation: none;
   }
 }
