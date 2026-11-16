@@ -46,16 +46,26 @@
             else if (roleUser === 'dosen') dashboardLink = '/dosen/dashboard';
             else if (roleUser === 'mahasiswa') dashboardLink = '/mahasiswa/dashboard';
           }
+          const targetRole = (typeof roleDibutuhkan !== 'undefined' && Array.isArray(roleDibutuhkan) && roleDibutuhkan.length > 0) ? roleDibutuhkan[0] : null;
         %>
+
+        <% if (targetRole) { %>
+          <a href="?asRole=<%= targetRole %>"
+            class="w-full sm:w-auto inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg bg-amber-500 hover:bg-amber-600 px-4 py-2 text-xs font-semibold text-zinc-950 shadow-xs transition-colors">
+            <i class="ph ph-swap text-sm"></i>
+            <span>Beralih ke Peran <%= targetRole.toUpperCase() %> (Demo)</span>
+          </a>
+        <% } %>
+
         <a href="<%= dashboardLink %>"
           class="w-full sm:w-auto inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
           <i class="ph ph-squares-four text-amber-400 text-sm"></i>
-          <span>Buka Dashboard Saya</span>
+          <span>Dashboard Saya</span>
         </a>
         <a href="/"
           class="w-full sm:w-auto inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 shadow-xs transition-colors">
           <i class="ph ph-house text-zinc-500"></i>
-          <span>Beranda Guest</span>
+          <span>Beranda</span>
         </a>
       </div>
     </div>
