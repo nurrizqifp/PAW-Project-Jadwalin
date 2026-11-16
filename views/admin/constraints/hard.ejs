@@ -1,0 +1,210 @@
+<%- include('../../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Hard Constraints — Jadwalin' }) %>
+
+<div class="flex-1 flex min-h-screen">
+  <%- include('../../partials/admin-sidebar', { activeMenu: 'constraints' }) %>
+
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <%- include('../../partials/admin-navbar') %>
+
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
+      <div class="max-w-6xl mx-auto space-y-6">
+
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 pb-5 dark:border-zinc-800">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="rounded bg-rose-100 px-2 py-0.5 font-mono text-[10px] font-bold text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                ZERO TOLERANCE
+              </span>
+              <span class="text-xs text-zinc-500 font-mono">3 Aturan Matematis Solver</span>
+            </div>
+            <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-1">
+              Hard Constraints (Aturan Wajib)
+            </h1>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">
+              Batasan mutlak yang tidak boleh dilanggar. Klik "Setel Parameter" untuk menyesuaikan rentang jam dan cakupan gedung.
+            </p>
+          </div>
+
+          <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800">
+            <a href="/admin/constraints" class="rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100">
+              Hard Constraints
+            </a>
+            <a href="/admin/constraints/soft" class="rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors">
+              Soft Constraints
+            </a>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <!-- HC-01 -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">HC-01: Satu Dosen Satu Waktu</span>
+                <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Wajib Aktif</span>
+              </div>
+              <p class="text-xs text-zinc-600 dark:text-zinc-400">
+                Seorang dosen tidak dapat mengajar lebih dari satu kelas pada slot waktu dan hari yang bersamaan.
+              </p>
+              <p class="font-mono text-[11px] text-zinc-400">Parameter: Toleransi Bentrok = 0% · Cakupan: 21 Dosen</p>
+            </div>
+            <button type="button" onclick="openConstraintDrawer('HC-01: Satu Dosen Satu Waktu', 'Seorang dosen tidak dapat mengajar lebih dari satu mata kuliah/kelas pada slot waktu dan hari yang bersamaan.', '07:00 - 17:20', 'Semua Gedung', true)"
+              class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-3.5 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-200 shrink-0 transition-colors shadow-xs">
+              <i class="ph ph-sliders"></i>
+              <span>Setel Parameter</span>
+            </button>
+          </div>
+
+          <!-- HC-02 -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">HC-02: Lab Matching & Satu Ruang Satu Sesi</span>
+                <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Wajib Aktif</span>
+              </div>
+              <p class="text-xs text-zinc-600 dark:text-zinc-400">
+                Satu ruangan tidak boleh digunakan lebih dari 1 sesi. Matkul bertipe Praktikum wajib ditempatkan di 4 Lab Komputer F4.
+              </p>
+              <p class="font-mono text-[11px] text-zinc-400">Parameter: 4 Lab Komputer (F4) + 8 Kelas Teori (F4 & F6)</p>
+            </div>
+            <button type="button" onclick="openConstraintDrawer('HC-02: Lab Matching & Satu Ruang Satu Sesi', 'Satu ruangan tidak boleh digunakan oleh lebih dari satu sesi perkuliahan pada slot waktu yang bersamaan.', '07:00 - 17:20', 'Gedung F4 & F6', true)"
+              class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-3.5 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-200 shrink-0 transition-colors shadow-xs">
+              <i class="ph ph-sliders"></i>
+              <span>Setel Parameter</span>
+            </button>
+          </div>
+
+          <!-- HC-03 -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">HC-03: Jeda Ibadah Sholat Dhuhur</span>
+                <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Wajib Aktif</span>
+              </div>
+              <p class="text-xs text-zinc-600 dark:text-zinc-400">
+                Tidak boleh ada satupun sesi perkuliahan atau praktikum yang berlangsung pada pukul <strong>11:30 – 12:10 WIB</strong>.
+              </p>
+              <p class="font-mono text-[11px] text-amber-600 dark:text-amber-400">Parameter Khusus: Jam Mulai = 11:30 WIB · Jam Selesai = 12:10 WIB</p>
+            </div>
+            <button type="button" onclick="openConstraintDrawer('HC-03: Jeda Ibadah Sholat Dhuhur', 'Larangan mutlak seluruh sesi perkuliahan saat masuk jam sholat Dhuhur.', '11:30 - 12:10', 'Seluruh Gedung FT UMY', true)"
+              class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-3.5 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-200 shrink-0 transition-colors shadow-xs">
+              <i class="ph ph-sliders"></i>
+              <span>Setel Parameter</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <%- include('../../partials/admin-footer') %>
+  </div>
+</div>
+
+<!-- Drawer Slide-over Pengaturan Parameter Constraint -->
+<div id="drawer-constraint-overlay"
+  class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs transition-opacity duration-150 opacity-0 pointer-events-none">
+  <div id="drawer-constraint-panel"
+    class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl border-l border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800 flex flex-col transform translate-x-full transition-transform duration-200 ease-in-out">
+
+    <div class="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">
+      <div>
+        <h3 id="drawer-title" class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">Setel Parameter Constraint</h3>
+        <p class="text-xs text-zinc-500">Konfigurasi batasan solver jadwal</p>
+      </div>
+      <button onclick="closeConstraintDrawer()" type="button"
+        class="h-8 w-8 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 flex items-center justify-center">
+        <i class="ph ph-x text-base"></i>
+      </button>
+    </div>
+
+    <form onsubmit="handleSaveConstraint(event)" class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
+      <div class="space-y-1">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama Aturan</label>
+        <input id="drawer-name" type="text" readonly
+          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 font-semibold">
+      </div>
+
+      <div class="space-y-1">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Deskripsi Aturan</label>
+        <textarea id="drawer-desc" rows="3" readonly
+          class="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"></textarea>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div class="space-y-1">
+          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Rentang Waktu</label>
+          <input id="drawer-time" type="text" value="11:30 - 12:10"
+            class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+        </div>
+        <div class="space-y-1">
+          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Cakupan Gedung</label>
+          <input id="drawer-scope" type="text" value="F4 & F6"
+            class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between p-3.5 rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800/40">
+        <div class="space-y-0.5">
+          <span class="font-semibold text-zinc-900 dark:text-zinc-100">Status Penegakan Solver</span>
+          <p class="text-[11px] text-zinc-500">Kunci aturan menjadi zero tolerance</p>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input id="drawer-active" type="checkbox" checked class="sr-only peer">
+          <div class="w-11 h-6 bg-zinc-200 peer-focus:outline-none rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-zinc-600 peer-checked:bg-[#0c2b5e]"></div>
+        </label>
+      </div>
+
+      <div class="pt-4 flex items-center justify-end gap-2 border-t border-zinc-100 dark:border-zinc-800">
+        <button type="button" onclick="closeConstraintDrawer()"
+          class="inline-flex min-h-[36px] items-center rounded-lg border border-zinc-200 px-3.5 font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800">
+          Batal
+        </button>
+        <button type="submit"
+          class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 font-semibold text-white shadow-xs">
+          <i class="ph ph-check text-amber-400"></i>
+          <span>Simpan Parameter</span>
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<script>
+  function openConstraintDrawer(name, desc, time, scope, isActive) {
+    const overlay = document.getElementById('drawer-constraint-overlay');
+    const panel = document.getElementById('drawer-constraint-panel');
+    const nameEl = document.getElementById('drawer-name');
+    const descEl = document.getElementById('drawer-desc');
+    const timeEl = document.getElementById('drawer-time');
+    const scopeEl = document.getElementById('drawer-scope');
+    const activeEl = document.getElementById('drawer-active');
+
+    if (nameEl) nameEl.value = name;
+    if (descEl) descEl.value = desc;
+    if (timeEl) timeEl.value = time;
+    if (scopeEl) scopeEl.value = scope;
+    if (activeEl) activeEl.checked = isActive;
+
+    if (overlay && panel) {
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      panel.classList.remove('translate-x-full');
+    }
+  }
+
+  function closeConstraintDrawer() {
+    const overlay = document.getElementById('drawer-constraint-overlay');
+    const panel = document.getElementById('drawer-constraint-panel');
+    if (overlay && panel) {
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      panel.classList.add('translate-x-full');
+    }
+  }
+
+  function handleSaveConstraint(e) {
+    e.preventDefault();
+    closeConstraintDrawer();
+    window.showConfirmDialog('Parameter Berhasil Diperbarui', 'Parameter constraint solver telah diperbarui dengan aman.', null, 'Selesai', true);
+  }
+</script>

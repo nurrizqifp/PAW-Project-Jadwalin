@@ -1,0 +1,233 @@
+<!-- Modal Dialogs Universal untuk Panel Admin -->
+
+<!-- 1. Modal Universal Edit Sesi Jadwal Cepat -->
+<div id="admin-edit-modal-overlay"
+  class="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center p-4 transition-opacity duration-150 opacity-0 pointer-events-none">
+  <div id="admin-edit-modal-panel"
+    class="w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-900 transform scale-95 transition-transform duration-150 space-y-5">
+
+    <div class="flex items-center justify-between border-b border-zinc-100 pb-3.5 dark:border-zinc-800">
+      <div>
+        <h3 id="admin-modal-title" class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-50">Edit Sesi Jadwal</h3>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400">Sesuaikan waktu, dosen, dan ruangan tanpa bentrok</p>
+      </div>
+      <button onclick="closeEditModal()" type="button" aria-label="Tutup Dialog"
+        class="flex h-8 w-8 items-center justify-center rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400 transition-colors">
+        <i class="ph ph-x text-base"></i>
+      </button>
+    </div>
+
+    <form id="admin-edit-slot-form" onsubmit="handleSaveSlot(event)" class="space-y-4">
+      <div class="space-y-1">
+        <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Mata Kuliah & Kelas</label>
+        <input id="admin-modal-matkul-input" type="text" readonly
+          class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none">
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="space-y-1">
+          <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Hari Perkuliahan</label>
+          <select id="admin-modal-hari-select"
+            class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+            <option value="Senin">Senin</option>
+            <option value="Selasa">Selasa</option>
+            <option value="Rabu">Rabu</option>
+            <option value="Kamis">Kamis</option>
+            <option value="Jumat">Jumat</option>
+            <option value="Sabtu">Sabtu</option>
+          </select>
+        </div>
+        <div class="space-y-1">
+          <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Jam Sesi Mulai</label>
+          <select id="admin-modal-jam-select"
+            class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+            <option value="07:00">07:00 - 08:40</option>
+            <option value="08:50">08:50 - 11:30</option>
+            <option value="12:10">12:10 - 14:40</option>
+            <option value="14:50">14:50 - 17:20</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div class="space-y-1">
+          <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Ruangan / Lab</label>
+          <select id="admin-modal-ruang-select"
+            class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+            <option value="F4.LAB1">F4.LAB1 (Lab Komputer 1)</option>
+            <option value="F4.LAB2">F4.LAB2 (Lab Komputer 2)</option>
+            <option value="F4.001">F4.001 (Reguler)</option>
+            <option value="F4.002">F4.002 (Reguler)</option>
+            <option value="F4.003">F4.003 (Reguler)</option>
+            <option value="F6.001">F6.001 (RKB Teori)</option>
+            <option value="F6.102">F6.102 (RKB Teori)</option>
+          </select>
+        </div>
+        <div class="space-y-1">
+          <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Dosen Pengampu</label>
+          <input id="admin-modal-dosen-input" type="text"
+            class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+        <button onclick="closeEditModal()" type="button"
+          class="inline-flex min-h-[38px] items-center rounded-lg border border-zinc-200 px-4 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+          Batal
+        </button>
+        <button type="submit"
+          class="inline-flex min-h-[38px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white shadow-sm transition-colors">
+          <i class="ph ph-floppy-disk text-amber-400"></i>
+          <span>Simpan Perubahan</span>
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<!-- 2. Modal Konfirmasi Standar Sistem (Pengganti alert() browser) -->
+<div id="admin-confirm-modal-overlay"
+  class="fixed inset-0 z-[110] bg-black/50 flex items-center justify-center p-4 transition-opacity duration-150 opacity-0 pointer-events-none">
+  <div id="admin-confirm-modal-panel"
+    class="w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-900 transform scale-95 transition-transform duration-150 space-y-4">
+
+    <div class="flex items-start gap-3.5">
+      <div id="confirm-icon-box" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300">
+        <i id="confirm-icon" class="ph ph-info text-xl"></i>
+      </div>
+      <div class="space-y-1">
+        <h4 id="confirm-modal-title" class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">
+          Konfirmasi Tindakan
+        </h4>
+        <p id="confirm-modal-desc" class="text-xs text-zinc-500 dark:text-zinc-400">
+          Apakah Anda yakin ingin melanjutkan tindakan ini?
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+      <button id="confirm-cancel-btn" type="button"
+        class="inline-flex min-h-[36px] items-center rounded-lg border border-zinc-200 px-3.5 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+        Batal
+      </button>
+      <button id="confirm-action-btn" type="button"
+        class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white shadow-sm transition-colors">
+        <i class="ph ph-check text-amber-400"></i>
+        <span id="confirm-action-text">Ya, Lanjutkan</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Script Global Modal Handlers (Accessible dari seluruh halaman)
+  window.openEditModal = function(matkul, dosen, ruang, hari, jam) {
+    const editOverlay = document.getElementById('admin-edit-modal-overlay');
+    const editPanel = document.getElementById('admin-edit-modal-panel');
+    const matkulInput = document.getElementById('admin-modal-matkul-input');
+    const dosenInput = document.getElementById('admin-modal-dosen-input');
+    const hariSelect = document.getElementById('admin-modal-hari-select');
+    const jamSelect = document.getElementById('admin-modal-jam-select');
+    const ruangSelect = document.getElementById('admin-modal-ruang-select');
+
+    if (matkulInput) matkulInput.value = matkul || '';
+    if (dosenInput) dosenInput.value = dosen || '';
+    if (hariSelect && hari) hariSelect.value = hari;
+    if (jamSelect && jam) jamSelect.value = jam.substring(0, 5);
+    if (ruangSelect && ruang) ruangSelect.value = ruang;
+
+    if (editOverlay && editPanel) {
+      editOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      editPanel.classList.remove('scale-95');
+      editPanel.classList.add('scale-100');
+    }
+  };
+
+  window.closeEditModal = function() {
+    const editOverlay = document.getElementById('admin-edit-modal-overlay');
+    const editPanel = document.getElementById('admin-edit-modal-panel');
+    if (editOverlay && editPanel) {
+      editOverlay.classList.add('opacity-0', 'pointer-events-none');
+      editPanel.classList.remove('scale-100');
+      editPanel.classList.add('scale-95');
+    }
+  };
+
+  window.handleSaveSlot = function(e) {
+    e.preventDefault();
+    const matkulInput = document.getElementById('admin-modal-matkul-input');
+    const hariSelect = document.getElementById('admin-modal-hari-select');
+    const jamSelect = document.getElementById('admin-modal-jam-select');
+    const ruangSelect = document.getElementById('admin-modal-ruang-select');
+
+    const matkul = matkulInput ? matkulInput.value : '';
+    const hari = hariSelect ? hariSelect.value : '';
+    const jam = jamSelect ? jamSelect.value : '';
+    const ruang = ruangSelect ? ruangSelect.value : '';
+
+    window.closeEditModal();
+    window.showConfirmDialog(
+      'Slot Berhasil Diperbarui',
+      `Jadwal ${matkul} telah dipindahkan ke hari ${hari} pukul ${jam} di ruang ${ruang}.`,
+      null,
+      'Selesai',
+      true
+    );
+  };
+
+  // Dialog Konfirmasi Standar Sistem
+  window.showConfirmDialog = function(title, desc, onConfirm, actionText = 'Lanjutkan', isAlertOnly = false) {
+    const overlay = document.getElementById('admin-confirm-modal-overlay');
+    const panel = document.getElementById('admin-confirm-modal-panel');
+    const titleEl = document.getElementById('confirm-modal-title');
+    const descEl = document.getElementById('confirm-modal-desc');
+    const actionBtn = document.getElementById('confirm-action-btn');
+    const cancelBtn = document.getElementById('confirm-cancel-btn');
+    const actionTextEl = document.getElementById('confirm-action-text');
+
+    if (!overlay || !panel) return;
+
+    if (titleEl) titleEl.textContent = title;
+    if (descEl) descEl.textContent = desc;
+    if (actionTextEl) actionTextEl.textContent = actionText;
+
+    if (isAlertOnly && cancelBtn) {
+      cancelBtn.style.display = 'none';
+    } else if (cancelBtn) {
+      cancelBtn.style.display = '';
+    }
+
+    overlay.classList.remove('opacity-0', 'pointer-events-none');
+    panel.classList.remove('scale-95');
+    panel.classList.add('scale-100');
+
+    const handleAction = () => {
+      closeConfirm();
+      if (typeof onConfirm === 'function') onConfirm();
+    };
+
+    const closeConfirm = () => {
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      panel.classList.remove('scale-100');
+      panel.classList.add('scale-95');
+      actionBtn.removeEventListener('click', handleAction);
+      cancelBtn.removeEventListener('click', closeConfirm);
+    };
+
+    actionBtn.onclick = handleAction;
+    cancelBtn.onclick = closeConfirm;
+  };
+
+  // Global Escape Key Listener
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      window.closeEditModal();
+      const confirmOverlay = document.getElementById('admin-confirm-modal-overlay');
+      if (confirmOverlay) {
+        confirmOverlay.classList.add('opacity-0', 'pointer-events-none');
+      }
+    }
+  });
+</script>

@@ -1,0 +1,376 @@
+/**
+ * Jadwalin Design System CSS
+ * Precision Academic & Monochrome Interface (Zinc Palette)
+ * Compliant with Antislop Design Standard (UI, Human, Code, Layout Mobile)
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+/* Typography Variables */
+:root {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Bricolage Grotesque', sans-serif;
+  --font-mono: 'Google Sans Code', 'JetBrains Mono', monospace;
+
+  /* Animation Easing */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Base Document Setup */
+html {
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: var(--font-heading);
+  letter-spacing: -0.025em;
+}
+
+code, kbd, samp, pre, .font-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "zero" 1;
+}
+
+/* Antislop Accessible Focus Styles (WCAG 2.4.7) */
+:focus-visible {
+  outline: 2px solid #18181b;
+  outline-offset: 2px;
+}
+
+.dark :focus-visible {
+  outline: 2px solid #f4f4f5;
+  outline-offset: 2px;
+}
+
+/* Minimalist Clean Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+}
+
+/* Mobile Touch Target Affordance (WCAG 2.5.5 >= 44x44px) */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* ========================================================
+ * PRECISION FORM CONTROLS & SELECT OVERRIDES (UI-KIT SPEC)
+ * ======================================================== */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem 1rem;
+  padding-right: 2.25rem !important;
+  cursor: pointer;
+}
+
+.dark select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+/* Clean Select & Option Overrides for Dark Mode */
+select option {
+  background-color: #ffffff;
+  color: #18181b;
+  padding: 8px 12px;
+}
+
+.dark select option {
+  background-color: #18181b;
+  color: #fafafa;
+  padding: 8px 12px;
+}
+
+/* Modal Backdrop & Dialog (Interactions & Visibility) */
+.modal-backdrop {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 200ms var(--ease-smooth), visibility 200ms;
+}
+
+.modal-backdrop[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.modal-panel {
+  opacity: 0;
+  transform: scale(0.96) translateY(4px);
+  transform-origin: center;
+  transition: transform 200ms var(--ease-smooth), opacity 200ms var(--ease-smooth);
+}
+
+.modal-backdrop[data-open="true"] .modal-panel {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* Button Pressable Feedback */
+.btn-press {
+  transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms ease, color 150ms ease, opacity 150ms ease;
+}
+
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Scrollbar Utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* App Toast Legacy Compatibility */
+.app-toast {
+  opacity: 0;
+  transform: translateY(12px) scale(0.97);
+  pointer-events: none;
+  transition: transform 220ms var(--ease-smooth), opacity 220ms var(--ease-smooth);
+}
+
+.app-toast[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Utility Animations */
+.animate-fade-in {
+  animation: fadeIn 0.2s var(--ease-smooth) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================================
+ * OPIS 3: SKELETON SHIMMER & EMPTY STATE (ANTISLOP UI)
+ * ======================================================== */
+.skeleton {
+  background: linear-gradient(90deg, #f4f4f5 25%, #e4e4e7 50%, #f4f4f5 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite linear;
+  border-radius: 0.375rem;
+}
+
+.dark .skeleton {
+  background: linear-gradient(90deg, #18181b 25%, #27272a 50%, #18181b 75%);
+  background-size: 200% 100%;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  border-radius: 0.75rem;
+  border: 1px dashed #d4d4d8;
+  background-color: #fafafa;
+}
+
+.dark .empty-state {
+  border-color: #3f3f46;
+  background-color: #18181b;
+}
+
+/* Subtle Technical Radial Surface (Antislop Liveliness) */
+.hero-glow-surface {
+  background-image: radial-gradient(circle at 50% 0%, rgba(24, 24, 27, 0.04) 0%, transparent 70%);
+}
+
+.dark .hero-glow-surface {
+  background-image: radial-gradient(circle at 50% 0%, rgba(250, 250, 250, 0.04) 0%, transparent 70%);
+}
+
+/* ========================================================
+ * BRAND AURORA HERO (NAVY BLUE & GOLD AMBER)
+ * Deep Navy Blue Glow (Left) & Amber Gold Glow (Right)
+ * Animated Gradient Mesh Flow (Pitch Black Base)
+ * ======================================================== */
+.hero-animated-mesh,
+.hero-cosmic-aurora {
+  position: relative;
+  background-color: #040711;
+  background-image: 
+    radial-gradient(at 0% 25%, rgba(12, 43, 94, 0.70) 0px, transparent 55%),
+    radial-gradient(at 100% 15%, rgba(245, 158, 11, 0.40) 0px, transparent 55%),
+    radial-gradient(at 50% 0%, rgba(37, 99, 235, 0.25) 0px, transparent 45%),
+    radial-gradient(at 85% 85%, rgba(217, 119, 6, 0.22) 0px, transparent 45%);
+  background-size: 150% 150%;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  animation: aurora-mesh-flow 16s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-mesh-flow {
+  0% {
+    background-position: 0% 15%;
+  }
+  50% {
+    background-position: 100% 85%;
+  }
+  100% {
+    background-position: 25% 100%;
+  }
+}
+
+.aurora-blob-blue {
+  position: absolute;
+  top: -15%;
+  left: -12%;
+  width: 58vw;
+  height: 58vw;
+  max-width: 680px;
+  max-height: 680px;
+  background: radial-gradient(circle, rgba(29, 78, 216, 0.52) 0%, rgba(12, 43, 94, 0.38) 45%, transparent 70%);
+  filter: blur(80px);
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 1;
+  animation: aurora-float-blue 14s ease-in-out infinite alternate;
+}
+
+.aurora-blob-yellow {
+  position: absolute;
+  top: -18%;
+  right: -10%;
+  width: 50vw;
+  height: 50vw;
+  max-width: 600px;
+  max-height: 600px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.48) 0%, rgba(217, 119, 6, 0.28) 40%, transparent 70%);
+  filter: blur(85px);
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 1;
+  animation: aurora-float-yellow 16s ease-in-out infinite alternate;
+}
+
+@keyframes aurora-float-blue {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.9; }
+  50% { transform: translate(6%, 7%) scale(1.08); opacity: 1; }
+  100% { transform: translate(-4%, 4%) scale(0.95); opacity: 0.85; }
+}
+
+@keyframes aurora-float-yellow {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.9; }
+  50% { transform: translate(-6%, 6%) scale(1.08); opacity: 1; }
+  100% { transform: translate(4%, -3%) scale(0.95); opacity: 0.85; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-animated-mesh,
+  .hero-cosmic-aurora,
+  .aurora-blob-blue,
+  .aurora-blob-yellow {
+    animation: none;
+  }
+}
+
+/* ========================================================
+ * OPIS 1: PRINT STYLES FOR OFFICIAL TIMETABLES (A4 / PDF)
+ * ======================================================== */
+@media print {
+  header, footer, aside, nav, button, .no-print, #jadwalin-toast-container, .modal-backdrop {
+    display: none !important;
+  }
+  
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 11pt !important;
+  }
+  
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .print-header {
+    display: block !important;
+    text-align: center;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  .print-header h1 {
+    font-size: 14pt !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .print-header p {
+    font-size: 9pt !important;
+    margin: 3px 0 0 0;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    page-break-inside: auto;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  th, td {
+    border: 1px solid #18181b !important;
+    padding: 6px 8px !important;
+    color: #000000 !important;
+    font-size: 9pt !important;
+  }
+
+  th {
+    background-color: #f4f4f5 !important;
+    font-weight: 700 !important;
+  }
+}
+
+.print-header {
+  display: none;
+}
