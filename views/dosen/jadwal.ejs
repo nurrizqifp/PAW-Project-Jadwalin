@@ -1,0 +1,40 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+    <h2 class="text-3xl font-heading font-bold text-app-dark mb-6">Jadwal Mengajar</h2>
+
+    <div class="bg-app-card border border-app-border rounded-xl shadow-mac overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-app-surface border-b border-app-border">
+                    <tr>
+                        <th class="p-4 text-sm font-semibold text-app-muted uppercase">Hari</th>
+                        <th class="p-4 text-sm font-semibold text-app-muted uppercase">Jam</th>
+                        <th class="p-4 text-sm font-semibold text-app-muted uppercase">Mata Kuliah</th>
+                        <th class="p-4 text-sm font-semibold text-app-muted uppercase">Ruangan</th>
+                        <th class="p-4 text-sm font-semibold text-app-muted uppercase">Kelas</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-app-border text-app-dark">
+                    <tr class="hover:bg-app-surface transition-colors">
+                        <td class="p-4">Senin</td>
+                        <td class="p-4 font-mono text-sm">08:00 - 10:30</td>
+                        <td class="p-4 font-semibold">Pemrograman Web Lanjut</td>
+                        <td class="p-4">Lab 3</td>
+                        <td class="p-4"><span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">A</span></td>
+                    </tr>
+                    <tr class="hover:bg-app-surface transition-colors">
+                        <td class="p-4">Rabu</td>
+                        <td class="p-4 font-mono text-sm">13:00 - 15:30</td>
+                        <td class="p-4 font-semibold">Struktur Data</td>
+                        <td class="p-4">Teori 1</td>
+                        <td class="p-4"><span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded">B</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

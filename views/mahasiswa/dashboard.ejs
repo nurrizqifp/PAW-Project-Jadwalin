@@ -1,0 +1,63 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+    <!-- Banner Sesi Aktif -->
+    <div class="bg-app-card border border-app-border rounded-xl p-6 shadow-mac flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <div>
+            <span class="bg-red-100 text-red-800 text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wide mb-2 inline-block">Sedang Berlangsung</span>
+            <h2 class="text-2xl font-heading font-bold text-app-dark">Pemrograman Web Lanjut</h2>
+            <p class="text-app-muted mt-1 flex items-center gap-1"><i class="ph ph-map-pin"></i> Ruang Lab 3</p>
+        </div>
+        <div class="bg-app-surface rounded-xl px-8 py-4 text-center border border-app-border min-w-[200px]">
+            <h3 class="text-4xl font-mono font-bold text-app-dark tabular-nums tracking-tight" id="countdown-timer">00:00:00</h3>
+            <p class="text-xs text-app-muted uppercase tracking-widest mt-2 font-semibold">Sisa Waktu</p>
+        </div>
+    </div>
+
+    <!-- Kartu Jadwal -->
+    <div class="flex justify-between items-end mb-4">
+        <h4 class="text-xl font-heading font-bold text-app-dark">Jadwal Hari Ini</h4>
+        <a href="/mahasiswa/jadwal" class="text-sm font-semibold text-app-muted hover:text-app-dark">Lihat Semua <i class="ph ph-arrow-right"></i></a>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="jadwal-container">
+        <!-- Dummy Data -->
+        <div class="bg-app-card border border-app-border rounded-xl p-5 shadow-mac border-l-4 border-l-blue-500 hover:shadow-mac-lg transition-shadow">
+            <h6 class="text-app-muted text-sm mb-2 font-mono">08:00 - 10:30</h6>
+            <h5 class="text-lg font-bold font-heading text-app-dark mb-3">Pemrograman Web Lanjut</h5>
+            <p class="text-sm text-app-muted flex items-center gap-2 mb-1"><i class="ph ph-map-pin"></i> Lab 3</p>
+            <p class="text-sm text-app-muted flex items-center gap-2"><i class="ph ph-user"></i> Bima Eka</p>
+        </div>
+        <div class="bg-app-card border border-app-border rounded-xl p-5 shadow-mac border-l-4 border-l-green-500 hover:shadow-mac-lg transition-shadow">
+            <h6 class="text-app-muted text-sm mb-2 font-mono">13:00 - 15:30</h6>
+            <h5 class="text-lg font-bold font-heading text-app-dark mb-3">Kecerdasan Buatan</h5>
+            <p class="text-sm text-app-muted flex items-center gap-2 mb-1"><i class="ph ph-map-pin"></i> Teori 2</p>
+            <p class="text-sm text-app-muted flex items-center gap-2"><i class="ph ph-user"></i> Nur Rizqi</p>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Logika Countdown Timer
+    const endTime = new Date().getTime() + (2 * 60 * 60 * 1000); 
+    const timerInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = endTime - now;
+
+        if (distance < 0) {
+            clearInterval(timerInterval);
+            document.getElementById("countdown-timer").innerHTML = "SELESAI";
+            return;
+        }
+
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown-timer").innerHTML = 
+            `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }, 1000);
+</script>
+
+<%- include('../partials/footer') %>
