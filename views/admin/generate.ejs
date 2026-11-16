@@ -30,13 +30,62 @@
           </button>
         </div>
 
-        <!-- Parameter Card -->
-        <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
-          <h2 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-50 border-b border-zinc-100 pb-3 dark:border-zinc-800">
-            Parameter Eksekusi Solver
-          </h2>
+        <!-- Preset Mode Solver & Parameter Card -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-zinc-100 pb-3 dark:border-zinc-800">
+            <div>
+              <h2 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-50">
+                Preset Mode Solver
+              </h2>
+              <p class="text-[11px] text-zinc-500">Pilih strategi optimasi jadwal sesuai kebutuhan periode penyusunan.</p>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono bg-blue-50 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300 font-semibold border border-blue-200 dark:border-blue-900">
+              <i class="ph ph-sliders"></i>
+              <span>Preset: Seimbang</span>
+            </span>
+          </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+          <!-- Pilihan Preset 3 Mode (Human-Centric) -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <button type="button" onclick="applyPreset('cepat')" id="preset-btn-cepat"
+              class="preset-card text-left p-4 rounded-xl border border-zinc-200 hover:border-zinc-400 bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-900/50 hover:bg-white dark:hover:bg-zinc-800 transition-all space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                  <i class="ph ph-lightning text-base"></i>
+                </span>
+                <span class="text-[10px] font-mono text-zinc-400">&lt; 10 Detik</span>
+              </div>
+              <h3 class="font-heading text-xs font-bold text-zinc-900 dark:text-zinc-100">Mode Cepat (Draft)</h3>
+              <p class="text-[11px] text-zinc-500 leading-relaxed">Penyusunan cepat kerangka awal sesi kuliah dan ruangan tanpa iterasi mendalam.</p>
+            </button>
+
+            <button type="button" onclick="applyPreset('seimbang')" id="preset-btn-seimbang"
+              class="preset-card text-left p-4 rounded-xl border-2 border-[#0c2b5e] bg-blue-50/40 dark:border-amber-400 dark:bg-amber-950/20 transition-all space-y-1.5 shadow-xs">
+              <div class="flex items-center justify-between">
+                <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#0c2b5e] text-white dark:bg-amber-400 dark:text-zinc-950">
+                  <i class="ph ph-scales text-base"></i>
+                </span>
+                <span class="text-[10px] font-mono text-[#0c2b5e] dark:text-amber-400 font-bold">Rekomendasi</span>
+              </div>
+              <h3 class="font-heading text-xs font-bold text-zinc-900 dark:text-zinc-100">Mode Seimbang (Standar)</h3>
+              <p class="text-[11px] text-zinc-600 dark:text-zinc-400 leading-relaxed">Keseimbangan optimal antara nol tabrakan ruang dan kepuasan preferensi hari dosen.</p>
+            </button>
+
+            <button type="button" onclick="applyPreset('maksimal')" id="preset-btn-maksimal"
+              class="preset-card text-left p-4 rounded-xl border border-zinc-200 hover:border-zinc-400 bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-900/50 hover:bg-white dark:hover:bg-zinc-800 transition-all space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                  <i class="ph ph-target text-base"></i>
+                </span>
+                <span class="text-[10px] font-mono text-zinc-400">&gt; 30 Detik</span>
+              </div>
+              <h3 class="font-heading text-xs font-bold text-zinc-900 dark:text-zinc-100">Mode Maksimal (Teliti)</h3>
+              <p class="text-[11px] text-zinc-500 leading-relaxed">Iterasi penuh heuristic repair hingga seluruh soft constraint dan gap jam kuliah terminimalisir.</p>
+            </button>
+          </div>
+
+          <!-- Parameter Teknis Lanjutan -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs pt-2 border-t border-zinc-100 dark:border-zinc-800">
             <div>
               <label for="target-semester" class="block font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Target Periode Akademik</label>
               <select id="target-semester" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900">
@@ -116,6 +165,40 @@
 </div>
 
 <script>
+  function applyPreset(mode) {
+    const btnCepat = document.getElementById('preset-btn-cepat');
+    const btnSeimbang = document.getElementById('preset-btn-seimbang');
+    const btnMaksimal = document.getElementById('preset-btn-maksimal');
+    const maxIterInput = document.getElementById('max-iterations');
+
+    const defaultClass = 'preset-card text-left p-4 rounded-xl border border-zinc-200 hover:border-zinc-400 bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-900/50 hover:bg-white dark:hover:bg-zinc-800 transition-all space-y-1.5';
+    const activeClass = 'preset-card text-left p-4 rounded-xl border-2 border-[#0c2b5e] bg-blue-50/40 dark:border-amber-400 dark:bg-amber-950/20 transition-all space-y-1.5 shadow-xs';
+
+    if (btnCepat) btnCepat.className = defaultClass;
+    if (btnSeimbang) btnSeimbang.className = defaultClass;
+    if (btnMaksimal) btnMaksimal.className = defaultClass;
+
+    if (mode === 'cepat') {
+      if (btnCepat) btnCepat.className = activeClass;
+      if (maxIterInput) maxIterInput.value = '1';
+      if (window.JadwalinUI && window.JadwalinUI.toast) {
+        window.JadwalinUI.toast.show('Preset Mode Cepat diterapkan (1 iterasi perbaikan).', 'info');
+      }
+    } else if (mode === 'maksimal') {
+      if (btnMaksimal) btnMaksimal.className = activeClass;
+      if (maxIterInput) maxIterInput.value = '10';
+      if (window.JadwalinUI && window.JadwalinUI.toast) {
+        window.JadwalinUI.toast.show('Preset Mode Maksimal diterapkan (10 iterasi perbaikan teliti).', 'info');
+      }
+    } else {
+      if (btnSeimbang) btnSeimbang.className = activeClass;
+      if (maxIterInput) maxIterInput.value = '3';
+      if (window.JadwalinUI && window.JadwalinUI.toast) {
+        window.JadwalinUI.toast.show('Preset Mode Seimbang diterapkan (standar rekomendasi).', 'info');
+      }
+    }
+  }
+
   function startGenerationSimulation() {
     const card = document.getElementById('gen-progress-card');
     const bar = document.getElementById('gen-bar');

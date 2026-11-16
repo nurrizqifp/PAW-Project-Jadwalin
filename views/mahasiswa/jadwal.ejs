@@ -647,5 +647,10 @@
 
         // Initial render
         updateViews();
+
+        // Otomatis aktifkan Agenda Harian di layar mobile (< 768px) untuk mencegah horizontal scroll
+        if (window.innerWidth < 768 && viewAgendaBtn) {
+          viewAgendaBtn.click();
+        }
       });
     </script>

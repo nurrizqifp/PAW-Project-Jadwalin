@@ -267,10 +267,10 @@
       if (btn) {
         btn.innerHTML = '<i class="ph ph-check text-base text-emerald-400"></i> Preferensi Tersimpan';
       }
-      if (window.toast) {
+      if (window.JadwalinUI && window.JadwalinUI.toast) {
+        window.JadwalinUI.toast.show('Preferensi hari dan slot mengajar berhasil disimpan! Algoritma AI akan mengoptimasi jadwal Anda.', 'success');
+      } else if (window.toast) {
         window.toast.success('Preferensi hari dan slot mengajar berhasil disimpan! Algoritma AI akan mengoptimasi jadwal Anda.');
-      } else {
-        alert('Preferensi mengajar berhasil disimpan!');
       }
 
       setTimeout(() => {
