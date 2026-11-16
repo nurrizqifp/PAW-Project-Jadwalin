@@ -1,0 +1,74 @@
+<!-- Admin Panel Collapsible Sidebar Navigation -->
+<aside id="admin-sidebar" class="w-64 border-r border-zinc-200 bg-white p-4 flex flex-col justify-between shrink-0 dark:border-zinc-800 dark:bg-zinc-900 transition-all duration-200">
+  <div class="space-y-6">
+    
+    <!-- User / Admin Badge -->
+    <div class="flex items-center gap-3 px-2 py-1.5 rounded-lg bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-700/60">
+      <div class="flex h-8 w-8 items-center justify-center rounded-md bg-zinc-900 text-white font-semibold text-xs dark:bg-zinc-100 dark:text-zinc-900">
+        RW
+      </div>
+      <div class="overflow-hidden">
+        <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100 truncate">Rina Wulandari</p>
+        <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Staf Akademik TI</p>
+      </div>
+    </div>
+
+    <!-- Group: Master Data -->
+    <div class="space-y-1">
+      <p class="px-2 text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-mono">
+        Data Master
+      </p>
+      <nav class="space-y-0.5 text-xs">
+        <a href="/admin/master/dosen" class="flex items-center gap-2.5 rounded-md px-2.5 py-2 font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-colors <%= typeof activeMenu !== 'undefined' && activeMenu === 'dosen' ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-zinc-50 font-semibold' : '' %>">
+          <i class="ph ph-chalkboard-teacher text-base"></i>
+          <span>Dosen Tetap (21)</span>
+        </a>
+        <a href="/admin/master/matkul" class="flex items-center gap-2.5 rounded-md px-2.5 py-2 font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-colors <%= typeof activeMenu !== 'undefined' && activeMenu === 'matkul' ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-zinc-50 font-semibold' : '' %>">
+          <i class="ph ph-book-open text-base"></i>
+          <span>Mata Kuliah (77)</span>
+        </a>
+        <a href="/admin/master/ruangan" class="flex items-center gap-2.5 rounded-md px-2.5 py-2 font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-colors <%= typeof activeMenu !== 'undefined' && activeMenu === 'ruangan' ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-zinc-50 font-semibold' : '' %>">
+          <i class="ph ph-door text-base"></i>
+          <span>Ruang & Lab (12)</span>
+        </a>
+        <a href="/admin/master/mahasiswa" class="flex items-center gap-2.5 rounded-md px-2.5 py-2 font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-colors <%= typeof activeMenu !== 'undefined' && activeMenu === 'mahasiswa' ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-zinc-50 font-semibold' : '' %>">
+          <i class="ph ph-student text-base"></i>
+          <span>Mahasiswa</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Group: Algoritma & Penjadwalan -->
+    <div class="space-y-1">
+      <p class="px-2 text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-mono">
+        Optimasi Jadwal
+      </p>
+      <nav class="space-y-0.5 text-xs">
+        <a href="/admin/constraints" class="flex items-center gap-2.5 rounded-md px-2.5 py-2 font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-colors <%= typeof activeMenu !== 'undefined' && activeMenu === 'constraints' ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-zinc-50 font-semibold' : '' %>">
+          <i class="ph ph-sliders text-base"></i>
+          <span>Aturan Constraint</span>
+        </a>
+        <a href="/admin/generate" class="flex items-center gap-2.5 rounded-md px-2.5 py-2 font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-colors <%= typeof activeMenu !== 'undefined' && activeMenu === 'generate' ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-zinc-50 font-semibold' : '' %>">
+          <i class="ph ph-cpu text-base"></i>
+          <span>AI Generator Solver</span>
+        </a>
+        <a href="/admin/jadwal" class="flex items-center gap-2.5 rounded-md px-2.5 py-2 font-medium text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 transition-colors <%= typeof activeMenu !== 'undefined' && activeMenu === 'jadwal' ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-950 dark:text-zinc-50 font-semibold' : '' %>">
+          <i class="ph ph-calendar-check text-base"></i>
+          <span>Preview & Publikasi</span>
+        </a>
+      </nav>
+    </div>
+
+  </div>
+
+  <!-- Bottom Info -->
+  <div class="border-t border-zinc-200 pt-4 dark:border-zinc-800 space-y-2">
+    <a href="/" class="flex items-center gap-2 text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+      <i class="ph ph-arrow-left text-sm"></i>
+      <span>Kembali ke Beranda</span>
+    </a>
+    <p class="font-mono text-[10px] text-zinc-400 dark:text-zinc-500">
+      Jadwalin Core v2.0
+    </p>
+  </div>
+</aside>
