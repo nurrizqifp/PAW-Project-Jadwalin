@@ -250,7 +250,7 @@ exports.adminSettings = (req, res) => {
 };
 
 exports.adminPeriode = (req, res) => {
-  res.render('admin/settings', {
+  res.render('admin/master/periode', {
     ...getBaseData(),
     judul: `Manajemen Periode & Semester — ${config.appName}`,
     currentRole: 'admin',
