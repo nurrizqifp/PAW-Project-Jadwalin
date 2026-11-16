@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const config = require('./config');
+const { connectDatabase } = require('./config/database');
 const logger = require('./middlewares/logger');
 const routes = require('./routes');
 
@@ -20,6 +22,7 @@ app.use((req, res, next) => {
 });
 app.use(express.json({ limit: '16kb' }));
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware Logger untuk mencatat semua HTTP Request ke logs/logger.md
@@ -59,6 +62,7 @@ app.use((err, req, res, next) => {
 
 // Menjalankan Server jika dieksekusi langsung
 if (require.main === module) {
+  connectDatabase();
   const server = app.listen(config.port, () => {
     console.log(`\n======================================================`);
     console.log(`[Jadwalin Server] Running on http://localhost:${config.port}`);

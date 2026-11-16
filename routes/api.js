@@ -1,7 +1,11 @@
 const express = require('express');
 const apiController = require('../controllers/apiController');
+const authRoutes = require('./api/auth');
 
 const router = express.Router();
+
+// Autentikasi Pengguna & RBAC
+router.use('/auth', authRoutes);
 
 router.get('/status', apiController.status);
 router.get('/jadwal', apiController.jadwal);
