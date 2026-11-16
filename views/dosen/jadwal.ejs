@@ -299,6 +299,11 @@
         btnTable.className = 'inline-flex items-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100 transition-all';
         btnGrid.className = 'inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
       });
+
+      // Otomatis aktifkan tampilan tabel di layar mobile (< 768px)
+      if (window.innerWidth < 768) {
+        btnTable.click();
+      }
     }
   })();
 </script>
