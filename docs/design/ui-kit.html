@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full antialiased selection:bg-zinc-900 selection:text-white dark:selection:bg-zinc-100 dark:selection:text-zinc-900">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jadwalin — Precision UI Kit & Component Showcase</title>
+
+  <!-- Typography: Plus Jakarta Sans (Body), Bricolage Grotesque (Heading), JetBrains Mono (Google Sans Code Fallback) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Phosphor Icons (All weights) -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Anti-Flicker Dark Mode Script -->
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <!-- Tailwind CSS CDN with Custom Tokens -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            heading: ['"Bricolage Grotesque"', 'sans-serif'],
+            mono: ['"Google Sans Code"', '"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            zinc: {
+              950: '#09090b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Antislop Accessible Focus Styles */
+    :focus-visible {
+      outline: 2px solid #18181b;
+      outline-offset: 2px;
+    }
+    .dark :focus-visible {
+      outline: 2px solid #f4f4f5;
+      outline-offset: 2px;
+    }
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #d4d4d8;
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #3f3f46;
+    }
+    /* Form option fix for Dark Mode */
+    option {
+      background-color: #ffffff;
+      color: #18181b;
+    }
+    .dark option {
+      background-color: #18181b;
+      color: #fafafa;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col font-sans bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50 transition-colors duration-200">
+
+  <!-- Top Global Header / Status Bar -->
+  <header class="sticky top-0 z-40 w-full border-b border-zinc-200 bg-white/95 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/95 transition-colors duration-200">
+    <div class="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
+      
+      <!-- Brand & Context -->
+      <div class="flex items-center gap-3">
+        <a href="#overview" class="flex items-center gap-2 font-heading text-lg font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
+          <span class="flex h-8 w-8 items-center justify-center rounded-md bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 transition-colors">
+            <i class="ph ph-calendar text-lg"></i>
+          </span>
+          <span>Jadwalin</span>
+        </a>
+        <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[11px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+          UI-Kit v2.0
+        </span>
+      </div>
+
+      <!-- Quick Section Anchor Links -->
+      <nav class="hidden md:flex items-center gap-1 text-xs font-medium text-zinc-600 dark:text-zinc-300">
+        <a href="#typography" class="rounded px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">Tipografi</a>
+        <a href="#icons" class="rounded px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">Ikon</a>
+        <a href="#controls" class="rounded px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">Komponen</a>
+        <a href="#schedule-hybrid" class="rounded px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">Hybrid Jadwal</a>
+        <a href="#admin-shell" class="rounded px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">Admin Shell</a>
+        <a href="#prakrs-wizard" class="rounded px-2.5 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">Pra-KRS</a>
+      </nav>
+
+      <!-- Global Actions: Drawer & Dark Mode Toggle -->
+      <div class="flex items-center gap-2">
+        <!-- Drawer Notifikasi Trigger -->
+        <button id="open-notif-btn" type="button" aria-label="Buka Notifikasi Sistem" class="relative flex h-9 w-9 items-center justify-center rounded-md border border-zinc-200 text-zinc-700 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+          <i class="ph ph-bell text-lg"></i>
+          <span class="absolute top-1.5 right-1.5 flex h-2 w-2">
+            <span class="relative inline-flex h-2 w-2 rounded-full bg-rose-600"></span>
+          </span>
+        </button>
+
+        <!-- Dark Mode Toggle Button (Persistent & Reactive) -->
+        <button id="theme-toggle-btn" type="button" aria-label="Ganti Mode Tampilan" class="flex h-9 w-9 items-center justify-center rounded-md border border-zinc-200 text-zinc-700 hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+          <i id="theme-icon" class="ph text-lg"></i>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 space-y-16">
+
+    <!-- 01. Typography & Hierarchy (Antislop Compliant) -->
+    <section id="typography" class="space-y-6">
+      <div class="border-b border-zinc-200 pb-3 dark:border-zinc-800">
+        <h2 class="font-heading text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+          01. Tipografi & Identitas Visual
+        </h2>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+          Kombinasi resmi: Bricolage Grotesque (Heading), Plus Jakarta Sans (Body), Google Sans Code / JetBrains Mono (Data/Monospace).
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Display Spec -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900 transition-colors">
+          <div class="flex items-center justify-between text-xs text-zinc-400 mb-3 font-mono">
+            <span>Bricolage Grotesque</span>
+            <span>Display / Headings</span>
+          </div>
+          <p class="font-heading text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+            Penjadwalan Kuliah Cerdas & Bebas Bentrok
+          </p>
+          <p class="font-heading text-lg font-semibold text-zinc-700 dark:text-zinc-300 mt-2">
+            Gedung F4 & F6 — Prodi Teknologi Informasi
+          </p>
+        </div>
+
+        <!-- Body Spec -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900 transition-colors">
+          <div class="flex items-center justify-between text-xs text-zinc-400 mb-3 font-mono">
+            <span>Plus Jakarta Sans</span>
+            <span>Body & Form Controls</span>
+          </div>
+          <p class="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
+            Sistem mengoptimalkan 21 dosen, 57 mata kuliah kurikulum, serta 12 ruang kuliah dan laboratorium komputer untuk mencapai target nol konflik.
+          </p>
+          <div class="mt-4 flex gap-2">
+            <span class="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300">
+              <i class="ph ph-check text-xs"></i> Keterbacaan AA
+            </span>
+            <span class="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300">
+              <i class="ph ph-shield-check text-xs"></i> Anti-Slop
+            </span>
+          </div>
+        </div>
+
+        <!-- Monospace Spec -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900 transition-colors">
+          <div class="flex items-center justify-between text-xs text-zinc-400 mb-3 font-mono">
+            <span>Google Sans Code</span>
+            <span>Slot Waktu & ID</span>
+          </div>
+          <p class="font-mono text-sm text-zinc-900 dark:text-zinc-100">
+            20240140093 · TI26101 · F6.001
+          </p>
+          <p class="font-mono text-xs text-zinc-500 dark:text-zinc-400 mt-2">
+            08:50 – 11:30 WIB [3 SKS]
+          </p>
+          <div class="mt-4 rounded bg-zinc-100 p-2 font-mono text-[11px] text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+            Countdown: 00:42:15 left
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02. Phosphor Icon System & Semantics -->
+    <section id="icons" class="space-y-6">
+      <div class="border-b border-zinc-200 pb-3 dark:border-zinc-800">
+        <h2 class="font-heading text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+          02. Standar Ikonografi (Phosphor Icons)
+        </h2>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+          Pengganti total seluruh emoji & karakter simbolik. Ikon berfungsi semantik, bukan sekadar hiasan.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+        <div class="flex flex-col items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900 text-center transition-colors">
+          <i class="ph ph-chalkboard-teacher text-2xl text-zinc-800 dark:text-zinc-200"></i>
+          <span class="text-xs font-medium text-zinc-800 dark:text-zinc-200">Dosen</span>
+          <span class="font-mono text-[10px] text-zinc-400">ph-chalkboard-teacher</span>
+        </div>
+        <div class="flex flex-col items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900 text-center transition-colors">
+          <i class="ph ph-student text-2xl text-zinc-800 dark:text-zinc-200"></i>
+          <span class="text-xs font-medium text-zinc-800 dark:text-zinc-200">Mahasiswa</span>
+          <span class="font-mono text-[10px] text-zinc-400">ph-student</span>
+        </div>
+        <div class="flex flex-col items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900 text-center transition-colors">
+          <i class="ph ph-flask text-2xl text-emerald-600 dark:text-emerald-400"></i>
+          <span class="text-xs font-medium text-zinc-800 dark:text-zinc-200">Laboratorium</span>
+          <span class="font-mono text-[10px] text-zinc-400">ph-flask</span>
+        </div>
+        <div class="flex flex-col items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900 text-center transition-colors">
+          <i class="ph ph-door text-2xl text-zinc-800 dark:text-zinc-200"></i>
+          <span class="text-xs font-medium text-zinc-800 dark:text-zinc-200">Ruang Teori</span>
+          <span class="font-mono text-[10px] text-zinc-400">ph-door</span>
+        </div>
+        <div class="flex flex-col items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900 text-center transition-colors">
+          <i class="ph ph-warning-circle text-2xl text-rose-600 dark:text-rose-400"></i>
+          <span class="text-xs font-medium text-zinc-800 dark:text-zinc-200">Konflik HC</span>
+          <span class="font-mono text-[10px] text-zinc-400">ph-warning-circle</span>
+        </div>
+        <div class="flex flex-col items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900 text-center transition-colors">
+          <i class="ph ph-cpu text-2xl text-zinc-800 dark:text-zinc-200"></i>
+          <span class="text-xs font-medium text-zinc-800 dark:text-zinc-200">AI Solver</span>
+          <span class="font-mono text-[10px] text-zinc-400">ph-cpu</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03. Interactive UI Controls & Semantics -->
+    <section id="controls" class="space-y-6">
+      <div class="border-b border-zinc-200 pb-3 dark:border-zinc-800">
+        <h2 class="font-heading text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+          03. Komponen Dasar & Formulir
+        </h2>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+          Radius ketat: Input & Tombol <code class="font-mono">rounded-md (6px)</code>, Kartu <code class="font-mono">rounded-xl (12px)</code>.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Buttons & Status Chips -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900 space-y-6 transition-colors">
+          <div>
+            <h3 class="font-heading text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-3">Varian Tombol Fungsional</h3>
+            <div class="flex flex-wrap gap-2.5">
+              <button type="button" class="inline-flex min-h-[44px] items-center gap-2 rounded-md bg-zinc-900 px-4 py-2 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white transition-colors">
+                <i class="ph ph-cpu text-base"></i>
+                <span>Jalankan AI Solver</span>
+              </button>
+              <button type="button" class="inline-flex min-h-[44px] items-center gap-2 rounded-md border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-800 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 transition-colors">
+                <i class="ph ph-faders text-base"></i>
+                <span>Filter Jadwal</span>
+              </button>
+              <button type="button" class="inline-flex min-h-[44px] items-center gap-2 rounded-md bg-rose-600 px-4 py-2 text-xs font-medium text-white hover:bg-rose-700 dark:bg-rose-600 dark:hover:bg-rose-700 transition-colors">
+                <i class="ph ph-trash text-base"></i>
+                <span>Hapus Sesi</span>
+              </button>
+              <button type="button" disabled class="inline-flex min-h-[44px] cursor-not-allowed items-center gap-2 rounded-md bg-zinc-200 px-4 py-2 text-xs font-medium text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600">
+                <i class="ph ph-lock text-base"></i>
+                <span>Terkunci</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="font-heading text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-3">Badge & Status Fungsional</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="inline-flex items-center gap-1.5 rounded-md border border-emerald-300 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300">
+                <i class="ph ph-check-circle text-sm"></i> Terpublikasi
+              </span>
+              <span class="inline-flex items-center gap-1.5 rounded-md border border-amber-300 bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-800 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-300">
+                <i class="ph ph-clock text-sm"></i> Menunggu Solver
+              </span>
+              <span class="inline-flex items-center gap-1.5 rounded-md border border-rose-300 bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-800 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300">
+                <i class="ph ph-warning-circle text-sm"></i> Konflik Dosen (HC-01)
+              </span>
+              <span class="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                <i class="ph ph-archive text-sm"></i> Arsip
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Elements -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900 space-y-4 transition-colors">
+          <h3 class="font-heading text-sm font-semibold text-zinc-900 dark:text-zinc-100">Kontrol Formulir Presisi</h3>
+          
+          <div class="space-y-1.5">
+            <label for="sample-nama" class="block text-xs font-medium text-zinc-700 dark:text-zinc-300">
+              Nama Lengkap Dosen <span class="text-rose-500">*</span>
+            </label>
+            <input id="sample-nama" type="text" value="Ir. Asroni, S.T., M.Eng" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="space-y-1.5">
+              <label for="sample-ruang" class="block text-xs font-medium text-zinc-700 dark:text-zinc-300">Ruang Perkuliahan</label>
+              <select id="sample-ruang" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 transition-colors">
+                <option value="F6.001">F6.001 (RKB)</option>
+                <option value="F4.LAB1">F4.LAB1 (Laboratorium Jaringan)</option>
+                <option value="F6.102">F6.102 (Reguler)</option>
+              </select>
+            </div>
+            <div class="space-y-1.5">
+              <label for="sample-hari" class="block text-xs font-medium text-zinc-700 dark:text-zinc-300">Hari Off Mengajar</label>
+              <select id="sample-hari" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 transition-colors">
+                <option value="Jumat">Jumat (Alokasi Riset)</option>
+                <option value="Kamis">Kamis</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04. Hybrid Schedule View (Grid vs Agenda View) -->
+    <section id="schedule-hybrid" class="space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 pb-3 dark:border-zinc-800">
+        <div>
+          <h2 class="font-heading text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+            04. Tampilan Jadwal Hybrid
+          </h2>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+            Mendukung Switcher Mode: <strong>Grid Mingguan (Desktop)</strong> dan <strong>Agenda View (Ponsel/Mobile)</strong>.
+          </p>
+        </div>
+
+        <!-- Mode Switcher -->
+        <div class="inline-flex rounded-md border border-zinc-200 bg-zinc-100 p-0.5 dark:border-zinc-800 dark:bg-zinc-800">
+          <button id="btn-view-grid" type="button" class="inline-flex min-h-[36px] items-center gap-1.5 rounded bg-white px-3 py-1 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-50 transition-all">
+            <i class="ph ph-squares-four text-sm"></i>
+            <span>Grid Mingguan</span>
+          </button>
+          <button id="btn-view-agenda" type="button" class="inline-flex min-h-[36px] items-center gap-1.5 rounded px-3 py-1 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
+            <i class="ph ph-list-dashes text-sm"></i>
+            <span>Agenda Harian</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- VIEW A: Grid Mingguan -->
+      <div id="container-grid-view" class="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm dark:border-zinc-800 dark:bg-zinc-900 transition-colors">
+        <!-- Filter Toolbar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 bg-zinc-50/70 p-3.5 dark:border-zinc-800 dark:bg-zinc-900/70">
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-2.5 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-800">
+              <i class="ph ph-funnel text-zinc-400"></i>
+              <span class="text-zinc-600 dark:text-zinc-300">Dosen: Semua</span>
+            </div>
+            <div class="flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-2.5 py-1 text-xs dark:border-zinc-700 dark:bg-zinc-800">
+              <i class="ph ph-door text-zinc-400"></i>
+              <span class="text-zinc-600 dark:text-zinc-300">Ruangan: F6.001</span>
+            </div>
+          </div>
+          <div class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+            Klik sesi untuk membuka Form Edit Cepat
+          </div>
+        </div>
+
+        <!-- The Responsive Table Grid -->
+        <div class="overflow-x-auto">
+          <table class="w-full border-collapse text-left text-xs min-w-[760px]">
+            <thead>
+              <tr class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/90">
+                <th class="sticky left-0 z-10 w-24 border-r border-zinc-200 bg-zinc-50 px-3 py-2.5 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900">WAKTU</th>
+                <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100">SENIN</th>
+                <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100">SELASA</th>
+                <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100">RABU</th>
+                <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100">KAMIS</th>
+                <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100">JUMAT</th>
+                <th class="px-3 py-2.5 font-heading font-semibold text-zinc-900 dark:text-zinc-100">SABTU</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans">
+              <!-- Slot 07:00 -->
+              <tr class="h-20">
+                <td class="sticky left-0 border-r border-zinc-200 bg-zinc-50 px-3 py-2 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 align-top">
+                  07:00–08:40
+                </td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top">
+                  <div onclick="openEditModal('Fisika & Elektronika TI', 'DP;QA', 'F6.001', 'Senin', '07:00')" class="h-full cursor-pointer rounded-md border border-blue-200 bg-blue-50/80 p-2 text-blue-950 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-200 hover:border-blue-400 dark:hover:border-blue-600 transition-colors">
+                    <div class="font-heading font-semibold leading-tight">Fisika TI</div>
+                    <div class="mt-1 flex items-center justify-between text-[11px] text-blue-700 dark:text-blue-300 font-mono">
+                      <span>F6.001</span>
+                      <span>Kls A;C</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top">
+                  <div onclick="openEditModal('Fisika & Elektronika TI', 'DP;QA', 'F6.001', 'Selasa', '07:00')" class="h-full cursor-pointer rounded-md border border-blue-200 bg-blue-50/80 p-2 text-blue-950 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-200 hover:border-blue-400 dark:hover:border-blue-600 transition-colors">
+                    <div class="font-heading font-semibold leading-tight">Fisika TI</div>
+                    <div class="mt-1 flex items-center justify-between text-[11px] text-blue-700 dark:text-blue-300 font-mono">
+                      <span>F6.001</span>
+                      <span>Kls B;D</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/30"></td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/30"></td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/30"></td>
+                <td class="p-1.5 bg-zinc-50/30 dark:bg-zinc-950/30"></td>
+              </tr>
+
+              <!-- Slot 08:50 -->
+              <tr class="h-24">
+                <td class="sticky left-0 border-r border-zinc-200 bg-zinc-50 px-3 py-2 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 align-top">
+                  08:50–11:30
+                </td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top">
+                  <div onclick="openEditModal('Pengembangan Aplikasi Web', 'AS', 'F4.003', 'Senin', '08:50')" class="h-full cursor-pointer rounded-md border border-blue-200 bg-blue-50/80 p-2 text-blue-950 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-200 hover:border-blue-400 dark:hover:border-blue-600 transition-colors">
+                    <div class="font-heading font-semibold leading-tight">Pengemb. Web</div>
+                    <div class="text-[11px] text-blue-800 dark:text-blue-300">Ir. Asroni</div>
+                    <div class="mt-1 flex items-center justify-between text-[11px] text-blue-600 dark:text-blue-400 font-mono">
+                      <span>F4.003</span>
+                      <span>Kls E · 3 SKS</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top">
+                  <div onclick="openEditModal('Praktikum Jaringan Komputer', 'EP', 'F4.LAB1', 'Selasa', '08:50')" class="h-full cursor-pointer rounded-md border border-emerald-300 bg-emerald-50/90 p-2 text-emerald-950 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-200 hover:border-emerald-500 dark:hover:border-emerald-600 transition-colors">
+                    <div class="flex items-center gap-1 font-heading font-semibold leading-tight">
+                      <i class="ph ph-flask text-emerald-700 dark:text-emerald-400"></i>
+                      <span>Prakt. Jaringan</span>
+                    </div>
+                    <div class="mt-1 flex items-center justify-between text-[11px] text-emerald-700 dark:text-emerald-300 font-mono">
+                      <span>Lab F4.LAB1</span>
+                      <span>Kls A · Lab 100%</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top">
+                  <div onclick="openEditModal('Serious Game (Peminatan UX)', 'RG', 'F6.002', 'Rabu', '08:50')" class="h-full cursor-pointer rounded-md border border-violet-200 bg-violet-50/90 p-2 text-violet-950 dark:border-violet-800 dark:bg-violet-950/40 dark:text-violet-200 hover:border-violet-400 dark:hover:border-violet-600 transition-colors">
+                    <div class="font-heading font-semibold leading-tight">Serious Game</div>
+                    <div class="mt-1 flex items-center justify-between text-[11px] text-violet-700 dark:text-violet-300 font-mono">
+                      <span>F6.002</span>
+                      <span>Pilihan / UX</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/30"></td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/30"></td>
+                <td class="p-1.5 bg-zinc-50/30 dark:bg-zinc-950/30"></td>
+              </tr>
+
+              <!-- Break / Jeda Ibadah Sholat -->
+              <tr class="bg-zinc-100/75 dark:bg-zinc-800/60">
+                <td class="sticky left-0 border-r border-zinc-200 bg-zinc-100 px-3 py-1.5 font-mono text-zinc-500 text-center dark:border-zinc-800 dark:bg-zinc-800 text-[11px]">
+                  11:30–12:10
+                </td>
+                <td colspan="6" class="px-4 py-1.5 text-center font-mono text-[11px] text-zinc-600 dark:text-zinc-400">
+                  <i class="ph ph-moon-stars mr-1"></i> Istirahat Sholat Dhuhur (Hard Constraint HC-03 Terpenuhi)
+                </td>
+              </tr>
+
+              <!-- Slot 12:10 -->
+              <tr class="h-20">
+                <td class="sticky left-0 border-r border-zinc-200 bg-zinc-50 px-3 py-2 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 align-top">
+                  12:10–15:00
+                </td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top">
+                  <div onclick="openEditModal('Manajemen Proyek TI', 'HQ', 'F6.102', 'Senin', '12:10')" class="h-full cursor-pointer rounded-md border border-rose-300 bg-rose-50/90 p-2 text-rose-950 dark:border-rose-800 dark:bg-rose-950/50 dark:text-rose-200 hover:border-rose-500 dark:hover:border-rose-600 transition-colors">
+                    <div class="flex items-center gap-1 font-heading font-semibold leading-tight text-rose-700 dark:text-rose-300">
+                      <i class="ph ph-warning-circle text-sm"></i>
+                      <span>Manajemen Proyek</span>
+                    </div>
+                    <div class="mt-1 flex items-center justify-between text-[11px] text-rose-600 dark:text-rose-400 font-mono">
+                      <span>F6.102</span>
+                      <span>Konflik Bentrok</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/30"></td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/30"></td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/30"></td>
+                <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/30"></td>
+                <td class="p-1.5 bg-zinc-50/30 dark:bg-zinc-950/30"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VIEW B: Agenda View (Mobile-First) -->
+      <div id="container-agenda-view" class="hidden space-y-3">
+        <!-- Day Picker Chips -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+          <button type="button" class="inline-flex min-h-[38px] items-center rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-white dark:bg-zinc-100 dark:text-zinc-900 transition-colors">Senin (3)</button>
+          <button type="button" class="inline-flex min-h-[38px] items-center rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">Selasa (2)</button>
+          <button type="button" class="inline-flex min-h-[38px] items-center rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">Rabu (1)</button>
+          <button type="button" class="inline-flex min-h-[38px] items-center rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">Kamis (0)</button>
+          <button type="button" class="inline-flex min-h-[38px] items-center rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">Jumat (0)</button>
+          <button type="button" class="inline-flex min-h-[38px] items-center rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">Sabtu (0)</button>
+        </div>
+
+        <!-- Agenda List Cards -->
+        <div class="space-y-2.5">
+          <!-- Item 1 -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex items-start justify-between gap-3 transition-colors">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="rounded bg-blue-50 px-2 py-0.5 font-mono text-xs font-medium text-blue-700 dark:bg-blue-950/50 dark:text-blue-300">
+                  07:00 – 08:40 WIB
+                </span>
+                <span class="text-xs text-zinc-400">· 2 SKS</span>
+              </div>
+              <h4 class="font-heading text-base font-semibold text-zinc-900 dark:text-zinc-50">Fisika dan Elektronika Teknologi Informasi</h4>
+              <p class="text-xs text-zinc-600 dark:text-zinc-400">Dr. Ir. Dwijoko Purbohadi, M.T. & Qodri Aziz, M.Eng</p>
+              <div class="flex items-center gap-2 pt-1 text-xs font-mono text-zinc-500 dark:text-zinc-400">
+                <span class="inline-flex items-center gap-1"><i class="ph ph-door"></i> F6.001 (RKB)</span>
+                <span>·</span>
+                <span>Kelas A;C</span>
+              </div>
+            </div>
+            <button onclick="openEditModal('Fisika TI', 'DP;QA', 'F6.001', 'Senin', '07:00')" class="inline-flex min-h-[44px] items-center justify-center rounded-md border border-zinc-200 px-3 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+              Edit
+            </button>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex items-start justify-between gap-3 transition-colors">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="rounded bg-blue-50 px-2 py-0.5 font-mono text-xs font-medium text-blue-700 dark:bg-blue-950/50 dark:text-blue-300">
+                  08:50 – 11:30 WIB
+                </span>
+                <span class="text-xs text-zinc-400">· 3 SKS</span>
+              </div>
+              <h4 class="font-heading text-base font-semibold text-zinc-900 dark:text-zinc-50">Pengembangan Aplikasi Web</h4>
+              <p class="text-xs text-zinc-600 dark:text-zinc-400">Ir. Asroni, S.T., M.Eng</p>
+              <div class="flex items-center gap-2 pt-1 text-xs font-mono text-zinc-500 dark:text-zinc-400">
+                <span class="inline-flex items-center gap-1"><i class="ph ph-door"></i> F4.003</span>
+                <span>·</span>
+                <span>Kelas E</span>
+              </div>
+            </div>
+            <button onclick="openEditModal('Pengembangan Aplikasi Web', 'AS', 'F4.003', 'Senin', '08:50')" class="inline-flex min-h-[44px] items-center justify-center rounded-md border border-zinc-200 px-3 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+              Edit
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05. Admin Shell Layout Preview (Sidebar + Top bar) -->
+    <section id="admin-shell" class="space-y-6">
+      <div class="border-b border-zinc-200 pb-3 dark:border-zinc-800">
+        <h2 class="font-heading text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+          05. Shell Panel Administrasi
+        </h2>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+          Sidebar kiri collapsible untuk modul sistem, dipadukan dengan Top bar fungsional.
+        </p>
+      </div>
+
+      <div class="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex h-96 transition-colors">
+        <!-- Collapsible Mini Sidebar Preview -->
+        <aside class="w-56 border-r border-zinc-200 bg-zinc-50/70 p-4 flex flex-col justify-between dark:border-zinc-800 dark:bg-zinc-950/60 transition-colors">
+          <div class="space-y-4">
+            <div class="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">Master Data</div>
+            <nav class="space-y-1 text-xs">
+              <a href="#" class="flex items-center gap-2 rounded-md bg-zinc-900 px-2.5 py-2 font-medium text-white dark:bg-zinc-100 dark:text-zinc-900">
+                <i class="ph ph-chalkboard-teacher text-sm"></i>
+                <span>Dosen (21)</span>
+              </a>
+              <a href="#" class="flex items-center gap-2 rounded-md px-2.5 py-2 font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800 transition-colors">
+                <i class="ph ph-door text-sm"></i>
+                <span>Ruang & Lab (12)</span>
+              </a>
+              <a href="#" class="flex items-center gap-2 rounded-md px-2.5 py-2 font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800 transition-colors">
+                <i class="ph ph-book-open text-sm"></i>
+                <span>Mata Kuliah (77)</span>
+              </a>
+              <a href="#" class="flex items-center gap-2 rounded-md px-2.5 py-2 font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800 transition-colors">
+                <i class="ph ph-student text-sm"></i>
+                <span>Mahasiswa</span>
+              </a>
+            </nav>
+
+            <div class="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 pt-2">Algoritma & Publikasi</div>
+            <nav class="space-y-1 text-xs">
+              <a href="#" class="flex items-center gap-2 rounded-md px-2.5 py-2 font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800 transition-colors">
+                <i class="ph ph-sliders text-sm"></i>
+                <span>Aturan Constraint</span>
+              </a>
+              <a href="#" class="flex items-center gap-2 rounded-md px-2.5 py-2 font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800 transition-colors">
+                <i class="ph ph-cpu text-sm"></i>
+                <span>AI Generator</span>
+              </a>
+            </nav>
+          </div>
+
+          <div class="border-t border-zinc-200 pt-3 dark:border-zinc-800 text-[11px] text-zinc-400 font-mono">
+            Prodi TI FT UMY
+          </div>
+        </aside>
+
+        <!-- Main Body Preview -->
+        <div class="flex-1 p-6 flex flex-col justify-between overflow-y-auto">
+          <div>
+            <div class="flex items-center justify-between pb-4 border-b border-zinc-100 dark:border-zinc-800">
+              <div>
+                <h3 class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-50">Kelola Data Master Dosen</h3>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400">Total 21 Dosen Tetap Terverifikasi</p>
+              </div>
+              <button class="inline-flex min-h-[38px] items-center gap-1.5 rounded-md bg-zinc-900 px-3 text-xs font-medium text-white dark:bg-zinc-100 dark:text-zinc-900 transition-colors">
+                <i class="ph ph-plus"></i> Tambah Dosen
+              </button>
+            </div>
+
+            <!-- Mini List -->
+            <div class="mt-4 divide-y divide-zinc-100 dark:divide-zinc-800 text-xs">
+              <div class="py-2.5 flex items-center justify-between">
+                <div>
+                  <span class="font-semibold text-zinc-900 dark:text-zinc-100">Ir. Asroni, S.T., M.Eng (AS)</span>
+                  <div class="text-[11px] text-zinc-500 dark:text-zinc-400">Rekayasa Web & Komputasi · Beban 12 SKS</div>
+                </div>
+                <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[11px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">Aktif</span>
+              </div>
+              <div class="py-2.5 flex items-center justify-between">
+                <div>
+                  <span class="font-semibold text-zinc-900 dark:text-zinc-100">Dr. Ir. Dwijoko Purbohadi, M.T. (DP)</span>
+                  <div class="text-[11px] text-zinc-500 dark:text-zinc-400">Arsitektur Perangkat Lunak · Beban 19 SKS</div>
+                </div>
+                <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[11px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">Aktif</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-md border border-zinc-200 bg-zinc-50 p-2 text-xs text-zinc-500 dark:border-zinc-800 dark:bg-zinc-800/40 dark:text-zinc-400">
+            CRUD terintegrasi dengan Sequelize PostgreSQL dan Zod validation schema.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06. Pra-KRS Form & Wizard Showcase -->
+    <section id="prakrs-wizard" class="space-y-6">
+      <div class="border-b border-zinc-200 pb-3 dark:border-zinc-800">
+        <h2 class="font-heading text-xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+          06. Form & Wizard Pra-KRS Mahasiswa
+        </h2>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+          Bisa diakses fleksibel tiap semester ganjil/genap dengan validasi integer semester 1–12.
+        </p>
+      </div>
+
+      <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 max-w-2xl mx-auto space-y-6 transition-colors">
+        <!-- Steps Indicator -->
+        <div class="flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800">
+          <div class="flex items-center gap-2 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+            <span class="flex h-6 w-6 items-center justify-center rounded-full bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 text-[11px]">1</span>
+            <span>Semester</span>
+          </div>
+          <div class="h-px flex-1 bg-zinc-200 mx-3 dark:bg-zinc-700"></div>
+          <div class="flex items-center gap-2 text-xs font-medium text-zinc-400">
+            <span class="flex h-6 w-6 items-center justify-center rounded-full border border-zinc-300 dark:border-zinc-700 text-[11px]">2</span>
+            <span>Angkatan & NIM</span>
+          </div>
+          <div class="h-px flex-1 bg-zinc-200 mx-3 dark:bg-zinc-700"></div>
+          <div class="flex items-center gap-2 text-xs font-medium text-zinc-400">
+            <span class="flex h-6 w-6 items-center justify-center rounded-full border border-zinc-300 dark:border-zinc-700 text-[11px]">3</span>
+            <span>Rekomendasi AI</span>
+          </div>
+        </div>
+
+        <!-- Form Content -->
+        <div class="space-y-4">
+          <div class="space-y-1.5">
+            <label for="prakrs-sem" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">
+              Semester Aktif Anda (Integer 1–12) <span class="text-rose-500">*</span>
+            </label>
+            <input id="prakrs-sem" type="number" min="1" max="12" value="4" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 font-mono transition-colors">
+            <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Masukkan angka 1 sampai 12 tanpa karakter lain.</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="space-y-1.5">
+              <label for="prakrs-tahun" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Tahun Angkatan</label>
+              <select id="prakrs-tahun" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 transition-colors">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+              </select>
+            </div>
+            <div class="space-y-1.5">
+              <label for="prakrs-nim" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">3 Digit Terakhir NIM</label>
+              <input id="prakrs-nim" type="text" maxlength="3" value="093" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 font-mono transition-colors">
+            </div>
+          </div>
+
+          <!-- Hasil Preview NIM -->
+          <div class="rounded-md border border-zinc-200 bg-zinc-50 p-3 text-xs dark:border-zinc-800 dark:bg-zinc-800/50">
+            <span class="text-zinc-500 dark:text-zinc-400">NIM Resmi Terbentuk:</span>
+            <span class="font-mono font-bold text-zinc-900 dark:text-zinc-100 ml-1.5">20240140093</span>
+          </div>
+
+          <div class="flex items-center justify-end gap-2 pt-4">
+            <button type="button" class="inline-flex min-h-[44px] items-center gap-1.5 rounded-md bg-zinc-900 px-5 py-2 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white transition-colors">
+              <span>Lanjutkan ke Pemetaan Mata Kuliah</span>
+              <i class="ph ph-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Slide-Over Notification Drawer (Right Side) -->
+  <div id="notif-drawer-overlay" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-[2px] transition-opacity duration-300 opacity-0 pointer-events-none">
+    <div id="notif-drawer" class="fixed inset-y-0 right-0 w-full sm:max-w-md bg-white dark:bg-zinc-900 shadow-2xl border-l border-zinc-200 dark:border-zinc-800 flex flex-col transform translate-x-full transition-transform duration-300">
+      
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between border-b border-zinc-200 px-5 py-4 dark:border-zinc-800">
+        <div class="flex items-center gap-2">
+          <i class="ph ph-bell text-lg text-zinc-900 dark:text-zinc-100"></i>
+          <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">Pusat Notifikasi</h3>
+        </div>
+        <button id="close-notif-btn" type="button" aria-label="Tutup Panel Notifikasi" class="flex h-8 w-8 items-center justify-center rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+          <i class="ph ph-x text-base"></i>
+        </button>
+      </div>
+
+      <!-- Drawer List -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-3">
+        <!-- Item 1: Conflict Alert -->
+        <div class="rounded-xl border border-rose-200 bg-rose-50/70 p-3.5 dark:border-rose-900/60 dark:bg-rose-950/30 space-y-1">
+          <div class="flex items-center justify-between text-xs">
+            <span class="inline-flex items-center gap-1 font-semibold text-rose-700 dark:text-rose-400">
+              <i class="ph ph-warning-circle"></i> Konflik Terdeteksi
+            </span>
+            <span class="font-mono text-[11px] text-zinc-400">10:45 WIB</span>
+          </div>
+          <p class="text-xs text-rose-950 dark:text-rose-200">
+            Dosen Ir. Asroni memiliki 2 kelas di slot yang sama (Senin 08:50 WIB di F6.001 & F4.003).
+          </p>
+        </div>
+
+        <!-- Item 2: Jadwal Published -->
+        <div class="rounded-xl border border-emerald-200 bg-emerald-50/70 p-3.5 dark:border-emerald-900/60 dark:bg-emerald-950/30 space-y-1">
+          <div class="flex items-center justify-between text-xs">
+            <span class="inline-flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400">
+              <i class="ph ph-check-circle"></i> Jadwal Terpublikasi
+            </span>
+            <span class="font-mono text-[11px] text-zinc-400">08:00 WIB</span>
+          </div>
+          <p class="text-xs text-emerald-950 dark:text-emerald-200">
+            Jadwal Semester Genap 2025/2026 resmi dipublikasikan ke seluruh civitas akademika TI UMY.
+          </p>
+        </div>
+
+        <!-- Item 3: Soft Constraint -->
+        <div class="rounded-xl border border-zinc-200 bg-zinc-50/70 p-3.5 dark:border-zinc-800 dark:bg-zinc-800/40 space-y-1">
+          <div class="flex items-center justify-between text-xs">
+            <span class="inline-flex items-center gap-1 font-semibold text-zinc-700 dark:text-zinc-300">
+              <i class="ph ph-user"></i> Preferensi Tersimpan
+            </span>
+            <span class="font-mono text-[11px] text-zinc-400">Kemarin</span>
+          </div>
+          <p class="text-xs text-zinc-600 dark:text-zinc-400">
+            Dosen Dr. Nasy'an Taufiq mencatat preferensi bebas mengajar hari Rabu untuk riset Cloud Computing.
+          </p>
+        </div>
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="border-t border-zinc-200 p-4 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/50 flex justify-between items-center">
+        <button type="button" class="text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200">
+          Tandai semua dibaca
+        </button>
+        <span class="font-mono text-[11px] text-zinc-400">3 Pembaruan</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal Edit Sesi Jadwal (Triggered by Clicking a Slot) -->
+  <div id="edit-modal-overlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-200 opacity-0 pointer-events-none">
+    <div id="edit-modal-panel" class="w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 transform scale-95 transition-transform duration-200 space-y-5">
+      
+      <div class="flex items-center justify-between border-b border-zinc-100 pb-3.5 dark:border-zinc-800">
+        <div>
+          <h3 id="modal-title" class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-50">Edit Sesi Jadwal</h3>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400">Sesuaikan waktu dan ruangan tanpa bentrok</p>
+        </div>
+        <button onclick="closeEditModal()" type="button" aria-label="Tutup Dialog" class="flex h-8 w-8 items-center justify-center rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+          <i class="ph ph-x text-base"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div class="space-y-1">
+          <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Mata Kuliah</label>
+          <input id="modal-matkul-input" type="text" readonly class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Hari Perkuliahan</label>
+            <select id="modal-hari-select" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 transition-colors">
+              <option value="Senin">Senin</option><option value="Selasa">Selasa</option><option value="Rabu">Rabu</option><option value="Kamis">Kamis</option><option value="Jumat">Jumat</option><option value="Sabtu">Sabtu</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Ruangan</label>
+            <select id="modal-ruang-select" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 transition-colors">
+              <option value="F6.001">F6.001 (RKB)</option>
+              <option value="F4.003">F4.003 (Reguler)</option>
+              <option value="F4.LAB1">F4.LAB1 (Laboratorium Komputer)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Dosen Pengampu / Team Teaching</label>
+          <input id="modal-dosen-input" type="text" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 transition-colors">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-zinc-100 dark:border-zinc-800">
+        <button onclick="closeEditModal()" type="button" class="inline-flex min-h-[44px] items-center rounded-md border border-zinc-200 px-4 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+          Batalkan
+        </button>
+        <button onclick="closeEditModal()" type="button" class="inline-flex min-h-[44px] items-center gap-1.5 rounded-md bg-zinc-900 px-5 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white transition-colors">
+          <i class="ph ph-floppy-disk"></i>
+          <span>Simpan Perubahan Slot</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-zinc-200 bg-white py-6 dark:border-zinc-800 dark:bg-zinc-900 text-center text-xs text-zinc-500 dark:text-zinc-400 transition-colors">
+    <div class="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p>Jadwalin Precision System · UMY TI 2026</p>
+      <p class="font-mono text-[11px]">Bricolage Grotesque · Plus Jakarta Sans · Phosphor Icons</p>
+    </div>
+  </footer>
+
+  <!-- Interactive Demo Script -->
+  <script>
+    // Theme Sync & Persistence Logic
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const themeIcon = document.getElementById('theme-icon');
+    const htmlEl = document.documentElement;
+
+    function updateThemeIcon() {
+      const isDark = htmlEl.classList.contains('dark');
+      themeIcon.className = isDark ? 'ph ph-sun text-lg text-amber-400' : 'ph ph-moon text-lg text-zinc-700';
+    }
+
+    // Initialize icon on page load
+    updateThemeIcon();
+
+    themeToggleBtn.addEventListener('click', () => {
+      if (htmlEl.classList.contains('dark')) {
+        htmlEl.classList.remove('dark');
+        localStorage.theme = 'light';
+      } else {
+        htmlEl.classList.add('dark');
+        localStorage.theme = 'dark';
+      }
+      updateThemeIcon();
+    });
+
+    // Schedule View Hybrid Switcher (Grid vs Agenda)
+    const btnGrid = document.getElementById('btn-view-grid');
+    const btnAgenda = document.getElementById('btn-view-agenda');
+    const gridContainer = document.getElementById('container-grid-view');
+    const agendaContainer = document.getElementById('container-agenda-view');
+
+    btnGrid.addEventListener('click', () => {
+      gridContainer.classList.remove('hidden');
+      agendaContainer.classList.add('hidden');
+      btnGrid.className = 'inline-flex min-h-[36px] items-center gap-1.5 rounded bg-white px-3 py-1 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-50 transition-all';
+      btnAgenda.className = 'inline-flex min-h-[36px] items-center gap-1.5 rounded px-3 py-1 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+    });
+
+    btnAgenda.addEventListener('click', () => {
+      gridContainer.classList.add('hidden');
+      agendaContainer.classList.remove('hidden');
+      btnAgenda.className = 'inline-flex min-h-[36px] items-center gap-1.5 rounded bg-white px-3 py-1 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-50 transition-all';
+      btnGrid.className = 'inline-flex min-h-[36px] items-center gap-1.5 rounded px-3 py-1 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+    });
+
+    // Slide-over Notification Drawer Handlers
+    const openNotifBtn = document.getElementById('open-notif-btn');
+    const closeNotifBtn = document.getElementById('close-notif-btn');
+    const notifOverlay = document.getElementById('notif-drawer-overlay');
+    const notifDrawer = document.getElementById('notif-drawer');
+
+    function openDrawer() {
+      notifOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      notifDrawer.classList.remove('translate-x-full');
+    }
+
+    function closeDrawer() {
+      notifOverlay.classList.add('opacity-0', 'pointer-events-none');
+      notifDrawer.classList.add('translate-x-full');
+    }
+
+    openNotifBtn.addEventListener('click', openDrawer);
+    closeNotifBtn.addEventListener('click', closeDrawer);
+    notifOverlay.addEventListener('click', (e) => {
+      if (e.target === notifOverlay) closeDrawer();
+    });
+
+    // Modal Edit Slot Handlers
+    const editModalOverlay = document.getElementById('edit-modal-overlay');
+    const editModalPanel = document.getElementById('edit-modal-panel');
+    const modalMatkulInput = document.getElementById('modal-matkul-input');
+    const modalDosenInput = document.getElementById('modal-dosen-input');
+    const modalHariSelect = document.getElementById('modal-hari-select');
+    const modalRuangSelect = document.getElementById('modal-ruang-select');
+
+    function openEditModal(matkul, dosen, ruang, hari, waktu) {
+      modalMatkulInput.value = `${matkul} (${waktu})`;
+      modalDosenInput.value = dosen;
+      modalHariSelect.value = hari;
+      modalRuangSelect.value = ruang;
+      editModalOverlay.classList.remove('opacity-0', 'pointer-events-none');
+      editModalPanel.classList.remove('scale-95');
+      editModalPanel.classList.add('scale-100');
+    }
+
+    function closeEditModal() {
+      editModalOverlay.classList.add('opacity-0', 'pointer-events-none');
+      editModalPanel.classList.remove('scale-100');
+      editModalPanel.classList.add('scale-95');
+    }
+
+    // Escape Key Listener for Modals & Drawers
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDrawer();
+        closeEditModal();
+      }
+    });
+  </script>
+</body>
+</html>
