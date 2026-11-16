@@ -20,5 +20,6 @@ router.get('/constraints', apiController.constraints);
 router.post('/constraints/preferensi', apiController.simpanPreferensiDosen);
 router.post('/constraints/hard', apiController.toggleConstraint);
 router.post('/generate', apiController.generate);
+router.get('/admin/backup-postgres', apiController.backupPostgres);
 
 module.exports = router;

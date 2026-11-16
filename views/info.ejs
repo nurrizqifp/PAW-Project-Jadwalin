@@ -1,0 +1,151 @@
+<%- include('partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Panduan & Info Akademik — Jadwalin' }) %>
+<%- include('partials/navbar') %>
+
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-10">
+
+  <!-- Header Section with Brand Colors -->
+  <div class="text-center max-w-3xl mx-auto space-y-3">
+    <div class="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/80 px-3.5 py-1 text-xs font-semibold text-blue-900 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-300">
+      <span class="rounded bg-amber-400 px-1.5 py-0.2 font-mono text-[9px] font-bold text-zinc-950">
+        <%= typeof appVersion !== 'undefined' ? appVersion : 'v.21' %>
+      </span>
+      <span>Pusat Informasi & Dokumentasi Resmi</span>
+    </div>
+    <h1 class="font-heading text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50">
+      Panduan Sistem & Aturan Akademik
+    </h1>
+    <p class="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed">
+      Tata kelola penjadwalan cerdas berbasis kecerdasan buatan, pedoman pengisian Pra-KRS mahasiswa, dan ketentuan preferensi mengajar dosen Program Studi S1 Teknologi Informasi UMY.
+    </p>
+  </div>
+
+  <!-- 3 Quick Pillar Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
+      <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-[#0c2b5e] dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+        <i class="ph ph-student text-2xl"></i>
+      </div>
+      <h3 class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-100">Bagi Mahasiswa</h3>
+      <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+        Gunakan fitur Pra-KRS Cerdas untuk merencanakan paket mata kuliah bebas bentrok 100%. Pantau kalender grid mingguan dan perhatikan jeda ibadah sholat Dhuhur.
+      </p>
+      <a href="/mahasiswa/prakrs" class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0c2b5e] dark:text-amber-400 hover:underline pt-1">
+        <span>Buka Wizard Pra-KRS</span>
+        <i class="ph ph-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
+      <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-900">
+        <i class="ph ph-chalkboard-teacher text-2xl"></i>
+      </div>
+      <h3 class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-100">Bagi Dosen</h3>
+      <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+        Ajukan hari bebas mengajar untuk keperluan riset, pengabdian, atau rapat senat melalui Formulir Preferensi. AI Solver akan memprioritaskan alokasi terbaik.
+      </p>
+      <a href="/dosen/preferensi" class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0c2b5e] dark:text-amber-400 hover:underline pt-1">
+        <span>Atur Hari Preferensi</span>
+        <i class="ph ph-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
+      <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900">
+        <i class="ph ph-shield-check text-2xl"></i>
+      </div>
+      <h3 class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-100">Transparansi Solver AI</h3>
+      <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+        Seluruh 111 sesi perkuliahan diproses menggunakan kombinasi algoritma genetika dan constraint satisfaction dengan jaminan 0 pelanggaran Hard Constraint.
+      </p>
+      <a href="/simulasi" class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0c2b5e] dark:text-amber-400 hover:underline pt-1">
+        <span>Coba Uji Simulasi</span>
+        <i class="ph ph-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Section: Aturan Constraint Penjadwalan -->
+  <div class="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-6">
+    <div class="border-b border-zinc-100 pb-4 dark:border-zinc-800">
+      <span class="font-mono text-[11px] font-bold text-zinc-400 uppercase tracking-wider">Arsitektur Logika</span>
+      <h2 class="font-heading text-xl sm:text-2xl font-bold text-zinc-900 dark:text-zinc-50 pt-1">
+        Aturan Batasan Penjadwalan (Constraints Matrix)
+      </h2>
+      <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
+        Kategori aturan yang diterapkan sistem saat menyusun seluruh jadwal perkuliahan prodi.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Hard Constraints -->
+      <div class="space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="flex h-6 w-6 items-center justify-center rounded-full bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-bold text-xs">
+            !
+          </span>
+          <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">Hard Constraints (Wajib 100%)</h3>
+        </div>
+        <div class="space-y-3 text-xs">
+          <div class="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-800/40 space-y-1">
+            <span class="font-mono font-bold text-blue-900 dark:text-blue-300">HC-01: Zero Clash Ruang & Dosen</span>
+            <p class="text-zinc-600 dark:text-zinc-400">Tidak diperkenankan satu ruangan atau satu dosen mengampu dua sesi pada rentang waktu yang sama.</p>
+          </div>
+          <div class="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-800/40 space-y-1">
+            <span class="font-mono font-bold text-blue-900 dark:text-blue-300">HC-02: Lab Matching Ruangan Praktikum</span>
+            <p class="text-zinc-600 dark:text-zinc-400">Mata kuliah praktikum wajib dialokasikan di Lab Komputer (Multimedia, Jaringan, Basis Data, Komputasi Lanjut).</p>
+          </div>
+          <div class="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-800/40 space-y-1">
+            <span class="font-mono font-bold text-blue-900 dark:text-blue-300">HC-03: Jeda Sholat Dhuhur Terjadwal</span>
+            <p class="text-zinc-600 dark:text-zinc-400">Pukul 11:30–12:10 WIB dikosongkan secara mutlak di seluruh ruangan untuk pelaksanaan sholat berjamaah.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Soft Constraints -->
+      <div class="space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 font-bold text-xs">
+            ★
+          </span>
+          <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">Soft Constraints (Optimasi Maksimal)</h3>
+        </div>
+        <div class="space-y-3 text-xs">
+          <div class="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-800/40 space-y-1">
+            <span class="font-mono font-bold text-amber-700 dark:text-amber-300">SC-01: Preferensi Hari Dosen</span>
+            <p class="text-zinc-600 dark:text-zinc-400">Menghindari penjadwalan kelas pada hari bebas yang diajukan dosen tetap melalui formulir preferensi.</p>
+          </div>
+          <div class="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-800/40 space-y-1">
+            <span class="font-mono font-bold text-amber-700 dark:text-amber-300">SC-02: Distribusi Beban Harian Seimbang</span>
+            <p class="text-zinc-600 dark:text-zinc-400">Penyebaran mata kuliah per semester tidak menumpuk di hari Senin/Rabu saja melainkan tersebar Senin s/d Sabtu.</p>
+          </div>
+          <div class="p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-800/40 space-y-1">
+            <span class="font-mono font-bold text-amber-700 dark:text-amber-300">SC-03: Minimalisasi Jeda Kosong Mahasiswa</span>
+            <p class="text-zinc-600 dark:text-zinc-400">Jarak jeda antar sesi kuliah untuk angkatan yang sama diusahakan beruntun tanpa jeda berjam-jam.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section: Kontak Helpdesk & Layanan -->
+  <div class="rounded-2xl border border-blue-900/30 bg-[#0c2b5e] text-white p-6 sm:p-8 space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h3 class="font-heading text-xl font-bold">Butuh Bantuan Penjadwalan Akademik?</h3>
+        <p class="text-xs text-blue-200 mt-1">
+          Sekretariat Program Studi Teknologi Informasi · Gedung F4 Lantai 2, Kampus Terpadu UMY
+        </p>
+      </div>
+      <div class="flex items-center gap-3 shrink-0">
+        <a href="/login"
+          class="inline-flex min-h-[38px] items-center gap-2 rounded-lg bg-amber-400 hover:bg-amber-300 px-4 text-xs font-semibold text-zinc-950 transition-colors shadow-sm">
+          <i class="ph ph-sign-in"></i>
+          <span>Masuk ke Panel Portal</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<%- include('partials/footer') %>

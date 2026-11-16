@@ -181,6 +181,42 @@
                       <div class="w-11 h-6 bg-zinc-200 peer-focus:outline-none rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-zinc-600 peer-checked:bg-[#0c2b5e]"></div>
                     </label>
                   </div>
+
+                  <!-- Range Slider 1: Batas Iterasi Solver -->
+                  <div class="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-800/40 space-y-2">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <span class="font-semibold text-zinc-900 dark:text-zinc-100">Batas Maksimal Siklus Iterasi AI Solver</span>
+                        <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Makin tinggi iterasi, semakin optimal solusi penataan ruang & waktu.</p>
+                      </div>
+                      <span id="iterasi-val" class="font-mono font-bold text-xs px-2.5 py-1 rounded bg-blue-100 dark:bg-blue-950 text-[#0c2b5e] dark:text-amber-400 border border-blue-200 dark:border-blue-900">
+                        5.000 Siklus
+                      </span>
+                    </div>
+                    <div class="pt-1">
+                      <input type="range" min="1000" max="15000" step="500" value="5000"
+                        oninput="document.getElementById('iterasi-val').textContent = Number(this.value).toLocaleString('id-ID') + ' Siklus'"
+                        onchange="handleInstantToggle(this, 'Batas Iterasi Solver: ' + Number(this.value).toLocaleString('id-ID'))">
+                    </div>
+                  </div>
+
+                  <!-- Range Slider 2: Bobot Penalti Pelanggaran Soft Constraint -->
+                  <div class="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-800/40 space-y-2">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <span class="font-semibold text-zinc-900 dark:text-zinc-100">Bobot Penalti Pelanggaran Preferensi Waktu</span>
+                        <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Tingkat kompromi AI saat kondisi ruang dan slot jadwal sangat padat.</p>
+                      </div>
+                      <span id="bobot-val" class="font-mono font-bold text-xs px-2.5 py-1 rounded bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-900">
+                        Tingkat 6 / 10
+                      </span>
+                    </div>
+                    <div class="pt-1">
+                      <input type="range" min="1" max="10" step="1" value="6"
+                        oninput="document.getElementById('bobot-val').textContent = 'Tingkat ' + this.value + ' / 10'"
+                        onchange="handleInstantToggle(this, 'Bobot Penalti: ' + this.value)">
+                    </div>
+                  </div>
                 </div>
 
                 <!-- Toast Indikator Auto-Save Status -->
@@ -222,31 +258,38 @@
               </div>
             </div>
 
-            <!-- TAB 4: CADANGAN & BASIS DATA -->
+            <!-- TAB 4: CADANGAN & BASIS DATA POSTGRESQL -->
             <div id="set-panel-pemeliharaan" class="settings-vtab-pane hidden space-y-5">
               <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
                 <div class="border-b border-zinc-100 pb-3 dark:border-zinc-800">
-                  <h3 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                    Log Audit & Pemeliharaan Basis Data
+                  <div class="flex items-center gap-2">
+                    <span class="rounded bg-blue-100 px-2 py-0.5 font-mono text-[10px] font-bold text-blue-900 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+                      POSTGRESQL 16
+                    </span>
+                    <span class="text-xs text-emerald-600 dark:text-emerald-400 font-mono flex items-center gap-1">
+                      <span class="h-2 w-2 rounded-full bg-emerald-500"></span> Connected: jadwalin_db (Port 5432)
+                    </span>
+                  </div>
+                  <h3 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-100 pt-2">
+                    Cadangan & Pemeliharaan Basis Data PostgreSQL
                   </h3>
                   <p class="text-xs text-zinc-500 dark:text-zinc-400">
-                    Utilitas pencadangan berkas basis data SQLite lokal (jadwalin.db).
+                    Utilitas pencadangan snapshot data relasional PostgreSQL (jadwalin_db.sql) untuk tabel master dosen, ruangan, mata kuliah, jadwal perkuliahan, dan constraints.
                   </p>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3 pt-1">
-                  <button type="button"
-                    onclick="window.showConfirmDialog('Cadangan Basis Data SQLite', 'Unduh berkas cadangan basis data jadwalin.db untuk arsip lokal?', null, 'Unduh DB', true)"
-                    class="inline-flex min-h-[36px] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors shadow-xs">
-                    <i class="ph ph-database text-base text-blue-600"></i>
-                    <span>Backup Database SQLite</span>
-                  </button>
+                  <a href="/api/admin/backup-postgres" download
+                    class="inline-flex min-h-[36px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white transition-colors shadow-xs border border-blue-900/40">
+                    <i class="ph ph-database text-base text-amber-400"></i>
+                    <span>Download Backup PostgreSQL (.sql)</span>
+                  </a>
 
                   <button type="button"
-                    onclick="window.showConfirmDialog('Pembersihan Cache', 'Cache session dan memori EJS akan disegarkan kembali.', null, 'Bersihkan', true)"
+                    onclick="window.showConfirmDialog('Pembersihan Cache', 'Cache session dan memori koneksi pool database akan disegarkan kembali.', () => { window.toast ? window.toast.success('Cache berhasil disegarkan.') : null; }, 'Bersihkan', true)"
                     class="inline-flex min-h-[36px] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors shadow-xs">
                     <i class="ph ph-arrow-clockwise text-base text-amber-500"></i>
-                    <span>Bersihkan Cache Memori</span>
+                    <span>Bersihkan Cache Pool</span>
                   </button>
                 </div>
               </div>
