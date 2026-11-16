@@ -38,10 +38,13 @@
 
         <!-- Dark/Light Mode Switcher -->
         <button
-          onclick="if(window.JadwalinUI) window.JadwalinUI.theme.toggle(); else document.documentElement.classList.toggle('dark');"
+          id="theme-toggle-btn"
+          data-toggle-theme
+          type="button"
+          onclick="window.toggleTheme ? window.toggleTheme() : (window.JadwalinUI ? window.JadwalinUI.theme.toggle() : document.documentElement.classList.toggle('dark'))"
           aria-label="Ganti Mode Tampilan"
           class="h-8 w-8 rounded-md border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition-colors">
-          <i class="theme-toggle-icon ph ph-moon text-base"></i>
+          <i id="theme-icon" class="theme-toggle-icon ph ph-moon text-base"></i>
         </button>
 
         <!-- Login / Portal Entry Button with Brand Blue & Gold Accent -->
