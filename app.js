@@ -59,9 +59,23 @@ app.use((err, req, res, next) => {
 
 // Menjalankan Server jika dieksekusi langsung
 if (require.main === module) {
-  app.listen(config.port, () => {
-    console.log(`[Jadwalin Server] Running on http://localhost:${config.port} (${config.nodeEnv})`);
-    console.log(`[Jadwalin Logger] Writing to ${config.logDir}/${config.logFile}`);
+  const server = app.listen(config.port, () => {
+    console.log(`\n======================================================`);
+    console.log(`[Jadwalin Server] Running on http://localhost:${config.port}`);
+    console.log(`[Jadwalin Role Mahasiswa] http://localhost:${config.port}/mahasiswa/dashboard`);
+    console.log(`[Jadwalin Role Admin]     http://localhost:${config.port}/admin/dashboard`);
+    console.log(`[Jadwalin Role Dosen]     http://localhost:${config.port}/dosen/dashboard`);
+    console.log(`[Jadwalin Environment]    ${config.nodeEnv}`);
+    console.log(`======================================================\n`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`\n[Jadwalin Error] Port ${config.port} sedang digunakan oleh proses lain.`);
+      console.error(`Solusi: Ubah PORT di file .env (misal PORT=4000 atau 8080) lalu jalankan ulang.\n`);
+    } else {
+      console.error('[Jadwalin Error]:', err);
+    }
   });
 }
 
