@@ -1,247 +1,342 @@
-<%- include('partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Jadwalin — AI Powered Smart Course Scheduling TI UMY' }) %>
+<%- include('partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Jadwalin — Pencarian Jadwal Perkuliahan TI UMY' }) %>
 <%- include('partials/navbar') %>
 
-<main class="flex-1 w-full mx-auto space-y-16 py-8 sm:py-14">
+<!-- ==================== FEATURE-FIRST HERO SECTION (DARK BACKGROUND) ==================== -->
+<section class="relative bg-zinc-950 text-white border-b border-zinc-800 py-12 sm:py-20 overflow-hidden">
+  
+  <!-- Subtle Technical Texture & Ambient Halo -->
+  <div class="absolute inset-0 pointer-events-none opacity-20">
+    <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-zinc-700/40 rounded-full blur-3xl"></div>
+  </div>
 
-  <!-- ==================== HERO SECTION WITH VISUAL GLOW ==================== -->
-  <section class="relative max-w-7xl mx-auto px-4 sm:px-6">
-    <!-- Subtle technical radial surface -->
-    <div class="absolute inset-0 -top-12 -z-10 hero-glow-surface pointer-events-none"></div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-      
-      <!-- Left Column: Copy & Actions -->
-      <div class="lg:col-span-7 space-y-6 text-left">
-        
-        <!-- Live Academic Badge -->
-        <div class="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/80 px-3.5 py-1 text-xs font-medium text-zinc-700 shadow-sm backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/80 dark:text-zinc-300">
-          <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="font-mono text-[11px] font-semibold text-zinc-900 dark:text-zinc-100">Semester Ganjil 2026/2027</span>
-          <span class="text-zinc-300 dark:text-zinc-700">·</span>
-          <span class="text-zinc-500 dark:text-zinc-400">Teknologi Informasi FT UMY</span>
-        </div>
-
-        <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-50 leading-[1.1]">
-          Jadwal Kuliah Cerdas, <br class="hidden sm:inline">
-          <span class="underline decoration-zinc-300 dark:decoration-zinc-700 decoration-wavy decoration-2 underline-offset-8">Zero-Clash</span> & Transparan.
-        </h1>
-
-        <p class="text-base sm:text-lg text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed">
-          Akses jadwal perkuliahan resmi mahasiswa Prodi TI UMY tanpa perlu login. Didukung teknologi optimasi jadwal otomatis untuk mengeliminasi bentrok ruang dan dosen.
-        </p>
-
-        <!-- Primary CTA Buttons (Khusus Mahasiswa / Publik) -->
-        <div class="flex flex-wrap items-center gap-3 pt-2">
-          <a href="/mahasiswa/jadwal" class="inline-flex min-h-[46px] items-center gap-2 rounded-lg bg-zinc-900 px-6 py-2.5 text-xs font-semibold text-white shadow-md hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white transition-all transform hover:-translate-y-0.5">
-            <i class="ph ph-calendar text-base"></i>
-            <span>Buka Jadwal Kuliah Mahasiswa</span>
-          </a>
-          <a href="/mahasiswa/prakrs" class="inline-flex min-h-[46px] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-5 py-2.5 text-xs font-semibold text-zinc-800 shadow-sm hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 transition-all">
-            <i class="ph ph-sparkle text-base"></i>
-            <span>Formulir Pra-KRS Publik</span>
-          </a>
-        </div>
-
-        <!-- Role Access Notice -->
-        <div class="flex items-center gap-2 pt-1 text-xs text-zinc-500 dark:text-zinc-400">
-          <i class="ph ph-lock-key text-zinc-400 text-sm"></i>
-          <span>Dosen & Staf Akademik?</span>
-          <a href="/login" class="font-semibold text-zinc-900 dark:text-zinc-200 underline hover:text-zinc-600 dark:hover:text-zinc-400">
-            Masuk dengan Akun Civitas
-          </a>
-        </div>
-
-      </div>
-
-      <!-- Right Column: Interactive Live Preview Card (Visual Enrichment) -->
-      <div class="lg:col-span-5">
-        <div class="rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-900 space-y-4 relative overflow-hidden">
-          
-          <!-- Card Decorative Top Bar -->
-          <div class="flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
-            <div class="flex items-center gap-2">
-              <span class="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <p class="font-mono text-xs font-bold uppercase tracking-wider text-zinc-800 dark:text-zinc-200">
-                Pratinjau Jadwal Hari Ini
-              </p>
-            </div>
-            <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-              Senin Aktif
-            </span>
-          </div>
-
-          <!-- Schedule Item 1: Active Live Session -->
-          <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 dark:border-emerald-900/60 dark:bg-emerald-950/20 space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="inline-flex items-center gap-1.5 font-mono font-bold text-emerald-700 dark:text-emerald-400 text-[11px]">
-                <i class="ph ph-radio-button text-xs"></i>
-                08:00 - 09:40 WIB · SEDANG BERLANGSUNG
-              </span>
-              <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300">
-                Kelas B
-              </span>
-            </div>
-            <div>
-              <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">
-                Pemrograman Berorientasi Objek
-              </h3>
-              <p class="text-xs text-zinc-600 dark:text-zinc-400">
-                Dr. Ir. Bambang Triatmaja, M.Kom.
-              </p>
-            </div>
-            <div class="flex items-center gap-2 pt-1 text-xs text-zinc-600 dark:text-zinc-400 font-medium">
-              <i class="ph ph-desktop text-sm"></i>
-              <span>Lab Komputer Multimedia (Lab Match 100%)</span>
-            </div>
-          </div>
-
-          <!-- Schedule Item 2: Up Next Session -->
-          <div class="rounded-xl border border-zinc-200 bg-zinc-50/60 p-4 dark:border-zinc-800 dark:bg-zinc-800/40 space-y-2">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-mono font-semibold text-zinc-500 dark:text-zinc-400 text-[11px]">
-                10:00 - 11:40 WIB · SESI BERIKUTNYA
-              </span>
-              <span class="rounded bg-zinc-200 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-700 dark:bg-zinc-700 dark:text-zinc-300">
-                Kelas B
-              </span>
-            </div>
-            <div>
-              <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">
-                Kecerdasan Buatan
-              </h3>
-              <p class="text-xs text-zinc-500 dark:text-zinc-400">
-                Hendra Prasetyo, Ph.D.
-              </p>
-            </div>
-            <div class="flex items-center gap-2 pt-1 text-xs text-zinc-500 dark:text-zinc-400">
-              <i class="ph ph-door text-sm"></i>
-              <span>Ruang Kuliah F3-202</span>
-            </div>
-          </div>
-
-          <!-- Hard Constraint HC-03 Reminder Pill -->
-          <div class="rounded-lg bg-zinc-100 p-2.5 dark:bg-zinc-800/80 text-center text-[11px] text-zinc-500 font-mono">
-            Jeda Ibadah Shalat Dhuhur: 11:30 – 12:10 WIB (Hard Constraint HC-03)
-          </div>
-
-          <!-- Direct Link to Full Schedule -->
-          <a href="/mahasiswa/jadwal" class="flex items-center justify-between rounded-lg border border-zinc-200 p-3 text-xs font-semibold text-zinc-800 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800 transition-colors">
-            <span>Lihat Seluruh Hari (Senin – Jumat)</span>
-            <i class="ph ph-arrow-right text-sm"></i>
-          </a>
-
-        </div>
-      </div>
-
+  <div class="relative max-w-5xl mx-auto px-4 sm:px-6 text-center space-y-6">
+    
+    <!-- Top Micro Tag -->
+    <div class="inline-flex items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/90 px-3.5 py-1 text-xs font-medium text-zinc-300 shadow-inner backdrop-blur-sm">
+      <span class="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span class="font-mono text-[11px] text-zinc-200">Portal Publik Mahasiswa</span>
+      <span class="text-zinc-600">·</span>
+      <span class="text-zinc-400">Semester Ganjil 2026/2027</span>
     </div>
-  </section>
 
-  <!-- ==================== KEY FEATURES & HARD CONSTRAINTS ==================== -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
-    <div class="text-center max-w-2xl mx-auto space-y-2">
-      <h2 class="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-        Standar Akademik Tanpa Kompromi
-      </h2>
-      <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-        Setiap jadwal yang terbit telah melalui verifikasi zero-clash lokal dan pemenuhan batasan mutlak.
+    <!-- Punchy Headline -->
+    <div class="space-y-2">
+      <h1 class="font-heading text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+        Cari Jadwal Kuliah TI UMY
+      </h1>
+      <p class="text-xs sm:text-sm text-zinc-400 max-w-xl mx-auto">
+        Ketik mata kuliah, dosen, atau pilih hari perkuliahan. Jadwal resmi terbitan tim akademik bebas bentrok (Zero-Clash).
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-      <!-- Feature Card 1 -->
-      <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
-        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100 font-bold">
-          <i class="ph ph-shield-check text-xl"></i>
+    <!-- ==================== GOOGLE-STYLE QUICK SEARCH BAR (FEATURE-FIRST) ==================== -->
+    <div id="schedule-finder" class="max-w-2xl mx-auto text-left pt-2">
+      <div class="relative rounded-2xl border border-zinc-700 bg-zinc-900/90 p-2 shadow-2xl backdrop-blur-xl transition-all focus-within:border-zinc-400 focus-within:ring-2 focus-within:ring-zinc-400/20">
+        <div class="flex items-center gap-3 px-3 py-1.5">
+          <i class="ph ph-magnifying-glass text-zinc-400 text-xl shrink-0"></i>
+          <input 
+            id="quick-search-input" 
+            type="text" 
+            placeholder="Cari mata kuliah (misal: PBO, Basis Data) atau nama dosen..." 
+            class="w-full bg-transparent text-sm sm:text-base text-white placeholder-zinc-500 focus:outline-none font-medium"
+            autocomplete="off"
+          >
+          <button id="quick-clear-btn" type="button" class="hidden text-zinc-500 hover:text-zinc-200 p-1">
+            <i class="ph ph-x text-base"></i>
+          </button>
         </div>
-        <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">
-          Zero Hard-Constraint Clash
-        </h3>
-        <p class="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          Tidak ada bentrok ruangan ganda (HC-02) maupun jadwal dosen tumpang tindih (HC-01) pada slot dan hari yang sama.
-        </p>
-      </div>
 
-      <!-- Feature Card 2 -->
-      <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
-        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100 font-bold">
-          <i class="ph ph-clock text-xl"></i>
-        </div>
-        <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">
-          Penegakan Jeda Ibadah (HC-03)
-        </h3>
-        <p class="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          Pukul 11:30 s/d 12:10 WIB dikunci mutlak dari seluruh aktivitas perkuliahan untuk pelaksanaan Shalat Dhuhur dan istirahat.
-        </p>
-      </div>
+        <!-- Quick Filter Pills (Hari & Kelas) -->
+        <div class="flex flex-wrap items-center justify-between gap-2 border-t border-zinc-800/80 pt-2.5 px-2 mt-1 text-xs">
+          <!-- Filter Hari -->
+          <div class="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
+            <span class="text-[10px] font-mono uppercase text-zinc-500 pr-1 shrink-0">Hari:</span>
+            <button type="button" data-filter-day="" class="filter-day-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-white text-zinc-950 shadow-sm transition-colors shrink-0">Semua</button>
+            <button type="button" data-filter-day="Senin" class="filter-day-btn px-2.5 py-1 rounded-md text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors shrink-0">Senin</button>
+            <button type="button" data-filter-day="Selasa" class="filter-day-btn px-2.5 py-1 rounded-md text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors shrink-0">Selasa</button>
+            <button type="button" data-filter-day="Rabu" class="filter-day-btn px-2.5 py-1 rounded-md text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors shrink-0">Rabu</button>
+            <button type="button" data-filter-day="Kamis" class="filter-day-btn px-2.5 py-1 rounded-md text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors shrink-0">Kamis</button>
+            <button type="button" data-filter-day="Jumat" class="filter-day-btn px-2.5 py-1 rounded-md text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors shrink-0">Jumat</button>
+          </div>
 
-      <!-- Feature Card 3 -->
-      <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
-        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100 font-bold">
-          <i class="ph ph-desktop text-xl"></i>
+          <!-- Filter Kelas Dropdown -->
+          <div class="flex items-center gap-1.5 shrink-0">
+            <label for="filter-kelas-select" class="text-[10px] font-mono uppercase text-zinc-500">Kelas:</label>
+            <select id="filter-kelas-select" class="rounded-md border border-zinc-700 bg-zinc-800 px-2 py-0.5 text-xs font-medium text-zinc-200 focus:outline-none">
+              <option value="">Semua</option>
+              <option value="A">Kelas A</option>
+              <option value="B" selected>Kelas B</option>
+              <option value="C">Kelas C</option>
+              <option value="D">Kelas D</option>
+            </select>
+          </div>
         </div>
-        <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">
-          100% Lab Matching
-        </h3>
-        <p class="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          Seluruh mata kuliah praktikum dialokasikan secara presisi pada 4 Laboratorium Komputer dengan spesifikasi memadai.
-        </p>
-      </div>
 
-    </div>
-  </section>
-
-  <!-- ==================== RESTRICTED CIVITAS ACCESS BANNER ==================== -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="rounded-2xl border border-zinc-200 bg-zinc-100/70 p-6 sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/60 flex flex-col md:flex-row items-center justify-between gap-6">
-      
-      <div class="space-y-2 text-center md:text-left">
-        <div class="inline-flex items-center gap-1.5 rounded-full bg-zinc-200 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
-          <i class="ph ph-lock-key"></i>
-          Area Terproteksi
-        </div>
-        <h3 class="font-heading text-xl font-bold text-zinc-900 dark:text-zinc-50">
-          Portal Dosen & Staf Akademik
-        </h3>
-        <p class="text-xs text-zinc-600 dark:text-zinc-400 max-w-xl">
-          Pengaturan preferensi mengajar dosen, manajemen master data perkuliahan, dan eksekusi AI Solver memerlukan hak akses akun resmi.
-        </p>
-      </div>
-
-      <div class="flex flex-wrap items-center gap-3 shrink-0">
-        <a href="/login" class="inline-flex min-h-[44px] items-center gap-2 rounded-md bg-zinc-900 px-6 py-2 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white transition-colors">
-          <i class="ph ph-sign-in text-base"></i>
-          <span>Masuk ke Akun Terverifikasi</span>
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ==================== SYSTEM KEY METRICS ==================== -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 dark:border-zinc-800 dark:bg-zinc-900 shadow-sm">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x-0 md:divide-x divide-zinc-100 dark:divide-zinc-800">
-        <div class="space-y-1">
-          <p class="font-mono text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">21</p>
-          <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Dosen Pengampu TI</p>
-        </div>
-        <div class="space-y-1">
-          <p class="font-mono text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">77</p>
-          <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Mata Kuliah Kurikulum</p>
-        </div>
-        <div class="space-y-1">
-          <p class="font-mono text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">12</p>
-          <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Ruang & Lab Komputer</p>
-        </div>
-        <div class="space-y-1">
-          <p class="font-mono text-3xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">Zero Clash</p>
-          <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Hard Constraint Kepatuhan 100%</p>
-        </div>
       </div>
     </div>
+
+    <!-- Quick Action Chips Under Search Bar -->
+    <div class="flex flex-wrap items-center justify-center gap-2 pt-2 text-xs font-medium text-zinc-400">
+      <span class="text-zinc-500">Akses Cepat:</span>
+      <a href="/mahasiswa/jadwal" class="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 inline-flex items-center gap-1.5 transition-colors">
+        <i class="ph ph-squares-four"></i>
+        <span>Matriks Lengkap</span>
+      </a>
+      <a href="/mahasiswa/prakrs" class="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 inline-flex items-center gap-1.5 transition-colors">
+        <i class="ph ph-sparkle"></i>
+        <span>Simulasi Pra-KRS</span>
+      </a>
+      <a href="/mahasiswa/dashboard" class="px-2.5 py-1 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 inline-flex items-center gap-1.5 transition-colors">
+        <i class="ph ph-clock-countdown"></i>
+        <span>Countdown Sesi Hari Ini</span>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==================== LIVE RESULTS & FEATURE-FIRST SCHEDULE GRID ==================== -->
+<main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-10 space-y-12">
+
+  <!-- Search Result Summary Bar -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800">
+    <div class="flex items-center gap-2.5">
+      <span class="flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+      <h2 id="result-heading" class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-50">
+        Daftar Jadwal Perkuliahan
+      </h2>
+      <span id="result-count-badge" class="rounded-full bg-zinc-100 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+        4 Sesi Ditemukan
+      </span>
+    </div>
+
+    <!-- Reset / Print Quick Actions -->
+    <div class="flex items-center gap-2">
+      <button onclick="window.print()" type="button" class="inline-flex items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 shadow-sm transition-colors">
+        <i class="ph ph-printer text-sm"></i>
+        <span>Cetak Halaman Ini</span>
+      </button>
+      <a href="/mahasiswa/jadwal" class="inline-flex items-center gap-1 text-xs font-semibold text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+        <span>Buka Tampilan Grid Mingguan</span>
+        <i class="ph ph-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+
+  <!-- Interactive Live Schedule Cards Grid -->
+  <div id="schedule-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+    
+    <!-- Card 1: PBO -->
+    <div class="schedule-card rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 transition-all space-y-3" data-day="Senin" data-class="B" data-search="pemrograman berorientasi objek pbo bambang lab multimedia">
+      <div class="flex items-center justify-between text-xs">
+        <span class="font-mono font-bold text-zinc-900 dark:text-zinc-100">Senin, 08:00 - 09:40</span>
+        <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-bold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">Kelas B</span>
+      </div>
+      <div>
+        <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">Pemrograman Berorientasi Objek</h3>
+        <p class="text-xs text-zinc-600 dark:text-zinc-400">Dr. Ir. Bambang Triatmaja, M.Kom.</p>
+      </div>
+      <div class="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800 text-xs">
+        <div class="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold font-mono text-[11px]">
+          <i class="ph ph-desktop"></i>
+          <span>Lab Multimedia</span>
+        </div>
+        <span class="text-[11px] font-mono text-zinc-400">3 SKS · Teori & Praktikum</span>
+      </div>
+    </div>
+
+    <!-- Card 2: Basis Data -->
+    <div class="schedule-card rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 transition-all space-y-3" data-day="Selasa" data-class="B" data-search="basis data dwi lab komputer f3">
+      <div class="flex items-center justify-between text-xs">
+        <span class="font-mono font-bold text-zinc-900 dark:text-zinc-100">Selasa, 10:00 - 11:40</span>
+        <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-bold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">Kelas B</span>
+      </div>
+      <div>
+        <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">Basis Data</h3>
+        <p class="text-xs text-zinc-600 dark:text-zinc-400">Dwi Astuti, S.Kom., M.Cs.</p>
+      </div>
+      <div class="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800 text-xs">
+        <div class="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 font-medium">
+          <i class="ph ph-door"></i>
+          <span>Ruang F3-102</span>
+        </div>
+        <span class="text-[11px] font-mono text-zinc-400">3 SKS · Wajib</span>
+      </div>
+    </div>
+
+    <!-- Card 3: Kecerdasan Buatan -->
+    <div class="schedule-card rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 transition-all space-y-3" data-day="Rabu" data-class="B" data-search="kecerdasan buatan hendra prasetyo ruang f3-202">
+      <div class="flex items-center justify-between text-xs">
+        <span class="font-mono font-bold text-zinc-900 dark:text-zinc-100">Rabu, 08:00 - 09:40</span>
+        <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-bold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">Kelas B</span>
+      </div>
+      <div>
+        <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">Kecerdasan Buatan</h3>
+        <p class="text-xs text-zinc-600 dark:text-zinc-400">Hendra Prasetyo, Ph.D.</p>
+      </div>
+      <div class="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800 text-xs">
+        <div class="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 font-medium">
+          <i class="ph ph-door"></i>
+          <span>Ruang F3-202</span>
+        </div>
+        <span class="text-[11px] font-mono text-zinc-400">3 SKS · Teori</span>
+      </div>
+    </div>
+
+    <!-- Card 4: Rekayasa Perangkat Lunak -->
+    <div class="schedule-card rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 transition-all space-y-3" data-day="Kamis" data-class="B" data-search="rekayasa perangkat lunak rpl rina wulandari f3-201">
+      <div class="flex items-center justify-between text-xs">
+        <span class="font-mono font-bold text-zinc-900 dark:text-zinc-100">Kamis, 12:15 - 13:55</span>
+        <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-bold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">Kelas B</span>
+      </div>
+      <div>
+        <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">Rekayasa Perangkat Lunak</h3>
+        <p class="text-xs text-zinc-600 dark:text-zinc-400">Rina Wulandari, S.T., M.Eng.</p>
+      </div>
+      <div class="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800 text-xs">
+        <div class="flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 font-medium">
+          <i class="ph ph-door"></i>
+          <span>Ruang F3-201</span>
+        </div>
+        <span class="text-[11px] font-mono text-zinc-400">3 SKS · Wajib</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Empty State Handler (Ketika filter tidak cocok) -->
+  <div id="schedule-empty-state" class="hidden empty-state space-y-3">
+    <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+      <i class="ph ph-magnifying-glass text-2xl"></i>
+    </div>
+    <div class="space-y-1">
+      <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100">Jadwal Tidak Ditemukan</h3>
+      <p class="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm">
+        Tidak ada jadwal perkuliahan yang cocok dengan kata kunci atau filter hari yang dipilih.
+      </p>
+    </div>
+    <button id="btn-reset-filter" type="button" class="mt-2 inline-flex items-center gap-1.5 rounded-md bg-zinc-900 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white transition-colors">
+      <i class="ph ph-arrow-counter-clockwise"></i>
+      <span>Reset Pencarian</span>
+    </button>
+  </div>
+
+  <!-- ==================== RESTRICTED DOSEN & AKADEMIK ACCESS ==================== -->
+  <section class="rounded-2xl border border-zinc-200 bg-zinc-50/70 p-6 sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/60 flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="space-y-1.5 text-center md:text-left">
+      <div class="inline-flex items-center gap-1.5 rounded-full bg-zinc-200 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
+        <i class="ph ph-lock-key"></i>
+        Area Terproteksi Civitas
+      </div>
+      <h3 class="font-heading text-xl font-bold text-zinc-900 dark:text-zinc-50">
+        Portal Khusus Dosen & Staf Akademik
+      </h3>
+      <p class="text-xs text-zinc-600 dark:text-zinc-400 max-w-xl">
+        Akses pengelolaan master data perkuliahan, penentuan hari berhalangan mengajar, dan eksekusi AI Solver memerlukan akun terverifikasi.
+      </p>
+    </div>
+
+    <a href="/login" class="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-zinc-900 px-6 py-2 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white transition-colors shadow-sm shrink-0">
+      <i class="ph ph-sign-in text-base"></i>
+      <span>Masuk Portal Civitas</span>
+    </a>
   </section>
 
 </main>
+
+<!-- Client-side Interactive Filter Script for Search Bar -->
+<script>
+  (function() {
+    const input = document.getElementById('quick-search-input');
+    const clearBtn = document.getElementById('quick-clear-btn');
+    const dayBtns = document.querySelectorAll('.filter-day-btn');
+    const classSelect = document.getElementById('filter-kelas-select');
+    const cards = document.querySelectorAll('.schedule-card');
+    const countBadge = document.getElementById('result-count-badge');
+    const emptyState = document.getElementById('schedule-empty-state');
+    const resetBtn = document.getElementById('btn-reset-filter');
+
+    let activeDay = '';
+    let activeClass = 'B';
+
+    function filterCards() {
+      const q = (input.value || '').trim().toLowerCase();
+      if (clearBtn) {
+        clearBtn.classList.toggle('hidden', q.length === 0);
+      }
+
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const cardDay = card.getAttribute('data-day') || '';
+        const cardClass = card.getAttribute('data-class') || '';
+        const cardSearch = card.getAttribute('data-search') || '';
+
+        const matchDay = !activeDay || cardDay === activeDay;
+        const matchClass = !activeClass || cardClass === activeClass;
+        const matchQuery = !q || cardSearch.includes(q);
+
+        if (matchDay && matchClass && matchQuery) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (countBadge) {
+        countBadge.textContent = `${visibleCount} Sesi Ditemukan`;
+      }
+
+      if (emptyState) {
+        emptyState.classList.toggle('hidden', visibleCount > 0);
+      }
+    }
+
+    if (input) input.addEventListener('input', filterCards);
+    if (clearBtn) clearBtn.addEventListener('click', () => {
+      input.value = '';
+      filterCards();
+      input.focus();
+    });
+
+    dayBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        dayBtns.forEach(b => {
+          b.className = 'filter-day-btn px-2.5 py-1 rounded-md text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors shrink-0';
+        });
+        btn.className = 'filter-day-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-white text-zinc-950 shadow-sm transition-colors shrink-0';
+        activeDay = btn.getAttribute('data-filter-day');
+        filterCards();
+      });
+    });
+
+    if (classSelect) {
+      classSelect.addEventListener('change', (e) => {
+        activeClass = e.target.value;
+        filterCards();
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        if (input) input.value = '';
+        activeDay = '';
+        activeClass = '';
+        if (classSelect) classSelect.value = '';
+        dayBtns.forEach((b, idx) => {
+          if (idx === 0) {
+            b.className = 'filter-day-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-white text-zinc-950 shadow-sm transition-colors shrink-0';
+          } else {
+            b.className = 'filter-day-btn px-2.5 py-1 rounded-md text-xs font-medium text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors shrink-0';
+          }
+        });
+        filterCards();
+      });
+    }
+
+    // Trigger initial filter
+    filterCards();
+  })();
+</script>
 
 <%- include('partials/footer') %>
