@@ -31,6 +31,27 @@
       </button>
     </form>
 
+    <!-- Quick Role Login (Testing & Prototyping) -->
+    <div class="space-y-2.5 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+      <p class="text-[11px] font-mono uppercase tracking-wider text-zinc-400 text-center">
+        Pilih Akun Demo / Uji Coba Role
+      </p>
+      <div class="grid grid-cols-3 gap-2">
+        <a href="/mahasiswa/dashboard?status=success&msg=Masuk+sebagai+Mahasiswa+(Haidar)" class="flex flex-col items-center justify-center p-2 rounded-lg border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-800/60 dark:hover:bg-zinc-800 text-center transition-colors">
+          <i class="ph ph-student text-base text-zinc-800 dark:text-zinc-200"></i>
+          <span class="text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 mt-1">Mahasiswa</span>
+        </a>
+        <a href="/dosen/dashboard?status=success&msg=Masuk+sebagai+Dosen+(Dr.+Bambang)" class="flex flex-col items-center justify-center p-2 rounded-lg border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-800/60 dark:hover:bg-zinc-800 text-center transition-colors">
+          <i class="ph ph-chalkboard-teacher text-base text-zinc-800 dark:text-zinc-200"></i>
+          <span class="text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 mt-1">Dosen</span>
+        </a>
+        <a href="/admin/dashboard?status=success&msg=Masuk+sebagai+Staf+Akademik+(Rina)" class="flex flex-col items-center justify-center p-2 rounded-lg border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-800/60 dark:hover:bg-zinc-800 text-center transition-colors">
+          <i class="ph ph-shield-check text-base text-zinc-800 dark:text-zinc-200"></i>
+          <span class="text-[10px] font-semibold text-zinc-700 dark:text-zinc-300 mt-1">Admin</span>
+        </a>
+      </div>
+    </div>
+
     <div class="border-t border-zinc-100 pt-4 dark:border-zinc-800 text-center text-xs text-zinc-500">
       <a href="/" class="hover:text-zinc-900 dark:hover:text-zinc-200 inline-flex items-center gap-1">
         <i class="ph ph-arrow-left"></i>
