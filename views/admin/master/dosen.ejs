@@ -7,67 +7,176 @@
     <%- include('../../partials/admin-navbar') %>
 
     <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
-    <div class="max-w-6xl mx-auto space-y-6">
+      <div class="max-w-6xl mx-auto space-y-6">
 
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Master Data Dosen
-          </h1>
-          <p class="text-xs text-zinc-500 dark:text-zinc-400">
-            Daftar 21 Dosen Tetap Prodi TI UMY, NIDN, beban SKS, dan status ketersediaan.
-          </p>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 pb-5 dark:border-zinc-800">
+          <div>
+            <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+              Master Data Dosen
+            </h1>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">
+              Daftar 21 Dosen Tetap Prodi TI UMY, NIDN, beban SKS, dan status ketersediaan.
+            </p>
+          </div>
+
+          <button type="button" onclick="openMasterDrawer('Tambah Dosen Baru', '', '', '', '12')"
+            class="inline-flex min-h-[38px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
+            <i class="ph ph-plus text-base text-amber-400"></i>
+            <span>Tambah Dosen</span>
+          </button>
         </div>
 
-        <button type="button" class="inline-flex min-h-[38px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
-          <i class="ph ph-plus text-base text-amber-400"></i>
-          <span>Tambah Dosen</span>
-        </button>
-      </div>
-
-      <div class="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
-              <tr>
-                <th class="px-4 py-3 font-semibold">Kode</th>
-                <th class="px-4 py-3 font-semibold">Nama Lengkap & Gelar</th>
-                <th class="px-4 py-3 font-semibold">NIDN</th>
-                <th class="px-4 py-3 font-semibold">Target SKS</th>
-                <th class="px-4 py-3 font-semibold text-right">Aksi</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
-              <tr>
-                <td class="px-4 py-3 font-mono font-semibold">D01</td>
-                <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Dr. Ir. Bambang Triatmaja, M.Kom.</td>
-                <td class="px-4 py-3 font-mono text-zinc-500">0512037501</td>
-                <td class="px-4 py-3 font-mono">12 SKS</td>
-                <td class="px-4 py-3 text-right">
-                  <button type="button" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                    <i class="ph ph-pencil-simple text-base"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3 font-mono font-semibold">D02</td>
-                <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Hendra Prasetyo, Ph.D.</td>
-                <td class="px-4 py-3 font-mono text-zinc-500">0524088002</td>
-                <td class="px-4 py-3 font-mono">10 SKS</td>
-                <td class="px-4 py-3 text-right">
-                  <button type="button" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                    <i class="ph ph-pencil-simple text-base"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
+                <tr>
+                  <th class="px-4 py-3 font-semibold">Kode</th>
+                  <th class="px-4 py-3 font-semibold">Nama Lengkap & Gelar</th>
+                  <th class="px-4 py-3 font-semibold">NIDN</th>
+                  <th class="px-4 py-3 font-semibold">Target SKS</th>
+                  <th class="px-4 py-3 font-semibold text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                <tr>
+                  <td class="px-4 py-3 font-mono font-semibold">D01</td>
+                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Dr. Ir. Bambang Triatmaja, M.Kom.</td>
+                  <td class="px-4 py-3 font-mono text-zinc-500">0512037501</td>
+                  <td class="px-4 py-3 font-mono">12 SKS</td>
+                  <td class="px-4 py-3 text-right">
+                    <button type="button" onclick="openMasterDrawer('Edit Dosen D01', 'D01', 'Dr. Ir. Bambang Triatmaja, M.Kom.', '0512037501', '12')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
+                      <i class="ph ph-pencil-simple text-base"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 font-mono font-semibold">D02</td>
+                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Hendra Prasetyo, Ph.D.</td>
+                  <td class="px-4 py-3 font-mono text-zinc-500">0524088002</td>
+                  <td class="px-4 py-3 font-mono">10 SKS</td>
+                  <td class="px-4 py-3 text-right">
+                    <button type="button" onclick="openMasterDrawer('Edit Dosen D02', 'D02', 'Hendra Prasetyo, Ph.D.', '0524088002', '10')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
+                      <i class="ph ph-pencil-simple text-base"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 font-mono font-semibold">D03</td>
+                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Dr. Nasy'an Taufiq, S.T., M.T.</td>
+                  <td class="px-4 py-3 font-mono text-zinc-500">0515068201</td>
+                  <td class="px-4 py-3 font-mono">12 SKS</td>
+                  <td class="px-4 py-3 text-right">
+                    <button type="button" onclick="openMasterDrawer('Edit Dosen D03', 'D03', 'Dr. Nasy\'an Taufiq, S.T., M.T.', '0515068201', '12')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
+                      <i class="ph ph-pencil-simple text-base"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-    </div>
-  </main>
+      </div>
+    </main>
 
     <%- include('../../partials/admin-footer') %>
   </div>
 </div>
+
+<!-- Drawer Slide-Over CRUD Master Dosen -->
+<div id="drawer-master-overlay"
+  class="fixed inset-0 z-50 bg-black/40 transition-opacity duration-150 opacity-0 pointer-events-none">
+  <div id="drawer-master-panel"
+    class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl border-l border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800 flex flex-col transform translate-x-full transition-transform duration-200 ease-in-out">
+
+    <div class="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">
+      <div>
+        <h3 id="drawer-title" class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">Form Dosen</h3>
+        <p class="text-xs text-zinc-500">Kelola data pengampu akademik</p>
+      </div>
+      <button onclick="closeMasterDrawer()" type="button"
+        class="h-8 w-8 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 flex items-center justify-center">
+        <i class="ph ph-x text-base"></i>
+      </button>
+    </div>
+
+    <form onsubmit="handleSaveMaster(event)" class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
+      <div class="space-y-1">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Kode Dosen</label>
+        <input id="input-dosen-code" type="text" required placeholder="Contoh: D01"
+          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+      </div>
+
+      <div class="space-y-1">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama Lengkap & Gelar</label>
+        <input id="input-dosen-name" type="text" required placeholder="Contoh: Dr. Ir. Bambang Triatmaja, M.Kom."
+          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div class="space-y-1">
+          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">NIDN</label>
+          <input id="input-dosen-nidn" type="text" required placeholder="0512037501"
+            class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+        </div>
+        <div class="space-y-1">
+          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Target Beban SKS</label>
+          <input id="input-dosen-sks" type="number" required value="12" min="2" max="24"
+            class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+        </div>
+      </div>
+
+      <div class="pt-4 flex items-center justify-end gap-2 border-t border-zinc-100 dark:border-zinc-800">
+        <button type="button" onclick="closeMasterDrawer()"
+          class="inline-flex min-h-[36px] items-center rounded-lg border border-zinc-200 px-3.5 font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800">
+          Batal
+        </button>
+        <button type="submit"
+          class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 font-semibold text-white shadow-xs">
+          <i class="ph ph-check text-amber-400"></i>
+          <span>Simpan Data</span>
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<script>
+  function openMasterDrawer(title, code, name, nidn, sks) {
+    const overlay = document.getElementById('drawer-master-overlay');
+    const panel = document.getElementById('drawer-master-panel');
+    const titleEl = document.getElementById('drawer-title');
+    const codeEl = document.getElementById('input-dosen-code');
+    const nameEl = document.getElementById('input-dosen-name');
+    const nidnEl = document.getElementById('input-dosen-nidn');
+    const sksEl = document.getElementById('input-dosen-sks');
+
+    if (titleEl) titleEl.textContent = title;
+    if (codeEl) codeEl.value = code;
+    if (nameEl) nameEl.value = name;
+    if (nidnEl) nidnEl.value = nidn;
+    if (sksEl) sksEl.value = sks;
+
+    if (overlay && panel) {
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      panel.classList.remove('translate-x-full');
+    }
+  }
+
+  function closeMasterDrawer() {
+    const overlay = document.getElementById('drawer-master-overlay');
+    const panel = document.getElementById('drawer-master-panel');
+    if (overlay && panel) {
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      panel.classList.add('translate-x-full');
+    }
+  }
+
+  function handleSaveMaster(e) {
+    e.preventDefault();
+    closeMasterDrawer();
+    window.showConfirmDialog('Data Dosen Disimpan', 'Data dosen berhasil disimpan ke database.', null, 'Selesai', true);
+  }
+</script>

@@ -140,7 +140,10 @@
                         <div class="space-y-1.5">
                           <% slotJadwal.forEach(item => { %>
                             <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
-                              class="cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>">
+                              class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>"
+                              data-hari="<%= item.hari %>"
+                              data-jenis="<%= item.jenis %>"
+                              data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas).toLowerCase() %>">
                               <div class="flex items-center justify-between gap-1">
                                 <span class="font-mono text-[9px] font-bold px-1 rounded <%= item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200' %>">
                                   <%= item.kodeMatkul || 'TI261' %>
@@ -171,7 +174,10 @@
                         <div class="space-y-1.5">
                           <% slotJadwal.forEach(item => { %>
                             <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
-                              class="cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>">
+                              class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>"
+                              data-hari="<%= item.hari %>"
+                              data-jenis="<%= item.jenis %>"
+                              data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas).toLowerCase() %>">
                               <div class="flex items-center justify-between gap-1">
                                 <span class="font-mono text-[9px] font-bold px-1 rounded <%= item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200' %>">
                                   <%= item.kodeMatkul || 'TI261' %>
@@ -212,7 +218,10 @@
                         <div class="space-y-1.5">
                           <% slotJadwal.forEach(item => { %>
                             <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
-                              class="cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>">
+                              class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>"
+                              data-hari="<%= item.hari %>"
+                              data-jenis="<%= item.jenis %>"
+                              data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas).toLowerCase() %>">
                               <div class="flex items-center justify-between gap-1">
                                 <span class="font-mono text-[9px] font-bold px-1 rounded <%= item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200' %>">
                                   <%= item.kodeMatkul || 'TI261' %>
@@ -243,7 +252,10 @@
                         <div class="space-y-1.5">
                           <% slotJadwal.forEach(item => { %>
                             <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
-                              class="cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>">
+                              class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>"
+                              data-hari="<%= item.hari %>"
+                              data-jenis="<%= item.jenis %>"
+                              data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas).toLowerCase() %>">
                               <div class="flex items-center justify-between gap-1">
                                 <span class="font-mono text-[9px] font-bold px-1 rounded <%= item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200' %>">
                                   <%= item.kodeMatkul || 'TI261' %>
@@ -373,12 +385,14 @@
     const filterHari = document.getElementById('filter-hari-select');
     const filterTipe = document.getElementById('filter-tipe-select');
     const rows = document.querySelectorAll('.jadwal-row');
+    const gridCards = document.querySelectorAll('.grid-slot-card');
 
     function applyFilter() {
       const q = (searchInput?.value || '').toLowerCase().trim();
       const hari = filterHari?.value || 'Semua';
       const tipe = filterTipe?.value || 'Semua';
 
+      // Filter baris Tabel Rinci
       rows.forEach(row => {
         const text = row.getAttribute('data-search') || '';
         const rowHari = row.getAttribute('data-hari') || '';
@@ -389,6 +403,19 @@
         const matchTipe = tipe === 'Semua' || rowTipe === tipe;
 
         row.style.display = (matchSearch && matchHari && matchTipe) ? '' : 'none';
+      });
+
+      // Filter kartu di Kalender Grid Mingguan
+      gridCards.forEach(card => {
+        const text = card.getAttribute('data-search') || '';
+        const cardHari = card.getAttribute('data-hari') || '';
+        const cardTipe = card.getAttribute('data-jenis') || '';
+
+        const matchSearch = !q || text.includes(q);
+        const matchHari = hari === 'Semua' || cardHari === hari;
+        const matchTipe = tipe === 'Semua' || cardTipe === tipe;
+
+        card.style.display = (matchSearch && matchHari && matchTipe) ? '' : 'none';
       });
     }
 

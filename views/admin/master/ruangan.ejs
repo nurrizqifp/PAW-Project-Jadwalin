@@ -7,84 +7,174 @@
     <%- include('../../partials/admin-navbar') %>
 
     <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
-    <div class="max-w-6xl mx-auto space-y-6">
+      <div class="max-w-6xl mx-auto space-y-6">
 
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Master Data Ruangan & Laboratorium
-          </h1>
-          <p class="text-xs text-zinc-500 dark:text-zinc-400">
-            Kelola data 12 sarana ruang perkuliahan, laboratorium komputer, dan kapasitas kursi mahasiswa.
-          </p>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 pb-5 dark:border-zinc-800">
+          <div>
+            <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+              Master Data Ruangan & Laboratorium
+            </h1>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">
+              Daftar 12 Ruang Kuliah (4 Lab Komputer F4, 2 RKB Teori F6, dan 6 Kelas Reguler).
+            </p>
+          </div>
+
+          <button type="button" onclick="openRuanganDrawer('Tambah Ruang / Lab Baru', '', 'F4', 'Kelas Reguler', '45')"
+            class="inline-flex min-h-[38px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
+            <i class="ph ph-plus text-base text-amber-400"></i>
+            <span>Tambah Ruangan</span>
+          </button>
         </div>
 
-        <button type="button" class="inline-flex min-h-[38px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
-          <i class="ph ph-plus text-base text-amber-400"></i>
-          <span>Tambah Ruangan / Lab</span>
-        </button>
-      </div>
-
-      <div class="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
-              <tr>
-                <th class="px-4 py-3 font-semibold">Kode Ruang</th>
-                <th class="px-4 py-3 font-semibold">Nama Ruangan</th>
-                <th class="px-4 py-3 font-semibold">Tipe Fasilitas</th>
-                <th class="px-4 py-3 font-semibold">Kapasitas</th>
-                <th class="px-4 py-3 font-semibold">Status</th>
-                <th class="px-4 py-3 font-semibold text-right">Aksi</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
-              <tr>
-                <td class="px-4 py-3 font-mono font-semibold">LAB-01</td>
-                <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Lab Komputer Multimedia</td>
-                <td class="px-4 py-3">
-                  <span class="inline-flex items-center gap-1 rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
-                    <i class="ph ph-desktop"></i>
-                    Laboratorium
-                  </span>
-                </td>
-                <td class="px-4 py-3 font-mono">40 Kursi</td>
-                <td class="px-4 py-3">
-                  <span class="text-emerald-600 dark:text-emerald-400 font-semibold">Aktif</span>
-                </td>
-                <td class="px-4 py-3 text-right">
-                  <button type="button" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                    <i class="ph ph-pencil-simple text-base"></i>
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3 font-mono font-semibold">F3-201</td>
-                <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Ruang Kuliah F3.201</td>
-                <td class="px-4 py-3">
-                  <span class="inline-flex items-center gap-1 rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
-                    <i class="ph ph-chalkboard"></i>
-                    Reguler
-                  </span>
-                </td>
-                <td class="px-4 py-3 font-mono">50 Kursi</td>
-                <td class="px-4 py-3">
-                  <span class="text-emerald-600 dark:text-emerald-400 font-semibold">Aktif</span>
-                </td>
-                <td class="px-4 py-3 text-right">
-                  <button type="button" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                    <i class="ph ph-pencil-simple text-base"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
+                <tr>
+                  <th class="px-4 py-3 font-semibold">Nama / Kode Ruang</th>
+                  <th class="px-4 py-3 font-semibold">Gedung</th>
+                  <th class="px-4 py-3 font-semibold">Tipe Fasilitas</th>
+                  <th class="px-4 py-3 font-semibold">Kapasitas</th>
+                  <th class="px-4 py-3 font-semibold text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                <tr>
+                  <td class="px-4 py-3 font-mono font-bold text-amber-600 dark:text-amber-400">F4.LAB1</td>
+                  <td class="px-4 py-3 font-mono">Gedung F4 (Lt 2)</td>
+                  <td class="px-4 py-3">
+                    <span class="rounded bg-amber-100 px-2 py-0.5 font-mono text-[10px] text-amber-800 dark:bg-amber-950 dark:text-amber-300 font-semibold">Lab Komputer & Basis Data</span>
+                  </td>
+                  <td class="px-4 py-3 font-mono">35 PC</td>
+                  <td class="px-4 py-3 text-right">
+                    <button type="button" onclick="openRuanganDrawer('Edit Ruangan F4.LAB1', 'F4.LAB1', 'F4', 'Laboratorium Komputer', '35')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
+                      <i class="ph ph-pencil-simple text-base"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 font-mono font-bold text-[#0c2b5e] dark:text-blue-300">F6.001</td>
+                  <td class="px-4 py-3 font-mono">Gedung F6 (Lt Dasar)</td>
+                  <td class="px-4 py-3">
+                    <span class="rounded bg-blue-100 px-2 py-0.5 font-mono text-[10px] text-blue-800 dark:bg-blue-950 dark:text-blue-300 font-semibold">Ruang Kuliah Bersama (RKB)</span>
+                  </td>
+                  <td class="px-4 py-3 font-mono">80 Kursi</td>
+                  <td class="px-4 py-3 text-right">
+                    <button type="button" onclick="openRuanganDrawer('Edit Ruangan F6.001', 'F6.001', 'F6', 'Ruang Kuliah Bersama', '80')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
+                      <i class="ph ph-pencil-simple text-base"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-    </div>
-  </main>
+      </div>
+    </main>
 
     <%- include('../../partials/admin-footer') %>
   </div>
 </div>
+
+<!-- Drawer Slide-Over CRUD Ruangan -->
+<div id="drawer-ruangan-overlay"
+  class="fixed inset-0 z-50 bg-black/40 transition-opacity duration-150 opacity-0 pointer-events-none">
+  <div id="drawer-ruangan-panel"
+    class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl border-l border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800 flex flex-col transform translate-x-full transition-transform duration-200 ease-in-out">
+
+    <div class="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">
+      <div>
+        <h3 id="ruangan-drawer-title" class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">Form Ruangan & Lab</h3>
+        <p class="text-xs text-zinc-500">Kelola alokasi fisik perkuliahan</p>
+      </div>
+      <button onclick="closeRuanganDrawer()" type="button"
+        class="h-8 w-8 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 flex items-center justify-center">
+        <i class="ph ph-x text-base"></i>
+      </button>
+    </div>
+
+    <form onsubmit="handleSaveRuangan(event)" class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
+      <div class="space-y-1">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama / Kode Ruang</label>
+        <input id="input-ruang-code" type="text" required placeholder="Contoh: F4.LAB3 atau F4.004"
+          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div class="space-y-1">
+          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Gedung</label>
+          <select id="input-ruang-building" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+            <option value="F4">Gedung F4 (Teknik)</option>
+            <option value="F6">Gedung F6 (Dasar)</option>
+          </select>
+        </div>
+        <div class="space-y-1">
+          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Kapasitas Maksimal</label>
+          <input id="input-ruang-cap" type="number" required value="40" min="10" max="120"
+            class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+        </div>
+      </div>
+
+      <div class="space-y-1">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Tipe Fasilitas Ruangan</label>
+        <select id="input-ruang-type" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+          <option value="Laboratorium Komputer">Laboratorium Komputer (Khusus Praktikum)</option>
+          <option value="Ruang Kuliah Bersama">Ruang Kuliah Bersama (RKB Teori Kapasitas Besar)</option>
+          <option value="Kelas Reguler">Kelas Reguler (Teori Standar)</option>
+        </select>
+      </div>
+
+      <div class="pt-4 flex items-center justify-end gap-2 border-t border-zinc-100 dark:border-zinc-800">
+        <button type="button" onclick="closeRuanganDrawer()"
+          class="inline-flex min-h-[36px] items-center rounded-lg border border-zinc-200 px-3.5 font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800">
+          Batal
+        </button>
+        <button type="submit"
+          class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 font-semibold text-white shadow-xs">
+          <i class="ph ph-check text-amber-400"></i>
+          <span>Simpan Ruangan</span>
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<script>
+  function openRuanganDrawer(title, code, building, type, cap) {
+    const overlay = document.getElementById('drawer-ruangan-overlay');
+    const panel = document.getElementById('drawer-ruangan-panel');
+    const titleEl = document.getElementById('ruangan-drawer-title');
+    const codeEl = document.getElementById('input-ruang-code');
+    const buildingEl = document.getElementById('input-ruang-building');
+    const typeEl = document.getElementById('input-ruang-type');
+    const capEl = document.getElementById('input-ruang-cap');
+
+    if (titleEl) titleEl.textContent = title;
+    if (codeEl) codeEl.value = code;
+    if (buildingEl) buildingEl.value = building;
+    if (typeEl) typeEl.value = type;
+    if (capEl) capEl.value = cap;
+
+    if (overlay && panel) {
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      panel.classList.remove('translate-x-full');
+    }
+  }
+
+  function closeRuanganDrawer() {
+    const overlay = document.getElementById('drawer-ruangan-overlay');
+    const panel = document.getElementById('drawer-ruangan-panel');
+    if (overlay && panel) {
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      panel.classList.add('translate-x-full');
+    }
+  }
+
+  function handleSaveRuangan(e) {
+    e.preventDefault();
+    closeRuanganDrawer();
+    window.showConfirmDialog('Ruangan Disimpan', 'Data ruangan dan laboratorium berhasil diperbarui.', null, 'Selesai', true);
+  }
+</script>
