@@ -1,0 +1,71 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-grow container mx-auto px-4 py-8 max-w-2xl">
+    <div class="bg-app-card border border-app-border rounded-xl shadow-mac overflow-hidden">
+        <div class="p-6 border-b border-app-border">
+            <h4 class="text-xl font-heading font-bold text-app-dark m-0">Form Preferensi Dosen</h4>
+            <p class="text-app-muted text-sm mt-1">Atur jadwal dan preferensi mengajar Anda.</p>
+        </div>
+        <div class="p-6">
+            <form id="formPreferensi">
+                <div class="mb-6">
+                    <label class="block font-semibold text-app-dark mb-3">Hari Off (Riset/Ibadah)</label>
+                    <div class="space-y-3">
+                        <label class="flex items-center gap-3 p-4 border border-app-border rounded-lg cursor-pointer hover:bg-app-surface transition-colors">
+                            <input type="checkbox" value="Senin" id="hariSenin" class="w-5 h-5 rounded border-app-border text-app-dark focus:ring-app-dark">
+                            <span class="text-app-dark font-medium">Senin</span>
+                        </label>
+                        <label class="flex items-center gap-3 p-4 border border-app-border rounded-lg cursor-pointer hover:bg-app-surface transition-colors">
+                            <input type="checkbox" value="Jumat" id="hariJumat" class="w-5 h-5 rounded border-app-border text-app-dark focus:ring-app-dark">
+                            <span class="text-app-dark font-medium">Jumat</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <label class="block font-semibold text-app-dark mb-2">Jam Maksimal Mengajar (per hari)</label>
+                    <input type="number" class="w-full bg-app-bg border border-app-border rounded-lg p-3 focus:ring-2 focus:ring-app-dark outline-none text-app-dark" id="jamMaksimal" value="4" min="1" max="8">
+                </div>
+
+                <button type="submit" class="w-full bg-app-dark text-white px-6 py-3 rounded-lg font-semibold btn-press hover:bg-zinc-800 flex justify-center items-center gap-2" id="btnSimpan">
+                    <i class="ph ph-floppy-disk text-lg"></i> Simpan Preferensi
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.getElementById('formPreferensi').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnSimpan');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="ph ph-spinner animate-spin text-lg"></i> Menyimpan...';
+
+        const hariOff = [];
+        if(document.getElementById('hariSenin').checked) hariOff.push('Senin');
+        if(document.getElementById('hariJumat').checked) hariOff.push('Jumat');
+        
+        const payload = { hari_off: hariOff, jam_maksimal: document.getElementById('jamMaksimal').value };
+
+        try {
+            const response = await fetch('/api/dosen/preferensi', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if(response.ok) alert("Preferensi berhasil disimpan!");
+            else alert("Gagal menyimpan preferensi.");
+        } catch (error) {
+            console.error(error);
+            alert("Terjadi kesalahan sistem.");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="ph ph-floppy-disk text-lg"></i> Simpan Preferensi';
+        }
+    });
+</script>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,44 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+    <div class="mb-8">
+        <h2 class="text-3xl font-heading font-bold text-app-dark">Selamat Datang, Bapak/Ibu Dosen</h2>
+        <p class="text-app-muted mt-1">Berikut adalah ringkasan aktivitas mengajar Anda hari ini.</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Kartu Ringkasan 1 -->
+        <div class="bg-app-card border border-app-border rounded-xl p-6 shadow-mac border-l-4 border-l-blue-500">
+            <h6 class="text-app-muted text-sm font-semibold uppercase tracking-wider mb-2">Total SKS Mengajar</h6>
+            <h2 class="text-4xl font-heading font-bold text-app-dark">12 <span class="text-lg text-app-muted font-normal">SKS</span></h2>
+        </div>
+        
+        <!-- Kartu Ringkasan 2 -->
+        <div class="bg-app-card border border-app-border rounded-xl p-6 shadow-mac border-l-4 border-l-green-500">
+            <h6 class="text-app-muted text-sm font-semibold uppercase tracking-wider mb-2">Jadwal Hari Ini</h6>
+            <h2 class="text-4xl font-heading font-bold text-app-dark">3 <span class="text-lg text-app-muted font-normal">Kelas</span></h2>
+        </div>
+        
+        <!-- Kartu Ringkasan 3 -->
+        <div class="bg-app-card border border-app-border rounded-xl p-6 shadow-mac border-l-4 border-l-yellow-500">
+            <h6 class="text-app-muted text-sm font-semibold uppercase tracking-wider mb-2">Status Preferensi</h6>
+            <h2 class="text-2xl font-heading font-bold text-app-dark mb-2">Belum Diatur</h2>
+            <a href="/dosen/preferensi" class="text-app-dark font-semibold hover:underline flex items-center gap-1 text-sm">
+                Atur Sekarang <i class="ph ph-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Tabel Jadwal Singkat -->
+    <div class="bg-app-card border border-app-border rounded-xl shadow-mac overflow-hidden">
+        <div class="p-6 border-b border-app-border bg-app-surface">
+            <h5 class="text-lg font-heading font-bold text-app-dark m-0">Jadwal Mengajar Terdekat</h5>
+        </div>
+        <div class="p-6">
+            <p class="text-app-muted text-sm">Data jadwal akan dimuat dari API secara otomatis di sini.</p>
+        </div>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

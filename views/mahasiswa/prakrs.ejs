@@ -1,0 +1,185 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-grow container mx-auto px-4 py-8 max-w-4xl">
+    <h2 class="text-3xl font-heading font-bold text-app-dark mb-6">Wizard Pra-KRS</h2>
+    
+    <!-- Progress Bar -->
+    <div class="w-full bg-app-surface rounded-full h-3 mb-8 border border-app-border overflow-hidden">
+        <div class="bg-app-dark h-3 rounded-full transition-all duration-300 ease-out" style="width: 25%;" id="wizard-progress"></div>
+    </div>
+
+    <div class="bg-app-card border border-app-border rounded-xl p-6 md:p-8 shadow-mac">
+        <!-- Step 1 -->
+        <div class="step-content" id="step-1">
+            <h4 class="text-xl font-bold font-heading mb-4 text-app-dark">1. Pilih Semester</h4>
+            <select class="w-full bg-app-bg border border-app-border rounded-lg p-3 mb-6 focus:ring-2 focus:ring-app-dark outline-none text-app-dark" id="select-semester">
+                <option value="Ganjil">Ganjil 2024/2025</option>
+                <option value="Genap">Genap 2024/2025</option>
+            </select>
+            <button class="bg-app-dark text-white px-6 py-3 rounded-lg font-semibold btn-press hover:bg-zinc-800 transition-colors" onclick="nextStep(2)">Selanjutnya</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-content hidden" id="step-2">
+            <h4 class="text-xl font-bold font-heading mb-4 text-app-dark">2. Konfirmasi Data Mahasiswa</h4>
+            <label class="block text-sm font-medium text-app-muted mb-2">NIM</label>
+            <input type="text" class="w-full bg-app-bg border border-app-border rounded-lg p-3 mb-6 focus:ring-2 focus:ring-app-dark outline-none text-app-dark" id="input-nim" placeholder="Masukkan NIM">
+            <div class="flex gap-3">
+                <button class="bg-app-surface text-app-dark border border-app-border px-6 py-3 rounded-lg font-semibold btn-press hover:bg-app-bg transition-colors" onclick="nextStep(1)">Kembali</button>
+                <button class="bg-app-dark text-white px-6 py-3 rounded-lg font-semibold btn-press hover:bg-zinc-800 transition-colors" onclick="nextStep(3)">Selanjutnya</button>
+            </div>
+        </div>
+
+        <!-- Step 3: AI Rekomendasi -->
+        <div class="step-content hidden" id="step-3">
+            <h4 class="text-xl font-bold font-heading mb-4 text-app-dark">3. Rekomendasi Mata Kuliah (AI)</h4>
+            <div class="bg-app-surface border border-app-border rounded-lg p-4 mb-6 text-app-dark text-sm" id="ai-recommendation-box">
+                <em>Sedang memuat rekomendasi...</em>
+            </div>
+            <button class="text-app-dark font-semibold flex items-center gap-2 mb-6 hover:underline text-sm" onclick="mintaVariasiLain()">
+                <i class="ph ph-arrows-clockwise text-lg"></i> Minta Variasi Lain
+            </button>
+            <div class="flex gap-3">
+                <button class="bg-app-surface text-app-dark border border-app-border px-6 py-3 rounded-lg font-semibold btn-press hover:bg-app-bg transition-colors" onclick="nextStep(2)">Kembali</button>
+                <button class="bg-app-dark text-white px-6 py-3 rounded-lg font-semibold btn-press hover:bg-zinc-800 transition-colors" onclick="nextStep(4)">Selanjutnya</button>
+            </div>
+        </div>
+
+        <!-- Step 4: Submit -->
+        <div class="step-content hidden" id="step-4">
+            <h4 class="text-xl font-bold font-heading mb-4 text-app-dark">4. Konfirmasi Akhir</h4>
+            <p class="text-app-muted mb-6">Pastikan semua data sudah benar. Klik tombol di bawah untuk menyimpan KRS.</p>
+            <div class="flex gap-3">
+                <button class="bg-app-surface text-app-dark border border-app-border px-6 py-3 rounded-lg font-semibold btn-press hover:bg-app-bg transition-colors" onclick="nextStep(3)">Kembali</button>
+                <button class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold btn-press hover:bg-green-700 transition-colors shadow-sm" onclick="submitKRS()">Simpan KRS</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- FITUR AI ASSISTANT -->
+<div class="fixed bottom-6 right-6 z-50">
+    <button class="bg-app-dark text-white rounded-full w-14 h-14 flex items-center justify-center shadow-mac-lg btn-press hover:bg-zinc-800 transition-colors" id="ai-chat-toggle">
+        <i class="ph ph-robot text-2xl"></i>
+    </button>
+    
+    <div class="hidden absolute bottom-20 right-0 w-80 md:w-96 bg-app-card border border-app-border rounded-xl shadow-mac-lg overflow-hidden flex flex-col" style="height: 500px;" id="ai-chat-window">
+        <div class="bg-app-surface p-4 border-b border-app-border flex justify-between items-center">
+            <span class="font-bold text-app-dark font-heading flex items-center gap-2"><i class="ph ph-robot text-xl"></i> AI Assistant</span>
+            <button type="button" class="text-app-muted hover:text-app-dark transition-colors" onclick="toggleChat()"><i class="ph ph-x text-xl"></i></button>
+        </div>
+        <div class="flex-grow overflow-y-auto p-4 space-y-4" id="chat-messages">
+            <div class="flex gap-2">
+                <div class="w-8 h-8 rounded-full bg-app-dark text-white flex items-center justify-center shrink-0"><i class="ph ph-robot"></i></div>
+                <div class="bg-app-surface border border-app-border rounded-lg rounded-tl-none p-3 text-sm text-app-dark">
+                    Halo! Ada yang bisa saya bantu terkait KRS atau jadwal?
+                </div>
+            </div>
+        </div>
+        <div class="p-3 border-t border-app-border bg-app-card flex gap-2">
+            <input type="text" class="flex-grow bg-app-bg border border-app-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-app-dark text-app-dark" id="chat-input" placeholder="Tanya sesuatu...">
+            <button class="bg-app-dark text-white p-2.5 rounded-lg btn-press hover:bg-zinc-800 transition-colors flex items-center justify-center" id="chat-send" onclick="sendChat()"><i class="ph ph-paper-plane-right text-lg"></i></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- LOGIKA WIZARD ---
+    function nextStep(step) {
+        document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+        document.getElementById(`step-${step}`).classList.remove('hidden');
+        
+        const progress = document.getElementById('wizard-progress');
+        progress.style.width = (step * 25) + '%';
+
+        if(step === 3) loadAIRecommendation();
+    }
+
+    function loadAIRecommendation() {
+        const box = document.getElementById('ai-recommendation-box');
+        box.innerHTML = '<div class="flex items-center gap-2 text-app-muted"><i class="ph ph-spinner animate-spin text-lg"></i> Menganalisis...</div>';
+        setTimeout(() => {
+            box.innerHTML = `
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>Pemrograman Web Lanjut (3 SKS)</li>
+                    <li>Kecerdasan Buatan (3 SKS)</li>
+                    <li>Rekayasa Perangkat Lunak (3 SKS)</li>
+                </ul>
+            `;
+        }, 1500);
+    }
+
+    function mintaVariasiLain() { loadAIRecommendation(); }
+    function submitKRS() { alert("KRS Berhasil Disimpan!"); window.location.href = "/mahasiswa/dashboard"; }
+
+    // --- LOGIKA AI CHATBOT ---
+    const chatWindow = document.getElementById('ai-chat-window');
+    document.getElementById('ai-chat-toggle').addEventListener('click', () => chatWindow.classList.toggle('hidden'));
+    function toggleChat() { chatWindow.classList.add('hidden'); }
+
+    async function sendChat() {
+        const input = document.getElementById('chat-input');
+        const message = input.value.trim();
+        if (!message) return;
+
+        const chatMessages = document.getElementById('chat-messages');
+        
+        chatMessages.innerHTML += `
+            <div class="flex gap-2 justify-end">
+                <div class="bg-app-dark text-white rounded-lg rounded-tr-none p-3 text-sm">${message}</div>
+            </div>
+        `;
+        input.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        const loadingId = 'loading-' + Date.now();
+        chatMessages.innerHTML += `
+            <div class="flex gap-2" id="${loadingId}">
+                <div class="w-8 h-8 rounded-full bg-app-dark text-white flex items-center justify-center shrink-0"><i class="ph ph-robot"></i></div>
+                <div class="bg-app-surface border border-app-border rounded-lg rounded-tl-none p-3 text-sm flex items-center gap-2 text-app-muted">
+                    <i class="ph ph-spinner animate-spin"></i> Mengetik...
+                </div>
+            </div>
+        `;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            });
+
+            const result = await response.json();
+            document.getElementById(loadingId).remove();
+
+            if (response.ok && result.success) {
+                chatMessages.innerHTML += `
+                    <div class="flex gap-2">
+                        <div class="w-8 h-8 rounded-full bg-app-dark text-white flex items-center justify-center shrink-0"><i class="ph ph-robot"></i></div>
+                        <div class="bg-app-surface border border-app-border rounded-lg rounded-tl-none p-3 text-sm text-app-dark">${result.data.reply}</div>
+                    </div>
+                `;
+            } else {
+                throw new Error("Gagal");
+            }
+        } catch (error) {
+            const loadingEl = document.getElementById(loadingId);
+            if (loadingEl) loadingEl.remove();
+            chatMessages.innerHTML += `
+                <div class="flex gap-2">
+                    <div class="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center shrink-0"><i class="ph ph-warning"></i></div>
+                    <div class="bg-red-50 text-red-600 border border-red-200 rounded-lg rounded-tl-none p-3 text-sm">Maaf, layanan AI sedang gangguan.</div>
+                </div>
+            `;
+        }
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    document.getElementById('chat-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') sendChat();
+    });
+</script>
+
+<%- include('../partials/footer') %>
