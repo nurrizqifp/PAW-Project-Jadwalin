@@ -19,6 +19,7 @@ router.get('/dosen', homeController.dosenDashboard);
 router.get('/dosen/dashboard', homeController.dosenDashboard);
 router.get('/dosen/jadwal', homeController.dosenJadwal);
 router.get('/dosen/preferensi', homeController.dosenPreferensi);
+router.get('/dosen/notifikasi', homeController.dosenNotifikasi);
 
 // Admin / Staf Akademik Routes
 router.get('/admin', homeController.adminDashboard);
@@ -28,6 +29,7 @@ router.get('/admin/master/matkul', homeController.adminMasterMatkul);
 router.get('/admin/master/ruangan', homeController.adminMasterRuangan);
 router.get('/admin/master/mahasiswa', homeController.adminMasterMahasiswa);
 router.get('/admin/constraints', homeController.adminConstraints);
+router.get('/admin/constraints/soft', homeController.adminConstraintsSoft);
 router.get('/admin/generate', homeController.adminGenerate);
 router.get('/admin/jadwal', homeController.adminJadwal);
 

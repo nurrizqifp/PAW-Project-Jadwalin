@@ -1,0 +1,166 @@
+<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Pengisian Pra-KRS — Jadwalin' }) %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+
+  <!-- Breadcrumb & Header -->
+  <div class="space-y-1">
+    <div class="flex items-center gap-2 text-xs text-zinc-500">
+      <a href="/mahasiswa/dashboard" class="hover:text-zinc-900 dark:hover:text-zinc-200">Mahasiswa</a>
+      <span>/</span>
+      <span class="text-zinc-800 dark:text-zinc-200 font-semibold">Pra-KRS Form</span>
+    </div>
+    <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+      Formulir Onboarding & Pra-KRS Mahasiswa
+    </h1>
+    <p class="text-xs text-zinc-500 dark:text-zinc-400">
+      Pilih preferensi kelas, waktu, dan mata kuliah untuk mendapatkan rekomendasi paket jadwal bebas bentrok.
+    </p>
+  </div>
+
+  <!-- Wizard Steps Indicator -->
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+    <div class="flex items-center gap-3 rounded-xl border border-zinc-900 bg-zinc-900 p-3.5 text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900">
+      <span class="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 font-mono text-xs font-bold dark:bg-zinc-900/20">1</span>
+      <div>
+        <p class="text-xs font-bold">Data & Preferensi</p>
+        <p class="text-[10px] opacity-80">Angkatan, Kelas & Hari</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3.5 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
+      <span class="flex h-7 w-7 items-center justify-center rounded-full bg-zinc-100 font-mono text-xs font-bold dark:bg-zinc-800">2</span>
+      <div>
+        <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-200">Pilih Mata Kuliah</p>
+        <p class="text-[10px]">Kurikulum & Peminatan</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3.5 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
+      <span class="flex h-7 w-7 items-center justify-center rounded-full bg-zinc-100 font-mono text-xs font-bold dark:bg-zinc-800">3</span>
+      <div>
+        <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-200">Rekomendasi Paket</p>
+        <p class="text-[10px]">Verifikasi Zero Clash</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Pra-KRS Container -->
+  <form id="prakrs-form" class="space-y-6">
+    
+    <!-- Step 1 Card -->
+    <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+      <h2 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50 border-b border-zinc-100 pb-3 dark:border-zinc-800">
+        Langkah 1: Profil Mahasiswa & Preferensi Waktu
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <label for="prakrs-nim" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">NIM</label>
+          <input id="prakrs-nim" type="text" value="20240140093" readonly class="w-full min-h-[42px] rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs font-mono text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
+        </div>
+        <div>
+          <label for="prakrs-semester" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Semester Aktif</label>
+          <select id="prakrs-semester" class="w-full min-h-[42px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+            <option value="5" selected>Semester 5 (Ganjil)</option>
+            <option value="3">Semester 3 (Ganjil)</option>
+            <option value="1">Semester 1 (Ganjil)</option>
+            <option value="7">Semester 7 (Ganjil)</option>
+          </select>
+        </div>
+        <div>
+          <label for="prakrs-kelas" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Preferensi Rombel / Kelas</label>
+          <select id="prakrs-kelas" class="w-full min-h-[42px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+            <option value="B" selected>Kelas B (Prioritas)</option>
+            <option value="A">Kelas A</option>
+            <option value="C">Kelas C</option>
+            <option value="D">Kelas D</option>
+          </select>
+        </div>
+        <div>
+          <label for="prakrs-peminatan" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Peminatan / Track</label>
+          <select id="prakrs-peminatan" class="w-full min-h-[42px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+            <option value="SE" selected>Software Engineering</option>
+            <option value="AI">Data & Artificial Intelligence</option>
+            <option value="NET">Network & Cyber Security</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Daftar Rencana Mata Kuliah -->
+    <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+      <div class="flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
+        <div>
+          <h2 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">
+            Langkah 2: Pemilihan Mata Kuliah Rencana
+          </h2>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400">Total SKS terpilih: <span id="total-sks" class="font-mono font-bold text-zinc-900 dark:text-zinc-100">18</span> / 24 SKS</p>
+        </div>
+        <button type="button" class="text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 inline-flex items-center gap-1">
+          <i class="ph ph-check-square"></i>
+          <span>Pilih Semua Paket Semester</span>
+        </button>
+      </div>
+
+      <div class="divide-y divide-zinc-100 dark:divide-zinc-800 text-xs">
+        <label class="flex items-center justify-between py-3 cursor-pointer hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 px-2 rounded-lg">
+          <div class="flex items-center gap-3">
+            <input type="checkbox" checked class="h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800">
+            <div>
+              <p class="font-semibold text-zinc-900 dark:text-zinc-100">Pemrograman Berorientasi Objek (TI301)</p>
+              <p class="text-[11px] text-zinc-500">3 SKS · Teori & Praktikum · Wajib Prodi</p>
+            </div>
+          </div>
+          <span class="font-mono font-semibold text-zinc-700 dark:text-zinc-300">3 SKS</span>
+        </label>
+
+        <label class="flex items-center justify-between py-3 cursor-pointer hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 px-2 rounded-lg">
+          <div class="flex items-center gap-3">
+            <input type="checkbox" checked class="h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800">
+            <div>
+              <p class="font-semibold text-zinc-900 dark:text-zinc-100">Rekayasa Perangkat Lunak (TI302)</p>
+              <p class="text-[11px] text-zinc-500">3 SKS · Teori · Wajib Prodi</p>
+            </div>
+          </div>
+          <span class="font-mono font-semibold text-zinc-700 dark:text-zinc-300">3 SKS</span>
+        </label>
+
+        <label class="flex items-center justify-between py-3 cursor-pointer hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 px-2 rounded-lg">
+          <div class="flex items-center gap-3">
+            <input type="checkbox" checked class="h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800">
+            <div>
+              <p class="font-semibold text-zinc-900 dark:text-zinc-100">Kecerdasan Buatan (TI303)</p>
+              <p class="text-[11px] text-zinc-500">3 SKS · Teori & Praktikum · Wajib Prodi</p>
+            </div>
+          </div>
+          <span class="font-mono font-semibold text-zinc-700 dark:text-zinc-300">3 SKS</span>
+        </label>
+
+        <label class="flex items-center justify-between py-3 cursor-pointer hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 px-2 rounded-lg">
+          <div class="flex items-center gap-3">
+            <input type="checkbox" checked class="h-4 w-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800">
+            <div>
+              <p class="font-semibold text-zinc-900 dark:text-zinc-100">Sistem Terdistribusi (TI304)</p>
+              <p class="text-[11px] text-zinc-500">3 SKS · Teori · Peminatan SE</p>
+            </div>
+          </div>
+          <span class="font-mono font-semibold text-zinc-700 dark:text-zinc-300">3 SKS</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Submit Action -->
+    <div class="flex justify-end gap-3 pt-2">
+      <button type="button" class="min-h-[44px] rounded-md border border-zinc-200 bg-white px-5 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+        Reset Formulir
+      </button>
+      <button type="submit" class="inline-flex min-h-[44px] items-center gap-2 rounded-md bg-zinc-900 px-6 py-2 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white transition-colors">
+        <i class="ph ph-sparkle text-base"></i>
+        <span>Kalkulasi Rekomendasi Jadwal</span>
+      </button>
+    </div>
+
+  </form>
+
+</main>
+
+<%- include('../partials/footer') %>

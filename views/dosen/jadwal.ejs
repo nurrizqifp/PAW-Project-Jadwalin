@@ -1,0 +1,62 @@
+<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Jadwal Mengajar Dosen — Jadwalin' }) %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+        Jadwal Mengajar Dosen
+      </h1>
+      <p class="text-xs text-zinc-500 dark:text-zinc-400">
+        Semester Ganjil 2026/2027 · Dr. Ir. Bambang Triatmaja, M.Kom.
+      </p>
+    </div>
+
+    <button type="button" class="inline-flex min-h-[40px] items-center gap-2 rounded-md border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+      <i class="ph ph-printer text-base"></i>
+      <span>Cetak Jadwal (PDF)</span>
+    </button>
+  </div>
+
+  <div class="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-xs">
+        <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
+          <tr>
+            <th class="px-4 py-3 font-semibold">Hari</th>
+            <th class="px-4 py-3 font-semibold">Jam</th>
+            <th class="px-4 py-3 font-semibold">Mata Kuliah</th>
+            <th class="px-4 py-3 font-semibold">Kelas</th>
+            <th class="px-4 py-3 font-semibold">SKS</th>
+            <th class="px-4 py-3 font-semibold">Ruangan</th>
+            <th class="px-4 py-3 font-semibold">Team Teaching</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+          <tr>
+            <td class="px-4 py-3 font-semibold">Senin</td>
+            <td class="px-4 py-3 font-mono">08:00 - 09:40</td>
+            <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Pemrograman Berorientasi Objek</td>
+            <td class="px-4 py-3 font-mono">B</td>
+            <td class="px-4 py-3 font-mono">3</td>
+            <td class="px-4 py-3">Lab Multimedia</td>
+            <td class="px-4 py-3 text-zinc-500">Mandiri</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-3 font-semibold">Rabu</td>
+            <td class="px-4 py-3 font-mono">10:00 - 11:40</td>
+            <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Pemrograman Berorientasi Objek</td>
+            <td class="px-4 py-3 font-mono">C</td>
+            <td class="px-4 py-3 font-mono">3</td>
+            <td class="px-4 py-3">Lab Multimedia</td>
+            <td class="px-4 py-3 text-zinc-500">Mandiri</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<%- include('../partials/footer') %>

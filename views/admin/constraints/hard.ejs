@@ -1,0 +1,69 @@
+<%- include('../../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Hard Constraints — Jadwalin' }) %>
+<%- include('../../partials/navbar') %>
+
+<div class="flex-1 flex overflow-hidden">
+  <%- include('../../partials/sidebar', { activeMenu: 'constraints' }) %>
+
+  <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
+    <div class="max-w-6xl mx-auto space-y-6">
+
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+            Hard Constraints (Aturan Wajib)
+          </h1>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400">
+            Batasan mutlak yang tidak boleh dilanggar (Zero Tolerance) dalam penyusunan jadwal otomatis.
+          </p>
+        </div>
+
+        <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800">
+          <a href="/admin/constraints" class="rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100">
+            Hard Constraints
+          </a>
+          <a href="/admin/constraints/soft" class="rounded-md px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+            Soft Constraints
+          </a>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <!-- HC-01 -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">HC-01: Satu Dosen Satu Waktu</span>
+            <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Wajib Aktif</span>
+          </div>
+          <p class="text-xs text-zinc-600 dark:text-zinc-400">
+            Seorang dosen tidak dapat mengajar lebih dari satu mata kuliah/kelas pada slot waktu dan hari yang bersamaan.
+          </p>
+        </div>
+
+        <!-- HC-02 -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">HC-02: Satu Ruangan Satu Sesi</span>
+            <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Wajib Aktif</span>
+          </div>
+          <p class="text-xs text-zinc-600 dark:text-zinc-400">
+            Satu ruangan tidak boleh digunakan oleh lebih dari satu sesi perkuliahan pada slot waktu yang bersamaan.
+          </p>
+        </div>
+
+        <!-- HC-03 -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">HC-03: Jeda Ibadah Shalat Dhuhur</span>
+            <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Wajib Aktif</span>
+          </div>
+          <p class="text-xs text-zinc-600 dark:text-zinc-400">
+            Tidak boleh ada sesi perkuliahan yang berlangsung pada pukul <strong>11:30 – 12:10 WIB</strong> setiap hari (Senin s/d Jumat).
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<%- include('../../partials/footer') %>
