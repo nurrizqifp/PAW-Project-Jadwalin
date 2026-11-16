@@ -1,92 +1,103 @@
-<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Portal Dosen — Jadwalin' }) %>
-<%- include('../partials/navbar') %>
+<%- include('../partials/head', { judul: typeof judul !=='undefined' ? judul : 'Portal Dosen — Jadwalin' }) %>
+  <%- include('../partials/navbar') %>
 
-<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
 
-  <!-- Dosen Profile & Stats Card -->
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="md:col-span-2 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
-      <div class="flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800">
-        <div>
-          <span class="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
-            Dosen Pengampu TI
-          </span>
-          <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-2">
-            Dr. Ir. Bambang Triatmaja, M.Kom.
-          </h1>
-          <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">NIDN: 0512037501 · Total Beban: 12 SKS</p>
+      <!-- Dosen Profile & Stats Card -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div
+          class="md:col-span-2 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+          <div class="flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800">
+            <div>
+              <span
+                class="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
+                Dosen Pengampu TI
+              </span>
+              <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-2">
+                Dr. Ir. Bambang Triatmaja, M.Kom.
+              </h1>
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">NIDN: 0512037501 · Total Beban: 12 SKS</p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3 pt-2">
+            <a href="/dosen/preferensi"
+              class="inline-flex min-h-[44px] items-center gap-2 rounded-md bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-md border border-blue-900/40 transition-colors">
+              <i class="ph ph-sliders text-base text-amber-400"></i>
+              <span>Atur Preferensi Waktu</span>
+            </a>
+            <a href="/dosen/jadwal"
+              class="inline-flex min-h-[44px] items-center gap-2 rounded-md border border-amber-300/80 bg-amber-50/70 hover:bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200 dark:hover:bg-amber-950/70 transition-colors shadow-sm">
+              <i class="ph ph-calendar text-base text-amber-600 dark:text-amber-400"></i>
+              <span>Jadwal Mengajar Saya</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Active Sesi Card -->
+        <div
+          class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex flex-col justify-between space-y-4">
+          <div>
+            <p class="font-mono text-[11px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Kelas Mengajar
+              Hari Ini</p>
+            <p class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-100 pt-1">Pemrograman Berorientasi
+              Objek</p>
+            <p class="text-xs text-zinc-500">Kelas B · 08:00 - 09:40 WIB</p>
+          </div>
+
+          <div
+            class="rounded-xl bg-zinc-50 p-4 dark:bg-zinc-800/60 border border-zinc-200/50 dark:border-zinc-700/50 text-center">
+            <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mb-1">Status Kehadiran</p>
+            <span
+              class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 font-mono text-xs font-semibold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+              Terjadwal Tepat Waktu
+            </span>
+          </div>
         </div>
       </div>
 
-      <div class="flex flex-wrap gap-3 pt-2">
-        <a href="/dosen/preferensi" class="inline-flex min-h-[44px] items-center gap-2 rounded-md bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-md border border-blue-900/40 transition-colors">
-          <i class="ph ph-sliders text-base text-amber-400"></i>
-          <span>Atur Preferensi Waktu</span>
-        </a>
-        <a href="/dosen/jadwal" class="inline-flex min-h-[44px] items-center gap-2 rounded-md border border-amber-300/80 bg-amber-50/70 hover:bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200 dark:hover:bg-amber-950/70 transition-colors shadow-sm">
-          <i class="ph ph-calendar text-base text-amber-600 dark:text-amber-400"></i>
-          <span>Jadwal Mengajar Saya</span>
-        </a>
+      <!-- Agenda Mengajar Pekan Ini -->
+      <div class="space-y-4">
+        <h2 class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-50">
+          Daftar Beban Mata Kuliah Semester Berjalan
+        </h2>
+
+        <div
+          class="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead
+                class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
+                <tr>
+                  <th class="px-4 py-3 font-semibold">Kode & Matkul</th>
+                  <th class="px-4 py-3 font-semibold">Kelas</th>
+                  <th class="px-4 py-3 font-semibold">SKS</th>
+                  <th class="px-4 py-3 font-semibold">Hari & Waktu</th>
+                  <th class="px-4 py-3 font-semibold">Ruangan</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                <tr>
+                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">TI301 — PBO</td>
+                  <td class="px-4 py-3 font-mono">Kelas B</td>
+                  <td class="px-4 py-3 font-mono">3</td>
+                  <td class="px-4 py-3">Senin, 08:00 - 09:40</td>
+                  <td class="px-4 py-3">Lab Multimedia</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">TI301 — PBO</td>
+                  <td class="px-4 py-3 font-mono">Kelas C</td>
+                  <td class="px-4 py-3 font-mono">3</td>
+                  <td class="px-4 py-3">Rabu, 10:00 - 11:40</td>
+                  <td class="px-4 py-3">Lab Multimedia</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- Active Sesi Card -->
-    <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex flex-col justify-between space-y-4">
-      <div>
-        <p class="font-mono text-[11px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Kelas Mengajar Hari Ini</p>
-        <p class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-100 pt-1">Pemrograman Berorientasi Objek</p>
-        <p class="text-xs text-zinc-500">Kelas B · 08:00 - 09:40 WIB</p>
-      </div>
+    </main>
 
-      <div class="rounded-xl bg-zinc-50 p-4 dark:bg-zinc-800/60 border border-zinc-200/50 dark:border-zinc-700/50 text-center">
-        <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mb-1">Status Kehadiran</p>
-        <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 font-mono text-xs font-semibold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300">
-          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-          Terjadwal Tepat Waktu
-        </span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Agenda Mengajar Pekan Ini -->
-  <div class="space-y-4">
-    <h2 class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-50">
-      Daftar Beban Mata Kuliah Semester Berjalan
-    </h2>
-
-    <div class="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs">
-          <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
-            <tr>
-              <th class="px-4 py-3 font-semibold">Kode & Matkul</th>
-              <th class="px-4 py-3 font-semibold">Kelas</th>
-              <th class="px-4 py-3 font-semibold">SKS</th>
-              <th class="px-4 py-3 font-semibold">Hari & Waktu</th>
-              <th class="px-4 py-3 font-semibold">Ruangan</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
-            <tr>
-              <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">TI301 — PBO</td>
-              <td class="px-4 py-3 font-mono">Kelas B</td>
-              <td class="px-4 py-3 font-mono">3</td>
-              <td class="px-4 py-3">Senin, 08:00 - 09:40</td>
-              <td class="px-4 py-3">Lab Multimedia</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">TI301 — PBO</td>
-              <td class="px-4 py-3 font-mono">Kelas C</td>
-              <td class="px-4 py-3 font-mono">3</td>
-              <td class="px-4 py-3">Rabu, 10:00 - 11:40</td>
-              <td class="px-4 py-3">Lab Multimedia</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-</main>
-
-<%- include('../partials/footer') %>
+    <%- include('../partials/footer') %>

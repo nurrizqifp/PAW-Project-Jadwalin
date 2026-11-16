@@ -7,66 +7,213 @@
     <%- include('../../partials/admin-navbar') %>
 
     <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
-    <div class="max-w-6xl mx-auto space-y-6">
+      <div class="max-w-6xl mx-auto space-y-6">
 
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Soft Constraints (Preferensi & Pembobotan)
-          </h1>
-          <p class="text-xs text-zinc-500 dark:text-zinc-400">
-            Batasan fleksibel yang dioptimalkan oleh AI Solver untuk menghasilkan jadwal perkuliahan paling ideal.
-          </p>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 pb-5 dark:border-zinc-800">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="rounded bg-amber-100 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-800 dark:bg-amber-950/80 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                OPTIMASI BOBOT PENALTI
+              </span>
+              <span class="text-xs text-zinc-500 font-mono">Preferensi Fleksibel</span>
+            </div>
+            <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-1">
+              Soft Constraints (Preferensi Jadwal)
+            </h1>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">
+              Kriteria yang diupayakan maksimal terpenuhi oleh AI solver. Dilengkapi skor penalti jika terlanggar.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2.5">
+            <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800">
+              <a href="/admin/constraints" class="rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors">
+                Hard Constraints
+              </a>
+              <a href="/admin/constraints/soft" class="rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100">
+                Soft Constraints
+              </a>
+            </div>
+
+            <button type="button" onclick="openSoftDrawer('create')"
+              class="inline-flex min-h-[38px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
+              <i class="ph ph-plus text-base text-amber-400"></i>
+              <span>Tambah Preferensi</span>
+            </button>
+          </div>
         </div>
 
-        <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800">
-          <a href="/admin/constraints" class="rounded-md px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
-            Hard Constraints
-          </a>
-          <a href="/admin/constraints/soft" class="rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100">
-            Soft Constraints
-          </a>
+        <div class="space-y-4">
+          <!-- SC-01 -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">SC-01: Preferensi Hari Bebas Dosen (Off Day)</span>
+                <span class="rounded bg-amber-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-amber-800 dark:bg-amber-950 dark:text-amber-300">Bobot Penalti: 8 (Tinggi)</span>
+              </div>
+              <p class="text-xs text-zinc-600 dark:text-zinc-400">
+                Upayakan dosen tidak dijadwalkan mengajar pada hari yang diajukan untuk riset, bimbingan, atau tugas luar.
+              </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" onclick="openSoftDrawer('edit', 'SC-01: Preferensi Hari Bebas Dosen', 8, 'Upayakan dosen tidak dijadwalkan mengajar pada hari riset.')"
+                class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-3 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
+                <i class="ph ph-pencil-simple"></i>
+                <span>Edit</span>
+              </button>
+              <button type="button" onclick="window.showConfirmDialog('Hapus Constraint', 'Hapus aturan preferensi ini dari algoritma solver?', () => {}, 'Hapus')"
+                class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-rose-50 px-3 text-xs font-semibold text-rose-600 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-rose-950/40 dark:text-rose-400 transition-colors">
+                <i class="ph ph-trash"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- SC-02 -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">SC-02: Batas Sesi Berturut-turut Dosen</span>
+                <span class="rounded bg-blue-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-blue-800 dark:bg-blue-950 dark:text-blue-300">Bobot Penalti: 5 (Sedang)</span>
+              </div>
+              <p class="text-xs text-zinc-600 dark:text-zinc-400">
+                Hindari dosen mengajar lebih dari 3 sesi kelas berturut-turut pada hari yang sama untuk menjaga performa pengajaran.
+              </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" onclick="openSoftDrawer('edit', 'SC-02: Batas Sesi Berturut-turut Dosen', 5, 'Hindari dosen mengajar lebih dari 3 sesi kelas berturut-turut.')"
+                class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-3 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
+                <i class="ph ph-pencil-simple"></i>
+                <span>Edit</span>
+              </button>
+              <button type="button" onclick="window.showConfirmDialog('Hapus Constraint', 'Hapus aturan preferensi ini dari algoritma solver?', () => {}, 'Hapus')"
+                class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-rose-50 px-3 text-xs font-semibold text-rose-600 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-rose-950/40 dark:text-rose-400 transition-colors">
+                <i class="ph ph-trash"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- SC-03 -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">SC-03: Distribusi Beban Merata Hari Perkuliahan</span>
+                <span class="rounded bg-blue-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-blue-800 dark:bg-blue-950 dark:text-blue-300">Bobot Penalti: 4 (Sedang)</span>
+              </div>
+              <p class="text-xs text-zinc-600 dark:text-zinc-400">
+                Distribusikan perkuliahan secara seimbang antara hari Senin hingga Jumat agar ruangan tidak menumpuk hanya di awal pekan.
+              </p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button type="button" onclick="openSoftDrawer('edit', 'SC-03: Distribusi Beban Merata Hari Perkuliahan', 4, 'Distribusikan perkuliahan secara seimbang antara hari Senin hingga Jumat.')"
+                class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-3 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
+                <i class="ph ph-pencil-simple"></i>
+                <span>Edit</span>
+              </button>
+              <button type="button" onclick="window.showConfirmDialog('Hapus Constraint', 'Hapus aturan preferensi ini dari algoritma solver?', () => {}, 'Hapus')"
+                class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-rose-50 px-3 text-xs font-semibold text-rose-600 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-rose-950/40 dark:text-rose-400 transition-colors">
+                <i class="ph ph-trash"></i>
+              </button>
+            </div>
+          </div>
         </div>
+
       </div>
-
-      <div class="space-y-4">
-        <!-- SC-01 -->
-        <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">SC-01: Preferensi Hari/Waktu Dosen</span>
-            <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">Bobot: 40%</span>
-          </div>
-          <p class="text-xs text-zinc-600 dark:text-zinc-400">
-            Mengutamakan pengalokasian waktu mengajar sesuai preferensi atau hari yang diajukan oleh masing-masing dosen tetap.
-          </p>
-        </div>
-
-        <!-- SC-02 -->
-        <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">SC-02: Sebaran Beban Mahasiswa Merata</span>
-            <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">Bobot: 35%</span>
-          </div>
-          <p class="text-xs text-zinc-600 dark:text-zinc-400">
-            Menghindari penumpukan lebih dari 3 mata kuliah berturut-turut pada satu rombel kelas di hari yang sama.
-          </p>
-        </div>
-
-        <!-- SC-03 -->
-        <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">SC-03: Utilisasi Fasilitas Laboratorium</span>
-            <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">Bobot: 25%</span>
-          </div>
-          <p class="text-xs text-zinc-600 dark:text-zinc-400">
-            Mengutamakan penempatan kelas praktikum di laboratorium khusus dan meminimalkan jeda waktu kosong ruang lab.
-          </p>
-        </div>
-      </div>
-
-    </div>
-  </main>
+    </main>
 
     <%- include('../../partials/admin-footer') %>
   </div>
 </div>
+
+<!-- Drawer Slide-over CRUD Soft Constraint -->
+<div id="drawer-soft-overlay"
+  class="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs transition-opacity duration-150 opacity-0 pointer-events-none">
+  <div id="drawer-soft-panel"
+    class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl border-l border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800 flex flex-col transform translate-x-full transition-transform duration-200 ease-in-out">
+
+    <div class="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">
+      <div>
+        <h3 id="soft-drawer-title" class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">Tambah Soft Constraint Baru</h3>
+        <p class="text-xs text-zinc-500">Konfigurasi bobot preferensi optimasi</p>
+      </div>
+      <button onclick="closeSoftDrawer()" type="button"
+        class="h-8 w-8 rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 flex items-center justify-center">
+        <i class="ph ph-x text-base"></i>
+      </button>
+    </div>
+
+    <form onsubmit="handleSaveSoft(event)" class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
+      <div class="space-y-1">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama Aturan Soft Constraint</label>
+        <input id="soft-input-name" type="text" required placeholder="Contoh: SC-04: Preferensi Ruang Dekat Dosen Senior"
+          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+      </div>
+
+      <div class="space-y-1">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nilai Bobot Penalti (1 s/d 10)</label>
+        <div class="flex items-center gap-3">
+          <input id="soft-input-penalty" type="range" min="1" max="10" value="5" oninput="document.getElementById('penalty-val').textContent = this.value"
+            class="flex-1">
+          <span id="penalty-val" class="font-mono font-bold text-sm text-[#0c2b5e] dark:text-amber-400 w-6 text-center">5</span>
+        </div>
+        <p class="text-[11px] text-zinc-400">Skor tinggi = AI solver akan berusaha keras menghindari pelanggaran.</p>
+      </div>
+
+      <div class="space-y-1">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Deskripsi Kebijakan</label>
+        <textarea id="soft-input-desc" rows="3" required placeholder="Jelaskan alasan dan kriteria penegakan preferensi..."
+          class="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"></textarea>
+      </div>
+
+      <div class="pt-4 flex items-center justify-end gap-2 border-t border-zinc-100 dark:border-zinc-800">
+        <button type="button" onclick="closeSoftDrawer()"
+          class="inline-flex min-h-[36px] items-center rounded-lg border border-zinc-200 px-3.5 font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800">
+          Batal
+        </button>
+        <button type="submit"
+          class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 font-semibold text-white shadow-xs">
+          <i class="ph ph-check text-amber-400"></i>
+          <span>Simpan Preferensi</span>
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<script>
+  function openSoftDrawer(mode, name = '', penalty = 5, desc = '') {
+    const overlay = document.getElementById('drawer-soft-overlay');
+    const panel = document.getElementById('drawer-soft-panel');
+    const title = document.getElementById('soft-drawer-title');
+    const inputName = document.getElementById('soft-input-name');
+    const inputPenalty = document.getElementById('soft-input-penalty');
+    const penaltyVal = document.getElementById('penalty-val');
+    const inputDesc = document.getElementById('soft-input-desc');
+
+    if (title) title.textContent = mode === 'create' ? 'Tambah Soft Constraint Baru' : 'Edit Soft Constraint';
+    if (inputName) inputName.value = name;
+    if (inputPenalty) inputPenalty.value = penalty;
+    if (penaltyVal) penaltyVal.textContent = penalty;
+    if (inputDesc) inputDesc.value = desc;
+
+    if (overlay && panel) {
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      panel.classList.remove('translate-x-full');
+    }
+  }
+
+  function closeSoftDrawer() {
+    const overlay = document.getElementById('drawer-soft-overlay');
+    const panel = document.getElementById('drawer-soft-panel');
+    if (overlay && panel) {
+      overlay.classList.add('opacity-0', 'pointer-events-none');
+      panel.classList.add('translate-x-full');
+    }
+  }
+
+  function handleSaveSoft(e) {
+    e.preventDefault();
+    closeSoftDrawer();
+    window.showConfirmDialog('Berhasil Disimpan', 'Aturan soft constraint dan bobot penalti telah diperbarui.', null, 'Selesai', true);
+  }
+</script>
