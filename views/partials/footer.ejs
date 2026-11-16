@@ -1,17 +1,41 @@
-<footer class="mt-auto border-t border-app-border bg-white text-zinc-500 text-xs py-6">
+<footer class="mt-auto border-t border-app-border dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 text-xs py-6 transition-colors">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
     <div class="flex items-center space-x-2">
-      <span class="font-bold text-zinc-900">Jadwalin</span>
+      <span class="font-bold text-zinc-900 dark:text-zinc-100">Jadwalin</span>
       <span>&middot;</span>
-      <span>Sistem Penjadwalan Cerdas</span>
+      <span>Sistem Penjadwalan Cerdas TI UMY</span>
     </div>
 
-    <div class="flex items-center space-x-4 text-zinc-400">
-      <a href="/api/status" target="_blank" class="hover:text-zinc-900 transition-colors">/api/status</a>
-      <a href="/api/produk" target="_blank" class="hover:text-zinc-900 transition-colors">/api/produk</a>
+    <div class="flex items-center space-x-4 text-zinc-400 dark:text-zinc-500">
+      <a href="/api/status" target="_blank" class="hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors">/api/status</a>
+      <a href="/api/produk" target="_blank" class="hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors">/api/produk</a>
       <span class="font-mono text-[11px]">logs/logger.md</span>
     </div>
   </div>
 </footer>
+
+<script>
+  function updateNavThemeIcon() {
+    const icon = document.getElementById('navbarThemeIcon');
+    if (!icon) return;
+    const isDark = document.documentElement.classList.contains('dark');
+    icon.className = isDark ? 'ph ph-sun text-sm text-amber-400' : 'ph ph-moon text-sm text-zinc-700';
+  }
+
+  function toggleDarkMode() {
+    const htmlEl = document.documentElement;
+    if (htmlEl.classList.contains('dark')) {
+      htmlEl.classList.remove('dark');
+      localStorage.theme = 'light';
+    } else {
+      htmlEl.classList.add('dark');
+      localStorage.theme = 'dark';
+    }
+    updateNavThemeIcon();
+  }
+
+  // Init on load
+  document.addEventListener('DOMContentLoaded', updateNavThemeIcon);
+</script>
 </body>
 </html>
