@@ -1,0 +1,105 @@
+<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Dashboard Mahasiswa — Jadwalin' }) %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
+  
+  <!-- Header & Live Countdown Card -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+    <div class="md:col-span-2 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 pb-4 dark:border-zinc-800">
+        <div>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
+            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            Semester Ganjil 2026/2027
+          </span>
+          <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-2">
+            Selamat Datang, Haidar Yahya Mudhofar
+          </h1>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">NIM: 20240140093 · S1 Teknologi Informasi UMY</p>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex flex-wrap gap-2.5 pt-2">
+        <a href="/mahasiswa/prakrs" class="inline-flex min-h-[44px] items-center gap-2 rounded-md bg-zinc-900 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white transition-colors">
+          <i class="ph ph-file-text text-base"></i>
+          <span>Pengisian Pra-KRS</span>
+        </a>
+        <a href="/mahasiswa/jadwal" class="inline-flex min-h-[44px] items-center gap-2 rounded-md border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 transition-colors">
+          <i class="ph ph-calendar text-base"></i>
+          <span>Lihat Jadwal Lengkap</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Live Countdown Timer -->
+    <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex flex-col justify-between space-y-4">
+      <div>
+        <div class="flex items-center justify-between">
+          <p class="font-mono text-[11px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Sesi Kuliah Aktif</p>
+          <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+            <i class="ph ph-radio-button text-xs"></i>
+            Live
+          </span>
+        </div>
+        <p class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-100 pt-1">Rekayasa Perangkat Lunak</p>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400">Ruang F3-201 · Kelas B</p>
+      </div>
+
+      <div class="rounded-xl bg-zinc-50 p-4 dark:bg-zinc-800/60 border border-zinc-200/50 dark:border-zinc-700/50 text-center">
+        <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mb-1">Waktu Sesi Berakhir</p>
+        <p id="countdown-active-session" data-target="2026-11-16T15:30:00" class="font-mono text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+          01:24:15
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agenda Hari Ini -->
+  <div class="space-y-4">
+    <div class="flex items-center justify-between">
+      <h2 class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-50">
+        Jadwal Kuliah Hari Ini (Senin)
+      </h2>
+      <a href="/mahasiswa/jadwal" class="text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 inline-flex items-center gap-1">
+        <span>Semua Hari</span>
+        <i class="ph ph-arrow-right"></i>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400">08:00 - 09:40</span>
+          <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">Kelas B</span>
+        </div>
+        <div>
+          <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">Pemrograman Berorientasi Objek</h3>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400">Dr. Ir. Bambang Triatmaja, M.Kom.</p>
+        </div>
+        <div class="flex items-center gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800 text-xs text-zinc-600 dark:text-zinc-400">
+          <i class="ph ph-door text-sm"></i>
+          <span>Lab Komputer Multimedia</span>
+        </div>
+      </div>
+
+      <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="font-mono text-xs font-semibold text-zinc-500 dark:text-zinc-400">10:00 - 11:40</span>
+          <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">Kelas B</span>
+        </div>
+        <div>
+          <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">Kecerdasan Buatan</h3>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400">Hendra Prasetyo, Ph.D.</p>
+        </div>
+        <div class="flex items-center gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800 text-xs text-zinc-600 dark:text-zinc-400">
+          <i class="ph ph-door text-sm"></i>
+          <span>Ruang F3-202</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<%- include('../partials/footer') %>

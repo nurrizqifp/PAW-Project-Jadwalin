@@ -1,0 +1,39 @@
+<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Notifikasi Dosen — Jadwalin' }) %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+        Pusat Notifikasi Dosen
+      </h1>
+      <p class="text-xs text-zinc-500 dark:text-zinc-400">
+        Notifikasi penerbitan draf jadwal mengajar, jadwal bentrok, atau perubahan jadwal oleh tim akademik.
+      </p>
+    </div>
+    <button type="button" class="text-xs font-medium text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200">
+      Tandai Semua Dibaca
+    </button>
+  </div>
+
+  <div class="space-y-3">
+    <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex items-start gap-4">
+      <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+        <i class="ph ph-check-circle text-lg"></i>
+      </div>
+      <div class="flex-1 space-y-1">
+        <div class="flex items-center justify-between">
+          <p class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-100">Preferensi Mengajar Anda Telah Diterapkan</p>
+          <span class="font-mono text-[11px] text-zinc-400">2 hari lalu</span>
+        </div>
+        <p class="text-xs text-zinc-600 dark:text-zinc-400">
+          Admin akademik telah memvalidasi preferensi hari Senin & Rabu Anda. Algoritma penjadwalan telah mengalokasikan slot tersebut dengan 100% kepatuhan soft-constraint.
+        </p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<%- include('../partials/footer') %>

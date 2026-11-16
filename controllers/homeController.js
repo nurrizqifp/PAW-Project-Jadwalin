@@ -57,10 +57,9 @@ exports.index = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  res.render('index', {
+  res.render('auth/login', {
     ...getBaseData(),
     judul: `Masuk Sistem — ${config.appName}`,
-    showLoginModal: true,
     currentRole: 'guest'
   });
 };
@@ -69,7 +68,7 @@ exports.login = (req, res) => {
 // 2. MAHASISWA ROUTES
 // --------------------------------------------------------
 exports.mahasiswaDashboard = (req, res) => {
-  res.render('index', {
+  res.render('mahasiswa/dashboard', {
     ...getBaseData(),
     judul: `Dashboard Mahasiswa — ${config.appName}`,
     currentRole: 'mahasiswa',
@@ -78,32 +77,29 @@ exports.mahasiswaDashboard = (req, res) => {
 };
 
 exports.mahasiswaJadwal = (req, res) => {
-  res.render('index', {
+  res.render('mahasiswa/jadwal', {
     ...getBaseData(),
     judul: `Jadwal Perkuliahan Lengkap — ${config.appName}`,
     currentRole: 'mahasiswa',
-    activeView: 'view-mahasiswa',
-    subSection: 'jadwal-lengkap'
+    activeView: 'view-mahasiswa'
   });
 };
 
 exports.mahasiswaPrakrs = (req, res) => {
-  res.render('index', {
+  res.render('mahasiswa/prakrs', {
     ...getBaseData(),
     judul: `Onboarding & Wizard Pra-KRS — ${config.appName}`,
     currentRole: 'mahasiswa',
-    activeView: 'view-mahasiswa',
-    subSection: 'prakrs'
+    activeView: 'view-mahasiswa'
   });
 };
 
 exports.mahasiswaNotifikasi = (req, res) => {
-  res.render('index', {
+  res.render('mahasiswa/notifikasi', {
     ...getBaseData(),
     judul: `Pusat Notifikasi Mahasiswa — ${config.appName}`,
     currentRole: 'mahasiswa',
-    activeView: 'view-mahasiswa',
-    openNotifDrawer: true
+    activeView: 'view-mahasiswa'
   });
 };
 
@@ -111,7 +107,7 @@ exports.mahasiswaNotifikasi = (req, res) => {
 // 3. DOSEN ROUTES
 // --------------------------------------------------------
 exports.dosenDashboard = (req, res) => {
-  res.render('index', {
+  res.render('dosen/dashboard', {
     ...getBaseData(),
     judul: `Portal Dosen — ${config.appName}`,
     currentRole: 'dosen',
@@ -120,22 +116,29 @@ exports.dosenDashboard = (req, res) => {
 };
 
 exports.dosenJadwal = (req, res) => {
-  res.render('index', {
+  res.render('dosen/jadwal', {
     ...getBaseData(),
     judul: `Jadwal Mengajar Dosen — ${config.appName}`,
     currentRole: 'dosen',
-    activeView: 'view-dosen',
-    subSection: 'jadwal'
+    activeView: 'view-dosen'
   });
 };
 
 exports.dosenPreferensi = (req, res) => {
-  res.render('index', {
+  res.render('dosen/preferensi', {
     ...getBaseData(),
     judul: `Formulir Preferensi Waktu Dosen — ${config.appName}`,
     currentRole: 'dosen',
-    activeView: 'view-dosen',
-    subSection: 'preferensi'
+    activeView: 'view-dosen'
+  });
+};
+
+exports.dosenNotifikasi = (req, res) => {
+  res.render('dosen/notifikasi', {
+    ...getBaseData(),
+    judul: `Pusat Notifikasi Dosen — ${config.appName}`,
+    currentRole: 'dosen',
+    activeView: 'view-dosen'
   });
 };
 
@@ -143,88 +146,82 @@ exports.dosenPreferensi = (req, res) => {
 // 4. ADMIN ROUTES
 // --------------------------------------------------------
 exports.adminDashboard = (req, res) => {
-  res.render('index', {
+  res.render('admin/dashboard', {
     ...getBaseData(),
     judul: `Panel Administrasi Akademik — ${config.appName}`,
     currentRole: 'admin',
-    activeView: 'view-akademik',
     activeMenu: 'dashboard'
   });
 };
 
 exports.adminMasterDosen = (req, res) => {
-  res.render('index', {
+  res.render('admin/master/dosen', {
     ...getBaseData(),
     judul: `Master Data Dosen — ${config.appName}`,
     currentRole: 'admin',
-    activeView: 'view-akademik',
-    activeMenu: 'dosen',
-    subSection: 'master-dosen'
+    activeMenu: 'dosen'
   });
 };
 
 exports.adminMasterMatkul = (req, res) => {
-  res.render('index', {
+  res.render('admin/master/matkul', {
     ...getBaseData(),
     judul: `Master Data Mata Kuliah — ${config.appName}`,
     currentRole: 'admin',
-    activeView: 'view-akademik',
-    activeMenu: 'matkul',
-    subSection: 'master-matkul'
+    activeMenu: 'matkul'
   });
 };
 
 exports.adminMasterRuangan = (req, res) => {
-  res.render('index', {
+  res.render('admin/master/ruangan', {
     ...getBaseData(),
     judul: `Master Data Ruangan & Laboratorium — ${config.appName}`,
     currentRole: 'admin',
-    activeView: 'view-akademik',
-    activeMenu: 'ruangan',
-    subSection: 'master-ruangan'
+    activeMenu: 'ruangan'
   });
 };
 
 exports.adminMasterMahasiswa = (req, res) => {
-  res.render('index', {
+  res.render('admin/master/mahasiswa', {
     ...getBaseData(),
     judul: `Master Data Mahasiswa — ${config.appName}`,
     currentRole: 'admin',
-    activeView: 'view-akademik',
-    activeMenu: 'mahasiswa',
-    subSection: 'master-mahasiswa'
+    activeMenu: 'mahasiswa'
   });
 };
 
 exports.adminConstraints = (req, res) => {
-  res.render('index', {
+  res.render('admin/constraints/hard', {
     ...getBaseData(),
-    judul: `Manajemen Constraints & Preferensi — ${config.appName}`,
+    judul: `Manajemen Hard Constraints — ${config.appName}`,
     currentRole: 'admin',
-    activeView: 'view-akademik',
-    activeMenu: 'constraints',
-    subSection: 'constraints'
+    activeMenu: 'constraints'
+  });
+};
+
+exports.adminConstraintsSoft = (req, res) => {
+  res.render('admin/constraints/soft', {
+    ...getBaseData(),
+    judul: `Manajemen Soft Constraints — ${config.appName}`,
+    currentRole: 'admin',
+    activeMenu: 'constraints'
   });
 };
 
 exports.adminGenerate = (req, res) => {
-  res.render('index', {
+  res.render('admin/generate', {
     ...getBaseData(),
     judul: `AI Generator Jadwal — ${config.appName}`,
     currentRole: 'admin',
-    activeView: 'view-akademik',
-    activeMenu: 'generate',
-    subSection: 'generate'
+    activeMenu: 'generate'
   });
 };
 
 exports.adminJadwal = (req, res) => {
-  res.render('index', {
+  res.render('admin/jadwal', {
     ...getBaseData(),
     judul: `Preview & Publikasi Jadwal — ${config.appName}`,
     currentRole: 'admin',
-    activeView: 'view-akademik',
-    activeMenu: 'jadwal',
-    subSection: 'jadwal'
+    activeMenu: 'jadwal'
   });
 };

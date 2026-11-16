@@ -1,0 +1,145 @@
+<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Jadwal Kuliah Mahasiswa — Jadwalin' }) %>
+<%- include('../partials/navbar') %>
+
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+
+  <!-- Header & Toolbar Filter -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+        Jadwal Kuliah Semester
+      </h1>
+      <p class="text-xs text-zinc-500 dark:text-zinc-400">
+        Semester Ganjil 2026/2027 · S1 Teknologi Informasi UMY
+      </p>
+    </div>
+
+    <!-- View Mode Switcher: Grid vs Agenda -->
+    <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800">
+      <button id="view-mode-grid" type="button" class="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100">
+        <i class="ph ph-squares-four text-sm"></i>
+        <span>Grid Mingguan</span>
+      </button>
+      <button id="view-mode-agenda" type="button" class="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+        <i class="ph ph-list-dashes text-sm"></i>
+        <span>Agenda Harian</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filter & Pencarian Bar -->
+  <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+      <div>
+        <label for="filter-hari" class="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">Hari</label>
+        <select id="filter-hari" class="w-full min-h-[40px] rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+          <option value="">Semua Hari</option>
+          <option value="Senin">Senin</option>
+          <option value="Selasa">Selasa</option>
+          <option value="Rabu">Rabu</option>
+          <option value="Kamis">Kamis</option>
+          <option value="Jumat">Jumat</option>
+        </select>
+      </div>
+      <div>
+        <label for="filter-kelas" class="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">Kelas</label>
+        <select id="filter-kelas" class="w-full min-h-[40px] rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+          <option value="">Semua Kelas</option>
+          <option value="A">Kelas A</option>
+          <option value="B" selected>Kelas B</option>
+          <option value="C">Kelas C</option>
+          <option value="D">Kelas D</option>
+        </select>
+      </div>
+      <div>
+        <label for="filter-angkatan" class="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">Semester / Angkatan</label>
+        <select id="filter-angkatan" class="w-full min-h-[40px] rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+          <option value="5" selected>Semester 5 (Angkatan 2024)</option>
+          <option value="3">Semester 3 (Angkatan 2025)</option>
+          <option value="1">Semester 1 (Angkatan 2026)</option>
+          <option value="7">Semester 7 (Angkatan 2023)</option>
+        </select>
+      </div>
+      <div>
+        <label for="filter-cari" class="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">Cari Mata Kuliah / Dosen</label>
+        <div class="relative">
+          <input id="filter-cari" type="text" placeholder="Ketik kata kunci..." class="w-full min-h-[40px] rounded-md border border-zinc-200 bg-white pl-8 pr-3 py-1.5 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+          <i class="ph ph-magnifying-glass absolute left-2.5 top-3 text-zinc-400 text-sm"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weekly Grid View Container -->
+  <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-x-auto">
+    <div class="min-w-[800px]">
+      <div class="grid grid-cols-6 border-b border-zinc-200 dark:border-zinc-800 pb-3 text-center text-xs font-semibold font-mono text-zinc-700 dark:text-zinc-300">
+        <div>WAKTU</div>
+        <div>SENIN</div>
+        <div>SELASA</div>
+        <div>RABU</div>
+        <div>KAMIS</div>
+        <div>JUMAT</div>
+      </div>
+
+      <!-- Rows -->
+      <div class="divide-y divide-zinc-100 dark:divide-zinc-800 text-xs">
+        <!-- Slot 08:00 - 09:40 -->
+        <div class="grid grid-cols-6 py-3 min-h-[90px] items-start">
+          <div class="font-mono text-[11px] text-zinc-500 text-center py-2">08:00 - 09:40</div>
+          <div class="p-1">
+            <div class="rounded-md border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+              <p class="font-semibold text-zinc-900 dark:text-zinc-100">PBO (Kelas B)</p>
+              <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Lab Komputer</p>
+            </div>
+          </div>
+          <div class="p-1"></div>
+          <div class="p-1">
+            <div class="rounded-md border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+              <p class="font-semibold text-zinc-900 dark:text-zinc-100">Basis Data (Kelas B)</p>
+              <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Ruang F3-102</p>
+            </div>
+          </div>
+          <div class="p-1"></div>
+          <div class="p-1">
+            <div class="rounded-md border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+              <p class="font-semibold text-zinc-900 dark:text-zinc-100">Kalkulus (Kelas B)</p>
+              <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Ruang F3-201</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slot Istirahat Dhuhur: 11:30 - 12:10 -->
+        <div class="grid grid-cols-6 py-2 bg-zinc-100/60 dark:bg-zinc-800/40 text-center text-[11px] font-mono font-medium text-zinc-500">
+          <div>11:30 - 12:10</div>
+          <div class="col-span-5 text-center font-semibold text-zinc-600 dark:text-zinc-400">
+            Jeda Ibadah Shalat Dhuhur & Istirahat (Hard Constraint HC-03)
+          </div>
+        </div>
+
+        <!-- Slot 12:15 - 13:55 -->
+        <div class="grid grid-cols-6 py-3 min-h-[90px] items-start">
+          <div class="font-mono text-[11px] text-zinc-500 text-center py-2">12:15 - 13:55</div>
+          <div class="p-1"></div>
+          <div class="p-1">
+            <div class="rounded-md border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+              <p class="font-semibold text-zinc-900 dark:text-zinc-100">Jaringan Komputer</p>
+              <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Lab Jaringan</p>
+            </div>
+          </div>
+          <div class="p-1"></div>
+          <div class="p-1">
+            <div class="rounded-md border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
+              <p class="font-semibold text-zinc-900 dark:text-zinc-100">RPL (Kelas B)</p>
+              <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Ruang F3-203</p>
+            </div>
+          </div>
+          <div class="p-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<%- include('../partials/footer') %>

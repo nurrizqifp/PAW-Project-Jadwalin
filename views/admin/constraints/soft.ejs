@@ -1,0 +1,69 @@
+<%- include('../../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Soft Constraints — Jadwalin' }) %>
+<%- include('../../partials/navbar') %>
+
+<div class="flex-1 flex overflow-hidden">
+  <%- include('../../partials/sidebar', { activeMenu: 'constraints' }) %>
+
+  <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
+    <div class="max-w-6xl mx-auto space-y-6">
+
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+            Soft Constraints (Preferensi & Pembobotan)
+          </h1>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400">
+            Batasan fleksibel yang dioptimalkan oleh AI Solver untuk menghasilkan jadwal perkuliahan paling ideal.
+          </p>
+        </div>
+
+        <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800">
+          <a href="/admin/constraints" class="rounded-md px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+            Hard Constraints
+          </a>
+          <a href="/admin/constraints/soft" class="rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100">
+            Soft Constraints
+          </a>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <!-- SC-01 -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">SC-01: Preferensi Hari/Waktu Dosen</span>
+            <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">Bobot: 40%</span>
+          </div>
+          <p class="text-xs text-zinc-600 dark:text-zinc-400">
+            Mengutamakan pengalokasian waktu mengajar sesuai preferensi atau hari yang diajukan oleh masing-masing dosen tetap.
+          </p>
+        </div>
+
+        <!-- SC-02 -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">SC-02: Sebaran Beban Mahasiswa Merata</span>
+            <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">Bobot: 35%</span>
+          </div>
+          <p class="text-xs text-zinc-600 dark:text-zinc-400">
+            Menghindari penumpukan lebih dari 3 mata kuliah berturut-turut pada satu rombel kelas di hari yang sama.
+          </p>
+        </div>
+
+        <!-- SC-03 -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">SC-03: Utilisasi Fasilitas Laboratorium</span>
+            <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">Bobot: 25%</span>
+          </div>
+          <p class="text-xs text-zinc-600 dark:text-zinc-400">
+            Mengutamakan penempatan kelas praktikum di laboratorium khusus dan meminimalkan jeda waktu kosong ruang lab.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<%- include('../../partials/footer') %>
