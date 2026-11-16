@@ -38,7 +38,7 @@
 
         <form id="form-preferensi-dosen" class="space-y-6" onsubmit="handleFormSubmit(event)">
 
-          <!-- Section 1: Ketersediaan Hari & Slot Waktu Mengajar -->
+          <!-- Section 1: Ketersediaan Hari & Pilihan Slot Waktu -->
           <div class="rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-zinc-100 pb-3 dark:border-zinc-800">
               <div>
@@ -59,16 +59,16 @@
 
               <% 
                 const daftarHari = [
-                  { hari: 'Senin', aktif: true, pagi: true, siang: true, sore: false, catatan: 'Sesi utama' },
-                  { hari: 'Selasa', aktif: true, pagi: true, siang: false, sore: false, catatan: 'Kuliah pagi' },
-                  { hari: 'Rabu', aktif: true, pagi: true, siang: true, sore: false, catatan: 'Sesi lab & teori' },
-                  { hari: 'Kamis', aktif: true, pagi: true, siang: true, sore: true, catatan: 'Fleksibel' },
-                  { hari: 'Jumat', aktif: false, pagi: false, siang: false, sore: false, catatan: 'Riset & Pengabdian' },
-                  { hari: 'Sabtu', aktif: true, pagi: true, siang: false, sore: false, catatan: 'Kelas pengganti / lab' }
+                  { hari: 'Senin', aktif: true, pagi: true, siang: true, sore: false },
+                  { hari: 'Selasa', aktif: true, pagi: true, siang: false, sore: false },
+                  { hari: 'Rabu', aktif: true, pagi: true, siang: true, sore: false },
+                  { hari: 'Kamis', aktif: true, pagi: true, siang: true, sore: true },
+                  { hari: 'Jumat', aktif: false, pagi: false, siang: false, sore: false },
+                  { hari: 'Sabtu', aktif: true, pagi: true, siang: false, sore: false }
                 ];
               %>
 
-              <% daftarHari.forEach((d, idx) => { %>
+              <% daftarHari.forEach((d) => { %>
                 <div id="card-day-<%= d.hari.toLowerCase() %>" 
                   class="day-card rounded-xl border p-4 transition-all duration-200 space-y-3 <%= d.aktif ? 'border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 shadow-xs' : 'border-zinc-200/60 bg-zinc-50/60 dark:border-zinc-800/50 dark:bg-zinc-900/40 opacity-70' %>">
                   
@@ -118,7 +118,34 @@
             </div>
           </div>
 
-          <!-- Section 2: Catatan Khusus & Quick Tag Alasan -->
+          <!-- Section 2: Batas Maksimal Jam Mengajar Harian (Fitur Resya dengan Custom Range Slider) -->
+          <div class="rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+            <div class="flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
+              <div>
+                <h2 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">
+                  Batas Maksimal Jam Mengajar Harian
+                </h2>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  Tentukan kuota batas jam maksimal mengajar per hari agar beban mengajar Anda tidak menumpuk berlebihan.
+                </p>
+              </div>
+              <span id="jam-maksimal-label" class="font-mono font-bold text-xs px-2.5 py-1 rounded bg-blue-100 dark:bg-blue-950 text-[#0c2b5e] dark:text-amber-400 border border-blue-200 dark:border-blue-900">
+                4 Jam / Hari
+              </span>
+            </div>
+
+            <div class="space-y-3 pt-1">
+              <div class="flex items-center gap-4">
+                <input id="jamMaksimal" type="range" min="1" max="8" step="1" value="4"
+                  oninput="document.getElementById('jam-maksimal-label').textContent = this.value + ' Jam / Hari'"
+                  class="flex-1">
+                <span class="text-xs font-mono text-zinc-500 dark:text-zinc-400 font-semibold w-12 text-right">Max 8 Jam</span>
+              </div>
+              <p class="text-[11px] text-zinc-400">Rekomendasi prodi: 4 s/d 6 jam per hari untuk menjaga performa pengajaran.</p>
+            </div>
+          </div>
+
+          <!-- Section 3: Catatan Khusus & Quick Tag Alasan -->
           <div class="rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
             <h2 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50 border-b border-zinc-100 pb-3 dark:border-zinc-800">
               Catatan & Justifikasi Agenda Rutin Dosen
@@ -159,7 +186,7 @@
             </div>
           </div>
 
-          <!-- Section 3: Action Button Bar -->
+          <!-- Section 4: Action Button Bar -->
           <div class="flex items-center justify-between pt-2">
             <span class="text-xs text-zinc-400 font-mono hidden sm:inline">
               Data preferensi akan disinkronkan ke AI Solver Jadwalin.

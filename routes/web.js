@@ -1,5 +1,8 @@
 const express = require('express');
-const homeController = require('../controllers/homeController');
+const publicController = require('../controllers/publicController');
+const mahasiswaController = require('../controllers/mahasiswaController');
+const dosenController = require('../controllers/dosenController');
+const adminController = require('../controllers/adminController');
 
 const router = express.Router();
 
@@ -28,12 +31,14 @@ function guardPanelRole(allowedRoles) {
   };
 }
 
-// Public & Auth Routes (Bebas diakses oleh semua civitas & guest)
-router.get('/', homeController.index);
-router.get('/info', homeController.info);
-router.get('/login', homeController.login);
-router.get('/forgot-password', homeController.forgotPassword);
-router.get('/simulasi', homeController.mahasiswaPrakrs);
+// -------------------------------------------------------------
+// 1. Public & Auth Routes (Bebas diakses semua civitas & guest)
+// -------------------------------------------------------------
+router.get('/', publicController.index);
+router.get('/info', publicController.info);
+router.get('/login', publicController.login);
+router.get('/forgot-password', publicController.forgotPassword);
+router.get('/simulasi', mahasiswaController.prakrs);
 
 // Logout Route
 router.get('/logout', (req, res) => {
@@ -43,35 +48,41 @@ router.get('/logout', (req, res) => {
   res.redirect('/login');
 });
 
-// Mahasiswa Routes (Panel Mahasiswa)
-router.get('/mahasiswa', guardPanelRole(['mahasiswa', 'admin']), homeController.mahasiswaDashboard);
-router.get('/mahasiswa/dashboard', guardPanelRole(['mahasiswa', 'admin']), homeController.mahasiswaDashboard);
-router.get('/mahasiswa/jadwal', homeController.mahasiswaJadwal); // Terbuka publik untuk cek jadwal
-router.get('/mahasiswa/prakrs', guardPanelRole(['mahasiswa', 'admin']), homeController.mahasiswaPrakrs);
-router.get('/mahasiswa/simulasi', homeController.mahasiswaPrakrs);
-router.get('/mahasiswa/notifikasi', guardPanelRole(['mahasiswa', 'admin']), homeController.mahasiswaNotifikasi);
+// -------------------------------------------------------------
+// 2. Mahasiswa Routes (Panel Mahasiswa)
+// -------------------------------------------------------------
+router.get('/mahasiswa', guardPanelRole(['mahasiswa', 'admin']), mahasiswaController.dashboard);
+router.get('/mahasiswa/dashboard', guardPanelRole(['mahasiswa', 'admin']), mahasiswaController.dashboard);
+router.get('/mahasiswa/jadwal', mahasiswaController.jadwal); // Terbuka publik untuk cek jadwal
+router.get('/mahasiswa/prakrs', guardPanelRole(['mahasiswa', 'admin']), mahasiswaController.prakrs);
+router.get('/mahasiswa/simulasi', mahasiswaController.prakrs);
+router.get('/mahasiswa/notifikasi', guardPanelRole(['mahasiswa', 'admin']), mahasiswaController.notifikasi);
 
-// Dosen Routes (Panel Dosen)
-router.get('/dosen', guardPanelRole(['dosen', 'admin']), homeController.dosenDashboard);
-router.get('/dosen/dashboard', guardPanelRole(['dosen', 'admin']), homeController.dosenDashboard);
-router.get('/dosen/jadwal', guardPanelRole(['dosen', 'admin']), homeController.dosenJadwal);
-router.get('/dosen/preferensi', guardPanelRole(['dosen', 'admin']), homeController.dosenPreferensi);
-router.get('/dosen/notifikasi', guardPanelRole(['dosen', 'admin']), homeController.dosenNotifikasi);
+// -------------------------------------------------------------
+// 3. Dosen Routes (Panel Dosen)
+// -------------------------------------------------------------
+router.get('/dosen', guardPanelRole(['dosen', 'admin']), dosenController.dashboard);
+router.get('/dosen/dashboard', guardPanelRole(['dosen', 'admin']), dosenController.dashboard);
+router.get('/dosen/jadwal', guardPanelRole(['dosen', 'admin']), dosenController.jadwal);
+router.get('/dosen/preferensi', guardPanelRole(['dosen', 'admin']), dosenController.preferensi);
+router.get('/dosen/notifikasi', guardPanelRole(['dosen', 'admin']), dosenController.notifikasi);
 
-// Admin / Staf Akademik Routes (Panel Admin)
-router.get('/admin', guardPanelRole(['admin']), homeController.adminDashboard);
-router.get('/admin/dashboard', guardPanelRole(['admin']), homeController.adminDashboard);
-router.get('/admin/master/dosen', guardPanelRole(['admin']), homeController.adminMasterDosen);
-router.get('/admin/master/matkul', guardPanelRole(['admin']), homeController.adminMasterMatkul);
-router.get('/admin/master/ruangan', guardPanelRole(['admin']), homeController.adminMasterRuangan);
-router.get('/admin/master/mahasiswa', guardPanelRole(['admin']), homeController.adminMasterMahasiswa);
-router.get('/admin/constraints', guardPanelRole(['admin']), homeController.adminConstraints);
-router.get('/admin/constraints/hard', guardPanelRole(['admin']), homeController.adminConstraints);
-router.get('/admin/constraints/soft', guardPanelRole(['admin']), homeController.adminConstraintsSoft);
-router.get('/admin/generate', guardPanelRole(['admin']), homeController.adminGenerate);
-router.get('/admin/jadwal', guardPanelRole(['admin']), homeController.adminJadwal);
-router.get('/admin/profil', guardPanelRole(['admin']), homeController.adminProfil);
-router.get('/admin/settings', guardPanelRole(['admin']), homeController.adminSettings);
-router.get('/admin/periode', guardPanelRole(['admin']), homeController.adminPeriode);
+// -------------------------------------------------------------
+// 4. Admin Routes (Panel Administrasi Akademik)
+// -------------------------------------------------------------
+router.get('/admin', guardPanelRole(['admin']), adminController.dashboard);
+router.get('/admin/dashboard', guardPanelRole(['admin']), adminController.dashboard);
+router.get('/admin/master/dosen', guardPanelRole(['admin']), adminController.masterDosen);
+router.get('/admin/master/matkul', guardPanelRole(['admin']), adminController.masterMatkul);
+router.get('/admin/master/ruangan', guardPanelRole(['admin']), adminController.masterRuangan);
+router.get('/admin/master/mahasiswa', guardPanelRole(['admin']), adminController.masterMahasiswa);
+router.get('/admin/constraints', guardPanelRole(['admin']), adminController.constraints);
+router.get('/admin/constraints/hard', guardPanelRole(['admin']), adminController.constraints);
+router.get('/admin/constraints/soft', guardPanelRole(['admin']), adminController.constraintsSoft);
+router.get('/admin/generate', guardPanelRole(['admin']), adminController.generate);
+router.get('/admin/jadwal', guardPanelRole(['admin']), adminController.jadwal);
+router.get('/admin/profil', guardPanelRole(['admin']), adminController.profil);
+router.get('/admin/settings', guardPanelRole(['admin']), adminController.settings);
+router.get('/admin/periode', guardPanelRole(['admin']), adminController.periode);
 
 module.exports = router;

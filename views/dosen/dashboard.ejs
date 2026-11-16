@@ -40,7 +40,7 @@
             </div>
           </div>
 
-          <!-- Active Sesi Card -->
+          <!-- Active Sesi Card (Live Status) -->
           <div
             class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex flex-col justify-between space-y-4">
             <div>
@@ -58,6 +58,42 @@
                 Terjadwal Tepat Waktu
               </span>
             </div>
+          </div>
+        </div>
+
+        <!-- 3 Kartu Ringkasan Aktivitas Mengajar (Fitur Resya dengan UI Jadwalin) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Metrik 1: Total SKS -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 border-l-4 border-l-[#0c2b5e] dark:border-l-blue-500 space-y-1">
+            <h6 class="text-zinc-500 dark:text-zinc-400 text-[11px] font-mono font-semibold uppercase tracking-wider">Total SKS Mengajar</h6>
+            <div class="flex items-baseline gap-2 pt-1">
+              <span class="text-3xl font-heading font-extrabold text-zinc-900 dark:text-zinc-50">12</span>
+              <span class="text-xs text-zinc-500 font-mono">SKS Terpenuhi</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 pt-1">Beban ideal dosen tetap TI</p>
+          </div>
+
+          <!-- Metrik 2: Jadwal Hari Ini -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 border-l-4 border-l-emerald-600 dark:border-l-emerald-500 space-y-1">
+            <h6 class="text-zinc-500 dark:text-zinc-400 text-[11px] font-mono font-semibold uppercase tracking-wider">Jadwal Kelas Hari Ini</h6>
+            <div class="flex items-baseline gap-2 pt-1">
+              <span class="text-3xl font-heading font-extrabold text-zinc-900 dark:text-zinc-50">2</span>
+              <span class="text-xs text-zinc-500 font-mono">Kelas Aktif</span>
+            </div>
+            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium pt-1">0 Tabrakan Jam & Ruang</p>
+          </div>
+
+          <!-- Metrik 3: Status Preferensi Dosen -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 border-l-4 border-l-amber-500 space-y-1">
+            <h6 class="text-zinc-500 dark:text-zinc-400 text-[11px] font-mono font-semibold uppercase tracking-wider">Status Preferensi Waktu</h6>
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-lg font-heading font-bold text-emerald-700 dark:text-emerald-400">Telah Disetel</span>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Aktif</span>
+            </div>
+            <a href="/dosen/preferensi" class="text-xs font-semibold text-[#0c2b5e] dark:text-amber-400 hover:underline inline-flex items-center gap-1 pt-1">
+              <span>Perbarui Preferensi</span>
+              <i class="ph ph-arrow-right"></i>
+            </a>
           </div>
         </div>
 
