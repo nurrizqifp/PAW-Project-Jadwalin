@@ -15,7 +15,7 @@
       init() {
         const isDark = localStorage.theme === 'dark' ||
           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        
+
         if (isDark) {
           document.documentElement.classList.add('dark');
         } else {
@@ -36,14 +36,14 @@
 
       updateIcon() {
         const isDark = document.documentElement.classList.contains('dark');
-        
+
         // 1. Update semua button dengan selector theme toggle
         const toggleButtons = document.querySelectorAll('[data-toggle-theme], #theme-toggle-btn, button[aria-label="Ganti Mode Tampilan"]');
         toggleButtons.forEach(btn => {
           const icon = btn.querySelector('i');
           if (icon) {
-            icon.className = isDark 
-              ? 'theme-toggle-icon ph ph-sun text-base text-amber-400' 
+            icon.className = isDark
+              ? 'theme-toggle-icon ph ph-sun text-base text-amber-400'
               : 'theme-toggle-icon ph ph-moon text-base text-zinc-700 dark:text-zinc-300';
           }
         });
@@ -52,8 +52,8 @@
         const icons = document.querySelectorAll('.theme-toggle-icon, #navbarThemeIcon, #theme-icon');
         icons.forEach(icon => {
           if (icon) {
-            icon.className = isDark 
-              ? 'theme-toggle-icon ph ph-sun text-base text-amber-400' 
+            icon.className = isDark
+              ? 'theme-toggle-icon ph ph-sun text-base text-zinc-300'
               : 'theme-toggle-icon ph ph-moon text-base text-zinc-700 dark:text-zinc-300';
           }
         });
@@ -85,10 +85,10 @@
           (type === 'error'
             ? 'bg-rose-950/90 text-rose-100 border-rose-800'
             : type === 'warning'
-            ? 'bg-amber-950/90 text-amber-100 border-amber-800'
-            : type === 'info'
-            ? 'bg-zinc-900 text-zinc-100 border-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:border-zinc-300'
-            : 'bg-emerald-950/90 text-emerald-100 border-emerald-800');
+              ? 'bg-amber-950/90 text-amber-100 border-amber-800'
+              : type === 'info'
+                ? 'bg-zinc-900 text-zinc-100 border-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:border-zinc-300'
+                : 'bg-emerald-950/90 text-emerald-100 border-emerald-800');
 
         let iconName = 'ph-check-circle';
         if (type === 'error') iconName = 'ph-warning-circle';
@@ -183,7 +183,7 @@
         const update = () => {
           const now = new Date();
           let target = new Date();
-          
+
           if (typeof endTime === 'string' && endTime.includes(':')) {
             const [hours, minutes] = endTime.split(':');
             target.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
