@@ -36,24 +36,25 @@ app.use((req, res) => {
       pesan: `Endpoint '${req.originalUrl}' tidak ditemukan.`,
     });
   }
-  res.status(404).send(`
-    <!DOCTYPE html>
-    <html lang="id">
-    <head>
-      <meta charset="UTF-8">
-      <title>404 - Halaman Tidak Ditemukan</title>
-      <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="bg-zinc-50 min-h-screen flex items-center justify-center p-4">
-      <div class="text-center bg-white p-8 rounded-2xl shadow-sm border border-zinc-200 max-w-sm">
-        <span class="text-4xl font-bold text-zinc-900">404</span>
-        <h1 class="text-base font-bold text-zinc-800 mt-2">Halaman Tidak Ditemukan</h1>
-        <p class="text-zinc-500 text-xs mt-2">Halaman yang dituju tidak tersedia pada sistem.</p>
-        <a href="/" class="mt-5 inline-block px-4 py-2 bg-zinc-900 text-white rounded-xl text-xs font-semibold hover:bg-zinc-800">Kembali ke Beranda</a>
-      </div>
-    </body>
-    </html>
-  `);
+  res.status(404).render('errors/404', {
+    judul: '404 — Halaman Tidak Ditemukan · Jadwalin'
+  });
+});
+
+// Global 500 Error Handler
+app.use((err, req, res, next) => {
+  console.error('[Jadwalin Server Error]:', err);
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(500).json({
+      sukses: false,
+      pesan: 'Terjadi kendala pemrosesan pada server internal.',
+      error: config.nodeEnv === 'development' ? err.message : undefined
+    });
+  }
+  res.status(500).render('errors/500', {
+    judul: '500 — Kendala Server · Jadwalin',
+    pesanError: config.nodeEnv === 'development' ? err.message : 'Terjadi kendala pada sistem backend.'
+  });
 });
 
 // Menjalankan Server jika dieksekusi langsung
