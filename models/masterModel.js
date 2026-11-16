@@ -835,6 +835,16 @@ const matkulPeminatan = [
   }
 ];
 
+const daftarMahasiswa = [
+  { id: 1, nim: '20240140001', nama: 'Andi Pratama', angkatan: 2024, semesterAktif: 4, kodePeminatan: 'PR' },
+  { id: 2, nim: '20240140089', nama: 'Bima Eka Setiawan', angkatan: 2024, semesterAktif: 4, kodePeminatan: 'DA' },
+  { id: 3, nim: '20240140056', nama: 'Nur Rizqi Febriansyah Putra', angkatan: 2024, semesterAktif: 4, kodePeminatan: 'NE' },
+  { id: 4, nim: '20240140091', nama: 'Resya Glamoda Suhendri', angkatan: 2024, semesterAktif: 4, kodePeminatan: 'UX' },
+  { id: 5, nim: '20240140075', nama: 'Nisrina Hanifah Ramadhani', angkatan: 2024, semesterAktif: 4, kodePeminatan: 'PR' },
+  { id: 6, nim: '20240140093', nama: 'Haidar Yahya Mudhofar', angkatan: 2024, semesterAktif: 4, kodePeminatan: 'UX' },
+  { id: 7, nim: '20240140133', nama: 'A. Muh. Fadil Asytar', angkatan: 2024, semesterAktif: 4, kodePeminatan: 'DA' }
+];
+
 const MasterModel = {
   getDosen() {
     return daftarDosen;
@@ -952,12 +962,94 @@ const MasterModel = {
     daftarRuangan.push(item);
     return item;
   },
+  updateRuangan(id, { kode, nama, kapasitas, gedung, tipe }) {
+    const idx = daftarRuangan.findIndex(r => r.id === Number(id) || r.kode === String(id));
+    if (idx === -1) return null;
+    if (kode) daftarRuangan[idx].kode = kode;
+    if (nama) daftarRuangan[idx].nama = nama;
+    if (kapasitas) daftarRuangan[idx].kapasitas = Number(kapasitas);
+    if (gedung) daftarRuangan[idx].gedung = gedung;
+    if (tipe) daftarRuangan[idx].tipe = tipe;
+    return daftarRuangan[idx];
+  },
+  deleteRuangan(id) {
+    const idx = daftarRuangan.findIndex(r => r.id === Number(id) || r.kode === String(id));
+    if (idx === -1) return false;
+    daftarRuangan.splice(idx, 1);
+    return true;
+  },
+  updateMataKuliah(kode, { nama, sks, semester, kategori, jenis }) {
+    const targetKode = String(kode).toUpperCase();
+    const idx = kurikulumSemester.findIndex(k => k.kode.toUpperCase() === targetKode);
+    if (idx !== -1) {
+      if (nama) kurikulumSemester[idx].nama = nama;
+      if (sks) kurikulumSemester[idx].sks = Number(sks);
+      if (semester) kurikulumSemester[idx].semester = Number(semester);
+      if (kategori) kurikulumSemester[idx].kategori = kategori;
+      if (jenis) kurikulumSemester[idx].jenis = jenis;
+      return kurikulumSemester[idx];
+    }
+    const pemIdx = matkulPeminatan.findIndex(p => p.kode.toUpperCase() === targetKode);
+    if (pemIdx !== -1) {
+      if (nama) matkulPeminatan[pemIdx].nama = nama;
+      if (sks) matkulPeminatan[pemIdx].sks = Number(sks);
+      if (jenis) matkulPeminatan[pemIdx].jenis = jenis;
+      return matkulPeminatan[pemIdx];
+    }
+    return null;
+  },
+  deleteMataKuliah(kode) {
+    const targetKode = String(kode).toUpperCase();
+    const idx = kurikulumSemester.findIndex(k => k.kode.toUpperCase() === targetKode);
+    if (idx !== -1) {
+      kurikulumSemester.splice(idx, 1);
+      return true;
+    }
+    const pemIdx = matkulPeminatan.findIndex(p => p.kode.toUpperCase() === targetKode);
+    if (pemIdx !== -1) {
+      matkulPeminatan.splice(pemIdx, 1);
+      return true;
+    }
+    return false;
+  },
+  getMahasiswa() {
+    return daftarMahasiswa;
+  },
+  addMahasiswa({ nim, nama, angkatan, semesterAktif, kodePeminatan }) {
+    const item = {
+      id: daftarMahasiswa.length + 1,
+      nim: String(nim),
+      nama,
+      angkatan: Number(angkatan) || 2024,
+      semesterAktif: Number(semesterAktif) || 1,
+      kodePeminatan: kodePeminatan || null
+    };
+    daftarMahasiswa.push(item);
+    return item;
+  },
+  updateMahasiswa(id, { nim, nama, angkatan, semesterAktif, kodePeminatan }) {
+    const idx = daftarMahasiswa.findIndex(m => m.id === Number(id) || m.nim === String(id));
+    if (idx === -1) return null;
+    if (nim) daftarMahasiswa[idx].nim = String(nim);
+    if (nama) daftarMahasiswa[idx].nama = nama;
+    if (angkatan) daftarMahasiswa[idx].angkatan = Number(angkatan);
+    if (semesterAktif) daftarMahasiswa[idx].semesterAktif = Number(semesterAktif);
+    if (kodePeminatan !== undefined) daftarMahasiswa[idx].kodePeminatan = kodePeminatan;
+    return daftarMahasiswa[idx];
+  },
+  deleteMahasiswa(id) {
+    const idx = daftarMahasiswa.findIndex(m => m.id === Number(id) || m.nim === String(id));
+    if (idx === -1) return false;
+    daftarMahasiswa.splice(idx, 1);
+    return true;
+  },
   getSummary() {
     return {
       totalDosen: daftarDosen.length,
       totalMatkul: kurikulumSemester.length,
       totalPeminatan: matkulPeminatan.length,
       totalRuangan: daftarRuangan.length,
+      totalMahasiswa: daftarMahasiswa.length,
       ruangF6: daftarRuangan.filter(r => r.gedung === 'F6').length,
       ruangF4: daftarRuangan.filter(r => r.gedung === 'F4').length
     };
