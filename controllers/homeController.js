@@ -1,7 +1,6 @@
 const MasterModel = require('../models/masterModel');
 const JadwalModel = require('../models/jadwalModel');
 const ConstraintModel = require('../models/constraintModel');
-const ProdukModel = require('../models/produkModel');
 const config = require('../config');
 
 // Helper untuk mengambil seluruh dataset dasar
@@ -15,7 +14,6 @@ function getBaseData() {
   const kurikulumList = MasterModel.getKurikulum();
   const peminatanList = MasterModel.getPeminatan();
   const constraints = ConstraintModel.getAll();
-  const produk = ProdukModel.getAll();
 
   const defaultMahasiswaMatkul = MasterModel.getMatkulForMahasiswa(5, 'PR');
   const defaultPrakrs = JadwalModel.rekomendasiPraKrs({
@@ -38,8 +36,7 @@ function getBaseData() {
     peminatanList,
     defaultMahasiswaMatkul,
     defaultPrakrs,
-    constraints,
-    produk
+    constraints
   };
 }
 

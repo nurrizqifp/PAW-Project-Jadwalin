@@ -2,7 +2,6 @@ const { z } = require('zod');
 const MasterModel = require('../models/masterModel');
 const JadwalModel = require('../models/jadwalModel');
 const ConstraintModel = require('../models/constraintModel');
-const ProdukModel = require('../models/produkModel');
 const config = require('../config');
 
 const preferensiSchema = z.object({
@@ -314,14 +313,5 @@ exports.generate = (req, res) => {
     sukses: true,
     result,
     notifikasi: JadwalModel.getNotifikasi()
-  });
-};
-
-exports.produk = (req, res) => {
-  const data = ProdukModel.getAll();
-  res.json({
-    sukses: true,
-    jumlah: data.length,
-    data
   });
 };
