@@ -1,18 +1,120 @@
-<footer class="mt-auto border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 text-xs py-6 transition-colors">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-    <div class="flex items-center space-x-2">
-      <span class="font-bold text-zinc-900 dark:text-zinc-100">Jadwalin</span>
-      <span>&middot;</span>
-      <span>Sistem Penjadwalan Cerdas TI UMY</span>
-    </div>
+<footer class="mt-auto border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 text-xs transition-colors">
+  
+  <!-- Main Multi-Column Section -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
+      
+      <!-- Brand & Mission Column (Span 2) -->
+      <div class="lg:col-span-2 space-y-4">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-lg bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-bold text-sm flex items-center justify-center">
+            J
+          </div>
+          <div>
+            <span class="text-base font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-heading">
+              Jadwalin
+            </span>
+            <span class="block text-[11px] text-zinc-400 font-mono">
+              AI Powered Smart Course Scheduling
+            </span>
+          </div>
+        </div>
+        
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-sm">
+          Sistem penjadwalan akademik terpadu Program Studi Teknologi Informasi, Fakultas Teknik, Universitas Muhammadiyah Yogyakarta. Menghadirkan alokasi perkuliahan berkeadilan tanpa bentrok ruang maupun dosen.
+        </p>
 
-    <div class="flex items-center space-x-4 text-zinc-400 dark:text-zinc-500">
-      <a href="/api/status" target="_blank" class="hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors font-mono">/api/status</a>
-      <a href="/api/jadwal" target="_blank" class="hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors font-mono">/api/jadwal</a>
-      <a href="/docs/design/ui-kit.html" target="_blank" class="hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors font-mono text-[11px]">ui-kit.html</a>
-      <span class="font-mono text-[11px]">logs/logger.md</span>
+        <div class="flex items-center gap-2 pt-1 font-mono text-[11px]">
+          <span class="inline-flex items-center gap-1.5 rounded-md bg-emerald-50 px-2 py-0.5 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300 font-semibold border border-emerald-200 dark:border-emerald-800">
+            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            Zero Hard-Constraint Clash
+          </span>
+          <span class="text-zinc-400">·</span>
+          <span class="text-zinc-400 font-semibold">Prodi Akreditasi Unggul</span>
+        </div>
+      </div>
+
+      <!-- Column 2: Layanan Mahasiswa -->
+      <div class="space-y-3">
+        <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
+          Layanan Mahasiswa
+        </p>
+        <ul class="space-y-2 text-xs">
+          <li>
+            <a href="/mahasiswa/jadwal" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Jadwal Kuliah Semester</a>
+          </li>
+          <li>
+            <a href="/mahasiswa/prakrs" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Simulasi Formulir Pra-KRS</a>
+          </li>
+          <li>
+            <a href="/mahasiswa/dashboard" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Dashboard Kuliah Harian</a>
+          </li>
+          <li>
+            <a href="/mahasiswa/notifikasi" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Pusat Notifikasi Perubahan</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Portal Dosen & Staf -->
+      <div class="space-y-3">
+        <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
+          Dosen & Akademik
+        </p>
+        <ul class="space-y-2 text-xs">
+          <li>
+            <a href="/login" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Masuk Portal Terproteksi</a>
+          </li>
+          <li>
+            <a href="/dosen/preferensi" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Pengajuan Hari Bebas Mengajar</a>
+          </li>
+          <li>
+            <a href="/admin/master/ruangan" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Alokasi Laboratorium Komputer</a>
+          </li>
+          <li>
+            <a href="/admin/generate" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">AI Generator Solver Core</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Standar Sistem & API -->
+      <div class="space-y-3">
+        <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
+          Sistem & Integritas
+        </p>
+        <ul class="space-y-2 text-xs">
+          <li>
+            <a href="/admin/constraints" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Aturan Jeda Dhuhur (HC-03)</a>
+          </li>
+          <li>
+            <a href="/api/status" target="_blank" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors font-mono">Endpoint /api/status</a>
+          </li>
+          <li>
+            <a href="/api/jadwal" target="_blank" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors font-mono">Endpoint /api/jadwal</a>
+          </li>
+          <li>
+            <a href="/docs/design/ui-kit.html" target="_blank" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Komponen UI Kit (Design)</a>
+          </li>
+        </ul>
+      </div>
+
     </div>
   </div>
+
+  <!-- Bottom Copyright & Health Bar -->
+  <div class="border-t border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 py-5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px]">
+      <p class="text-zinc-500 dark:text-zinc-400">
+        &copy; 2026 Program Studi Teknologi Informasi, Universitas Muhammadiyah Yogyakarta. Seluruh hak cipta dilindungi.
+      </p>
+
+      <div class="flex items-center space-x-3 text-zinc-400 font-mono">
+        <span>Jadwalin Core v2.1</span>
+        <span>&middot;</span>
+        <span>PAW Kelompok 5</span>
+      </div>
+    </div>
+  </div>
+
 </footer>
 
 <!-- Global Toast Container -->
