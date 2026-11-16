@@ -24,11 +24,11 @@
               Matriks Jadwal Perkuliahan Resmi
             </h1>
             <p class="text-xs text-zinc-500 dark:text-zinc-400">
-              Tinjau seluruh alokasi slot perkuliahan semester ganjil dalam mode Kalender Grid Mingguan atau Tabel Rinci.
+              Tinjau seluruh 111 alokasi sesi perkuliahan semester ganjil dalam mode Kalender Grid Mingguan atau Tabel Rinci.
             </p>
           </div>
 
-          <!-- Group CTA Kanan yang Rapi & Proporsional -->
+          <!-- Group CTA Kanan -->
           <div class="flex items-center gap-3 shrink-0">
             <button type="button"
               onclick="window.showConfirmDialog('Export Matriks Jadwal', 'Unduh jadwal lengkap 111 sesi perkuliahan dalam format spreadsheet Excel (.xlsx)?', null, 'Unduh Excel', true)"
@@ -37,8 +37,8 @@
               <span>Export Excel</span>
             </button>
             <button type="button"
-              onclick="window.showConfirmDialog('Sinkronisasi & Publikasi Jadwal', 'Publikasikan jadwal versi terbaru ke seluruh mahasiswa dan dosen TI UMY?', () => {}, 'Publikasikan Sekarang')"
-              class="inline-flex h-9 items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white shadow-sm border border-blue-900/40 transition-colors">
+              onclick="window.showConfirmDialog('Publikasikan Jadwal', 'Publikasikan jadwal versi terbaru ke seluruh civitas akademika TI UMY?', () => {}, 'Publikasikan Sekarang')"
+              class="inline-flex h-9 items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
               <i class="ph ph-broadcast text-amber-400 text-sm"></i>
               <span>Publikasikan Jadwal</span>
             </button>
@@ -46,7 +46,7 @@
         </div>
 
         <!-- Filter, View Switcher & Search Toolbar -->
-        <div class="flex flex-col lg:flex-row items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-3 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
           
           <!-- View Switcher Segmented Control (Grid vs Tabel) -->
           <div class="inline-flex w-full sm:w-auto rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800/80">
@@ -66,7 +66,7 @@
           <div class="flex flex-col sm:flex-row items-center gap-2.5 w-full lg:w-auto">
             <div class="relative w-full sm:w-64">
               <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></i>
-              <input id="jadwal-search-input" type="text" placeholder="Cari matkul, dosen, ruang..."
+              <input id="jadwal-search-input" type="text" placeholder="Cari kode MK, matkul, dosen..."
                 class="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
             </div>
 
@@ -85,8 +85,8 @@
               <select id="filter-tipe-select"
                 class="flex-1 sm:flex-initial text-xs rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 px-2.5 py-1.5 focus:outline-none">
                 <option value="Semua">Semua Jenis</option>
-                <option value="Teori">Teori</option>
-                <option value="Praktikum">Praktikum Lab</option>
+                <option value="Teori">Teori (Kelas Reguler/RKB)</option>
+                <option value="Praktikum">Praktikum (Lab Komputer)</option>
               </select>
 
               <span class="text-xs font-mono text-zinc-400 px-1 hidden xl:inline">
@@ -96,53 +96,32 @@
           </div>
 
         </div>
-          <div class="relative w-full sm:w-80">
-            <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></i>
-            <input id="jadwal-search-input" type="text" placeholder="Cari matkul, dosen, atau ruang..."
-              class="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-zinc-400">
-          </div>
-
-          <div class="flex items-center gap-2 w-full sm:w-auto overflow-x-auto">
-            <select id="filter-hari-select"
-              class="text-xs rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 px-2.5 py-1.5 focus:outline-none">
-              <option value="Semua">Semua Hari</option>
-              <option value="Senin">Senin</option>
-              <option value="Selasa">Selasa</option>
-              <option value="Rabu">Rabu</option>
-              <option value="Kamis">Kamis</option>
-              <option value="Jumat">Jumat</option>
-              <option value="Sabtu">Sabtu</option>
-            </select>
-
-            <select id="filter-tipe-select"
-              class="text-xs rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 px-2.5 py-1.5 focus:outline-none">
-              <option value="Semua">Semua Jenis</option>
-              <option value="Teori">Teori (Kelas Reguler/RKB)</option>
-              <option value="Praktikum">Praktikum (Lab Komputer)</option>
-            </select>
-
-            <span class="text-xs font-mono text-zinc-400 px-1 hidden md:inline">
-              Total: <strong class="text-zinc-700 dark:text-zinc-200"><%= jadwal ? jadwal.length : 0 %></strong> Sesi
-            </span>
-          </div>
-        </div>
 
         <!-- ---------------------------------------------------- -->
-        <!-- VIEW 1: CALENDAR GRID VIEW (Grid Mingguan)           -->
+        <!-- VIEW 1: CALENDAR GRID VIEW (Presisi & Rapi)          -->
         <!-- ---------------------------------------------------- -->
         <div id="container-grid-view" class="space-y-4">
-          <div class="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
             <div class="overflow-x-auto">
-              <table class="w-full border-collapse text-left min-w-[900px]">
+              <table class="table-fixed w-full min-w-[980px] border-collapse text-left">
+                <colgroup>
+                  <col class="w-24">
+                  <col class="w-[16%]">
+                  <col class="w-[16%]">
+                  <col class="w-[16%]">
+                  <col class="w-[16%]">
+                  <col class="w-[16%]">
+                  <col class="w-[16%]">
+                </colgroup>
                 <thead>
                   <tr class="border-b border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-800/60 font-mono text-xs uppercase text-zinc-500">
-                    <th class="sticky left-0 z-10 w-28 border-r border-zinc-200 bg-zinc-50/95 px-3 py-3 text-center dark:border-zinc-800 dark:bg-zinc-900/95">
+                    <th class="border-r border-zinc-200 bg-zinc-50/95 px-3 py-3 text-center dark:border-zinc-800 dark:bg-zinc-900/95">
                       Waktu
                     </th>
-                    <% const namaHari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']; %>
-                    <% namaHari.forEach(hari => { %>
-                      <th class="border-r border-zinc-200 px-3 py-3 text-center dark:border-zinc-800">
-                        <span class="font-bold text-zinc-800 dark:text-zinc-200"><%= hari %></span>
+                    <% const daysOfWeek = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']; %>
+                    <% daysOfWeek.forEach(d => { %>
+                      <th class="border-r border-zinc-200 px-3 py-3 text-center dark:border-zinc-800 last:border-r-0">
+                        <span class="font-bold text-zinc-800 dark:text-zinc-200"><%= d %></span>
                       </th>
                     <% }); %>
                   </tr>
@@ -150,30 +129,28 @@
                 <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 text-xs">
 
                   <!-- Slot 1: 07:00 - 08:40 -->
-                  <tr class="h-28">
-                    <td class="sticky left-0 z-10 border-r border-zinc-200 bg-zinc-50/90 px-3 py-2 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
+                  <tr class="min-h-24">
+                    <td class="border-r border-zinc-200 bg-zinc-50/90 px-2 py-3 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
                       <div class="font-semibold text-zinc-700 dark:text-zinc-300">07:00</div>
                       <div class="text-[10px] text-zinc-400">08:40</div>
                     </td>
-                    <% namaHari.forEach(hari => { %>
+                    <% daysOfWeek.forEach(hari => { %>
                       <% const slotJadwal = (jadwal || []).filter(j => j.hari === hari && j.jamMulai.startsWith('07:')); %>
-                      <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
+                      <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
                         <div class="space-y-1.5">
                           <% slotJadwal.forEach(item => { %>
                             <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
-                              class="cursor-pointer rounded-lg border p-2 shadow-xs transition-all hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>">
+                              class="cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>">
                               <div class="flex items-center justify-between gap-1">
-                                <span class="font-semibold truncate leading-tight font-heading text-[11px]"><%= item.mataKuliah %></span>
-                                <span class="text-[9px] font-mono px-1 rounded <%= item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900/60 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900/60 dark:text-blue-200' %>">
-                                  Kls <%= item.kelas %>
+                                <span class="font-mono text-[9px] font-bold px-1 rounded <%= item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200' %>">
+                                  <%= item.kodeMatkul || 'TI261' %>
                                 </span>
+                                <span class="text-[9px] font-mono font-semibold opacity-90">Kls <%= item.kelas %></span>
                               </div>
+                              <h4 class="font-heading font-semibold text-[11px] leading-tight pt-1 truncate" title="<%= item.mataKuliah %>"><%= item.mataKuliah %></h4>
                               <div class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
                                 <span><%= item.ruang %></span>
                                 <span><%= item.sks %> SKS</span>
-                              </div>
-                              <div class="text-[10px] truncate text-zinc-600 dark:text-zinc-400 pt-0.5">
-                                <%= item.dosen.split(',')[0] %>
                               </div>
                             </div>
                           <% }); %>
@@ -183,30 +160,28 @@
                   </tr>
 
                   <!-- Slot 2: 08:50 - 11:30 -->
-                  <tr class="h-28">
-                    <td class="sticky left-0 z-10 border-r border-zinc-200 bg-zinc-50/90 px-3 py-2 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
+                  <tr class="min-h-24">
+                    <td class="border-r border-zinc-200 bg-zinc-50/90 px-2 py-3 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
                       <div class="font-semibold text-zinc-700 dark:text-zinc-300">08:50</div>
                       <div class="text-[10px] text-zinc-400">11:30</div>
                     </td>
-                    <% namaHari.forEach(hari => { %>
+                    <% daysOfWeek.forEach(hari => { %>
                       <% const slotJadwal = (jadwal || []).filter(j => j.hari === hari && (j.jamMulai.startsWith('08:') || j.jamMulai.startsWith('09:') || j.jamMulai.startsWith('10:'))); %>
-                      <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
+                      <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
                         <div class="space-y-1.5">
                           <% slotJadwal.forEach(item => { %>
                             <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
-                              class="cursor-pointer rounded-lg border p-2 shadow-xs transition-all hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>">
+                              class="cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>">
                               <div class="flex items-center justify-between gap-1">
-                                <span class="font-semibold truncate leading-tight font-heading text-[11px]"><%= item.mataKuliah %></span>
-                                <span class="text-[9px] font-mono px-1 rounded <%= item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900/60 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900/60 dark:text-blue-200' %>">
-                                  Kls <%= item.kelas %>
+                                <span class="font-mono text-[9px] font-bold px-1 rounded <%= item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200' %>">
+                                  <%= item.kodeMatkul || 'TI261' %>
                                 </span>
+                                <span class="text-[9px] font-mono font-semibold opacity-90">Kls <%= item.kelas %></span>
                               </div>
+                              <h4 class="font-heading font-semibold text-[11px] leading-tight pt-1 truncate" title="<%= item.mataKuliah %>"><%= item.mataKuliah %></h4>
                               <div class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
                                 <span><%= item.ruang %></span>
                                 <span><%= item.sks %> SKS</span>
-                              </div>
-                              <div class="text-[10px] truncate text-zinc-600 dark:text-zinc-400 pt-0.5">
-                                <%= item.dosen.split(',')[0] %>
                               </div>
                             </div>
                           <% }); %>
@@ -215,42 +190,39 @@
                     <% }); %>
                   </tr>
 
-                  <!-- JEDA SHOLAT DHUHUR (Hard Constraint HC-03) -->
-                  <tr class="bg-amber-50/50 dark:bg-amber-950/20 border-y border-amber-200/60 dark:border-amber-900/40">
-                    <td class="sticky left-0 z-10 border-r border-zinc-200 bg-amber-50/80 px-3 py-2 font-mono text-zinc-600 text-center dark:border-zinc-800 dark:bg-amber-950/40 text-[11px]">
+                  <!-- JEDA SHOLAT DHUHUR -->
+                  <tr class="bg-amber-50/60 dark:bg-amber-950/20 border-y border-amber-200/70 dark:border-amber-900/50">
+                    <td class="border-r border-zinc-200 bg-amber-50/80 px-2 py-2 font-mono text-zinc-600 text-center dark:border-zinc-800 dark:bg-amber-950/40 text-[11px]">
                       11:30–12:10
                     </td>
                     <td colspan="6" class="px-4 py-2 text-center font-mono text-xs text-amber-900 dark:text-amber-300">
-                      <i class="ph ph-moon-stars mr-1.5 text-amber-500"></i>
-                      <span>Jeda Ibadah Sholat Dhuhur & Istirahat (Hard Constraint HC-03 Terpenuhi)</span>
+                      <i class="ph ph-moon-stars mr-1.5 text-amber-500"></i> Jeda Sholat Dhuhur & Istirahat (Hard Constraint HC-03 Terpenuhi)
                     </td>
                   </tr>
 
                   <!-- Slot 3: 12:10 - 14:40 -->
-                  <tr class="h-28">
-                    <td class="sticky left-0 z-10 border-r border-zinc-200 bg-zinc-50/90 px-3 py-2 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
+                  <tr class="min-h-24">
+                    <td class="border-r border-zinc-200 bg-zinc-50/90 px-2 py-3 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
                       <div class="font-semibold text-zinc-700 dark:text-zinc-300">12:10</div>
                       <div class="text-[10px] text-zinc-400">14:40</div>
                     </td>
-                    <% namaHari.forEach(hari => { %>
+                    <% daysOfWeek.forEach(hari => { %>
                       <% const slotJadwal = (jadwal || []).filter(j => j.hari === hari && (j.jamMulai.startsWith('12:') || j.jamMulai.startsWith('13:'))); %>
-                      <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
+                      <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
                         <div class="space-y-1.5">
                           <% slotJadwal.forEach(item => { %>
                             <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
-                              class="cursor-pointer rounded-lg border p-2 shadow-xs transition-all hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>">
+                              class="cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>">
                               <div class="flex items-center justify-between gap-1">
-                                <span class="font-semibold truncate leading-tight font-heading text-[11px]"><%= item.mataKuliah %></span>
-                                <span class="text-[9px] font-mono px-1 rounded <%= item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900/60 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900/60 dark:text-blue-200' %>">
-                                  Kls <%= item.kelas %>
+                                <span class="font-mono text-[9px] font-bold px-1 rounded <%= item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200' %>">
+                                  <%= item.kodeMatkul || 'TI261' %>
                                 </span>
+                                <span class="text-[9px] font-mono font-semibold opacity-90">Kls <%= item.kelas %></span>
                               </div>
+                              <h4 class="font-heading font-semibold text-[11px] leading-tight pt-1 truncate" title="<%= item.mataKuliah %>"><%= item.mataKuliah %></h4>
                               <div class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
                                 <span><%= item.ruang %></span>
                                 <span><%= item.sks %> SKS</span>
-                              </div>
-                              <div class="text-[10px] truncate text-zinc-600 dark:text-zinc-400 pt-0.5">
-                                <%= item.dosen.split(',')[0] %>
                               </div>
                             </div>
                           <% }); %>
@@ -260,30 +232,28 @@
                   </tr>
 
                   <!-- Slot 4: 14:50 - 17:20 -->
-                  <tr class="h-28">
-                    <td class="sticky left-0 z-10 border-r border-zinc-200 bg-zinc-50/90 px-3 py-2 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
+                  <tr class="min-h-24">
+                    <td class="border-r border-zinc-200 bg-zinc-50/90 px-2 py-3 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
                       <div class="font-semibold text-zinc-700 dark:text-zinc-300">14:50</div>
                       <div class="text-[10px] text-zinc-400">17:20</div>
                     </td>
-                    <% namaHari.forEach(hari => { %>
+                    <% daysOfWeek.forEach(hari => { %>
                       <% const slotJadwal = (jadwal || []).filter(j => j.hari === hari && (j.jamMulai.startsWith('14:') || j.jamMulai.startsWith('15:') || j.jamMulai.startsWith('16:'))); %>
-                      <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
+                      <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
                         <div class="space-y-1.5">
                           <% slotJadwal.forEach(item => { %>
                             <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
-                              class="cursor-pointer rounded-lg border p-2 shadow-xs transition-all hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>">
+                              class="cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>">
                               <div class="flex items-center justify-between gap-1">
-                                <span class="font-semibold truncate leading-tight font-heading text-[11px]"><%= item.mataKuliah %></span>
-                                <span class="text-[9px] font-mono px-1 rounded <%= item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900/60 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900/60 dark:text-blue-200' %>">
-                                  Kls <%= item.kelas %>
+                                <span class="font-mono text-[9px] font-bold px-1 rounded <%= item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200' %>">
+                                  <%= item.kodeMatkul || 'TI261' %>
                                 </span>
+                                <span class="text-[9px] font-mono font-semibold opacity-90">Kls <%= item.kelas %></span>
                               </div>
+                              <h4 class="font-heading font-semibold text-[11px] leading-tight pt-1 truncate" title="<%= item.mataKuliah %>"><%= item.mataKuliah %></h4>
                               <div class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
                                 <span><%= item.ruang %></span>
                                 <span><%= item.sks %> SKS</span>
-                              </div>
-                              <div class="text-[10px] truncate text-zinc-600 dark:text-zinc-400 pt-0.5">
-                                <%= item.dosen.split(',')[0] %>
                               </div>
                             </div>
                           <% }); %>
@@ -299,16 +269,17 @@
         </div>
 
         <!-- ---------------------------------------------------- -->
-        <!-- VIEW 2: TABEL RINCI (List View dengan Filter Cepat)  -->
+        <!-- VIEW 2: TABEL RINCI (Lengkap Kolom Kode MK)          -->
         <!-- ---------------------------------------------------- -->
         <div id="container-table-view" class="hidden space-y-4">
-          <div class="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-left text-xs" id="jadwal-data-table">
                 <thead class="border-b border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
                   <tr>
-                    <th class="px-4 py-3 font-semibold">Hari & Jam</th>
+                    <th class="px-4 py-3 font-semibold">Kode MK</th>
                     <th class="px-4 py-3 font-semibold">Mata Kuliah</th>
+                    <th class="px-4 py-3 font-semibold">Hari & Jam</th>
                     <th class="px-4 py-3 font-semibold">Kelas & SKS</th>
                     <th class="px-4 py-3 font-semibold">Dosen Pengampu</th>
                     <th class="px-4 py-3 font-semibold">Ruangan</th>
@@ -321,18 +292,21 @@
                     <tr class="jadwal-row hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors"
                       data-hari="<%= item.hari %>"
                       data-jenis="<%= item.jenis %>"
-                      data-search="<%= (item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas).toLowerCase() %>">
-                      <td class="px-4 py-3 font-mono font-medium whitespace-nowrap text-zinc-700 dark:text-zinc-300">
-                        <span class="inline-block w-14 font-semibold"><%= item.hari %>,</span>
-                        <span><%= item.jamMulai %> - <%= item.jamSelesai %></span>
+                      data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas).toLowerCase() %>">
+                      <td class="px-4 py-3 font-mono font-bold text-zinc-900 dark:text-zinc-100">
+                        <%= item.kodeMatkul || 'TI261' %>
                       </td>
                       <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">
                         <%= item.mataKuliah %>
                       </td>
-                      <td class="px-4 py-3 font-mono text-zinc-600 dark:text-zinc-400">
-                        Kelas <%= item.kelas %> (<%= item.sks %> SKS)
+                      <td class="px-4 py-3 font-mono font-medium whitespace-nowrap text-zinc-700 dark:text-zinc-300">
+                        <span class="inline-block w-14 font-semibold"><%= item.hari %>,</span>
+                        <span><%= item.jamMulai %> - <%= item.jamSelesai %></span>
                       </td>
-                      <td class="px-4 py-3 text-zinc-700 dark:text-zinc-300 max-w-[220px] truncate" title="<%= item.dosen %>">
+                      <td class="px-4 py-3 font-mono text-zinc-600 dark:text-zinc-400">
+                        Kls <%= item.kelas %> (<%= item.sks %> SKS)
+                      </td>
+                      <td class="px-4 py-3 text-zinc-700 dark:text-zinc-300 max-w-[200px] truncate" title="<%= item.dosen %>">
                         <%= item.dosen %>
                       </td>
                       <td class="px-4 py-3 font-mono text-zinc-700 dark:text-zinc-300">
@@ -341,11 +315,11 @@
                       <td class="px-4 py-3">
                         <% if (item.jenis === 'Praktikum') { %>
                           <span class="inline-flex items-center gap-1 font-mono text-[10px] text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800 font-semibold">
-                            <i class="ph ph-flask"></i> Praktikum Lab
+                            <i class="ph ph-flask"></i> Praktikum
                           </span>
                         <% } else { %>
                           <span class="inline-flex items-center gap-1 font-mono text-[10px] text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-900 font-semibold">
-                            <i class="ph ph-chalkboard"></i> Kuliah Teori
+                            <i class="ph ph-chalkboard"></i> Teori
                           </span>
                         <% } %>
                       </td>
@@ -373,7 +347,6 @@
 </div>
 
 <script>
-  // Logika Switcher Grid vs Tabel
   (function initJadwalSwitcher() {
     const btnGrid = document.getElementById('btn-view-grid');
     const btnTable = document.getElementById('btn-view-table');
@@ -384,19 +357,18 @@
       btnGrid.addEventListener('click', () => {
         gridView.classList.remove('hidden');
         tableView.classList.add('hidden');
-        btnGrid.className = 'inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-50 transition-all';
-        btnTable.className = 'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+        btnGrid.className = 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-50 transition-all';
+        btnTable.className = 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
       });
 
       btnTable.addEventListener('click', () => {
         gridView.classList.add('hidden');
         tableView.classList.remove('hidden');
-        btnTable.className = 'inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-50 transition-all';
-        btnGrid.className = 'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+        btnTable.className = 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-50 transition-all';
+        btnGrid.className = 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
       });
     }
 
-    // Filter Interaktif pada Tabel Rinci
     const searchInput = document.getElementById('jadwal-search-input');
     const filterHari = document.getElementById('filter-hari-select');
     const filterTipe = document.getElementById('filter-tipe-select');

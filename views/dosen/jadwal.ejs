@@ -4,67 +4,292 @@
 <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
 
   <!-- Kop Resmi Khusus Cetak / Print A4 -->
-  <div class="print-header">
-    <h1>Universitas Muhammadiyah Yogyakarta</h1>
-    <p><strong>Fakultas Teknik · Program Studi S1 Teknologi Informasi</strong></p>
-    <p>Surat Tugas / Jadwal Mengajar Dosen Semester Ganjil TA 2026/2027</p>
-    <p class="font-mono text-xs">Dosen: Dr. Ir. Bambang Triatmaja, M.Kom. (NIDN: 0512037501)</p>
+  <div class="print-header hidden">
+    <div class="border-b-2 border-zinc-900 pb-3 mb-4 text-center">
+      <h1 class="text-xl font-bold uppercase tracking-wider text-zinc-900">Universitas Muhammadiyah Yogyakarta</h1>
+      <p class="text-sm font-semibold text-zinc-800">Fakultas Teknik · Program Studi S1 Teknologi Informasi</p>
+      <p class="text-xs text-zinc-600 mt-1">Jadwal Mengajar Dosen Semester Ganjil TA 2026/2027</p>
+      <p class="font-mono text-xs text-zinc-700 mt-1">Dosen: Dr. Ir. Bambang Triatmaja, M.Kom. (NIDN: 0512037501)</p>
+    </div>
   </div>
 
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  <!-- Header & Toolbar Action -->
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-zinc-200/80 pb-5 dark:border-zinc-800">
     <div>
-      <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-        Jadwal Mengajar Dosen
+      <div class="flex items-center gap-2 text-xs text-zinc-500 mb-1">
+        <a href="/dosen/dashboard" class="hover:text-zinc-900 dark:hover:text-zinc-200">Portal Dosen</a>
+        <span>/</span>
+        <span class="text-amber-600 dark:text-amber-400 font-semibold">Jadwal Mengajar</span>
+      </div>
+      <h1 class="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+        Jadwal Perkuliahan Dosen
       </h1>
-      <p class="text-xs text-zinc-500 dark:text-zinc-400">
-        Semester Ganjil 2026/2027 · Dr. Ir. Bambang Triatmaja, M.Kom.
+      <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+        Dr. Ir. Bambang Triatmaja, M.Kom. · Total Beban: <strong>12 SKS</strong> · Status: 0 Bentrok Ruang & Waktu
       </p>
     </div>
 
-    <button onclick="window.print()" type="button" class="inline-flex min-h-[40px] items-center gap-2 rounded-md border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 shadow-sm transition-colors">
-      <i class="ph ph-printer text-base"></i>
-      <span>Cetak Jadwal (PDF)</span>
-    </button>
+    <div class="flex flex-wrap items-center gap-2.5">
+      <!-- Print Button -->
+      <button onclick="window.print()" type="button"
+        class="inline-flex min-h-[38px] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 shadow-xs transition-colors">
+        <i class="ph ph-printer text-base text-zinc-500"></i>
+        <span>Cetak Jadwal (PDF)</span>
+      </button>
+
+      <!-- View Mode Switcher: Grid vs Tabel -->
+      <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800">
+        <button id="dosen-view-grid" type="button"
+          class="inline-flex items-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100 transition-all">
+          <i class="ph ph-calendar-blank text-sm text-[#0c2b5e] dark:text-amber-400"></i>
+          <span>Grid Mingguan</span>
+        </button>
+        <button id="dosen-view-table" type="button"
+          class="inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
+          <i class="ph ph-table text-sm"></i>
+          <span>Tabel Rinci</span>
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div class="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
-    <div class="overflow-x-auto">
-      <table class="w-full text-left text-xs">
-        <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
-          <tr>
-            <th class="px-4 py-3 font-semibold">Hari</th>
-            <th class="px-4 py-3 font-semibold">Jam</th>
-            <th class="px-4 py-3 font-semibold">Mata Kuliah</th>
-            <th class="px-4 py-3 font-semibold">Kelas</th>
-            <th class="px-4 py-3 font-semibold">SKS</th>
-            <th class="px-4 py-3 font-semibold">Ruangan</th>
-            <th class="px-4 py-3 font-semibold">Team Teaching</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
-          <tr>
-            <td class="px-4 py-3 font-semibold">Senin</td>
-            <td class="px-4 py-3 font-mono">08:00 - 09:40</td>
-            <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Pemrograman Berorientasi Objek</td>
-            <td class="px-4 py-3 font-mono">B</td>
-            <td class="px-4 py-3 font-mono">3</td>
-            <td class="px-4 py-3">Lab Multimedia</td>
-            <td class="px-4 py-3 text-zinc-500">Mandiri</td>
-          </tr>
-          <tr>
-            <td class="px-4 py-3 font-semibold">Rabu</td>
-            <td class="px-4 py-3 font-mono">10:00 - 11:40</td>
-            <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Pemrograman Berorientasi Objek</td>
-            <td class="px-4 py-3 font-mono">C</td>
-            <td class="px-4 py-3 font-mono">3</td>
-            <td class="px-4 py-3">Lab Multimedia</td>
-            <td class="px-4 py-3 text-zinc-500">Mandiri</td>
-          </tr>
-        </tbody>
-      </table>
+  <!-- VIEW 1: CALENDAR GRID MINGGUAN DOSEN -->
+  <div id="dosen-grid-container" class="space-y-4">
+    <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse text-left min-w-[850px]">
+          <thead>
+            <tr class="border-b border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-800/60 font-mono text-xs uppercase text-zinc-500">
+              <th class="w-24 border-r border-zinc-200 px-3 py-3 text-center dark:border-zinc-800">Waktu</th>
+              <% const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']; %>
+              <% days.forEach(d => { %>
+                <th class="border-r border-zinc-200 px-3 py-3 text-center dark:border-zinc-800">
+                  <span class="font-bold text-zinc-800 dark:text-zinc-200"><%= d %></span>
+                </th>
+              <% }); %>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 text-xs">
+
+            <!-- Slot 07:00 - 08:40 -->
+            <tr class="h-28">
+              <td class="border-r border-zinc-200 bg-zinc-50/90 px-3 py-2 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
+                <div class="font-semibold text-zinc-700 dark:text-zinc-300">07:00</div>
+                <div class="text-[10px] text-zinc-400">08:40</div>
+              </td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="p-1.5 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+            </tr>
+
+            <!-- Slot 08:50 - 11:30 -->
+            <tr class="h-28">
+              <td class="border-r border-zinc-200 bg-zinc-50/90 px-3 py-2 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
+                <div class="font-semibold text-zinc-700 dark:text-zinc-300">08:50</div>
+                <div class="text-[10px] text-zinc-400">11:30</div>
+              </td>
+              <!-- Senin: Pemrograman Berorientasi Objek -->
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top">
+                <div class="rounded-lg border border-amber-300 bg-amber-50/90 p-2 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200 shadow-xs">
+                  <div class="flex items-center justify-between gap-1">
+                    <span class="font-mono text-[9px] font-bold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/60 px-1 rounded">TI26105</span>
+                    <span class="text-[9px] font-mono px-1 rounded bg-amber-200/80 text-amber-900 dark:bg-amber-800 dark:text-amber-100 font-semibold">Kls B</span>
+                  </div>
+                  <h4 class="font-heading font-semibold text-[11px] leading-tight pt-1">Pemrograman Berorientasi Objek</h4>
+                  <div class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
+                    <span>F4.LAB1</span>
+                    <span>3 SKS · Lab</span>
+                  </div>
+                </div>
+              </td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <!-- Rabu: PBO Kelas C -->
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top">
+                <div class="rounded-lg border border-amber-300 bg-amber-50/90 p-2 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200 shadow-xs">
+                  <div class="flex items-center justify-between gap-1">
+                    <span class="font-mono text-[9px] font-bold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/60 px-1 rounded">TI26105</span>
+                    <span class="text-[9px] font-mono px-1 rounded bg-amber-200/80 text-amber-900 dark:bg-amber-800 dark:text-amber-100 font-semibold">Kls C</span>
+                  </div>
+                  <h4 class="font-heading font-semibold text-[11px] leading-tight pt-1">Pemrograman Berorientasi Objek</h4>
+                  <div class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
+                    <span>F4.LAB2</span>
+                    <span>3 SKS · Lab</span>
+                  </div>
+                </div>
+              </td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="p-1.5 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+            </tr>
+
+            <!-- JEDA SHOLAT DHUHUR -->
+            <tr class="bg-amber-50/50 dark:bg-amber-950/20 border-y border-amber-200/60 dark:border-amber-900/40">
+              <td class="border-r border-zinc-200 bg-amber-50/80 px-3 py-2 font-mono text-zinc-600 text-center dark:border-zinc-800 dark:bg-amber-950/40 text-[11px]">
+                11:30–12:10
+              </td>
+              <td colspan="6" class="px-4 py-2 text-center font-mono text-xs text-amber-900 dark:text-amber-300">
+                <i class="ph ph-moon-stars mr-1.5 text-amber-500"></i> Jeda Sholat Dhuhur & Istirahat (Hard Constraint HC-03)
+              </td>
+            </tr>
+
+            <!-- Slot 12:10 - 14:40 -->
+            <tr class="h-28">
+              <td class="border-r border-zinc-200 bg-zinc-50/90 px-3 py-2 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
+                <div class="font-semibold text-zinc-700 dark:text-zinc-300">12:10</div>
+                <div class="text-[10px] text-zinc-400">14:40</div>
+              </td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <!-- Selasa: Struktur Data & Algoritma -->
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top">
+                <div class="rounded-lg border border-blue-200 bg-blue-50/80 p-2 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200 shadow-xs">
+                  <div class="flex items-center justify-between gap-1">
+                    <span class="font-mono text-[9px] font-bold text-blue-800 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/60 px-1 rounded">TI26102</span>
+                    <span class="text-[9px] font-mono px-1 rounded bg-blue-200/80 text-blue-900 dark:bg-blue-800 dark:text-blue-100 font-semibold">Kls A</span>
+                  </div>
+                  <h4 class="font-heading font-semibold text-[11px] leading-tight pt-1">Struktur Data & Algoritma</h4>
+                  <div class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
+                    <span>F6.001</span>
+                    <span>3 SKS · Teori</span>
+                  </div>
+                </div>
+              </td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <!-- Kamis: Struktur Data & Algoritma Kelas B -->
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top">
+                <div class="rounded-lg border border-blue-200 bg-blue-50/80 p-2 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200 shadow-xs">
+                  <div class="flex items-center justify-between gap-1">
+                    <span class="font-mono text-[9px] font-bold text-blue-800 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/60 px-1 rounded">TI26102</span>
+                    <span class="text-[9px] font-mono px-1 rounded bg-blue-200/80 text-blue-900 dark:bg-blue-800 dark:text-blue-100 font-semibold">Kls B</span>
+                  </div>
+                  <h4 class="font-heading font-semibold text-[11px] leading-tight pt-1">Struktur Data & Algoritma</h4>
+                  <div class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
+                    <span>F6.102</span>
+                    <span>3 SKS · Teori</span>
+                  </div>
+                </div>
+              </td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="p-1.5 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+            </tr>
+
+            <!-- Slot 14:50 - 17:20 -->
+            <tr class="h-28">
+              <td class="border-r border-zinc-200 bg-zinc-50/90 px-3 py-2 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
+                <div class="font-semibold text-zinc-700 dark:text-zinc-300">14:50</div>
+                <div class="text-[10px] text-zinc-400">17:20</div>
+              </td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+              <td class="p-1.5 bg-zinc-50/30 dark:bg-zinc-950/20"></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 2: TABEL RINCI DOSEN LENGKAP KODE MATKUL -->
+  <div id="dosen-table-container" class="hidden space-y-4">
+    <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
+            <tr>
+              <th class="px-4 py-3 font-semibold">Kode MK</th>
+              <th class="px-4 py-3 font-semibold">Mata Kuliah</th>
+              <th class="px-4 py-3 font-semibold">Hari & Jam</th>
+              <th class="px-4 py-3 font-semibold">Kelas & SKS</th>
+              <th class="px-4 py-3 font-semibold">Ruangan</th>
+              <th class="px-4 py-3 font-semibold">Tipe Perkuliahan</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+            <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors">
+              <td class="px-4 py-3 font-mono font-bold text-amber-700 dark:text-amber-400">TI26105</td>
+              <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Pemrograman Berorientasi Objek</td>
+              <td class="px-4 py-3 font-mono text-zinc-700 dark:text-zinc-300">Senin, 08:50 - 11:30</td>
+              <td class="px-4 py-3 font-mono">Kelas B (3 SKS)</td>
+              <td class="px-4 py-3 font-mono">F4.LAB1</td>
+              <td class="px-4 py-3">
+                <span class="inline-flex items-center gap-1 font-mono text-[10px] text-amber-700 bg-amber-50 dark:bg-amber-950/60 dark:text-amber-300 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800 font-semibold">
+                  <i class="ph ph-flask"></i> Praktikum Lab
+                </span>
+              </td>
+            </tr>
+            <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors">
+              <td class="px-4 py-3 font-mono font-bold text-blue-700 dark:text-blue-400">TI26102</td>
+              <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Struktur Data & Algoritma</td>
+              <td class="px-4 py-3 font-mono text-zinc-700 dark:text-zinc-300">Selasa, 12:10 - 14:40</td>
+              <td class="px-4 py-3 font-mono">Kelas A (3 SKS)</td>
+              <td class="px-4 py-3 font-mono">F6.001</td>
+              <td class="px-4 py-3">
+                <span class="inline-flex items-center gap-1 font-mono text-[10px] text-blue-700 bg-blue-50 dark:bg-blue-950/60 dark:text-blue-300 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-900 font-semibold">
+                  <i class="ph ph-chalkboard"></i> Kuliah Teori
+                </span>
+              </td>
+            </tr>
+            <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors">
+              <td class="px-4 py-3 font-mono font-bold text-amber-700 dark:text-amber-400">TI26105</td>
+              <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Pemrograman Berorientasi Objek</td>
+              <td class="px-4 py-3 font-mono text-zinc-700 dark:text-zinc-300">Rabu, 08:50 - 11:30</td>
+              <td class="px-4 py-3 font-mono">Kelas C (3 SKS)</td>
+              <td class="px-4 py-3 font-mono">F4.LAB2</td>
+              <td class="px-4 py-3">
+                <span class="inline-flex items-center gap-1 font-mono text-[10px] text-amber-700 bg-amber-50 dark:bg-amber-950/60 dark:text-amber-300 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800 font-semibold">
+                  <i class="ph ph-flask"></i> Praktikum Lab
+                </span>
+              </td>
+            </tr>
+            <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors">
+              <td class="px-4 py-3 font-mono font-bold text-blue-700 dark:text-blue-400">TI26102</td>
+              <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Struktur Data & Algoritma</td>
+              <td class="px-4 py-3 font-mono text-zinc-700 dark:text-zinc-300">Kamis, 12:10 - 14:40</td>
+              <td class="px-4 py-3 font-mono">Kelas B (3 SKS)</td>
+              <td class="px-4 py-3 font-mono">F6.102</td>
+              <td class="px-4 py-3">
+                <span class="inline-flex items-center gap-1 font-mono text-[10px] text-blue-700 bg-blue-50 dark:bg-blue-950/60 dark:text-blue-300 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-900 font-semibold">
+                  <i class="ph ph-chalkboard"></i> Kuliah Teori
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
 </main>
 
 <%- include('../partials/footer') %>
+
+<script>
+  (function initDosenScheduleSwitcher() {
+    const btnGrid = document.getElementById('dosen-view-grid');
+    const btnTable = document.getElementById('dosen-view-table');
+    const gridView = document.getElementById('dosen-grid-container');
+    const tableView = document.getElementById('dosen-table-container');
+
+    if (btnGrid && btnTable && gridView && tableView) {
+      btnGrid.addEventListener('click', () => {
+        gridView.classList.remove('hidden');
+        tableView.classList.add('hidden');
+        btnGrid.className = 'inline-flex items-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100 transition-all';
+        btnTable.className = 'inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+      });
+
+      btnTable.addEventListener('click', () => {
+        gridView.classList.add('hidden');
+        tableView.classList.remove('hidden');
+        btnTable.className = 'inline-flex items-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100 transition-all';
+        btnGrid.className = 'inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+      });
+    }
+  })();
+</script>

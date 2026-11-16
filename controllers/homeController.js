@@ -61,6 +61,14 @@ exports.login = (req, res) => {
   });
 };
 
+exports.forgotPassword = (req, res) => {
+  res.render('auth/forgot-password', {
+    ...getBaseData(),
+    judul: `Lupa Kata Sandi — ${config.appName}`,
+    currentRole: 'guest'
+  });
+};
+
 // --------------------------------------------------------
 // 2. MAHASISWA ROUTES
 // --------------------------------------------------------
@@ -224,22 +232,20 @@ exports.adminJadwal = (req, res) => {
 };
 
 exports.adminProfil = (req, res) => {
-  res.render('admin/settings', {
+  res.render('admin/profil', {
     ...getBaseData(),
     judul: `Profil Pengelola Akademik — ${config.appName}`,
     currentRole: 'admin',
-    activeMenu: 'profil',
-    defaultTab: 'profil'
+    activeMenu: 'profil'
   });
 };
 
 exports.adminSettings = (req, res) => {
   res.render('admin/settings', {
     ...getBaseData(),
-    judul: `Pengaturan Sistem & Periode — ${config.appName}`,
+    judul: `Pengaturan Sistem — ${config.appName}`,
     currentRole: 'admin',
-    activeMenu: 'settings',
-    defaultTab: 'periode'
+    activeMenu: 'settings'
   });
 };
 
@@ -248,7 +254,6 @@ exports.adminPeriode = (req, res) => {
     ...getBaseData(),
     judul: `Manajemen Periode & Semester — ${config.appName}`,
     currentRole: 'admin',
-    activeMenu: 'periode',
-    defaultTab: 'periode'
+    activeMenu: 'periode'
   });
 };

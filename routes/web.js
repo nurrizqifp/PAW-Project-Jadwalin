@@ -6,6 +6,7 @@ const router = express.Router();
 // Public & Auth Routes
 router.get('/', homeController.index);
 router.get('/login', homeController.login);
+router.get('/forgot-password', homeController.forgotPassword);
 
 // Mahasiswa Routes
 router.get('/mahasiswa', homeController.mahasiswaDashboard);
