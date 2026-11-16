@@ -19,7 +19,7 @@
                   Semester Ganjil 2026/2027
                 </span>
                 <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-2">
-                  Selamat Datang, Haidar
+                  Selamat Datang, <%= typeof user !== 'undefined' && user.nama ? user.nama : 'Haidar' %>
                 </h1>
                 <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">NIM: 20220140001 · S1 Teknologi Informasi UMY</p>
               </div>
@@ -58,8 +58,8 @@
 
             <div class="rounded-xl bg-blue-50/60 p-4 dark:bg-blue-950/30 border border-blue-200/60 dark:border-blue-900/40 text-center">
               <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mb-1">Waktu Sesi Berakhir</p>
-              <p id="countdown-active-session" data-target="2026-11-16T15:30:00" class="font-mono text-2xl font-bold tracking-tight text-[#0c2b5e] dark:text-amber-400">
-                01:24:15
+              <p id="countdown-active-session" class="font-mono text-2xl font-bold tracking-tight text-[#0c2b5e] dark:text-amber-400 tabular-nums">
+                01:45:00
               </p>
             </div>
           </div>
@@ -118,3 +118,29 @@
     <%- include('../partials/admin-footer') %>
   </div>
 </div>
+
+<script>
+  // Live Countdown Timer (Resya x Yuum)
+  (function() {
+    const el = document.getElementById("countdown-active-session");
+    if (!el) return;
+
+    // Target 1 jam 45 menit dari saat halaman dimuat
+    let totalSeconds = (1 * 3600) + (45 * 60);
+
+    const updateTimer = () => {
+      if (totalSeconds <= 0) {
+        el.innerHTML = "<span class='text-emerald-600 dark:text-emerald-400'>SELESAI</span>";
+        return;
+      }
+      totalSeconds--;
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      el.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    };
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  })();
+</script>

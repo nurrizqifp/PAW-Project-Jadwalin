@@ -680,4 +680,152 @@
     // Initial check
     recalculateSks();
   });
+
+<!-- FLOATING AI ASSISTANT CHATBOT (Resya x Yuum) -->
+<div class="fixed bottom-6 right-6 z-50">
+  <button id="ai-chat-toggle" type="button" class="group flex h-14 w-14 items-center justify-center rounded-full bg-[#0c2b5e] text-white shadow-xl ring-4 ring-amber-400/30 hover:bg-[#092248] hover:scale-105 transition-all duration-200" title="Tanya AI Jadwalin">
+    <i class="ph ph-robot text-2xl text-amber-400 group-hover:rotate-12 transition-transform"></i>
+  </button>
+
+  <div id="ai-chat-window" class="hidden absolute bottom-16 right-0 w-80 sm:w-96 rounded-2xl border border-zinc-200 bg-white/95 backdrop-blur-md shadow-2xl dark:border-zinc-800 dark:bg-zinc-900/95 overflow-hidden flex flex-col z-50 animate-in fade-in zoom-in-95 duration-200" style="height: 480px;">
+    <div class="p-4 border-b border-zinc-200 bg-[#0c2b5e] text-white flex justify-between items-center">
+      <div class="flex items-center gap-2.5">
+        <div class="h-8 w-8 rounded-lg bg-amber-400/20 text-amber-400 flex items-center justify-center border border-amber-400/30">
+          <i class="ph ph-sparkle text-lg"></i>
+        </div>
+        <div>
+          <h4 class="font-heading text-sm font-bold tracking-tight text-white">AI Assistant Jadwal</h4>
+          <p class="text-[11px] text-blue-200/80">Konsultasi KRS & Penjadwalan</p>
+        </div>
+      </div>
+      <button type="button" id="ai-chat-close" class="text-zinc-300 hover:text-white rounded-lg p-1 hover:bg-white/10 transition-colors">
+        <i class="ph ph-x text-lg"></i>
+      </button>
+    </div>
+
+    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs">
+      <div class="flex gap-2.5">
+        <div class="w-7 h-7 rounded-full bg-blue-100 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-900">
+          <i class="ph ph-robot text-sm"></i>
+        </div>
+        <div class="bg-zinc-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm p-3 text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700/60 max-w-[85%]">
+          Halo! Saya asisten pintar Jadwalin. Ada yang bisa saya bantu terkait pemilihan mata kuliah, kuota kelas, atau simulasi jadwal Pra-KRS Anda?
+        </div>
+      </div>
+    </div>
+
+    <div class="p-3 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 flex gap-2">
+      <input type="text" id="chat-input" placeholder="Ketik pertanyaan seputar KRS..." class="flex-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#0c2b5e] dark:focus:ring-amber-500">
+      <button type="button" id="chat-send" class="bg-[#0c2b5e] text-white hover:bg-[#092248] rounded-xl px-3.5 py-2 flex items-center justify-center shadow-xs transition-colors">
+        <i class="ph ph-paper-plane-right text-base text-amber-400"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+  // --- INTEGRASI FITUR AI ASSISTANT (Resya x Yuum) ---
+  const chatToggle = document.getElementById('ai-chat-toggle');
+  const chatWindow = document.getElementById('ai-chat-window');
+  const chatClose = document.getElementById('ai-chat-close');
+  const chatInput = document.getElementById('chat-input');
+  const chatSend = document.getElementById('chat-send');
+  const chatMessages = document.getElementById('chat-messages');
+
+  if (chatToggle && chatWindow) {
+    chatToggle.addEventListener('click', () => {
+      chatWindow.classList.toggle('hidden');
+      if (!chatWindow.classList.contains('hidden')) {
+        chatInput.focus();
+      }
+    });
+
+    if (chatClose) {
+      chatClose.addEventListener('click', () => chatWindow.classList.add('hidden'));
+    }
+
+    async function sendChat() {
+      const msg = chatInput.value.trim();
+      if (!msg) return;
+
+      // Render bubble user
+      const userBubble = document.createElement('div');
+      userBubble.className = 'flex gap-2.5 justify-end';
+      userBubble.innerHTML = `<div class="bg-[#0c2b5e] text-white rounded-2xl rounded-tr-sm p-3 max-w-[85%] shadow-xs">${msg}</div>`;
+      chatMessages.appendChild(userBubble);
+      chatInput.value = '';
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      // Loading bubble
+      const loadingEl = document.createElement('div');
+      loadingEl.className = 'flex gap-2.5';
+      loadingEl.innerHTML = `
+        <div class="w-7 h-7 rounded-full bg-blue-100 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-900">
+          <i class="ph ph-robot text-sm"></i>
+        </div>
+        <div class="bg-zinc-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm p-3 text-zinc-500 border border-zinc-200/60 dark:border-zinc-700/60 flex items-center gap-2">
+          <i class="ph ph-spinner animate-spin text-sm text-[#0c2b5e] dark:text-amber-400"></i>
+          <span>Menganalisis opsi jadwal...</span>
+        </div>
+      `;
+      chatMessages.appendChild(loadingEl);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg })
+        });
+        const result = await response.json();
+        loadingEl.remove();
+
+        let reply = '';
+        if (response.ok && result && result.success && result.data && result.data.reply) {
+          reply = result.data.reply;
+        } else {
+          if (msg.toLowerCase().includes('sks') || msg.toLowerCase().includes('batas')) {
+            reply = 'Beban maksimal KRS per semester adalah 24 SKS. Usahakan seimbang antara beban teori dan praktikum agar terhindar dari bentrok ruang/waktu.';
+          } else if (msg.toLowerCase().includes('rekomendasi') || msg.toLowerCase().includes('matkul')) {
+            reply = 'Untuk paket semester ganjil, kami menyarankan: Pemrograman Web Lanjut (3 SKS), Kecerdasan Buatan (3 SKS), dan Rekayasa Perangkat Lunak (3 SKS).';
+          } else {
+            reply = 'Saran jadwal optimal: periksa tab Langkah 3 untuk melihat simulasi kombinasi jadwal otomatis yang bebas tabrakan!';
+          }
+        }
+
+        const replyBubble = document.createElement('div');
+        replyBubble.className = 'flex gap-2.5';
+        replyBubble.innerHTML = `
+          <div class="w-7 h-7 rounded-full bg-blue-100 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-900">
+            <i class="ph ph-robot text-sm"></i>
+          </div>
+          <div class="bg-zinc-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm p-3 text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700/60 max-w-[85%]">
+            ${reply}
+          </div>
+        `;
+        chatMessages.appendChild(replyBubble);
+      } catch (err) {
+        loadingEl.remove();
+        const errBubble = document.createElement('div');
+        errBubble.className = 'flex gap-2.5';
+        errBubble.innerHTML = `
+          <div class="w-7 h-7 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+            <i class="ph ph-sparkle text-sm"></i>
+          </div>
+          <div class="bg-zinc-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm p-3 text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700/60 max-w-[85%]">
+            Rekomendasi AI lokal: Anda dapat memilih paket standar semester 5 dengan prioritas kelas pagi agar jadwal praktikum tidak bertabrakan.
+          </div>
+        `;
+        chatMessages.appendChild(errBubble);
+      }
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    if (chatSend) chatSend.addEventListener('click', sendChat);
+    if (chatInput) {
+      chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendChat();
+      });
+    }
+  }
 </script>
