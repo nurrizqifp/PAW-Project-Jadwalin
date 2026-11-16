@@ -203,3 +203,37 @@ flowchart TD
   - Wizard Pra-KRS 4-Step berjalan fleksibel tiap semester dengan tombol "Minta Variasi Lain".
   - Form preferensi dosen mencatat hari off riset dan langsung tersinkronisasi ke sistem.
   - Tampilan jadwal hybrid (Grid Mingguan & Agenda Harian) berjalan mulus di browser smartphone.
+
+---
+
+## 5. Instruksi Tambahan & Action Items Per Role Pasca-Audit Fase 1
+
+Berdasarkan hasil audit komprehensif fase 1, berikut adalah instruksi perbaikan mendesak yang wajib ditindaklanjuti oleh masing-masing developer di branch kerja masing-masing:
+
+### 👤 1. Bima Eka Setiawan (`bims` — Database, Auth & Seeder)
+- **Persistensi Slot Jadwal**: Selesaikan endpoint `POST /api/jadwal/update-slot` dan `POST /api/jadwal/revisi` agar perubahan waktu/ruangan dari modal edit admin langsung tersimpan persisten ke tabel SQLite `jadwal_sesis`.
+- **Manajemen Periode & Semester**: Lengkapi CRUD tabel `periode_jadwals` (Tahun ajaran, Semester Ganjil/Genap, status aktif/terkunci). Sediakan query filter semester di endpoint jadwal.
+- **Transisi ke Model Sequelize**: Alihkan pembacaan data controller yang masih memakai file statis (`masterModel.js`) ke Sequelize model (`models/index.js`).
+- **Auth Guard & Session**: Tuntaskan middleware `middlewares/auth.js` dan `middlewares/rbac.js` agar login berbasis JWT/session benar-benar membatasi akses role panel (Admin, Dosen, Mahasiswa).
+
+### 👤 2. Nur Rizqi Febriansyah Putra (`nurrizqifp` — AI Solver & Validation)
+- **Solver Fallback**: Tambahkan fallback generator berbasis constraint heuristic lokal jika kuota Gemini API rate-limited atau offline.
+- **Progress Tracking API**: Sediakan endpoint `GET /api/generate/status` yang mengembalikan persentase kalkulasi dan metrik zero-clash untuk ditampilkan di progress bar UI admin.
+- **Validasi Zero-Clash Post-Generate**: Pastikan parser menjamin 100% kepatuhan terhadap HC-03 (jeda sholat 11:30–12:10) sebelum jadwal disimpan.
+
+### 👤 3. A. Muh. Fadil Asytar (`fadil` — Jadwal, Publish & Notifikasi)
+- **Persistensi Notifikasi**: Hubungkan aksi publikasi jadwal dengan penyisipan record ke tabel `notifikasis` agar drawer notifikasi membaca data riil dari database.
+- **Guard Publikasi Jadwal**: Kunci tombol publikasi jika total bentrok > 0, dan catat riwayat versi jadwal (`v1.0`, `v1.1`, dst) saat publikasi berhasil.
+
+### 👤 4. Nisrina Hanifah Ramadhani (`nanaa` — Frontend Admin Panel)
+- **Modal CRUD Master Data**: Tambahkan form modal tambah/edit di halaman `master/dosen.ejs`, `master/matkul.ejs`, dan `master/ruangan.ejs` memanfaatkan modal sistem universal (`views/partials/admin-modals.ejs`).
+- **Gunakan Switch Toggle**: Gunakan toggle switch instan untuk pengaturan constraint tanpa tombol submit manual.
+
+### 👤 5. Resya Glamoda Suhendri (`resya` — Frontend Civitas)
+- **Sinkronisasi Timer Countdown**: Sambungkan countdown waktu di dashboard mahasiswa dengan jam sesi riil matkul hari ini (misal 08:50–11:30).
+- **Integrasi Toggle Eye**: Manfaatkan helper `togglePasswordEye` yang sudah tersedia di form login dan form ubah kata sandi.
+
+### 👤 6. Haidar Yahya Mudhofar (`yuum` — UI System, Layout & Routing)
+- **Layout & Sidebar Fixed**: Menjamin seluruh halaman admin menggunakan struktur `admin-sidebar.ejs` sticky fixed dan `admin-footer.ejs` seragam.
+- **Design System Consistency**: Memastikan warna tombol konsisten ke Deep Navy Blue (`#0c2b5e`) dan Amber Gold (`#f59e0b`).
+- **Tab Menu Vertikal**: Menyediakan layout tab vertikal terpadu untuk profil staf dan pengaturan sistem.
