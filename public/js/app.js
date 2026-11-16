@@ -226,6 +226,29 @@
     }
   };
 
+  // Auto Flash Message from URL Query Parameters (?status=success&msg=...)
+  function checkUrlFlashMessage() {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const msg = urlParams.get('msg') || urlParams.get('pesan');
+      if (msg) {
+        const type = urlParams.get('status') || urlParams.get('type') || 'success';
+        JadwalinUI.toast.show(decodeURIComponent(msg), type);
+
+        // Clean up URL without triggering reload
+        urlParams.delete('msg');
+        urlParams.delete('pesan');
+        urlParams.delete('status');
+        urlParams.delete('type');
+        const cleanSearch = urlParams.toString();
+        const newUrl = window.location.pathname + (cleanSearch ? '?' + cleanSearch : '');
+        window.history.replaceState({}, document.title, newUrl);
+      }
+    } catch (e) {
+      // Ignore if history state manipulation fails
+    }
+  }
+
   // Global Keydown Listeners (Escape key closes modals & drawers)
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
@@ -242,6 +265,7 @@
   // Global DOM Ready Init
   document.addEventListener('DOMContentLoaded', () => {
     JadwalinUI.theme.init();
+    checkUrlFlashMessage();
 
     // Attach click events to all elements with data-toggle-theme
     document.querySelectorAll('[data-toggle-theme]').forEach(btn => {
