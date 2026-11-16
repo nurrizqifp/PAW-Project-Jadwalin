@@ -1,6 +1,6 @@
 <%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Preview & Publikasi Jadwal — Jadwalin' }) %>
 
-<div class="flex-1 flex overflow-hidden">
+<div class="flex-1 flex min-h-screen">
   <%- include('../partials/admin-sidebar', { activeMenu: 'jadwal' }) %>
 
   <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
@@ -10,7 +10,7 @@
       <div class="max-w-7xl mx-auto space-y-6">
 
         <!-- Header & Action Status Bar -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-zinc-200 pb-5 dark:border-zinc-800">
           <div>
             <div class="flex items-center gap-2">
               <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
@@ -28,36 +28,74 @@
             </p>
           </div>
 
-          <div class="flex flex-wrap items-center gap-2.5">
-            <!-- View Switcher Segmented Control ala Shadcn -->
-            <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100 p-0.5 dark:border-zinc-800 dark:bg-zinc-800/80">
-              <button id="btn-view-grid" type="button"
-                class="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-50 transition-all">
-                <i class="ph ph-calendar-blank text-sm text-[#0c2b5e] dark:text-blue-400"></i>
-                <span>Grid Mingguan</span>
-              </button>
-              <button id="btn-view-table" type="button"
-                class="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
-                <i class="ph ph-table text-sm"></i>
-                <span>Tabel Rinci</span>
-              </button>
-            </div>
-
-            <button type="button" onclick="alert('Mengekspor jadwal ke format Excel (.xlsx)...')"
-              class="inline-flex min-h-[36px] items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 transition-colors">
+          <!-- Group CTA Kanan yang Rapi & Proporsional -->
+          <div class="flex items-center gap-3 shrink-0">
+            <button type="button"
+              onclick="window.showConfirmDialog('Export Matriks Jadwal', 'Unduh jadwal lengkap 111 sesi perkuliahan dalam format spreadsheet Excel (.xlsx)?', null, 'Unduh Excel', true)"
+              class="inline-flex h-9 items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 transition-colors shadow-xs">
               <i class="ph ph-file-arrow-down text-base text-emerald-600 dark:text-emerald-400"></i>
-              <span class="hidden sm:inline">Export Excel</span>
+              <span>Export Excel</span>
             </button>
-            <button type="button" onclick="alert('Jadwal berhasil disinkronkan & dipublikasikan ulang!')"
-              class="inline-flex min-h-[36px] items-center gap-1.5 rounded-md bg-[#0c2b5e] hover:bg-[#081d40] px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm border border-blue-900/50 transition-colors">
+            <button type="button"
+              onclick="window.showConfirmDialog('Sinkronisasi & Publikasi Jadwal', 'Publikasikan jadwal versi terbaru ke seluruh mahasiswa dan dosen TI UMY?', () => {}, 'Publikasikan Sekarang')"
+              class="inline-flex h-9 items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white shadow-sm border border-blue-900/40 transition-colors">
               <i class="ph ph-broadcast text-amber-400 text-sm"></i>
               <span>Publikasikan Jadwal</span>
             </button>
           </div>
         </div>
 
-        <!-- Filter & Search Toolbar -->
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <!-- Filter, View Switcher & Search Toolbar -->
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          
+          <!-- View Switcher Segmented Control (Grid vs Tabel) -->
+          <div class="inline-flex w-full sm:w-auto rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800/80">
+            <button id="btn-view-grid" type="button"
+              class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-50 transition-all">
+              <i class="ph ph-calendar-blank text-sm text-[#0c2b5e] dark:text-blue-400"></i>
+              <span>Grid Mingguan</span>
+            </button>
+            <button id="btn-view-table" type="button"
+              class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
+              <i class="ph ph-table text-sm"></i>
+              <span>Tabel Rinci</span>
+            </button>
+          </div>
+
+          <!-- Search & Filter Options -->
+          <div class="flex flex-col sm:flex-row items-center gap-2.5 w-full lg:w-auto">
+            <div class="relative w-full sm:w-64">
+              <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></i>
+              <input id="jadwal-search-input" type="text" placeholder="Cari matkul, dosen, ruang..."
+                class="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+            </div>
+
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <select id="filter-hari-select"
+                class="flex-1 sm:flex-initial text-xs rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 px-2.5 py-1.5 focus:outline-none">
+                <option value="Semua">Semua Hari</option>
+                <option value="Senin">Senin</option>
+                <option value="Selasa">Selasa</option>
+                <option value="Rabu">Rabu</option>
+                <option value="Kamis">Kamis</option>
+                <option value="Jumat">Jumat</option>
+                <option value="Sabtu">Sabtu</option>
+              </select>
+
+              <select id="filter-tipe-select"
+                class="flex-1 sm:flex-initial text-xs rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 px-2.5 py-1.5 focus:outline-none">
+                <option value="Semua">Semua Jenis</option>
+                <option value="Teori">Teori</option>
+                <option value="Praktikum">Praktikum Lab</option>
+              </select>
+
+              <span class="text-xs font-mono text-zinc-400 px-1 hidden xl:inline">
+                <strong class="text-zinc-700 dark:text-zinc-200"><%= jadwal ? jadwal.length : 0 %></strong> Sesi
+              </span>
+            </div>
+          </div>
+
+        </div>
           <div class="relative w-full sm:w-80">
             <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></i>
             <input id="jadwal-search-input" type="text" placeholder="Cari matkul, dosen, atau ruang..."

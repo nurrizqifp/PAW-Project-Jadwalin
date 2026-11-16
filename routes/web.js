@@ -34,5 +34,6 @@ router.get('/admin/generate', homeController.adminGenerate);
 router.get('/admin/jadwal', homeController.adminJadwal);
 router.get('/admin/profil', homeController.adminProfil);
 router.get('/admin/settings', homeController.adminSettings);
+router.get('/admin/periode', homeController.adminPeriode);
 
 module.exports = router;

@@ -224,11 +224,12 @@ exports.adminJadwal = (req, res) => {
 };
 
 exports.adminProfil = (req, res) => {
-  res.render('admin/profil', {
+  res.render('admin/settings', {
     ...getBaseData(),
     judul: `Profil Pengelola Akademik — ${config.appName}`,
     currentRole: 'admin',
-    activeMenu: 'profil'
+    activeMenu: 'profil',
+    defaultTab: 'profil'
   });
 };
 
@@ -237,6 +238,17 @@ exports.adminSettings = (req, res) => {
     ...getBaseData(),
     judul: `Pengaturan Sistem & Periode — ${config.appName}`,
     currentRole: 'admin',
-    activeMenu: 'settings'
+    activeMenu: 'settings',
+    defaultTab: 'periode'
+  });
+};
+
+exports.adminPeriode = (req, res) => {
+  res.render('admin/settings', {
+    ...getBaseData(),
+    judul: `Manajemen Periode & Semester — ${config.appName}`,
+    currentRole: 'admin',
+    activeMenu: 'periode',
+    defaultTab: 'periode'
   });
 };
