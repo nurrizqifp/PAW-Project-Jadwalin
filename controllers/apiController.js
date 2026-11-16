@@ -216,6 +216,49 @@ exports.tambahMaster = (req, res) => {
   });
 };
 
+exports.updateDosen = (req, res) => {
+  const id = Number(req.params.id);
+  const parsed = masterDosenSchema.partial().safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({
+      sukses: false,
+      pesan: parsed.error.issues[0]?.message || 'Input update dosen tidak valid.'
+    });
+  }
+
+  const updated = MasterModel.updateDosen(id, parsed.data);
+  if (!updated) {
+    return res.status(404).json({
+      sukses: false,
+      pesan: `Dosen dengan ID ${id} tidak ditemukan.`
+    });
+  }
+
+  return res.json({
+    sukses: true,
+    pesan: `Data dosen ${updated.nama} berhasil diperbarui.`,
+    item: updated,
+    summary: MasterModel.getSummary()
+  });
+};
+
+exports.deleteDosen = (req, res) => {
+  const id = Number(req.params.id);
+  const success = MasterModel.deleteDosen(id);
+  if (!success) {
+    return res.status(404).json({
+      sukses: false,
+      pesan: `Dosen dengan ID ${id} tidak ditemukan.`
+    });
+  }
+
+  return res.json({
+    sukses: true,
+    pesan: `Data dosen ID ${id} berhasil dihapus.`,
+    summary: MasterModel.getSummary()
+  });
+};
+
 exports.constraints = (req, res) => {
   res.json({
     sukses: true,
