@@ -4,36 +4,44 @@
 <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
 
   <!-- Kop Resmi Khusus Cetak / Print A4 -->
-  <div class="print-header">
-    <h1>Universitas Muhammadiyah Yogyakarta</h1>
-    <p><strong>Fakultas Teknik · Program Studi S1 Teknologi Informasi</strong></p>
-    <p>Jadwal Perkuliahan Resmi Semester Ganjil TA 2026/2027</p>
+  <div class="print-header hidden">
+    <div class="border-b-2 border-zinc-900 pb-3 mb-4 text-center">
+      <h1 class="text-xl font-bold uppercase tracking-wider text-zinc-900">Universitas Muhammadiyah Yogyakarta</h1>
+      <p class="text-sm font-semibold text-zinc-800">Fakultas Teknik · Program Studi S1 Teknologi Informasi</p>
+      <p class="text-xs text-zinc-600 mt-1">Jadwal Perkuliahan Resmi Semester Ganjil Tahun Akademik 2026/2027</p>
+    </div>
   </div>
 
-  <!-- Header & Toolbar Filter -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  <!-- Header & Toolbar Action -->
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-zinc-200/80 pb-5 dark:border-zinc-800">
     <div>
-      <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-        Jadwal Kuliah Semester
+      <div class="flex items-center gap-2 text-xs text-zinc-500 mb-1">
+        <a href="/mahasiswa/dashboard" class="hover:text-zinc-900 dark:hover:text-zinc-200">Mahasiswa</a>
+        <span>/</span>
+        <span class="text-brand-blue dark:text-amber-400 font-semibold">Jadwal Perkuliahan</span>
+      </div>
+      <h1 class="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+        Kalender Perkuliahan Mahasiswa
       </h1>
-      <p class="text-xs text-zinc-500 dark:text-zinc-400">
-        Semester Ganjil 2026/2027 · S1 Teknologi Informasi UMY
+      <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+        Distribusi jadwal resmi S1 Teknologi Informasi UMY · Semester Ganjil 2026/2027 · Terverifikasi Bebas Bentrok
       </p>
     </div>
 
-    <div class="flex items-center gap-2.5">
-      <button onclick="window.print()" type="button" class="inline-flex min-h-[38px] items-center gap-1.5 rounded-md border border-zinc-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 shadow-sm transition-colors">
-        <i class="ph ph-printer text-base"></i>
-        <span>Cetak PDF</span>
+    <div class="flex flex-wrap items-center gap-2.5">
+      <!-- Print Button -->
+      <button onclick="window.print()" type="button" class="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 shadow-sm transition-colors">
+        <i class="ph ph-printer text-base text-zinc-500"></i>
+        <span>Cetak PDF Resmi</span>
       </button>
 
       <!-- View Mode Switcher: Grid vs Agenda -->
       <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800">
-        <button id="view-mode-grid" type="button" class="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100">
-          <i class="ph ph-squares-four text-sm"></i>
+        <button id="view-mode-grid" type="button" class="inline-flex items-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100 transition-all">
+          <i class="ph ph-squares-four text-sm text-brand-blue dark:text-amber-400"></i>
           <span>Grid Mingguan</span>
         </button>
-        <button id="view-mode-agenda" type="button" class="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+        <button id="view-mode-agenda" type="button" class="inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
           <i class="ph ph-list-dashes text-sm"></i>
           <span>Agenda Harian</span>
         </button>
@@ -41,23 +49,27 @@
     </div>
   </div>
 
-  <!-- Filter & Pencarian Bar -->
-  <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+  <!-- Filter & Pencarian Bar Interaktif -->
+  <div class="rounded-xl border border-zinc-200 bg-white p-4 sm:p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 transition-colors">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+      <!-- Filter Hari -->
       <div>
-        <label for="filter-hari" class="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">Hari</label>
-        <select id="filter-hari" class="w-full min-h-[40px] rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-          <option value="">Semua Hari</option>
+        <label for="filter-hari" class="block text-[11px] font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5">Hari</label>
+        <select id="filter-hari" class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue">
+          <option value="">Semua Hari (Senin - Sabtu)</option>
           <option value="Senin">Senin</option>
           <option value="Selasa">Selasa</option>
           <option value="Rabu">Rabu</option>
           <option value="Kamis">Kamis</option>
           <option value="Jumat">Jumat</option>
+          <option value="Sabtu">Sabtu</option>
         </select>
       </div>
+
+      <!-- Filter Kelas -->
       <div>
-        <label for="filter-kelas" class="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">Kelas</label>
-        <select id="filter-kelas" class="w-full min-h-[40px] rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+        <label for="filter-kelas" class="block text-[11px] font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5">Rombongan Belajar (Kelas)</label>
+        <select id="filter-kelas" class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue">
           <option value="">Semua Kelas</option>
           <option value="A">Kelas A</option>
           <option value="B" selected>Kelas B</option>
@@ -65,95 +77,525 @@
           <option value="D">Kelas D</option>
         </select>
       </div>
+
+      <!-- Filter Tipe Ruangan -->
       <div>
-        <label for="filter-angkatan" class="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">Semester / Angkatan</label>
-        <select id="filter-angkatan" class="w-full min-h-[40px] rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-          <option value="5" selected>Semester 5 (Angkatan 2024)</option>
-          <option value="3">Semester 3 (Angkatan 2025)</option>
-          <option value="1">Semester 1 (Angkatan 2026)</option>
-          <option value="7">Semester 7 (Angkatan 2023)</option>
+        <label for="filter-tipe-ruang" class="block text-[11px] font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5">Tipe Ruangan</label>
+        <select id="filter-tipe-ruang" class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue">
+          <option value="">Semua Ruangan</option>
+          <option value="lab">Laboratorium Komputer</option>
+          <option value="reguler">Ruang Teori (Reguler)</option>
         </select>
       </div>
+
+      <!-- Filter Peminatan -->
       <div>
-        <label for="filter-cari" class="block text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 mb-1">Cari Mata Kuliah / Dosen</label>
+        <label for="filter-peminatan" class="block text-[11px] font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5">Jalur Peminatan</label>
+        <select id="filter-peminatan" class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue">
+          <option value="">Semua Peminatan</option>
+          <option value="SE">Software Engineering (SE)</option>
+          <option value="AI">Data & Artificial Intelligence (AI)</option>
+          <option value="NET">Network & Cyber Security (NET)</option>
+        </select>
+      </div>
+
+      <!-- Pencarian Cepat -->
+      <div>
+        <label for="filter-cari" class="block text-[11px] font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5">Cari Sesi / Dosen</label>
         <div class="relative">
-          <input id="filter-cari" type="text" placeholder="Ketik kata kunci..." class="w-full min-h-[40px] rounded-md border border-zinc-200 bg-white pl-8 pr-3 py-1.5 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-          <i class="ph ph-magnifying-glass absolute left-2.5 top-3 text-zinc-400 text-sm"></i>
+          <input id="filter-cari" type="text" placeholder="Ketik matkul, dosen, ruang..." class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white pl-9 pr-3 py-2 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:ring-2 focus:ring-brand-blue/30 focus:border-brand-blue placeholder:text-zinc-400">
+          <i class="ph ph-magnifying-glass absolute left-3 top-3 text-zinc-400 text-sm"></i>
         </div>
       </div>
     </div>
+
+    <!-- Active Filter Status & Reset -->
+    <div class="mt-3.5 pt-3 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-100 dark:bg-zinc-800 font-medium text-zinc-700 dark:text-zinc-300">
+          <i class="ph ph-funnel text-zinc-400"></i>
+          <span id="active-count-label">Menampilkan jadwal terfilter</span>
+        </span>
+        <span class="text-zinc-400">·</span>
+        <span class="text-[11px] text-zinc-500">Klik kartu sesi untuk melihat detail ruangan dan dosen</span>
+      </div>
+      <button id="btn-reset-filter" type="button" class="text-xs font-semibold text-brand-blue dark:text-amber-400 hover:underline inline-flex items-center gap-1">
+        <i class="ph ph-arrow-counter-clockwise"></i>
+        <span>Reset Filter</span>
+      </button>
+    </div>
   </div>
 
-  <!-- Weekly Grid View Container -->
-  <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-x-auto">
-    <div class="min-w-[800px]">
-      <div class="grid grid-cols-6 border-b border-zinc-200 dark:border-zinc-800 pb-3 text-center text-xs font-semibold font-mono text-zinc-700 dark:text-zinc-300">
-        <div>WAKTU</div>
-        <div>SENIN</div>
-        <div>SELASA</div>
-        <div>RABU</div>
-        <div>KAMIS</div>
-        <div>JUMAT</div>
-      </div>
-
-      <!-- Rows -->
-      <div class="divide-y divide-zinc-100 dark:divide-zinc-800 text-xs">
-        <!-- Slot 08:00 - 09:40 -->
-        <div class="grid grid-cols-6 py-3 min-h-[90px] items-start">
-          <div class="font-mono text-[11px] text-zinc-500 text-center py-2">08:00 - 09:40</div>
-          <div class="p-1">
-            <div class="rounded-md border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
-              <p class="font-semibold text-zinc-900 dark:text-zinc-100">PBO (Kelas B)</p>
-              <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Lab Komputer</p>
-            </div>
+  <!-- ==================== VIEW 1: KALENDER GRID MINGGUAN ==================== -->
+  <div id="view-grid-container" class="space-y-4">
+    <div class="rounded-2xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+      
+      <!-- Legend Sesi -->
+      <div class="px-5 py-3 border-b border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/70 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="flex flex-wrap items-center gap-4">
+          <span class="text-zinc-500 font-semibold text-[11px]">Keterangan:</span>
+          <div class="inline-flex items-center gap-1.5">
+            <span class="h-3 w-3 rounded bg-blue-100 border border-blue-300 dark:bg-blue-950/70 dark:border-blue-700"></span>
+            <span class="text-zinc-700 dark:text-zinc-300">Kuliah Teori (Reguler)</span>
           </div>
-          <div class="p-1"></div>
-          <div class="p-1">
-            <div class="rounded-md border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
-              <p class="font-semibold text-zinc-900 dark:text-zinc-100">Basis Data (Kelas B)</p>
-              <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Ruang F3-102</p>
-            </div>
+          <div class="inline-flex items-center gap-1.5">
+            <span class="h-3 w-3 rounded bg-amber-100 border border-amber-300 dark:bg-amber-950/70 dark:border-amber-700"></span>
+            <span class="text-zinc-700 dark:text-zinc-300">Praktikum Laboratorium</span>
           </div>
-          <div class="p-1"></div>
-          <div class="p-1">
-            <div class="rounded-md border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
-              <p class="font-semibold text-zinc-900 dark:text-zinc-100">Kalkulus (Kelas B)</p>
-              <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Ruang F3-201</p>
-            </div>
+          <div class="inline-flex items-center gap-1.5">
+            <span class="h-3 w-3 rounded bg-zinc-200 border border-zinc-300 dark:bg-zinc-800 dark:border-zinc-700"></span>
+            <span class="text-zinc-700 dark:text-zinc-300">Jeda Shalat Dhuhur</span>
           </div>
         </div>
-
-        <!-- Slot Istirahat Dhuhur: 11:30 - 12:10 -->
-        <div class="grid grid-cols-6 py-2 bg-zinc-100/60 dark:bg-zinc-800/40 text-center text-[11px] font-mono font-medium text-zinc-500">
-          <div>11:30 - 12:10</div>
-          <div class="col-span-5 text-center font-semibold text-zinc-600 dark:text-zinc-400">
-            Jeda Ibadah Shalat Dhuhur & Istirahat (Hard Constraint HC-03)
-          </div>
-        </div>
-
-        <!-- Slot 12:15 - 13:55 -->
-        <div class="grid grid-cols-6 py-3 min-h-[90px] items-start">
-          <div class="font-mono text-[11px] text-zinc-500 text-center py-2">12:15 - 13:55</div>
-          <div class="p-1"></div>
-          <div class="p-1">
-            <div class="rounded-md border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
-              <p class="font-semibold text-zinc-900 dark:text-zinc-100">Jaringan Komputer</p>
-              <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Lab Jaringan</p>
-            </div>
-          </div>
-          <div class="p-1"></div>
-          <div class="p-1">
-            <div class="rounded-md border border-zinc-200 bg-zinc-50 p-2 dark:border-zinc-700 dark:bg-zinc-800">
-              <p class="font-semibold text-zinc-900 dark:text-zinc-100">RPL (Kelas B)</p>
-              <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Ruang F3-203</p>
-            </div>
-          </div>
-          <div class="p-1"></div>
+        <div class="inline-flex items-center gap-1.5 text-zinc-500 text-[11px]">
+          <i class="ph ph-shield-check text-emerald-600 dark:text-emerald-400"></i>
+          <span>Semua Slot Terverifikasi Hard Constraint HC-01, HC-02, HC-03</span>
         </div>
       </div>
+
+      <!-- Responsive Table Grid -->
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse text-left text-xs min-w-[900px]">
+          <thead>
+            <tr class="border-b border-zinc-200 bg-zinc-100/75 dark:border-zinc-800 dark:bg-zinc-800/80">
+              <th class="sticky left-0 z-10 w-28 border-r border-zinc-200 bg-zinc-100/90 px-3.5 py-3 font-semibold text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300 text-center">
+                WAKTU
+              </th>
+              <th class="border-r border-zinc-200 px-4 py-3 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                SENIN
+              </th>
+              <th class="border-r border-zinc-200 px-4 py-3 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                SELASA
+              </th>
+              <th class="border-r border-zinc-200 px-4 py-3 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                RABU
+              </th>
+              <th class="border-r border-zinc-200 px-4 py-3 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                KAMIS
+              </th>
+              <th class="border-r border-zinc-200 px-4 py-3 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                JUMAT
+              </th>
+              <th class="px-4 py-3 font-heading font-bold text-zinc-900 dark:text-zinc-100 text-center">
+                SABTU
+              </th>
+            </tr>
+          </thead>
+          <tbody id="grid-table-body" class="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans">
+            <!-- Dynamic Content Rendered by Client-side JS below -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== VIEW 2: AGENDA VIEW (MOBILE / LIST) ==================== -->
+  <div id="view-agenda-container" class="hidden space-y-4">
+    <!-- Day Selector Tabs -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1" id="agenda-day-tabs">
+      <button type="button" data-day="Senin" class="agenda-tab inline-flex min-h-[38px] items-center gap-1.5 rounded-lg bg-brand-blue px-4 py-2 text-xs font-semibold text-white shadow-sm dark:bg-amber-500 dark:text-zinc-900 transition-colors">
+        Senin
+      </button>
+      <button type="button" data-day="Selasa" class="agenda-tab inline-flex min-h-[38px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+        Selasa
+      </button>
+      <button type="button" data-day="Rabu" class="agenda-tab inline-flex min-h-[38px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+        Rabu
+      </button>
+      <button type="button" data-day="Kamis" class="agenda-tab inline-flex min-h-[38px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+        Kamis
+      </button>
+      <button type="button" data-day="Jumat" class="agenda-tab inline-flex min-h-[38px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+        Jumat
+      </button>
+      <button type="button" data-day="Sabtu" class="agenda-tab inline-flex min-h-[38px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+        Sabtu
+      </button>
+    </div>
+
+    <!-- Agenda Cards Container -->
+    <div id="agenda-cards-container" class="space-y-3">
+      <!-- Diisi oleh JS -->
     </div>
   </div>
 
 </main>
+
+<!-- Modal Detail Sesi Perkuliahan -->
+<div id="modal-sesi-detail" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-900/60 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-200">
+  <div role="dialog" aria-modal="true" class="w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-6 shadow-xl dark:border-zinc-800 dark:bg-zinc-900 scale-95 transition-all duration-200 space-y-4">
+    <div class="flex items-start justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
+      <div>
+        <span id="modal-badge-jenis" class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-300">
+          Kuliah Teori
+        </span>
+        <h3 id="modal-matkul-nama" class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-50 mt-1">
+          Nama Mata Kuliah
+        </h3>
+        <p id="modal-matkul-kode" class="text-xs text-zinc-500">Kode SKS</p>
+      </div>
+      <button onclick="JadwalinUI.modal.close('modal-sesi-detail')" type="button" class="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200">
+        <i class="ph ph-x text-lg"></i>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 text-xs">
+      <div class="rounded-lg border border-zinc-100 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-800/50">
+        <p class="text-zinc-500 text-[11px]">Waktu & Hari</p>
+        <p id="modal-waktu" class="font-semibold text-zinc-900 dark:text-zinc-100 mt-0.5">Senin, 08:50 – 11:30</p>
+      </div>
+      <div class="rounded-lg border border-zinc-100 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-800/50">
+        <p class="text-zinc-500 text-[11px]">Ruangan & Gedung</p>
+        <p id="modal-ruang" class="font-semibold text-zinc-900 dark:text-zinc-100 mt-0.5">F6.001 (Gedung F6)</p>
+      </div>
+      <div class="rounded-lg border border-zinc-100 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-800/50">
+        <p class="text-zinc-500 text-[11px]">Rombel / Kelas</p>
+        <p id="modal-kelas" class="font-semibold text-zinc-900 dark:text-zinc-100 mt-0.5">Kelas B</p>
+      </div>
+      <div class="rounded-lg border border-zinc-100 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-800/50">
+        <p class="text-zinc-500 text-[11px]">Beban SKS</p>
+        <p id="modal-sks" class="font-semibold text-zinc-900 dark:text-zinc-100 mt-0.5">3 SKS</p>
+      </div>
+    </div>
+
+    <div class="rounded-lg border border-zinc-100 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-800/50 text-xs">
+      <p class="text-zinc-500 text-[11px]">Dosen Pengampu</p>
+      <p id="modal-dosen" class="font-semibold text-zinc-900 dark:text-zinc-100 mt-0.5">Nama Dosen Lengkap</p>
+    </div>
+
+    <div class="flex items-center justify-between pt-2">
+      <span class="inline-flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+        <i class="ph ph-check-circle"></i>
+        <span>Slot diverifikasi bebas bentrok</span>
+      </span>
+      <button onclick="JadwalinUI.modal.close('modal-sesi-detail')" type="button" class="px-4 py-2 rounded-lg bg-zinc-900 text-white text-xs font-semibold hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900">
+        Tutup
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Raw Jadwal Data Script for Zero Reload Dynamic Filter -->
+<script id="raw-jadwal-data" type="application/json">
+  <%- JSON.stringify(jadwal) %>
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const rawDataEl = document.getElementById('raw-jadwal-data');
+    let allJadwal = [];
+    try {
+      allJadwal = JSON.parse(rawDataEl.textContent || '[]');
+    } catch (e) {
+      allJadwal = [];
+    }
+
+    const filterHari = document.getElementById('filter-hari');
+    const filterKelas = document.getElementById('filter-kelas');
+    const filterTipeRuang = document.getElementById('filter-tipe-ruang');
+    const filterPeminatan = document.getElementById('filter-peminatan');
+    const filterCari = document.getElementById('filter-cari');
+    const btnReset = document.getElementById('btn-reset-filter');
+    const countLabel = document.getElementById('active-count-label');
+
+    const viewGridBtn = document.getElementById('view-mode-grid');
+    const viewAgendaBtn = document.getElementById('view-mode-agenda');
+    const gridContainer = document.getElementById('view-grid-container');
+    const agendaContainer = document.getElementById('view-agenda-container');
+
+    const gridTableBody = document.getElementById('grid-table-body');
+    const agendaCardsContainer = document.getElementById('agenda-cards-container');
+    const agendaDayTabs = document.querySelectorAll('.agenda-tab');
+
+    let currentSelectedAgendaDay = 'Senin';
+
+    // Standard Grid Time Slots
+    const timeSlots = [
+      { start: '07:00', end: '08:40', label: '07:00 – 08:40' },
+      { start: '08:50', end: '11:30', label: '08:50 – 11:30' },
+      { isBreak: true, start: '11:30', end: '12:10', label: '11:30 – 12:10' },
+      { start: '12:10', end: '14:40', label: '12:10 – 14:40' },
+      { start: '14:45', end: '17:15', label: '14:45 – 17:15' }
+    ];
+
+    const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
+    // Helper: Filter Logic
+    function getFilteredData() {
+      const hVal = filterHari.value.trim().toLowerCase();
+      const kVal = filterKelas.value.trim().toUpperCase();
+      const tVal = filterTipeRuang.value.trim().toLowerCase();
+      const pVal = filterPeminatan.value.trim().toUpperCase();
+      const qVal = filterCari.value.trim().toLowerCase();
+
+      return allJadwal.filter(item => {
+        if (hVal && item.hari.toLowerCase() !== hVal) return false;
+        
+        if (kVal) {
+          const list = item.kelasList || [item.kelas];
+          if (!list.includes(kVal) && item.kelas !== kVal) return false;
+        }
+
+        if (tVal) {
+          const isLab = (item.ruang && item.ruang.toLowerCase().includes('lab')) || 
+                        (item.tipeRuang && item.tipeRuang.toLowerCase().includes('lab')) ||
+                        (item.jenis && item.jenis.toLowerCase().includes('praktikum'));
+          if (tVal === 'lab' && !isLab) return false;
+          if (tVal === 'reguler' && isLab) return false;
+        }
+
+        if (pVal) {
+          if (item.peminatanKode !== pVal) return false;
+        }
+
+        if (qVal) {
+          const haystack = `${item.mataKuliah} ${item.kodeMatkul} ${item.dosen} ${item.ruang}`.toLowerCase();
+          if (!haystack.includes(qVal)) return false;
+        }
+
+        return true;
+      });
+    }
+
+    // Render Grid Mingguan
+    function renderGrid(filtered) {
+      gridTableBody.innerHTML = '';
+      countLabel.textContent = `Menampilkan ${filtered.length} sesi terverifikasi`;
+
+      timeSlots.forEach(slot => {
+        const tr = document.createElement('tr');
+
+        // Break Row (Sholat Dhuhur)
+        if (slot.isBreak) {
+          tr.className = 'bg-zinc-100/90 dark:bg-zinc-800/60 border-y border-zinc-200 dark:border-zinc-700/60';
+          tr.innerHTML = `
+            <td class="sticky left-0 border-r border-zinc-200 bg-zinc-100 px-3 py-2 text-center text-zinc-500 dark:border-zinc-800 dark:bg-zinc-800 font-semibold text-[11px]">
+              ${slot.label}
+            </td>
+            <td colspan="6" class="px-4 py-2 text-center text-xs font-semibold text-zinc-600 dark:text-zinc-400">
+              <span class="inline-flex items-center gap-1.5">
+                <i class="ph ph-moon-stars text-amber-500"></i>
+                <span>Jeda Ibadah Shalat Dhuhur & Istirahat (Hard Constraint HC-03)</span>
+              </span>
+            </td>
+          `;
+          gridTableBody.appendChild(tr);
+          return;
+        }
+
+        // Regular Time Slot Row
+        tr.className = 'min-h-[110px] items-stretch';
+        
+        // Time Label Column
+        const timeTd = document.createElement('td');
+        timeTd.className = 'sticky left-0 border-r border-zinc-200 bg-zinc-50 px-3 py-2.5 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 align-top text-center font-medium text-[11px]';
+        timeTd.textContent = slot.label;
+        tr.appendChild(timeTd);
+
+        // Days Columns (Senin -> Sabtu)
+        days.forEach(day => {
+          const td = document.createElement('td');
+          td.className = 'border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors';
+
+          // Cari sesi yang cocok di hari & rentang jam ini
+          const matches = filtered.filter(item => {
+            if (item.hari !== day) return false;
+            // Toleransi pencocokan jam mulai
+            const jMulai = item.jamMulai;
+            if (slot.start === '07:00' && jMulai < '08:45') return true;
+            if (slot.start === '08:50' && jMulai >= '08:45' && jMulai < '11:30') return true;
+            if (slot.start === '12:10' && jMulai >= '12:00' && jMulai < '14:40') return true;
+            if (slot.start === '14:45' && jMulai >= '14:40') return true;
+            return false;
+          });
+
+          if (matches.length === 0) {
+            td.innerHTML = '<div class="h-20"></div>';
+          } else {
+            const container = document.createElement('div');
+            container.className = 'space-y-1.5';
+
+            matches.forEach(item => {
+              const isLab = (item.ruang && item.ruang.toLowerCase().includes('lab')) || 
+                            (item.tipeRuang && item.tipeRuang.toLowerCase().includes('lab')) ||
+                            (item.jenis && item.jenis.toLowerCase().includes('praktikum'));
+              
+              const card = document.createElement('div');
+              card.className = isLab
+                ? 'cursor-pointer rounded-lg border border-amber-300 bg-amber-50/90 p-2 text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100 hover:border-amber-500 dark:hover:border-amber-500 shadow-sm transition-all'
+                : 'cursor-pointer rounded-lg border border-blue-200 bg-blue-50/90 p-2 text-blue-950 dark:border-blue-900 dark:bg-blue-950/40 dark:text-blue-100 hover:border-brand-blue dark:hover:border-blue-500 shadow-sm transition-all';
+
+              card.innerHTML = `
+                <div class="flex items-start justify-between gap-1">
+                  <span class="font-heading font-bold text-xs leading-tight line-clamp-1">${item.mataKuliah}</span>
+                  ${isLab ? '<i class="ph ph-flask text-amber-600 dark:text-amber-400 shrink-0 text-xs"></i>' : ''}
+                </div>
+                <div class="mt-1 flex items-center justify-between text-[10px] opacity-80">
+                  <span class="font-semibold">${item.ruang}</span>
+                  <span>Kls ${item.kelas} · ${item.sks} SKS</span>
+                </div>
+                <div class="mt-0.5 text-[10px] truncate opacity-75">
+                  ${item.dosenInisial || item.dosen}
+                </div>
+              `;
+
+              card.addEventListener('click', () => openDetailModal(item));
+              container.appendChild(card);
+            });
+
+            td.appendChild(container);
+          }
+
+          tr.appendChild(td);
+        });
+
+        gridTableBody.appendChild(tr);
+      });
+    }
+
+    // Render Agenda Harian
+    function renderAgenda(filtered) {
+      agendaCardsContainer.innerHTML = '';
+      const dayFiltered = filtered.filter(item => item.hari === currentSelectedAgendaDay);
+
+      if (dayFiltered.length === 0) {
+        agendaCardsContainer.innerHTML = `
+          <div class="rounded-xl border border-dashed border-zinc-200 bg-zinc-50 p-8 text-center dark:border-zinc-800 dark:bg-zinc-900/50">
+            <i class="ph ph-calendar-blank text-3xl text-zinc-400 mb-2"></i>
+            <p class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">Tidak ada perkuliahan pada hari ${currentSelectedAgendaDay}</p>
+            <p class="text-xs text-zinc-500 mt-1">Coba sesuaikan filter kelas atau pilih hari lain di atas.</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Sort by jam mulai
+      dayFiltered.sort((a, b) => a.jamMulai.localeCompare(b.jamMulai));
+
+      dayFiltered.forEach(item => {
+        const isLab = (item.ruang && item.ruang.toLowerCase().includes('lab')) || 
+                      (item.tipeRuang && item.tipeRuang.toLowerCase().includes('lab')) ||
+                      (item.jenis && item.jenis.toLowerCase().includes('praktikum'));
+
+        const card = document.createElement('div');
+        card.className = 'cursor-pointer rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 hover:border-brand-blue dark:hover:border-amber-400 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4';
+
+        card.innerHTML = `
+          <div class="flex items-start gap-3">
+            <div class="flex flex-col items-center justify-center rounded-lg ${isLab ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300'} px-3 py-2 shrink-0">
+              <span class="text-xs font-bold">${item.jamMulai}</span>
+              <span class="text-[10px] opacity-75">${item.jamSelesai}</span>
+            </div>
+            <div class="space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${isLab ? 'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300' : 'bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-300'}">
+                  ${isLab ? 'Praktikum Lab' : 'Kuliah Teori'}
+                </span>
+                <span class="text-xs text-zinc-400">·</span>
+                <span class="text-xs font-semibold text-zinc-600 dark:text-zinc-400">Kelas ${item.kelas}</span>
+                <span class="text-xs text-zinc-400">·</span>
+                <span class="text-xs text-zinc-600 dark:text-zinc-400">${item.sks} SKS</span>
+              </div>
+              <h4 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">${item.mataKuliah}</h4>
+              <p class="text-xs text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5">
+                <i class="ph ph-chalkboard-teacher text-sm text-zinc-400"></i>
+                <span>${item.dosen}</span>
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 shrink-0 self-end sm:self-center">
+            <div class="text-right">
+              <p class="text-xs font-bold text-zinc-800 dark:text-zinc-200">${item.ruang}</p>
+              <p class="text-[11px] text-zinc-500">Gedung ${item.gedung}</p>
+            </div>
+            <i class="ph ph-caret-right text-zinc-400 text-base"></i>
+          </div>
+        `;
+
+        card.addEventListener('click', () => openDetailModal(item));
+        agendaCardsContainer.appendChild(card);
+      });
+    }
+
+    // Modal Detail Opener
+    function openDetailModal(item) {
+      const isLab = (item.ruang && item.ruang.toLowerCase().includes('lab')) || 
+                    (item.tipeRuang && item.tipeRuang.toLowerCase().includes('lab')) ||
+                    (item.jenis && item.jenis.toLowerCase().includes('praktikum'));
+
+      const badgeJenis = document.getElementById('modal-badge-jenis');
+      badgeJenis.textContent = isLab ? 'Praktikum Laboratorium' : 'Kuliah Teori (Reguler)';
+      badgeJenis.className = isLab 
+        ? 'inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300'
+        : 'inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-300';
+
+      document.getElementById('modal-matkul-nama').textContent = item.mataKuliah;
+      document.getElementById('modal-matkul-kode').textContent = `${item.kodeMatkul} · ${item.sks} SKS`;
+      document.getElementById('modal-waktu').textContent = `${item.hari}, ${item.jamMulai} – ${item.jamSelesai} WIB`;
+      document.getElementById('modal-ruang').textContent = `${item.ruang} (${item.tipeRuang || 'Ruang Standar'})`;
+      document.getElementById('modal-kelas').textContent = `Kelas ${item.kelas}`;
+      document.getElementById('modal-sks').textContent = `${item.sks} SKS`;
+      document.getElementById('modal-dosen').textContent = item.dosen;
+
+      JadwalinUI.modal.open('modal-sesi-detail');
+    }
+
+    // Update Function
+    function updateViews() {
+      const filtered = getFilteredData();
+      renderGrid(filtered);
+      renderAgenda(filtered);
+    }
+
+    // Switch View Mode
+    viewGridBtn.addEventListener('click', () => {
+      gridContainer.classList.remove('hidden');
+      agendaContainer.classList.add('hidden');
+      viewGridBtn.className = 'inline-flex items-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100 transition-all';
+      viewAgendaBtn.className = 'inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+    });
+
+    viewAgendaBtn.addEventListener('click', () => {
+      gridContainer.classList.add('hidden');
+      agendaContainer.classList.remove('hidden');
+      viewAgendaBtn.className = 'inline-flex items-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100 transition-all';
+      viewGridBtn.className = 'inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+      renderAgenda(getFilteredData());
+    });
+
+    // Agenda Tab Switching
+    agendaDayTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        agendaDayTabs.forEach(t => {
+          t.className = 'agenda-tab inline-flex min-h-[38px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors';
+        });
+        tab.className = 'agenda-tab inline-flex min-h-[38px] items-center gap-1.5 rounded-lg bg-brand-blue px-4 py-2 text-xs font-semibold text-white shadow-sm dark:bg-amber-500 dark:text-zinc-900 transition-colors';
+        currentSelectedAgendaDay = tab.getAttribute('data-day');
+        renderAgenda(getFilteredData());
+      });
+    });
+
+    // Filter Listeners
+    [filterHari, filterKelas, filterTipeRuang, filterPeminatan].forEach(el => {
+      el.addEventListener('change', updateViews);
+    });
+    filterCari.addEventListener('input', updateViews);
+
+    btnReset.addEventListener('click', () => {
+      filterHari.value = '';
+      filterKelas.value = 'B';
+      filterTipeRuang.value = '';
+      filterPeminatan.value = '';
+      filterCari.value = '';
+      updateViews();
+      JadwalinUI.toast.show('Filter berhasil direset ke setelan awal', 'info');
+    });
+
+    // Initial render
+    updateViews();
+  });
+</script>
 
 <%- include('../partials/footer') %>
