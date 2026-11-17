@@ -10,40 +10,71 @@
       <div class="max-w-7xl mx-auto space-y-6">
 
         <!-- Header & Action Status Bar -->
+        <% const totalKonflik = (typeof jadwalStatus !== 'undefined' && jadwalStatus) ? (jadwalStatus.totalKonflik || 0) : 0; %>
+        <% const daftarKonflik = (typeof jadwalStatus !== 'undefined' && jadwalStatus && Array.isArray(jadwalStatus.daftarKonflik)) ? jadwalStatus.daftarKonflik : []; %>
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-zinc-200 pb-5 dark:border-zinc-800">
           <div>
             <div class="flex items-center gap-2">
-              <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                STATUS: PUBLISHED (v1.0)
-              </span>
-              <span class="text-xs text-zinc-500 dark:text-zinc-400 font-mono flex items-center gap-1">
-                <i class="ph ph-shield-check text-emerald-500"></i> 0 Konflik Hard Constraint
-              </span>
+              <% if (totalKonflik > 0) { %>
+                <span class="rounded bg-rose-100 px-2 py-0.5 font-mono text-[10px] font-bold text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                  STATUS: <%= (jadwalStatus && jadwalStatus.status) ? jadwalStatus.status.toUpperCase() : 'PERLU REVISI (KONFLIK)' %>
+                </span>
+                <span class="text-xs text-rose-600 dark:text-rose-400 font-mono font-semibold flex items-center gap-1">
+                  <i class="ph ph-warning-octagon text-rose-500"></i> <%= totalKonflik %> Pelanggaran Hard Constraint
+                </span>
+              <% } else { %>
+                <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                  STATUS: <%= (jadwalStatus && jadwalStatus.status) ? jadwalStatus.status.toUpperCase() : 'PUBLISHED' %> (<%= (jadwalStatus && jadwalStatus.versi) || 'v1.0' %>)
+                </span>
+                <span class="text-xs text-zinc-500 dark:text-zinc-400 font-mono flex items-center gap-1">
+                  <i class="ph ph-shield-check text-emerald-500"></i> 0 Konflik Hard Constraint
+                </span>
+              <% } %>
             </div>
-            <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-1">
-              Matriks Jadwal Perkuliahan Resmi
+            <h1 class="font-heading text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-1">
+              Matriks Jadwal Perkuliahan
             </h1>
             <p class="text-xs text-zinc-500 dark:text-zinc-400">
-              Tinjau seluruh 111 alokasi sesi perkuliahan semester ganjil dalam mode Kalender Grid Mingguan atau Tabel Rinci.
+              <%= jadwal ? jadwal.length : 0 %> sesi · <%= (typeof activePeriode !== 'undefined' && activePeriode) ? activePeriode.nama : 'Semester Aktif' %>
             </p>
           </div>
 
           <!-- Group CTA Kanan -->
           <div class="flex items-center gap-3 shrink-0">
             <button type="button"
-              onclick="window.showConfirmDialog('Export Matriks Jadwal', 'Unduh jadwal lengkap 111 sesi perkuliahan dalam format spreadsheet Excel (.xlsx)?', null, 'Unduh Excel', true)"
+              onclick="window.showConfirmDialog('Export Matriks Jadwal', 'Unduh jadwal lengkap dalam format spreadsheet Excel (.xlsx)?', null, 'Unduh Excel', true)"
               class="inline-flex h-9 items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 transition-colors shadow-xs">
               <i class="ph ph-file-arrow-down text-base text-emerald-600 dark:text-emerald-400"></i>
               <span>Export Excel</span>
             </button>
             <button type="button"
-              onclick="window.showConfirmDialog('Publikasikan Jadwal', 'Publikasikan jadwal versi terbaru ke seluruh civitas akademika TI UMY?', () => { window.toast ? window.toast.success('Jadwal resmi berhasil dipublikasikan ke seluruh civitas!') : null; }, 'Publikasikan Sekarang')"
+              onclick="window.handlePublishJadwal()"
               class="inline-flex h-9 items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
               <i class="ph ph-broadcast text-amber-400 text-sm"></i>
               <span>Publikasikan Jadwal</span>
             </button>
           </div>
         </div>
+
+        <% if (totalKonflik > 0) { %>
+          <details class="rounded-xl border border-rose-200 bg-rose-50/70 p-3.5 dark:border-rose-900/60 dark:bg-rose-950/30">
+            <summary class="cursor-pointer text-xs font-semibold text-rose-800 dark:text-rose-200 flex items-center justify-between">
+              <span class="flex items-center gap-2">
+                <i class="ph ph-warning-circle text-base text-rose-600"></i>
+                Ditemukan <%= totalKonflik %> pelanggaran constraint pada jadwal saat ini (Klik untuk melihat rincian)
+              </span>
+              <span class="font-mono text-[10px] underline">Lihat Daftar Konflik</span>
+            </summary>
+            <ul class="mt-2.5 max-h-40 overflow-y-auto space-y-1 border-t border-rose-200/70 pt-2 text-[11px] font-mono text-rose-900 dark:border-rose-900/50 dark:text-rose-200">
+              <% daftarKonflik.slice(0, 20).forEach(msg => { %>
+                <li>• <%= msg %></li>
+              <% }) %>
+              <% if (daftarKonflik.length > 20) { %>
+                <li class="italic text-rose-600 dark:text-rose-400">...dan <%= daftarKonflik.length - 20 %> pelanggaran lainnya. Jalankan ulang AI Generator untuk membersihkan bentrok.</li>
+              <% } %>
+            </ul>
+          </details>
+        <% } %>
 
         <!-- Filter, View Switcher & Search Toolbar -->
         <div class="flex flex-col lg:flex-row items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-3 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
@@ -66,7 +97,7 @@
           <div class="flex flex-col sm:flex-row items-center gap-2.5 w-full lg:w-auto">
             <div class="relative w-full sm:w-64">
               <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></i>
-              <input id="jadwal-search-input" type="text" placeholder="Cari kode MK, matkul, dosen..."
+              <input id="jadwal-search-input" type="text" maxlength="40" placeholder="Cari kode MK, matkul, dosen..."
                 class="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
             </div>
 
@@ -139,7 +170,7 @@
                       <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
                         <div class="space-y-1.5">
                           <% slotJadwal.forEach(item => { %>
-                            <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
+                            <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>')"
                               class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>"
                               data-hari="<%= item.hari %>"
                               data-jenis="<%= item.jenis %>"
@@ -173,7 +204,7 @@
                       <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
                         <div class="space-y-1.5">
                           <% slotJadwal.forEach(item => { %>
-                            <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
+                            <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>')"
                               class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>"
                               data-hari="<%= item.hari %>"
                               data-jenis="<%= item.jenis %>"
@@ -217,7 +248,7 @@
                       <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
                         <div class="space-y-1.5">
                           <% slotJadwal.forEach(item => { %>
-                            <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
+                            <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>')"
                               class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>"
                               data-hari="<%= item.hari %>"
                               data-jenis="<%= item.jenis %>"
@@ -251,7 +282,7 @@
                       <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
                         <div class="space-y-1.5">
                           <% slotJadwal.forEach(item => { %>
-                            <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
+                            <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>')"
                               class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= item.jenis === 'Praktikum' ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200' %>"
                               data-hari="<%= item.hari %>"
                               data-jenis="<%= item.jenis %>"
@@ -337,7 +368,7 @@
                       </td>
                       <td class="px-4 py-3 text-right">
                         <button type="button"
-                          onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>')"
+                          onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>')"
                           class="inline-flex items-center gap-1 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
                           <i class="ph ph-pencil-simple text-sm"></i>
                           <span>Edit</span>

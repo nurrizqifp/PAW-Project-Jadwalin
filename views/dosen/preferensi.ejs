@@ -20,8 +20,9 @@
             <h1 class="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
               Formulir Preferensi Hari & Jam Mengajar
             </h1>
+            <% const prefDosen = (typeof activeDosen !== 'undefined' && activeDosen) ? activeDosen : { inisial: 'AS', nama: 'Ir. Asroni, S.T., M.Eng', bebanSks: 12 }; %>
             <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-              Dr. Ir. Bambang Triatmaja, M.Kom. (NIDN: 0512037501) · Semester Ganjil 2026/2027
+              <%= prefDosen.nama %> (Kode: <%= prefDosen.inisial %>) · Semester Ganjil 2026/2027
             </p>
           </div>
 
@@ -32,7 +33,7 @@
               <span id="active-days-counter">5 Hari Bersedia</span>
             </div>
             <span class="text-zinc-300 dark:text-zinc-700">|</span>
-            <span class="text-zinc-500 font-mono text-[11px]">Beban: 12 SKS</span>
+            <span class="text-zinc-500 font-mono text-[11px]">Beban: <%= prefDosen.bebanSks %> SKS</span>
           </div>
         </div>
 
@@ -154,11 +155,11 @@
             <div class="space-y-3">
               <div>
                 <label for="alasan-berhalangan" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
-                  Keterangan Hari Bebas Mengajar / Agenda Tetap
+                  Keterangan Hari Bebas Mengajar / Agenda Tetap (3–80 Karakter)
                 </label>
-                <textarea id="alasan-berhalangan" rows="3"
-                  placeholder="Contoh: Hari Jumat ada agenda rapat rutin senat fakultas dan pelaksanaan riset Laboratorium Jaringan..."
-                  class="w-full rounded-lg border border-zinc-200 bg-white p-3 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900">Hari Jumat difokuskan untuk agenda riset Cloud Computing dan pengabdian masyarakat.</textarea>
+                <textarea id="alasan-berhalangan" rows="3" required minlength="3" maxlength="80"
+                  placeholder="Contoh: Rapat rutin senat fakultas & riset Laboratorium Jaringan..."
+                  class="w-full rounded-lg border border-zinc-200 bg-white p-3 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900"><%= prefRow ? prefRow.alasan : 'Agenda riset Cloud Computing dan pengabdian masyarakat.' %></textarea>
               </div>
 
               <!-- Quick Tag Badges -->
@@ -249,35 +250,56 @@
   function appendCatatan(text) {
     const ta = document.getElementById('alasan-berhalangan');
     if (!ta) return;
-    if (ta.value.trim().length > 0) {
-      ta.value += '\n• ' + text;
-    } else {
-      ta.value = '• ' + text;
-    }
+    ta.value = text.slice(0, 80);
   }
 
-  function handleFormSubmit(e) {
+  async function handleFormSubmit(e) {
     e.preventDefault();
     const btn = document.getElementById('btn-submit-pref');
+    const dayKeys = [
+      { key: 'senin', label: 'Senin' },
+      { key: 'selasa', label: 'Selasa' },
+      { key: 'rabu', label: 'Rabu' },
+      { key: 'kamis', label: 'Kamis' },
+      { key: 'jumat', label: 'Jumat' },
+      { key: 'sabtu', label: 'Sabtu' }
+    ];
+    const offDayObj = dayKeys.find(d => {
+      const cb = document.getElementById('toggle-' + d.key);
+      return cb && !cb.checked;
+    });
+    const hariOff = offDayObj ? offDayObj.label : 'Jumat';
+    const alasan = (document.getElementById('alasan-berhalangan')?.value || '').trim().replace(/\s+/g, ' ');
+
     if (btn) {
+      btn.disabled = true;
       btn.innerHTML = '<i class="ph ph-circle-notch animate-spin text-base text-amber-400"></i> Menyimpan...';
     }
 
-    setTimeout(() => {
-      if (btn) {
-        btn.innerHTML = '<i class="ph ph-check text-base text-emerald-400"></i> Preferensi Tersimpan';
-      }
-      if (window.JadwalinUI && window.JadwalinUI.toast) {
-        window.JadwalinUI.toast.show('Preferensi hari dan slot mengajar berhasil disimpan! Algoritma AI akan mengoptimasi jadwal Anda.', 'success');
-      } else if (window.toast) {
-        window.toast.success('Preferensi hari dan slot mengajar berhasil disimpan! Algoritma AI akan mengoptimasi jadwal Anda.');
-      }
-
+    try {
+      const res = await fetch('/api/constraints/preferensi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          dosenId: <%= prefDosen.id || 1 %>,
+          dosenNama: '<%= prefDosen.nama.replace(/'/g, "\\'") %>',
+          hariOff,
+          alasan
+        })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menyimpan preferensi.');
+      if (btn) btn.innerHTML = '<i class="ph ph-check text-base text-emerald-400"></i> Preferensi Tersimpan';
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+    } catch (err) {
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+    } finally {
       setTimeout(() => {
         if (btn) {
+          btn.disabled = false;
           btn.innerHTML = '<i class="ph ph-floppy-disk text-base text-amber-400"></i> <span>Simpan Preferensi Mengajar</span>';
         }
-      }, 2000);
-    }, 600);
+      }, 1200);
+    }
   }
 </script>
