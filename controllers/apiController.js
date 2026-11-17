@@ -3,6 +3,7 @@ const MasterModel = require('../models/masterModel');
 const JadwalModel = require('../models/jadwalModel');
 const ConstraintModel = require('../models/constraintModel');
 const ProdukModel = require('../models/produkModel');
+const aiSolverService = require('../services/aiSolverService');
 const config = require('../config');
 
 const preferensiSchema = z.object({
@@ -308,13 +309,46 @@ exports.toggleConstraint = (req, res) => {
   });
 };
 
-exports.generate = (req, res) => {
-  const result = JadwalModel.generateAI();
-  res.json({
-    sukses: true,
-    result,
-    notifikasi: JadwalModel.getNotifikasi()
-  });
+exports.generate = async (req, res) => {
+  try {
+    const hasCustomPayload = req.body && typeof req.body === 'object' && Object.keys(req.body).length > 0;
+    const solverOutput = await aiSolverService.generateSchedule({
+      payload: hasCustomPayload ? req.body : undefined
+    });
+    const baseResult = JadwalModel.generateAI();
+    const totalKonflik = solverOutput.konflik.length;
+    const status = totalKonflik === 0 ? 'Terpublikasi' : 'Generated (Konflik)';
+
+    const result = {
+      ...baseResult,
+      success: solverOutput.sukses,
+      source: solverOutput.source,
+      model: solverOutput.model,
+      fallbackReason: solverOutput.fallbackReason,
+      message: solverOutput.source === 'gemini-api'
+        ? `Jadwal berhasil dioptimasi oleh Gemini AI (${solverOutput.model}) dalam ${solverOutput.evaluasi.durasiGenerateDetik} detik (${totalKonflik} bentrok).`
+        : `Jadwal dioptimasi menggunakan solver lokal (${totalKonflik} bentrok).`,
+      totalKonflik,
+      daftarKonflik: solverOutput.konflik,
+      labMatching: `${solverOutput.evaluasi.persenLabMatching}% Sesuai`,
+      kepuasanDosen: `${solverOutput.evaluasi.persenPreferensiDosenTerpenuhi}%`,
+      status,
+      evaluasi: solverOutput.evaluasi,
+      jadwal: solverOutput.jadwal,
+      timestamp: solverOutput.timestamp
+    };
+
+    return res.json({
+      sukses: true,
+      result,
+      notifikasi: JadwalModel.getNotifikasi()
+    });
+  } catch (err) {
+    return res.status(500).json({
+      sukses: false,
+      pesan: 'Gagal menjalankan AI Solver: ' + err.message
+    });
+  }
 };
 
 exports.produk = (req, res) => {
