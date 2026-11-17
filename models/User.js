@@ -19,6 +19,10 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING(50),
         allowNull: false,
         unique: true,
+        validate: {
+          len: [3, 20],
+          is: /^[A-Za-z0-9._-]+$/,
+        },
       },
       password_hash: {
         type: DataTypes.STRING(255),

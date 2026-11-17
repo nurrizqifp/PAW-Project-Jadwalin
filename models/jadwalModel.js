@@ -2701,7 +2701,13 @@ const jadwalKuliah = [
     "peminatanKode": null,
     "isLabValid": true
   }
-];
+]
+  .filter(s => !['DA', 'UX'].includes(s.peminatanKode) && !/^TI(DA|UX)/.test(s.kodeMatkul))
+  .map(s => ({
+    ...s,
+    kodeMatkul: String(s.kodeMatkul || '').replace(/^TIPR/, 'TISE').replace(/^TINE/, 'TINS'),
+    peminatanKode: s.peminatanKode === 'PR' ? 'SE' : (s.peminatanKode === 'NE' ? 'NS' : s.peminatanKode)
+  }));
 
 function keMenit(jamStr) {
   const [h, m] = String(jamStr || '00:00').split(':').map(Number);
@@ -2766,7 +2772,7 @@ const JadwalModel = {
       return true;
     });
   },
-  rekomendasiPraKrs({ kodeMatkulList = [], prefKelas = 'B', prefHari = 'Semua', prefWaktu = 'Semua', variasiIndex = 0 } = {}) {
+  rekomendasiPraKrs({ kodeMatkulList = [], prefKelas = 'B', prefHari = 'Semua', prefWaktu = 'Semua', variasiIndex = 0, kelasPerMatkul = {} } = {}) {
     const urutanKelas = ['A', 'B', 'C', 'D', 'E', 'F'];
     const baseIdx = Math.max(0, urutanKelas.indexOf(String(prefKelas).toUpperCase()));
     const targetKelas = urutanKelas[(baseIdx + Number(variasiIndex || 0)) % urutanKelas.length];
@@ -2796,6 +2802,11 @@ const JadwalModel = {
 
     for (const kode of normalizedCodes) {
       const aliasKode = kode.replace(/^TI10([1-9])$/, 'TI2610$1');
+      // Prioritaskan kelas per-matkul jika mahasiswa memilih kelas spesifik untuk mata kuliah ini
+      const specificClass = (kelasPerMatkul && (kelasPerMatkul[kode] || kelasPerMatkul[aliasKode]))
+        ? String(kelasPerMatkul[kode] || kelasPerMatkul[aliasKode]).toUpperCase()
+        : targetKelas;
+
       const kandidat = jadwalKuliah.filter(j => j.kodeMatkul === kode || j.kodeMatkul === aliasKode);
       if (kandidat.length === 0) {
         // Fallback untuk MK semester genap atau MK kurikulum yang belum ada di CSV ganjil
@@ -2823,8 +2834,8 @@ const JadwalModel = {
           kodeMatkul: kode,
           mataKuliah: mkObj.nama,
           sks: mkObj.sks || 3,
-          kelas: targetKelas,
-          kelasList: [targetKelas],
+          kelas: specificClass,
+          kelasList: [specificClass],
           ruang: roomObj.kode,
           gedung: roomObj.gedung || (roomObj.kode.startsWith('F6') ? 'F6' : 'F4'),
           tipeRuang: roomObj.tipe || 'Reguler',
@@ -2844,7 +2855,7 @@ const JadwalModel = {
       // Cari yang sesuai kelas target, hari, dan waktu jika memungkinkan
       const skorKandidat = kandidat.map(s => {
         let skor = 0;
-        if (s.kelasList.includes(targetKelas) || s.kelas === targetKelas) skor += 10;
+        if (s.kelasList.includes(specificClass) || s.kelas === specificClass) skor += 15;
         if (prefHari === 'Semua' || s.hari === prefHari) skor += 5;
         const jam = parseInt(s.jamMulai.split(':')[0], 10);
         if (prefWaktu === 'Pagi' && jam < 12) skor += 4;
@@ -2985,7 +2996,20 @@ const JadwalModel = {
       status: statusJadwal,
       timestamp: lastGeneratedAt
     };
+  },
+  setSavedPrakrs(username, data) {
+    if (!username) return;
+    savedPrakrsStore.set(String(username), {
+      ...data,
+      savedAt: new Date().toISOString()
+    });
+  },
+  getSavedPrakrs(username) {
+    if (!username) return null;
+    return savedPrakrsStore.get(String(username)) || null;
   }
 };
+
+const savedPrakrsStore = new Map();
 
 module.exports = JadwalModel;

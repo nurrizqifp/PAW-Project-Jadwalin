@@ -25,7 +25,7 @@
             </p>
           </div>
 
-          <button type="button" onclick="openPeriodeDrawer('Tambah Periode Baru', '20262', '2026/2027', 'Genap', '2027-02-15', 'open')"
+          <button type="button" onclick="openPeriodeDrawer('Tambah Periode Baru', '20262', '2026/2027', 'Genap', '2027-02-15', 'Terpublikasi')"
             class="inline-flex min-h-[38px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
             <i class="ph ph-plus text-base text-amber-400"></i>
             <span>Tambah Periode Baru</span>
@@ -46,60 +46,35 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
-                <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors">
-                  <td class="px-4 py-3 font-mono font-bold text-[#0c2b5e] dark:text-blue-300">20261</td>
-                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">2026/2027</td>
-                  <td class="px-4 py-3 font-semibold text-zinc-800 dark:text-zinc-200">
-                    <span class="inline-flex items-center gap-1.5 font-mono text-xs">
-                      <span class="h-2 w-2 rounded-full bg-emerald-500"></span> Semester Ganjil (Gasal)
-                    </span>
-                  </td>
-                  <td class="px-4 py-3 font-mono text-zinc-600 dark:text-zinc-400">01 September 2026</td>
-                  <td class="px-4 py-3">
-                    <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-emerald-800">
-                      Aktif & Terbuka
-                    </span>
-                  </td>
-                  <td class="px-4 py-3 text-right">
-                    <button type="button" onclick="openPeriodeDrawer('Edit Periode 20261', '20261', '2026/2027', 'Ganjil', '2026-09-01', 'open')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                      <i class="ph ph-pencil-simple text-base"></i>
-                    </button>
-                  </td>
-                </tr>
-
-                <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors opacity-75">
-                  <td class="px-4 py-3 font-mono font-bold text-zinc-500">20252</td>
-                  <td class="px-4 py-3 font-semibold text-zinc-700 dark:text-zinc-300">2025/2026</td>
-                  <td class="px-4 py-3 font-mono text-zinc-600 dark:text-zinc-400">Semester Genap</td>
-                  <td class="px-4 py-3 font-mono text-zinc-500">15 Februari 2026</td>
-                  <td class="px-4 py-3">
-                    <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 font-semibold">
-                      Terkunci (Arsip)
-                    </span>
-                  </td>
-                  <td class="px-4 py-3 text-right">
-                    <button type="button" onclick="openPeriodeDrawer('Edit Periode 20252', '20252', '2025/2026', 'Genap', '2026-02-15', 'locked')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                      <i class="ph ph-pencil-simple text-base"></i>
-                    </button>
-                  </td>
-                </tr>
-
-                <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors opacity-75">
-                  <td class="px-4 py-3 font-mono font-bold text-zinc-500">20251</td>
-                  <td class="px-4 py-3 font-semibold text-zinc-700 dark:text-zinc-300">2025/2026</td>
-                  <td class="px-4 py-3 font-mono text-zinc-600 dark:text-zinc-400">Semester Ganjil</td>
-                  <td class="px-4 py-3 font-mono text-zinc-500">01 September 2025</td>
-                  <td class="px-4 py-3">
-                    <span class="rounded bg-zinc-100 px-2 py-0.5 font-mono text-[10px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 font-semibold">
-                      Terkunci (Arsip)
-                    </span>
-                  </td>
-                  <td class="px-4 py-3 text-right">
-                    <button type="button" onclick="openPeriodeDrawer('Edit Periode 20251', '20251', '2025/2026', 'Ganjil', '2025-09-01', 'locked')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                      <i class="ph ph-pencil-simple text-base"></i>
-                    </button>
-                  </td>
-                </tr>
+                <% const listPer = (typeof periodeList !== 'undefined' && Array.isArray(periodeList)) ? periodeList : []; %>
+                <% listPer.forEach(function(per) {
+                  const isActive = per.status !== 'Arsip';
+                %>
+                  <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors <%= isActive ? '' : 'opacity-75' %>">
+                    <td class="px-4 py-3 font-mono font-bold <%= isActive ? 'text-[#0c2b5e] dark:text-blue-300' : 'text-zinc-500' %>"><%= per.kode %></td>
+                    <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100"><%= per.tahunAkademik %></td>
+                    <td class="px-4 py-3 font-semibold text-zinc-800 dark:text-zinc-200">
+                      <span class="inline-flex items-center gap-1.5 font-mono text-xs">
+                        <span class="h-2 w-2 rounded-full <%= isActive ? 'bg-emerald-500' : 'bg-zinc-400' %>"></span>
+                        Semester <%= per.semesterTipe %>
+                      </span>
+                    </td>
+                    <td class="px-4 py-3 font-mono text-zinc-600 dark:text-zinc-400"><%= per.publishedAt || '2026-09-01' %></td>
+                    <td class="px-4 py-3">
+                      <span class="rounded <%= isActive ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-bold' : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 font-semibold' %> px-2 py-0.5 font-mono text-[10px]">
+                        <%= per.status %>
+                      </span>
+                    </td>
+                    <td class="px-4 py-3 text-right space-x-1">
+                      <button type="button" onclick="openPeriodeDrawer('Edit Periode <%= per.kode %>', '<%= per.kode %>', '<%= per.tahunAkademik %>', '<%= per.semesterTipe %>', '<%= per.publishedAt || '2026-09-01' %>', '<%= per.status %>', '<%= per.id %>')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1" title="Edit">
+                        <i class="ph ph-pencil-simple text-base"></i>
+                      </button>
+                      <button type="button" onclick="deletePeriode(<%= per.id %>, '<%= per.nama %>')" class="text-zinc-400 hover:text-rose-600 p-1" title="Hapus">
+                        <i class="ph ph-trash text-base"></i>
+                      </button>
+                    </td>
+                  </tr>
+                <% }); %>
               </tbody>
             </table>
           </div>
@@ -131,15 +106,15 @@
 
     <form onsubmit="handleSavePeriode(event)" class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
       <div class="space-y-1">
-        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Kode Periode (Tahun + Semester)</label>
-        <input id="input-per-code" type="text" required placeholder="Contoh: 20261"
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Kode Periode (5 Digit)</label>
+        <input id="input-per-code" type="text" required minlength="5" maxlength="5" pattern="\d{4}[12]" placeholder="Contoh: 20261"
           class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
       </div>
 
       <div class="grid grid-cols-2 gap-3">
         <div class="space-y-1">
           <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Tahun Akademik</label>
-          <input id="input-per-year" type="text" required value="2026/2027" placeholder="Contoh: 2026/2027"
+          <input id="input-per-year" type="text" required minlength="9" maxlength="9" pattern="\d{4}/\d{4}" value="2026/2027" placeholder="2026/2027"
             class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
         </div>
         <div class="space-y-1">
@@ -160,8 +135,9 @@
       <div class="space-y-1">
         <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Status Akses Mahasiswa</label>
         <select id="input-per-status" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
-          <option value="open">Aktif & Terbuka (Mahasiswa Bebas Memilih Paket Pra-KRS)</option>
-          <option value="locked">Terkunci / Arsip (Mode Baca Jadwal Saja)</option>
+          <option value="Terpublikasi">Terpublikasi (Aktif &amp; Terbuka)</option>
+          <option value="Draft">Draft (Persiapan Jadwal)</option>
+          <option value="Arsip">Arsip (Terkunci)</option>
         </select>
       </div>
 
@@ -182,7 +158,10 @@
 </div>
 
 <script>
-  function openPeriodeDrawer(title, code, year, sem, date, status) {
+  let editingPeriodeId = null;
+
+  function openPeriodeDrawer(title, code, year, sem, date, status, id = null) {
+    editingPeriodeId = id ? Number(id) : null;
     const overlay = document.getElementById('drawer-periode-overlay');
     const panel = document.getElementById('drawer-periode-panel');
     const titleEl = document.getElementById('periode-drawer-title');
@@ -193,11 +172,11 @@
     const statusEl = document.getElementById('input-per-status');
 
     if (titleEl) titleEl.textContent = title;
-    if (codeEl) codeEl.value = code;
-    if (yearEl) yearEl.value = year;
-    if (semEl) semEl.value = sem;
-    if (dateEl) dateEl.value = date;
-    if (statusEl) statusEl.value = status;
+    if (codeEl) codeEl.value = code || '';
+    if (yearEl) yearEl.value = year || '2026/2027';
+    if (semEl) semEl.value = sem || 'Ganjil';
+    if (dateEl) dateEl.value = date || '2026-09-01';
+    if (statusEl) statusEl.value = /arsip|locked/i.test(status || '') ? 'Arsip' : (/draft/i.test(status || '') ? 'Draft' : 'Terpublikasi');
 
     if (overlay && panel) {
       overlay.classList.remove('opacity-0', 'pointer-events-none');
@@ -214,9 +193,51 @@
     }
   }
 
-  function handleSavePeriode(e) {
+  async function handleSavePeriode(e) {
     e.preventDefault();
-    closePeriodeDrawer();
-    window.showConfirmDialog('Periode Akademik Disimpan', 'Data tahun ajaran dan semester berhasil disimpan.', null, 'Selesai', true);
+    const payload = {
+      kategori: 'periode',
+      tahunAkademik: document.getElementById('input-per-year')?.value.trim(),
+      semesterTipe: document.getElementById('input-per-sem')?.value || 'Ganjil',
+      batasWaktu: document.getElementById('input-per-date')?.value || '2026-09-01',
+      status: document.getElementById('input-per-status')?.value || 'Terpublikasi'
+    };
+
+    try {
+      const url = editingPeriodeId ? `/api/master/periode/${editingPeriodeId}` : '/api/master';
+      const method = editingPeriodeId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menyimpan periode.');
+      closePeriodeDrawer();
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+      setTimeout(() => window.location.reload(), 400);
+    } catch (err) {
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+      else alert(err.message);
+    }
+  }
+
+  function deletePeriode(id, nama) {
+    const execDelete = async () => {
+      try {
+        const res = await fetch(`/api/master/periode/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menghapus periode.');
+        if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+        setTimeout(() => window.location.reload(), 400);
+      } catch (err) {
+        if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+      }
+    };
+    if (window.showConfirmDialog) {
+      window.showConfirmDialog('Hapus Periode', `Yakin ingin menghapus ${nama}?`, execDelete, 'Hapus');
+    } else if (confirm(`Hapus ${nama}?`)) {
+      execDelete();
+    }
   }
 </script>

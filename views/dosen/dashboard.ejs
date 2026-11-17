@@ -9,89 +9,111 @@
     <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
       <div class="max-w-7xl mx-auto space-y-8">
 
-        <!-- Dosen Profile & Stats Card -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <% const dsn = (typeof activeDosen !== 'undefined' && activeDosen) ? activeDosen : { inisial: 'AS', nama: 'Ir. Asroni, S.T., M.Eng', keahlian: 'Rekayasa Web & Komputasi', bebanSks: 12 }; %>
+        <% const dsnJadwal = (typeof dosenJadwal !== 'undefined' && Array.isArray(dosenJadwal)) ? dosenJadwal : []; %>
+        <%
+          const HARI_ORDER = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+          const nowDsn = new Date();
+          const todayIdx = nowDsn.getDay();
+          const todayNama = HARI_ORDER[todayIdx];
+          const nowMinDsn = nowDsn.getHours() * 60 + nowDsn.getMinutes();
+          const toMinDsn = (s) => { const [h, m] = String(s || '00:00').split(':').map(Number); return (h || 0) * 60 + (m || 0); };
+
+          let dsnNearestSesi = dsnJadwal.find(j => j.hari === todayNama && nowMinDsn >= toMinDsn(j.jamMulai) && nowMinDsn < toMinDsn(j.jamSelesai));
+          let dsnPhase = 'Sedang Berlangsung';
+          if (!dsnNearestSesi) {
+            dsnNearestSesi = dsnJadwal.find(j => j.hari === todayNama && nowMinDsn < toMinDsn(j.jamMulai));
+            if (dsnNearestSesi) dsnPhase = 'Berikutnya Hari Ini';
+          }
+          if (!dsnNearestSesi && dsnJadwal.length > 0) {
+            const sortedUpcoming = [...dsnJadwal].sort((a, b) => {
+              const da = (HARI_ORDER.indexOf(a.hari) - todayIdx + 7) % 7 || 7;
+              const db = (HARI_ORDER.indexOf(b.hari) - todayIdx + 7) % 7 || 7;
+              return da - db || toMinDsn(a.jamMulai) - toMinDsn(b.jamMulai);
+            });
+            dsnNearestSesi = sortedUpcoming[0];
+            dsnPhase = `Jadwal ${dsnNearestSesi.hari}`;
+          }
+          if (!dsnNearestSesi) {
+            dsnNearestSesi = { mataKuliah: 'Belum Ada Sesi', kelas: '-', hari: '-', jamMulai: '-', jamSelesai: '-', ruang: '-' };
+            dsnPhase = 'Tidak Ada Jadwal';
+          }
+
+          const softListDsn = (typeof constraints !== 'undefined' && constraints?.softConstraints) ? constraints.softConstraints : [];
+          const dsnPref = softListDsn.find(sc => sc.dosenId === dsn.id || sc.dosenNama === dsn.nama);
+        %>
+        <!-- Dosen Profile & Live Sesi Ringkas -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div
-            class="md:col-span-2 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
-            <div class="flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800">
+            class="lg:col-span-2 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex flex-col justify-between gap-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 pb-3.5 dark:border-zinc-800">
               <div>
-                <span
-                  class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-blue-900 dark:bg-blue-950/70 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
-                  <i class="ph ph-chalkboard-teacher"></i> Dosen Pengampu TI
-                </span>
-                <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-2">
-                  Dr. Ir. Bambang Triatmaja, M.Kom.
+                <div class="flex flex-wrap items-center gap-2">
+                  <span
+                    class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-blue-900 dark:bg-blue-950/70 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+                    <i class="ph ph-chalkboard-teacher"></i> Dosen Pengampu TI
+                  </span>
+                  <span class="rounded-full bg-emerald-50 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                    <%= dsnJadwal.length %> Sesi Aktif · 0 Bentrok
+                  </span>
+                  <span class="rounded-full bg-amber-50 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                    Preferensi: <%= dsnPref ? (dsnPref.hariOff ? 'Libur ' + dsnPref.hariOff : (dsnPref.preferensiWaktu || 'Aktif')) : 'Default' %>
+                  </span>
+                </div>
+                <h1 class="font-heading text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-1.5">
+                  <%= dsn.nama %>
                 </h1>
-                <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">NIDN: 0512037501 · Total Beban: 12 SKS</p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">Kode: <%= dsn.inisial %> · <%= dsn.keahlian %> · Total Beban: <%= dsn.bebanSks %> SKS</p>
+              </div>
+              <div class="flex flex-wrap gap-2 shrink-0">
+                <a href="/dosen/preferensi"
+                  class="inline-flex min-h-[38px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition-colors">
+                  <i class="ph ph-sliders text-sm text-amber-400"></i>
+                  <span>Preferensi Waktu</span>
+                </a>
+                <a href="/dosen/jadwal"
+                  class="inline-flex min-h-[38px] items-center gap-1.5 rounded-lg border border-amber-300/80 bg-amber-50/70 hover:bg-amber-100 px-3.5 py-2 text-xs font-semibold text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200 dark:hover:bg-amber-950/70 transition-colors shadow-sm">
+                  <i class="ph ph-calendar text-sm text-amber-600 dark:text-amber-400"></i>
+                  <span>Kalender Mengajar</span>
+                </a>
               </div>
             </div>
 
-            <div class="flex flex-wrap gap-3 pt-2">
-              <a href="/dosen/preferensi"
-                class="inline-flex min-h-[40px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-sm border border-blue-900/40 transition-colors">
-                <i class="ph ph-sliders text-base text-amber-400"></i>
-                <span>Atur Preferensi Waktu</span>
-              </a>
-              <a href="/dosen/jadwal"
-                class="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-amber-300/80 bg-amber-50/70 hover:bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200 dark:hover:bg-amber-950/70 transition-colors shadow-sm">
-                <i class="ph ph-calendar text-base text-amber-600 dark:text-amber-400"></i>
-                <span>Jadwal Mengajar Saya</span>
-              </a>
+            <div class="grid grid-cols-3 gap-3 text-center sm:text-left">
+              <div class="rounded-xl bg-zinc-50/80 dark:bg-zinc-800/50 px-3.5 py-2.5 border border-zinc-200/60 dark:border-zinc-800">
+                <p class="font-mono text-[10px] uppercase tracking-wider text-zinc-400">Total Beban</p>
+                <p class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100"><%= dsn.bebanSks %> SKS</p>
+              </div>
+              <div class="rounded-xl bg-zinc-50/80 dark:bg-zinc-800/50 px-3.5 py-2.5 border border-zinc-200/60 dark:border-zinc-800">
+                <p class="font-mono text-[10px] uppercase tracking-wider text-zinc-400">Kelas Aktif</p>
+                <p class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100"><%= dsnJadwal.length %> Sesi</p>
+              </div>
+              <div class="rounded-xl bg-zinc-50/80 dark:bg-zinc-800/50 px-3.5 py-2.5 border border-zinc-200/60 dark:border-zinc-800">
+                <p class="font-mono text-[10px] uppercase tracking-wider text-zinc-400">Hari Bebas Riset</p>
+                <p class="font-heading text-sm font-bold text-emerald-700 dark:text-emerald-400 truncate"><%= dsnPref && dsnPref.hariOff ? dsnPref.hariOff : 'Fleksibel' %></p>
+              </div>
             </div>
           </div>
 
           <!-- Active Sesi Card (Live Status) -->
           <div
-            class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex flex-col justify-between space-y-4">
+            class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex flex-col justify-between gap-3">
             <div>
-              <p class="font-mono text-[11px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Kelas Mengajar Hari Ini</p>
-              <p class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-100 pt-1">Pemrograman Berorientasi Objek</p>
-              <p class="text-xs text-zinc-500">Kelas B · 08:00 - 09:40 WIB</p>
+              <div class="flex items-center justify-between">
+                <p class="font-mono text-[11px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Sesi Mengajar Terdekat</p>
+                <span
+                  class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                  <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                  <%= dsnPhase %>
+                </span>
+              </div>
+              <p class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100 pt-2"><%= dsnNearestSesi.mataKuliah %></p>
+              <p class="text-xs text-zinc-500 mt-1">
+                <%= dsnNearestSesi.hari %>, <%= dsnNearestSesi.jamMulai %> - <%= dsnNearestSesi.jamSelesai %> WIB · Ruang <%= dsnNearestSesi.ruang %> · Kelas <%= dsnNearestSesi.kelas %>
+              </p>
             </div>
-
-            <div
-              class="rounded-xl bg-zinc-50 p-4 dark:bg-zinc-800/60 border border-zinc-200/50 dark:border-zinc-700/50 text-center">
-              <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mb-1">Status Kehadiran</p>
-              <span
-                class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 font-mono text-xs font-semibold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                Terjadwal Tepat Waktu
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3 Kartu Ringkasan Aktivitas Mengajar (Fitur Resya dengan UI Jadwalin) -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-          <!-- Metrik 1: Total SKS -->
-          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 border-l-4 border-l-[#0c2b5e] dark:border-l-blue-500 space-y-1">
-            <h6 class="text-zinc-500 dark:text-zinc-400 text-[11px] font-mono font-semibold uppercase tracking-wider">Total SKS Mengajar</h6>
-            <div class="flex items-baseline gap-2 pt-1">
-              <span class="text-3xl font-heading font-extrabold text-zinc-900 dark:text-zinc-50">12</span>
-              <span class="text-xs text-zinc-500 font-mono">SKS Terpenuhi</span>
-            </div>
-            <p class="text-[11px] text-zinc-400 pt-1">Beban ideal dosen tetap TI</p>
-          </div>
-
-          <!-- Metrik 2: Jadwal Hari Ini -->
-          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 border-l-4 border-l-emerald-600 dark:border-l-emerald-500 space-y-1">
-            <h6 class="text-zinc-500 dark:text-zinc-400 text-[11px] font-mono font-semibold uppercase tracking-wider">Jadwal Kelas Hari Ini</h6>
-            <div class="flex items-baseline gap-2 pt-1">
-              <span class="text-3xl font-heading font-extrabold text-zinc-900 dark:text-zinc-50">2</span>
-              <span class="text-xs text-zinc-500 font-mono">Kelas Aktif</span>
-            </div>
-            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium pt-1">0 Tabrakan Jam & Ruang</p>
-          </div>
-
-          <!-- Metrik 3: Status Preferensi Dosen -->
-          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 border-l-4 border-l-amber-500 space-y-1">
-            <h6 class="text-zinc-500 dark:text-zinc-400 text-[11px] font-mono font-semibold uppercase tracking-wider">Status Preferensi Waktu</h6>
-            <div class="flex items-center justify-between pt-1">
-              <span class="text-lg font-heading font-bold text-emerald-700 dark:text-emerald-400">Telah Disetel</span>
-              <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Aktif</span>
-            </div>
-            <a href="/dosen/preferensi" class="text-xs font-semibold text-[#0c2b5e] dark:text-amber-400 hover:underline inline-flex items-center gap-1 pt-1">
-              <span>Perbarui Preferensi</span>
+            <a href="/dosen/jadwal" class="inline-flex items-center justify-between rounded-xl bg-zinc-50 px-3.5 py-2.5 text-xs font-semibold text-[#0c2b5e] dark:bg-zinc-800/60 dark:text-amber-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+              <span>Buka Jadwal Mengajar Lengkap</span>
               <i class="ph ph-arrow-right"></i>
             </a>
           </div>
@@ -123,20 +145,21 @@
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
-                  <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40">
-                    <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">TI26105 — Pemrograman Berorientasi Objek</td>
-                    <td class="px-4 py-3 font-mono">Kelas B</td>
-                    <td class="px-4 py-3 font-mono">3 SKS</td>
-                    <td class="px-4 py-3 font-mono">Senin, 08:00 - 09:40</td>
-                    <td class="px-4 py-3">Lab Multimedia</td>
-                  </tr>
-                  <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40">
-                    <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">TI26105 — Pemrograman Berorientasi Objek</td>
-                    <td class="px-4 py-3 font-mono">Kelas C</td>
-                    <td class="px-4 py-3 font-mono">3 SKS</td>
-                    <td class="px-4 py-3 font-mono">Rabu, 10:00 - 11:40</td>
-                    <td class="px-4 py-3">Lab Multimedia</td>
-                  </tr>
+                  <% if (dsnJadwal.length === 0) { %>
+                    <tr>
+                      <td colspan="5" class="px-4 py-6 text-center text-zinc-500">Belum ada jadwal mengajar tercatat.</td>
+                    </tr>
+                  <% } else { %>
+                    <% dsnJadwal.forEach(function(item) { %>
+                      <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40">
+                        <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100"><%= item.kodeMatkul %> — <%= item.mataKuliah %></td>
+                        <td class="px-4 py-3 font-mono">Kelas <%= item.kelas %></td>
+                        <td class="px-4 py-3 font-mono"><%= item.sks %> SKS</td>
+                        <td class="px-4 py-3 font-mono"><%= item.hari %>, <%= item.jamMulai %> - <%= item.jamSelesai %></td>
+                        <td class="px-4 py-3 font-mono"><%= item.ruang %></td>
+                      </tr>
+                    <% }); %>
+                  <% } %>
                 </tbody>
               </table>
             </div>

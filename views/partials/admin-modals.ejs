@@ -20,7 +20,7 @@
     <form id="admin-edit-slot-form" onsubmit="handleSaveSlot(event)" class="space-y-4">
       <div class="space-y-1">
         <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Mata Kuliah & Kelas</label>
-        <input id="admin-modal-matkul-input" type="text" readonly
+        <input id="admin-modal-matkul-input" type="text" readonly maxlength="80"
           class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs font-medium text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none">
       </div>
 
@@ -54,18 +54,24 @@
           <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Ruangan / Lab</label>
           <select id="admin-modal-ruang-select"
             class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
-            <option value="F4.LAB1">F4.LAB1 (Lab Komputer 1)</option>
-            <option value="F4.LAB2">F4.LAB2 (Lab Komputer 2)</option>
-            <option value="F4.001">F4.001 (Reguler)</option>
-            <option value="F4.002">F4.002 (Reguler)</option>
-            <option value="F4.003">F4.003 (Reguler)</option>
-            <option value="F6.001">F6.001 (RKB Teori)</option>
-            <option value="F6.102">F6.102 (RKB Teori)</option>
+            <% if (typeof ruanganList !== 'undefined' && Array.isArray(ruanganList) && ruanganList.length > 0) { %>
+              <% ruanganList.forEach(r => { %>
+                <option value="<%= r.kode %>"><%= r.kode %> (<%= r.tipe %>)</option>
+              <% }) %>
+            <% } else { %>
+              <option value="F4.LAB1">F4.LAB1 (Laboratorium)</option>
+              <option value="F4.LAB2">F4.LAB2 (Laboratorium)</option>
+              <option value="F4.001">F4.001 (Ruang Kuliah)</option>
+              <option value="F4.002">F4.002 (Ruang Kuliah)</option>
+              <option value="F4.003">F4.003 (Ruang Kuliah)</option>
+              <option value="F6.001">F6.001 (Ruang Kuliah Besar)</option>
+              <option value="F6.102">F6.102 (Ruang Kuliah Besar)</option>
+            <% } %>
           </select>
         </div>
         <div class="space-y-1">
-          <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Dosen Pengampu</label>
-          <input id="admin-modal-dosen-input" type="text"
+          <label class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300">Dosen Pengampu (Maks. 60 Karakter)</label>
+          <input id="admin-modal-dosen-input" type="text" minlength="3" maxlength="60"
             class="w-full min-h-[40px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
         </div>
       </div>
@@ -123,7 +129,10 @@
 
 <script>
   // Script Global Modal Handlers (Accessible dari seluruh halaman)
-  window.openEditModal = function(matkul, dosen, ruang, hari, jam) {
+  window.__editingSlotId = null;
+
+  window.openEditModal = function(matkul, dosen, ruang, hari, jam, id) {
+    window.__editingSlotId = id || null;
     const editOverlay = document.getElementById('admin-edit-modal-overlay');
     const editPanel = document.getElementById('admin-edit-modal-panel');
     const matkulInput = document.getElementById('admin-modal-matkul-input');
@@ -155,25 +164,60 @@
     }
   };
 
-  window.handleSaveSlot = function(e) {
+  window.handleSaveSlot = async function(e) {
     e.preventDefault();
-    const matkulInput = document.getElementById('admin-modal-matkul-input');
     const hariSelect = document.getElementById('admin-modal-hari-select');
     const jamSelect = document.getElementById('admin-modal-jam-select');
     const ruangSelect = document.getElementById('admin-modal-ruang-select');
 
-    const matkul = matkulInput ? matkulInput.value : '';
     const hari = hariSelect ? hariSelect.value : '';
     const jam = jamSelect ? jamSelect.value : '';
     const ruang = ruangSelect ? ruangSelect.value : '';
 
-    window.closeEditModal();
+    if (!window.__editingSlotId) {
+      window.closeEditModal();
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/jadwal/revisi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: Number(window.__editingSlotId), hari, jamMulai: jam, ruang })
+      });
+      const data = await res.json();
+      window.closeEditModal();
+      if (!res.ok || data.status !== 'success') {
+        window.showConfirmDialog('Gagal Menyimpan Slot', data.message || 'Terjadi pelanggaran constraint.', null, 'Tutup', true);
+        return;
+      }
+      if (window.toast) window.toast.success(data.message);
+      setTimeout(() => window.location.reload(), 500);
+    } catch (err) {
+      window.closeEditModal();
+      if (window.toast) window.toast.error('Gagal menghubungi server.');
+    }
+  };
+
+  window.handlePublishJadwal = function() {
     window.showConfirmDialog(
-      'Slot Berhasil Diperbarui',
-      `Jadwal ${matkul} telah dipindahkan ke hari ${hari} pukul ${jam} di ruang ${ruang}.`,
-      null,
-      'Selesai',
-      true
+      'Publikasikan Jadwal',
+      'Publikasikan jadwal ke seluruh civitas akademika TI UMY? Sistem akan memvalidasi bahwa 0 Hard Constraint dilanggar.',
+      async () => {
+        try {
+          const res = await fetch('/api/jadwal/publish', { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+          const data = await res.json();
+          if (!res.ok || data.status !== 'success') {
+            window.showConfirmDialog('Publikasi Ditolak (Constraint Violation)', data.message || 'Masih terdapat konflik jadwal.', null, 'Mengerti', true);
+            return;
+          }
+          if (window.toast) window.toast.success(data.message);
+          setTimeout(() => window.location.reload(), 600);
+        } catch (err) {
+          if (window.toast) window.toast.error('Gagal menghubungi server.');
+        }
+      },
+      'Publikasikan Sekarang'
     );
   };
 

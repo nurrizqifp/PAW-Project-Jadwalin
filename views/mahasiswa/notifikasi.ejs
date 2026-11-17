@@ -32,23 +32,44 @@
         </div>
 
         <div class="space-y-3">
-          <!-- Notif Item 1 -->
-          <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex items-start gap-4">
-            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200/60 dark:border-amber-800/60">
-              <i class="ph ph-door text-xl"></i>
+          <% const prkNotif = (typeof prakrsAccess !== 'undefined' && prakrsAccess) ? prakrsAccess : { isOpen: true, deadline: '2026-12-31', reason: 'Pengisian Pra-KRS sedang dibuka.' }; %>
+          <div class="rounded-xl border p-4 shadow-sm flex items-start gap-4 <%= prkNotif.isOpen ? 'border-emerald-200 bg-emerald-50/70 dark:border-emerald-900/60 dark:bg-emerald-950/30' : 'border-rose-200 bg-rose-50/70 dark:border-rose-900/60 dark:bg-rose-950/30' %>">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg <%= prkNotif.isOpen ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300' : 'bg-rose-100 text-rose-700 dark:bg-rose-900/60 dark:text-rose-300' %>">
+              <i class="ph <%= prkNotif.isOpen ? 'ph-check-circle' : 'ph-lock-key' %> text-xl"></i>
             </div>
             <div class="flex-1 space-y-1">
-              <div class="flex items-center justify-between">
-                <p class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-100">Perubahan Ruangan Kuliah PBO (Kelas B)</p>
-                <span class="font-mono text-[11px] text-zinc-400">10 menit lalu</span>
+              <div class="flex items-center justify-between gap-2">
+                <p class="font-heading text-sm font-bold <%= prkNotif.isOpen ? 'text-emerald-950 dark:text-emerald-100' : 'text-rose-950 dark:text-rose-100' %>">
+                  <%= prkNotif.isOpen ? 'Status Pra-KRS: Sedang Dibuka' : 'Status Pra-KRS: Telah Ditutup' %>
+                </p>
+                <span class="font-mono text-[11px] text-zinc-500 shrink-0">Batas: <%= prkNotif.deadline %></span>
               </div>
-              <p class="text-xs text-zinc-600 dark:text-zinc-400">
-                Sesi kuliah hari ini dipindahkan dari Ruang F3-201 ke <strong>Lab Komputer Multimedia</strong> karena sesi praktikum langsung.
-              </p>
+              <p class="text-xs <%= prkNotif.isOpen ? 'text-emerald-900/90 dark:text-emerald-200' : 'text-rose-900/90 dark:text-rose-200' %>"><%= prkNotif.reason %></p>
             </div>
           </div>
 
-          <!-- Notif Item 2 -->
+          <% const notifItems = (typeof notifikasiList !== 'undefined' && Array.isArray(notifikasiList)) ? notifikasiList : []; %>
+          <% if (notifItems.length === 0) { %>
+            <div class="rounded-xl border border-zinc-200 bg-white p-6 text-center text-xs text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900">
+              Belum ada notifikasi perubahan jadwal saat ini.
+            </div>
+          <% } else { %>
+            <% notifItems.forEach(function(item) { %>
+              <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex items-start gap-4">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200/60 dark:border-amber-800/60">
+                  <i class="ph ph-bell-ringing text-xl"></i>
+                </div>
+                <div class="flex-1 space-y-1">
+                  <div class="flex items-center justify-between gap-2">
+                    <p class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-100"><%= item.kodeMatkul %> — <%= item.mataKuliah %></p>
+                    <span class="font-mono text-[11px] text-zinc-400 shrink-0"><%= item.waktu || 'Terbaru' %></span>
+                  </div>
+                  <p class="text-xs text-zinc-600 dark:text-zinc-400"><%= item.perubahan %></p>
+                </div>
+              </div>
+            <% }); %>
+          <% } %>
+
           <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex items-start gap-4">
             <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/60">
               <i class="ph ph-calendar-check text-xl"></i>
@@ -56,7 +77,7 @@
             <div class="flex-1 space-y-1">
               <div class="flex items-center justify-between">
                 <p class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-100">Jadwal Final Semester Ganjil Telah Dipublikasikan</p>
-                <span class="font-mono text-[11px] text-zinc-400">1 hari lalu</span>
+                <span class="font-mono text-[11px] text-zinc-400">Terverifikasi</span>
               </div>
               <p class="text-xs text-zinc-600 dark:text-zinc-400">
                 Admin Akademik telah merilis jadwal kuliah resmi versi <%= typeof appVersion !== 'undefined' ? appVersion : 'v.21' %> yang telah diverifikasi bebas tabrakan oleh AI Solver.
