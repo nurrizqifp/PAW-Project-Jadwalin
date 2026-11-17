@@ -1,41 +1,131 @@
-<footer class="mt-auto border-t border-app-border dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 text-xs py-6 transition-colors">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-    <div class="flex items-center space-x-2">
-      <span class="font-bold text-zinc-900 dark:text-zinc-100">Jadwalin</span>
-      <span>&middot;</span>
-      <span>Sistem Penjadwalan Cerdas TI UMY</span>
-    </div>
+<footer
+  class="relative mt-auto border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 text-xs transition-colors overflow-hidden">
 
-    <div class="flex items-center space-x-4 text-zinc-400 dark:text-zinc-500">
-      <a href="/api/status" target="_blank" class="hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors">/api/status</a>
-      <a href="/api/produk" target="_blank" class="hover:text-zinc-900 dark:hover:text-zinc-200 transition-colors">/api/produk</a>
-      <span class="font-mono text-[11px]">logs/logger.md</span>
+  <!-- Main Multi-Column Section -->
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
+
+      <!-- Brand & Mission Column (Span 2) -->
+      <div class="lg:col-span-2 space-y-4">
+        <div class="flex items-center space-x-3">
+          <img src="/logo.png" alt="Logo Jadwalin" class="h-10 w-auto object-contain">
+          <div>
+            <span class="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-heading">
+              Jadwalin
+            </span>
+            <span class="block text-[11px] text-zinc-500 font-mono">
+              Sistem Penjadwalan Cerdas TI UMY
+            </span>
+          </div>
+        </div>
+
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-sm">
+          Platform terpadu Program Studi Teknologi Informasi, Fakultas Teknik, Universitas Muhammadiyah Yogyakarta.
+          Menjamin distribusi perkuliahan yang adil dan tanpa tabrakan ruang maupun dosen.
+        </p>
+
+      </div>
+
+      <!-- Column 2: Layanan Mahasiswa -->
+      <div class="space-y-3">
+        <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
+          Layanan Mahasiswa
+        </p>
+        <ul class="space-y-2 text-xs">
+          <li>
+            <a href="/mahasiswa/jadwal" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Kalender
+              Mingguan</a>
+          </li>
+          <li>
+            <a href="/mahasiswa/prakrs" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Simulasi
+              Formulir Pra-KRS</a>
+          </li>
+          <li>
+            <a href="/mahasiswa/dashboard"
+              class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Dashboard Kuliah Harian</a>
+          </li>
+          <li>
+            <a href="/mahasiswa/notifikasi" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Pusat
+              Notifikasi Jadwal</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Portal Dosen & Staf -->
+      <div class="space-y-3">
+        <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
+          Dosen & Akademik
+        </p>
+        <ul class="space-y-2 text-xs">
+          <li>
+            <a href="/login" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Masuk Portal
+              Terproteksi</a>
+          </li>
+          <li>
+            <a href="/dosen/preferensi" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Hari
+              Bebas Mengajar Dosen</a>
+          </li>
+          <li>
+            <a href="/admin/master/ruangan"
+              class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">Alokasi Laboratorium Komputer</a>
+          </li>
+          <li>
+            <a href="/admin/generate" class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">AI
+              Generator Solver Panel</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Column 4: Standar Sistem & API -->
+      <div class="space-y-3">
+        <p class="font-mono text-[11px] font-bold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
+          Sistem & API
+        </p>
+        <ul class="space-y-2 text-xs">
+          <li>
+            <a href="/api/status" target="_blank"
+              class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors font-mono">Endpoint /api/status</a>
+          </li>
+          <li>
+            <a href="/api/jadwal" target="_blank"
+              class="hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors font-mono">Endpoint /api/jadwal</a>
+          </li>
+        </ul>
+      </div>
+
     </div>
   </div>
+
+  <!-- Big Watermark Typography (Ala-ala Footer Laravel) -->
+  <div class="relative w-full overflow-hidden select-none pointer-events-none py-2 text-center">
+    <span class="block font-heading font-black tracking-tighter text-[13vw] leading-none text-zinc-900 dark:text-white">
+      Jadwalin.
+    </span>
+  </div>
+
+  <!-- Bottom Copyright & Health Bar -->
+  <div class="relative z-10 border-t border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/60 py-4">
+    <div
+      class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px]">
+      <p class="text-zinc-500 dark:text-zinc-400">
+        &copy; 2026 Program Studi Teknologi Informasi, Universitas Muhammadiyah Yogyakarta.
+      </p>
+
+      <div class="flex items-center space-x-3 text-zinc-500 font-mono">
+        <span><%= typeof appName !== 'undefined' ? appName : 'Jadwalin' %> Core <%= typeof appVersion !== 'undefined' ? appVersion : 'v.21' %></span>
+        <span>&middot;</span>
+        <span>Kelompok 5 PAW</span>
+      </div>
+    </div>
+  </div>
+
 </footer>
 
-<script>
-  function updateNavThemeIcon() {
-    const icon = document.getElementById('navbarThemeIcon');
-    if (!icon) return;
-    const isDark = document.documentElement.classList.contains('dark');
-    icon.className = isDark ? 'ph ph-sun text-sm text-amber-400' : 'ph ph-moon text-sm text-zinc-700';
-  }
+<!-- Global Toast Container -->
+<%- include('./flash') %>
 
-  function toggleDarkMode() {
-    const htmlEl = document.documentElement;
-    if (htmlEl.classList.contains('dark')) {
-      htmlEl.classList.remove('dark');
-      localStorage.theme = 'light';
-    } else {
-      htmlEl.classList.add('dark');
-      localStorage.theme = 'dark';
-    }
-    updateNavThemeIcon();
-  }
+  <!-- Core Application Client Library -->
+  <script src="/js/app.js"></script>
+  </body>
 
-  // Init on load
-  document.addEventListener('DOMContentLoaded', updateNavThemeIcon);
-</script>
-</body>
-</html>
+  </html>

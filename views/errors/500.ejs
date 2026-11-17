@@ -1,0 +1,59 @@
+<%- include('../partials/head', { judul: '500 — Kendala Sistem Internal · Jadwalin' }) %>
+
+<div class="min-h-screen flex flex-col justify-between bg-zinc-50 dark:bg-zinc-950 px-4 py-8">
+  <div class="max-w-md w-full mx-auto my-auto text-center space-y-6">
+
+    <!-- Brand Logo Header -->
+    <a href="/" class="inline-flex items-center gap-2.5 group">
+      <img src="/logo.png" alt="Logo Jadwalin" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform">
+      <div class="flex flex-col text-left">
+        <span class="text-base font-bold tracking-tight text-zinc-900 dark:text-zinc-50 font-heading leading-tight">
+          <%= typeof appName !== 'undefined' ? appName : 'Jadwalin' %>
+        </span>
+        <span class="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono leading-none">
+          Prodi TI FT UMY · <%= typeof appVersion !== 'undefined' ? appVersion : 'v.21' %>
+        </span>
+      </div>
+    </a>
+
+    <!-- Card Error 500 -->
+    <div class="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-5">
+      <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 border border-rose-200 dark:border-rose-900">
+        <i class="ph ph-warning-octagon text-3xl"></i>
+      </div>
+
+      <div class="space-y-2">
+        <span class="inline-flex items-center gap-1.5 rounded-full bg-rose-100 px-3 py-0.5 font-mono text-[11px] font-bold text-rose-900 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-900">
+          KODE STATUS: 500
+        </span>
+        <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+          Kendala Pemrosesan Server
+        </h1>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-sm mx-auto">
+          <%= typeof pesanError !== 'undefined' ? pesanError : 'Terjadi kendala pada backend atau koneksi basis data. Tim pengembang telah diberitahu.' %>
+        </p>
+      </div>
+
+      <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2.5">
+        <button onclick="window.location.reload()"
+          class="w-full sm:w-auto inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
+          <i class="ph ph-arrows-clockwise text-amber-400 text-sm"></i>
+          <span>Muat Ulang Halaman</span>
+        </button>
+        <a href="/"
+          class="w-full sm:w-auto inline-flex min-h-[40px] items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 shadow-xs transition-colors">
+          <i class="ph ph-house text-zinc-500"></i>
+          <span>Kembali ke Beranda</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Mini Footer -->
+  <footer class="text-center text-[11px] text-zinc-400 font-mono">
+    &copy; 2026 Program Studi Teknologi Informasi · Universitas Muhammadiyah Yogyakarta
+  </footer>
+</div>
+
+<%- include('../partials/footer') %>

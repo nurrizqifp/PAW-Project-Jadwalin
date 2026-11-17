@@ -1,0 +1,243 @@
+<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'AI Generator Solver — Jadwalin' }) %>
+
+<div class="flex-1 flex min-h-screen">
+  <%- include('../partials/admin-sidebar', { activeMenu: 'generate' }) %>
+
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <%- include('../partials/admin-navbar') %>
+
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
+      <div class="max-w-6xl mx-auto space-y-6">
+
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 pb-5 dark:border-zinc-800">
+          <div>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-blue-900 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+              <i class="ph ph-cpu text-amber-500"></i> Powered by Gemini API & Heuristic Solver
+            </span>
+            <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-1">
+              AI Automated Schedule Generator
+            </h1>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">
+              Optimasi kombinatorial jadwal perkuliahan bebas tabrakan (Zero Hard-Constraint Violations).
+            </p>
+          </div>
+
+          <button id="btn-run-solver" type="button" onclick="startGenerationSimulation()"
+            class="inline-flex min-h-[40px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-5 py-2 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
+            <i class="ph ph-sparkle text-base text-amber-400"></i>
+            <span>Mulai Generate Jadwal</span>
+          </button>
+        </div>
+
+        <!-- Preset Mode Solver & Parameter Card -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-zinc-100 pb-3 dark:border-zinc-800">
+            <div>
+              <h2 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-50">
+                Preset Mode Solver
+              </h2>
+              <p class="text-[11px] text-zinc-500">Pilih strategi optimasi jadwal sesuai kebutuhan periode penyusunan.</p>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono bg-blue-50 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300 font-semibold border border-blue-200 dark:border-blue-900">
+              <i class="ph ph-sliders"></i>
+              <span>Preset: Seimbang</span>
+            </span>
+          </div>
+
+          <!-- Pilihan Preset 3 Mode (Human-Centric) -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <button type="button" onclick="applyPreset('cepat')" id="preset-btn-cepat"
+              class="preset-card text-left p-4 rounded-xl border border-zinc-200 hover:border-zinc-400 bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-900/50 hover:bg-white dark:hover:bg-zinc-800 transition-all space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                  <i class="ph ph-lightning text-base"></i>
+                </span>
+                <span class="text-[10px] font-mono text-zinc-400">&lt; 10 Detik</span>
+              </div>
+              <h3 class="font-heading text-xs font-bold text-zinc-900 dark:text-zinc-100">Mode Cepat (Draft)</h3>
+              <p class="text-[11px] text-zinc-500 leading-relaxed">Penyusunan cepat kerangka awal sesi kuliah dan ruangan tanpa iterasi mendalam.</p>
+            </button>
+
+            <button type="button" onclick="applyPreset('seimbang')" id="preset-btn-seimbang"
+              class="preset-card text-left p-4 rounded-xl border-2 border-[#0c2b5e] bg-blue-50/40 dark:border-amber-400 dark:bg-amber-950/20 transition-all space-y-1.5 shadow-xs">
+              <div class="flex items-center justify-between">
+                <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#0c2b5e] text-white dark:bg-amber-400 dark:text-zinc-950">
+                  <i class="ph ph-scales text-base"></i>
+                </span>
+                <span class="text-[10px] font-mono text-[#0c2b5e] dark:text-amber-400 font-bold">Rekomendasi</span>
+              </div>
+              <h3 class="font-heading text-xs font-bold text-zinc-900 dark:text-zinc-100">Mode Seimbang (Standar)</h3>
+              <p class="text-[11px] text-zinc-600 dark:text-zinc-400 leading-relaxed">Keseimbangan optimal antara nol tabrakan ruang dan kepuasan preferensi hari dosen.</p>
+            </button>
+
+            <button type="button" onclick="applyPreset('maksimal')" id="preset-btn-maksimal"
+              class="preset-card text-left p-4 rounded-xl border border-zinc-200 hover:border-zinc-400 bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-900/50 hover:bg-white dark:hover:bg-zinc-800 transition-all space-y-1.5">
+              <div class="flex items-center justify-between">
+                <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-200 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                  <i class="ph ph-target text-base"></i>
+                </span>
+                <span class="text-[10px] font-mono text-zinc-400">&gt; 30 Detik</span>
+              </div>
+              <h3 class="font-heading text-xs font-bold text-zinc-900 dark:text-zinc-100">Mode Maksimal (Teliti)</h3>
+              <p class="text-[11px] text-zinc-500 leading-relaxed">Iterasi penuh heuristic repair hingga seluruh soft constraint dan gap jam kuliah terminimalisir.</p>
+            </button>
+          </div>
+
+          <!-- Parameter Teknis Lanjutan -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs pt-2 border-t border-zinc-100 dark:border-zinc-800">
+            <div>
+              <label for="target-semester" class="block font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Target Periode Akademik</label>
+              <select id="target-semester" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900">
+                <option value="20261" selected>Semester Ganjil 2026/2027</option>
+                <option value="20262">Semester Genap 2026/2027</option>
+              </select>
+            </div>
+            <div>
+              <label for="ai-model" class="block font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Model AI Engine</label>
+              <input id="ai-model" type="text" value="gemini-1.5-flash (Google DeepMind)" readonly class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 font-mono text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
+            </div>
+            <div>
+              <label for="max-iterations" class="block font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Maksimal Upaya Repair</label>
+              <input id="max-iterations" type="number" value="3" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900">
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Progress Status Indicator -->
+        <div id="gen-progress-card" class="hidden rounded-xl border border-blue-200 bg-blue-50/50 p-6 shadow-xs dark:border-blue-900/50 dark:bg-blue-950/20 space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-semibold text-[#0c2b5e] dark:text-blue-300 flex items-center gap-2">
+              <i class="ph ph-circle-notch animate-spin text-base text-amber-500"></i>
+              <span id="gen-status-text">Memproses 111 sesi perkuliahan...</span>
+            </span>
+            <span id="gen-pct" class="font-mono font-bold text-[#0c2b5e] dark:text-amber-400">0%</span>
+          </div>
+          <div class="w-full bg-blue-100 dark:bg-blue-900/40 h-2.5 rounded-full overflow-hidden">
+            <div id="gen-bar" class="bg-[#0c2b5e] dark:bg-amber-400 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Metrik Hasil Optimasi (PRD M-01 s/d M-04) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+            <span class="text-zinc-400 text-[10px] font-mono">M-01: Waktu Eksekusi</span>
+            <p class="font-mono text-xl font-bold text-zinc-900 dark:text-zinc-50 pt-1">1.82 Detik</p>
+            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold pt-0.5">Sangat Cepat (&lt; 60s)</p>
+          </div>
+          <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+            <span class="text-zinc-400 text-[10px] font-mono">M-02: Bentrok Hard Constraint</span>
+            <p class="font-mono text-xl font-bold text-emerald-600 dark:text-emerald-400 pt-1">0 Bentrok</p>
+            <p class="text-[11px] text-zinc-500 pt-0.5">100% Zero Tolerance</p>
+          </div>
+          <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+            <span class="text-zinc-400 text-[10px] font-mono">M-03: Kepatuhan Lab</span>
+            <p class="font-mono text-xl font-bold text-zinc-900 dark:text-zinc-50 pt-1">100%</p>
+            <p class="text-[11px] text-zinc-500 pt-0.5">31/31 Sesi Lab Tepat</p>
+          </div>
+          <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+            <span class="text-zinc-400 text-[10px] font-mono">M-04: Kepuasan Dosen</span>
+            <p class="font-mono text-xl font-bold text-amber-600 dark:text-amber-400 pt-1">94.2%</p>
+            <p class="text-[11px] text-zinc-500 pt-0.5">Soft Constraint Optimal</p>
+          </div>
+        </div>
+
+        <!-- Execution Console Log Output -->
+        <div class="rounded-xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-50">
+              Log Konsol Solver
+            </h2>
+            <span class="font-mono text-[10px] text-zinc-400">Status: Idle (Siap Dijalankan)</span>
+          </div>
+
+          <div id="solver-console" class="rounded-lg bg-zinc-950 p-4 font-mono text-xs text-zinc-300 space-y-1 h-44 overflow-y-auto border border-zinc-800">
+            <p class="text-zinc-500">// Menunggu instruksi generate jadwal dari staf akademik...</p>
+            <p class="text-zinc-500">// Tekan tombol "Mulai Generate Jadwal" di atas untuk memicu AI Solver.</p>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <%- include('../partials/admin-footer') %>
+  </div>
+</div>
+
+<script>
+  function applyPreset(mode) {
+    const btnCepat = document.getElementById('preset-btn-cepat');
+    const btnSeimbang = document.getElementById('preset-btn-seimbang');
+    const btnMaksimal = document.getElementById('preset-btn-maksimal');
+    const maxIterInput = document.getElementById('max-iterations');
+
+    const defaultClass = 'preset-card text-left p-4 rounded-xl border border-zinc-200 hover:border-zinc-400 bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-900/50 hover:bg-white dark:hover:bg-zinc-800 transition-all space-y-1.5';
+    const activeClass = 'preset-card text-left p-4 rounded-xl border-2 border-[#0c2b5e] bg-blue-50/40 dark:border-amber-400 dark:bg-amber-950/20 transition-all space-y-1.5 shadow-xs';
+
+    if (btnCepat) btnCepat.className = defaultClass;
+    if (btnSeimbang) btnSeimbang.className = defaultClass;
+    if (btnMaksimal) btnMaksimal.className = defaultClass;
+
+    if (mode === 'cepat') {
+      if (btnCepat) btnCepat.className = activeClass;
+      if (maxIterInput) maxIterInput.value = '1';
+      if (window.JadwalinUI && window.JadwalinUI.toast) {
+        window.JadwalinUI.toast.show('Preset Mode Cepat diterapkan (1 iterasi perbaikan).', 'info');
+      }
+    } else if (mode === 'maksimal') {
+      if (btnMaksimal) btnMaksimal.className = activeClass;
+      if (maxIterInput) maxIterInput.value = '10';
+      if (window.JadwalinUI && window.JadwalinUI.toast) {
+        window.JadwalinUI.toast.show('Preset Mode Maksimal diterapkan (10 iterasi perbaikan teliti).', 'info');
+      }
+    } else {
+      if (btnSeimbang) btnSeimbang.className = activeClass;
+      if (maxIterInput) maxIterInput.value = '3';
+      if (window.JadwalinUI && window.JadwalinUI.toast) {
+        window.JadwalinUI.toast.show('Preset Mode Seimbang diterapkan (standar rekomendasi).', 'info');
+      }
+    }
+  }
+
+  function startGenerationSimulation() {
+    const card = document.getElementById('gen-progress-card');
+    const bar = document.getElementById('gen-bar');
+    const pct = document.getElementById('gen-pct');
+    const text = document.getElementById('gen-status-text');
+    const consoleEl = document.getElementById('solver-console');
+
+    if (card) card.classList.remove('hidden');
+    let currentPct = 0;
+
+    consoleEl.innerHTML = '<p class="text-blue-400">[SOLVER START] Menginisialisasi 111 sesi mata kuliah prodi TI...</p>';
+
+    const interval = setInterval(() => {
+      currentPct += 20;
+      if (bar) bar.style.width = currentPct + '%';
+      if (pct) pct.textContent = currentPct + '%';
+
+      if (currentPct === 40) {
+        text.textContent = 'Mengevaluasi Hard Constraints (Dosen, Ruang, Sholat Dhuhur)...';
+        consoleEl.innerHTML += '<p class="text-zinc-300">[HC-CHECK] Memvalidasi jeda sholat 11:30–12:10 WIB: PASS (0 bentrok)</p>';
+      } else if (currentPct === 60) {
+        text.textContent = 'Menyesuaikan 31 praktikum ke 4 Lab Komputer F4...';
+        consoleEl.innerHTML += '<p class="text-zinc-300">[LAB-MATCH] Alokasi F4.LAB1 s/d LAB4: PASS (100% valid)</p>';
+      } else if (currentPct === 80) {
+        text.textContent = 'Mengoptimalkan soft constraint hari riset dosen...';
+        consoleEl.innerHTML += '<p class="text-amber-400">[SC-OPTIM] Kepuasan preferensi dosen: 94.2%</p>';
+      } else if (currentPct >= 100) {
+        clearInterval(interval);
+        text.textContent = 'Penyusunan jadwal selesai dengan status ZERO CLASH!';
+        consoleEl.innerHTML += '<p class="text-emerald-400">[SUCCESS] Jadwal perkuliahan berhasil digenerate dalam 1.82 detik!</p>';
+        setTimeout(() => {
+          window.showConfirmDialog(
+            'Generate Jadwal Berhasil',
+            '111 Sesi perkuliahan berhasil disusun tanpa satupun bentrok. Buka halaman Preview & Publikasi?',
+            () => { window.location.href = '/admin/jadwal'; },
+            'Buka Matriks Jadwal'
+          );
+        }, 600);
+      }
+    }, 400);
+  }
+</script>

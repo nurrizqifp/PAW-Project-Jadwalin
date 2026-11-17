@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const config = require('./config');
+const { connectDatabase } = require('./config/database');
 const logger = require('./middlewares/logger');
 const routes = require('./routes');
 
@@ -20,10 +22,18 @@ app.use((req, res, next) => {
 });
 app.use(express.json({ limit: '16kb' }));
 app.use(express.urlencoded({ extended: true, limit: '16kb' }));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware Logger untuk mencatat semua HTTP Request ke logs/logger.md
 app.use(logger);
+
+// Global locals untuk view
+app.use((req, res, next) => {
+  res.locals.appName = config.appName;
+  res.locals.appVersion = config.appVersion;
+  next();
+});
 
 // Routing Aplikasi
 app.use('/', routes);
@@ -36,31 +46,47 @@ app.use((req, res) => {
       pesan: `Endpoint '${req.originalUrl}' tidak ditemukan.`,
     });
   }
-  res.status(404).send(`
-    <!DOCTYPE html>
-    <html lang="id">
-    <head>
-      <meta charset="UTF-8">
-      <title>404 - Halaman Tidak Ditemukan</title>
-      <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="bg-zinc-50 min-h-screen flex items-center justify-center p-4">
-      <div class="text-center bg-white p-8 rounded-2xl shadow-sm border border-zinc-200 max-w-sm">
-        <span class="text-4xl font-bold text-zinc-900">404</span>
-        <h1 class="text-base font-bold text-zinc-800 mt-2">Halaman Tidak Ditemukan</h1>
-        <p class="text-zinc-500 text-xs mt-2">Halaman yang dituju tidak tersedia pada sistem.</p>
-        <a href="/" class="mt-5 inline-block px-4 py-2 bg-zinc-900 text-white rounded-xl text-xs font-semibold hover:bg-zinc-800">Kembali ke Beranda</a>
-      </div>
-    </body>
-    </html>
-  `);
+  res.status(404).render('errors/404', {
+    judul: '404 — Halaman Tidak Ditemukan · Jadwalin'
+  });
+});
+
+// Global 500 Error Handler
+app.use((err, req, res, next) => {
+  console.error('[Jadwalin Server Error]:', err);
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(500).json({
+      sukses: false,
+      pesan: 'Terjadi kendala pemrosesan pada server internal.',
+      error: config.nodeEnv === 'development' ? err.message : undefined
+    });
+  }
+  res.status(500).render('errors/500', {
+    judul: '500 — Kendala Server · Jadwalin',
+    pesanError: config.nodeEnv === 'development' ? err.message : 'Terjadi kendala pada sistem backend.'
+  });
 });
 
 // Menjalankan Server jika dieksekusi langsung
 if (require.main === module) {
-  app.listen(config.port, () => {
-    console.log(`[Jadwalin Server] Running on http://localhost:${config.port} (${config.nodeEnv})`);
-    console.log(`[Jadwalin Logger] Writing to ${config.logDir}/${config.logFile}`);
+  connectDatabase();
+  const server = app.listen(config.port, () => {
+    console.log(`\n======================================================`);
+    console.log(`[Jadwalin Server] Running on http://localhost:${config.port}`);
+    console.log(`[Jadwalin Role Mahasiswa] http://localhost:${config.port}/mahasiswa/dashboard`);
+    console.log(`[Jadwalin Role Admin]     http://localhost:${config.port}/admin/dashboard`);
+    console.log(`[Jadwalin Role Dosen]     http://localhost:${config.port}/dosen/dashboard`);
+    console.log(`[Jadwalin Environment]    ${config.nodeEnv}`);
+    console.log(`======================================================\n`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`\n[Jadwalin Error] Port ${config.port} sedang digunakan oleh proses lain.`);
+      console.error(`Solusi: Ubah PORT di file .env (misal PORT=4000 atau 8080) lalu jalankan ulang.\n`);
+    } else {
+      console.error('[Jadwalin Error]:', err);
+    }
   });
 }
 

@@ -1,0 +1,329 @@
+<!-- App Dedicated Topbar (Role-Aware: Admin, Dosen, Mahasiswa) -->
+<% const navRole=(typeof currentRole !=='undefined' ) ? currentRole : 'admin' ; %>
+  <header
+    class="sticky top-0 z-30 w-full border-b border-zinc-200/80 bg-white/95 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95 transition-colors">
+    <div class="px-4 sm:px-6">
+      <div class="flex items-center justify-between h-14">
+
+        <!-- Left: Breadcrumb / Scope Indicator -->
+        <div class="flex items-center space-x-2 text-xs">
+          <% if (navRole==='dosen' ) { %>
+            <span
+              class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 font-mono font-semibold border border-blue-200 dark:border-blue-900 text-[11px]">
+              PORTAL DOSEN
+            </span>
+            <% } else if (navRole==='mahasiswa' ) { %>
+              <span
+                class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 font-mono font-semibold border border-blue-200 dark:border-blue-900 text-[11px]">
+                PORTAL MAHASISWA
+              </span>
+              <% } else { %>
+                <span
+                  class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 font-mono font-semibold border border-blue-200 dark:border-blue-900 text-[11px]">
+                  STAFF AKADEMIK
+                </span>
+                <% } %>
+                  <span class="text-zinc-300 dark:text-zinc-700">/</span>
+                  <span class="font-medium text-zinc-600 dark:text-zinc-300">
+                    <%= typeof judul !=='undefined' ? judul.split('—')[0].trim() : 'Panel Akademik' %>
+                  </span>
+        </div>
+
+        <!-- Right: System Status, Notifikasi, Theme & User Dropdown -->
+        <div class="flex items-center space-x-2.5 text-xs">
+
+          <!-- Academic Period Pill -->
+          <div
+            class="hidden lg:inline-flex items-center gap-1.5 font-mono text-[11px] text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">
+            <i class="ph ph-calendar-blank text-zinc-600 dark:text-zinc-300"></i>
+            <span>Ganjil 2026/2027</span>
+          </div>
+
+          <!-- Tombol Drawer Notifikasi -->
+          <button id="admin-open-notif-btn" type="button" aria-label="Buka Notifikasi Sistem"
+            class="relative h-8 w-8 rounded-md border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition-colors">
+            <i class="ph ph-bell text-base"></i>
+            <span class="absolute top-1 right-1 flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+              <span class="relative inline-flex h-2 w-2 rounded-full bg-amber-500"></span>
+            </span>
+          </button>
+
+          <!-- Dark Mode Toggle Button -->
+          <button id="admin-theme-toggle-btn" data-toggle-theme type="button"
+            onclick="window.toggleTheme ? window.toggleTheme() : (window.JadwalinUI ? window.JadwalinUI.theme.toggle() : document.documentElement.classList.toggle('dark'))"
+            aria-label="Ganti Mode Tampilan"
+            class="h-8 w-8 rounded-md border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition-colors">
+            <i id="admin-theme-icon" class="theme-toggle-icon ph ph-moon text-base"></i>
+          </button>
+
+          <div class="h-4 w-px bg-zinc-200 dark:bg-zinc-800 hidden sm:block"></div>
+
+          <!-- User Profile Dropdown Menu -->
+          <div class="relative inline-block text-left" id="admin-user-menu-container">
+            <button id="admin-user-menu-btn" type="button" aria-expanded="false" aria-haspopup="true"
+              class="flex items-center gap-2 rounded-md border border-zinc-200 bg-white p-1 pr-2 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors">
+              <% if (navRole==='dosen' ) { %>
+                <div
+                  class="flex h-6 w-6 items-center justify-center rounded bg-[#0c2b5e] text-amber-300 font-bold text-[10px]">
+                  BT
+                </div>
+                <span class="hidden sm:inline font-medium text-xs text-zinc-800 dark:text-zinc-200">Dr. Bambang</span>
+                <% } else if (navRole==='mahasiswa' ) { %>
+                  <div
+                    class="flex h-6 w-6 items-center justify-center rounded bg-[#0c2b5e] text-white font-bold text-[10px]">
+                    HD
+                  </div>
+                  <span class="hidden sm:inline font-medium text-xs text-zinc-800 dark:text-zinc-200">Haidar</span>
+                  <% } else { %>
+                    <div
+                      class="flex h-6 w-6 items-center justify-center rounded bg-[#0c2b5e] text-white font-bold text-[10px]">
+                      RW
+                    </div>
+                    <span class="hidden sm:inline font-medium text-xs text-zinc-800 dark:text-zinc-200">Rina S.T.</span>
+                    <% } %>
+                      <i class="ph ph-caret-down text-[10px] text-zinc-400"></i>
+            </button>
+
+            <!-- Dropdown Panel -->
+            <div id="admin-user-dropdown"
+              class="hidden absolute right-0 mt-2 w-60 origin-top-right rounded-xl border border-zinc-200 bg-white p-1.5 shadow-lg ring-1 ring-black/5 dark:border-zinc-800 dark:bg-zinc-900 focus:outline-none z-50 transition-all">
+
+              <% if (navRole==='dosen' ) { %>
+                <div class="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800">
+                  <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100">Dr. Ir. Bambang Triatmaja, M.Kom.
+                  </p>
+                  <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">NIDN: 0512037501 · Dosen TI</p>
+                </div>
+                <div class="py-1">
+                  <a href="/dosen/dashboard"
+                    class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                    <i class="ph ph-squares-four text-base text-[#0c2b5e] dark:text-blue-400"></i>
+                    <span>Dashboard Dosen</span>
+                  </a>
+                  <a href="/dosen/jadwal"
+                    class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                    <i class="ph ph-calendar-check text-base"></i>
+                    <span>Jadwal Mengajar Saya</span>
+                  </a>
+                  <a href="/dosen/preferensi"
+                    class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                    <i class="ph ph-sliders text-base"></i>
+                    <span>Atur Preferensi Waktu</span>
+                  </a>
+                  <a href="/"
+                    class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                    <i class="ph ph-arrow-square-out text-base"></i>
+                    <span>Lihat Portal Publik</span>
+                  </a>
+                </div>
+                <% } else if (navRole==='mahasiswa' ) { %>
+                  <div class="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800">
+                    <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100">Haidar</p>
+                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">NIM: 20220140001 · Smt 5 TI</p>
+                  </div>
+                  <div class="py-1">
+                    <a href="/mahasiswa/dashboard"
+                      class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                      <i class="ph ph-squares-four text-base text-[#0c2b5e] dark:text-blue-400"></i>
+                      <span>Dashboard Mahasiswa</span>
+                    </a>
+                    <a href="/mahasiswa/jadwal"
+                      class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                      <i class="ph ph-calendar-blank text-base"></i>
+                      <span>Jadwal Perkuliahan</span>
+                    </a>
+                    <a href="/mahasiswa/prakrs"
+                      class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                      <i class="ph ph-notebook text-base"></i>
+                      <span>Pra-KRS Terpandu</span>
+                    </a>
+                    <a href="/"
+                      class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                      <i class="ph ph-arrow-square-out text-base"></i>
+                      <span>Lihat Portal Publik</span>
+                    </a>
+                  </div>
+                  <% } else { %>
+                    <div class="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800">
+                      <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100">Rina Wulandari, S.T.</p>
+                      <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">NIP: 19880415 201404 2 001</p>
+                    </div>
+                    <div class="py-1">
+                      <a href="/admin/profil"
+                        class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                        <i class="ph ph-user text-base"></i>
+                        <span>Profil Staf</span>
+                      </a>
+                      <a href="/admin/settings"
+                        class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                        <i class="ph ph-gear text-base"></i>
+                        <span>Pengaturan Sistem</span>
+                      </a>
+                      <a href="/"
+                        class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                        <i class="ph ph-arrow-square-out text-base"></i>
+                        <span>Lihat Portal Publik</span>
+                      </a>
+                    </div>
+                    <% } %>
+
+                      <div
+                        class="border-t border-zinc-100 pt-1 dark:border-zinc-800 flex items-center justify-between px-3 py-1.5">
+                        <span class="font-mono text-[10px] text-zinc-400">
+                          <%= typeof appVersion !== 'undefined' ? appVersion : 'v.21' %>
+                        </span>
+                        <a href="/logout"
+                          class="inline-flex items-center gap-1.5 text-xs text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 font-medium transition-colors">
+                          <i class="ph ph-sign-out text-sm"></i>
+                          <span>Keluar (Logout)</span>
+                        </a>
+                      </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Slide-over Notification Drawer -->
+  <div id="admin-notif-overlay"
+    class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition-opacity duration-200 opacity-0 pointer-events-none">
+    <div id="admin-notif-drawer"
+      class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-2xl border-l border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800 flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
+
+      <!-- Drawer Header -->
+      <div class="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">
+        <div class="flex items-center gap-2">
+          <i class="ph ph-bell text-lg text-amber-500"></i>
+          <h3 class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">Notifikasi Sistem Akademik</h3>
+        </div>
+        <button id="admin-close-notif-btn" type="button" aria-label="Tutup Drawer"
+          class="flex h-8 w-8 items-center justify-center rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500 transition-colors">
+          <i class="ph ph-x text-base"></i>
+        </button>
+      </div>
+
+      <!-- Drawer Body / Alerts List -->
+      <div class="flex-1 overflow-y-auto p-4 space-y-3">
+        <!-- Item 1: Conflict Alert -->
+        <div
+          class="rounded-xl border border-emerald-200 bg-emerald-50/70 p-3.5 dark:border-emerald-900/60 dark:bg-emerald-950/30 space-y-1">
+          <div class="flex items-center justify-between text-xs">
+            <span class="inline-flex items-center gap-1 font-semibold text-emerald-700 dark:text-emerald-400">
+              <i class="ph ph-check-circle"></i> AI Solver Optimal
+            </span>
+            <span class="font-mono text-[10px] text-zinc-400">10:45 WIB</span>
+          </div>
+          <p class="text-xs text-emerald-950 dark:text-emerald-200">
+            Siklus penjadwalan otomatis telah menyelesaikan 111 sesi perkuliahan dengan 0 konflik Hard Constraint.
+          </p>
+        </div>
+
+        <!-- Item 2: Dosen Preference -->
+        <div
+          class="rounded-xl border border-zinc-200 bg-zinc-50/80 p-3.5 dark:border-zinc-800 dark:bg-zinc-800/40 space-y-1">
+          <div class="flex items-center justify-between text-xs">
+            <span class="inline-flex items-center gap-1 font-semibold text-zinc-700 dark:text-zinc-300">
+              <i class="ph ph-user"></i> Preferensi Dosen Masuk
+            </span>
+            <span class="font-mono text-[10px] text-zinc-400">Hari ini</span>
+          </div>
+          <p class="text-xs text-zinc-600 dark:text-zinc-400">
+            Dr. Nasy'an Taufiq mencatat preferensi mengajar hari Rabu untuk alokasi riset Cloud Computing.
+          </p>
+        </div>
+
+        <!-- Item 3: Jadwal Status -->
+        <div
+          class="rounded-xl border border-blue-200 bg-blue-50/70 p-3.5 dark:border-blue-900/60 dark:bg-blue-950/30 space-y-1">
+          <div class="flex items-center justify-between text-xs">
+            <span class="inline-flex items-center gap-1 font-semibold text-blue-700 dark:text-blue-400">
+              <i class="ph ph-calendar"></i> Periode Akademik Aktif
+            </span>
+            <span class="font-mono text-[10px] text-zinc-400">08:00 WIB</span>
+          </div>
+          <p class="text-xs text-blue-950 dark:text-blue-200">
+            Periode Semester Ganjil 2026/2027 telah dibuka untuk simulasi Pra-KRS mahasiswa.
+          </p>
+        </div>
+      </div>
+
+      <!-- Drawer Footer -->
+      <div
+        class="border-t border-zinc-200 p-3.5 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/50 flex justify-between items-center text-xs">
+        <button type="button"
+          onclick="window.showConfirmDialog ? window.showConfirmDialog('Tandai Semua Dibaca', 'Seluruh notifikasi perubahan jadwal dan preferensi dosen akan ditandai telah dibaca.', () => { closeAdminNotifDrawer(); }, 'Tandai Dibaca') : null"
+          class="font-medium text-[#0c2b5e] hover:underline dark:text-blue-400 transition-colors">
+          Tandai dibaca
+        </button>
+        <span class="font-mono text-[10px] text-zinc-400">3 Pembaruan</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Sertakan Modals Universal -->
+  <%- include('admin-modals') %>
+
+    <script>
+      // Setup Interaksi Dropdown & Drawer
+      (function initAdminNavbar() {
+        // 1. User Dropdown Menu
+        const userMenuBtn = document.getElementById('admin-user-menu-btn');
+        const userDropdown = document.getElementById('admin-user-dropdown');
+        if (userMenuBtn && userDropdown) {
+          userMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.classList.toggle('hidden');
+          });
+          document.addEventListener('click', (e) => {
+            if (!userDropdown.contains(e.target) && !userMenuBtn.contains(e.target)) {
+              userDropdown.classList.add('hidden');
+            }
+          });
+        }
+
+        // 2. Notification Drawer
+        const notifBtn = document.getElementById('admin-open-notif-btn');
+        const closeNotifBtn = document.getElementById('admin-close-notif-btn');
+        const notifOverlay = document.getElementById('admin-notif-overlay');
+        const notifDrawer = document.getElementById('admin-notif-drawer');
+
+        function openDrawer() {
+          if (notifOverlay && notifDrawer) {
+            notifOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            notifDrawer.classList.remove('translate-x-full');
+          }
+        }
+
+        function closeDrawer() {
+          if (notifOverlay && notifDrawer) {
+            notifOverlay.classList.add('opacity-0', 'pointer-events-none');
+            notifDrawer.classList.add('translate-x-full');
+          }
+        }
+
+        if (notifBtn) notifBtn.addEventListener('click', openDrawer);
+        if (closeNotifBtn) closeNotifBtn.addEventListener('click', closeDrawer);
+        if (notifOverlay) {
+          notifOverlay.addEventListener('click', (e) => {
+            if (e.target === notifOverlay) closeDrawer();
+          });
+        }
+
+        // Expose Global Helper Functions
+        window.openAdminNotifDrawer = openDrawer;
+        window.closeAdminNotifDrawer = closeDrawer;
+
+        // Escape listener
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            closeDrawer();
+            if (userDropdown) userDropdown.classList.add('hidden');
+          }
+        });
+      })();
+    </script>
