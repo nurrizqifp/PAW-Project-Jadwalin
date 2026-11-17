@@ -53,10 +53,10 @@ function guardPanelRole(allowedRoles) {
 // 1. Public & Auth Routes (Bebas diakses semua civitas & guest)
 // -------------------------------------------------------------
 router.get('/', publicController.index);
+router.get('/jadwal', publicController.jadwal);
 router.get('/info', publicController.info);
 router.get('/login', publicController.login);
 router.get('/forgot-password', publicController.forgotPassword);
-router.get('/simulasi', mahasiswaController.prakrs);
 
 // Logout Route
 router.get('/logout', (req, res) => {
@@ -71,9 +71,9 @@ router.get('/logout', (req, res) => {
 // -------------------------------------------------------------
 router.get('/mahasiswa', guardPanelRole(['mahasiswa', 'admin']), mahasiswaController.dashboard);
 router.get('/mahasiswa/dashboard', guardPanelRole(['mahasiswa', 'admin']), mahasiswaController.dashboard);
-router.get('/mahasiswa/jadwal', mahasiswaController.jadwal); // Terbuka publik untuk cek jadwal
+router.get('/mahasiswa/jadwal', guardPanelRole(['mahasiswa', 'admin']), mahasiswaController.jadwal);
 router.get('/mahasiswa/prakrs', guardPanelRole(['mahasiswa', 'admin']), mahasiswaController.prakrs);
-router.get('/mahasiswa/simulasi', mahasiswaController.prakrs);
+router.get('/mahasiswa/simulasi', guardPanelRole(['mahasiswa', 'admin']), mahasiswaController.prakrs);
 router.get('/mahasiswa/notifikasi', guardPanelRole(['mahasiswa', 'admin']), mahasiswaController.notifikasi);
 
 // -------------------------------------------------------------
