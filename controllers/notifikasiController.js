@@ -1,8 +1,9 @@
 /**
+ * controllers/notifikasiController.js
  * Controller Notifikasi (PRD F-08)
- * GET /api/notifikasi            - notifikasi milik pengguna yang login (drawer)
- * PUT /api/notifikasi/read-all   - tandai semua notifikasi pengguna sebagai dibaca
- * PUT /api/notifikasi/:id/read   - tandai satu notifikasi sebagai dibaca
+ *   GET /api/notifikasi            - notifikasi milik pengguna yang login (drawer)
+ *   PUT /api/notifikasi/read-all   - tandai semua notifikasi pengguna sebagai dibaca
+ *   PUT /api/notifikasi/:id/read   - tandai satu notifikasi sebagai dibaca
  */
 const { z } = require('zod');
 const notifikasiService = require('../services/notifikasiService');

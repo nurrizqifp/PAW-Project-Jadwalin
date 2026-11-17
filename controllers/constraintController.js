@@ -1,16 +1,18 @@
 /**
+ * controllers/constraintController.js
  * Controller Constraint (PRD F-02, F-06, US-02, US-05)
- * GET  /api/constraints             - hard constraint + preferensi dosen (soft) dari database
- * POST /api/constraints/hard        - aktif/nonaktifkan hard constraint
- * POST /api/constraints/preferensi  - simpan preferensi hari bebas mengajar dosen
+ *   GET  /api/constraints             - hard constraint + preferensi dosen (soft) dari database
+ *   POST /api/constraints/hard        - aktif/nonaktifkan hard constraint
+ *   POST /api/constraints/preferensi  - simpan preferensi hari bebas mengajar dosen
  */
 const { z } = require('zod');
 const { Op } = require('sequelize');
 const db = require('../models');
-const jadwalService = require('../services/jadwalService');
+const jadwalController = require('./jadwalController');
 const notifikasiService = require('../services/notifikasiService');
 
-const { sequelize, ConstraintHard, ConstraintSoft, Dosen } = db;
+const { sequelize, ConstraintHard, ConstraintSoft, Dosen, JadwalDosen, JadwalSesi } = db;
+const { resolvePeriode, hitungKonflik } = jadwalController.helpers;
 
 const hardConstraintSchema = z.object({
   id: z.enum(['HC-01', 'HC-02', 'HC-03', 'LAB-MATCH'], { message: 'Kode hard constraint tidak valid' }),
@@ -26,14 +28,25 @@ const preferensiSchema = z.object({
 const escapeLike = (teks) => String(teks).replace(/[\\%_]/g, '\\$&');
 
 async function ambilStatusPelanggaran() {
-  const periode = await jadwalService.resolvePeriode({ isAdmin: true });
+  const periode = await resolvePeriode({ isAdmin: true });
   if (!periode) return { perKode: {}, ringkasan: { bentrokDosenRuangan: 0, labMatchingPercent: 100 } };
-  const hasil = await jadwalService.hitungKonflik(periode.id);
+  const hasil = await hitungKonflik(periode.id);
   const perKode = {};
   hasil.daftar.forEach((k) => {
     perKode[k.kode] = (perKode[k.kode] || 0) + 1;
   });
   return { perKode, ringkasan: hasil.ringkasan };
+}
+
+/** Apakah dosen masih punya sesi di hari tertentu pada periode aktif (menentukan status preferensi). */
+async function masihMengajarDiHari(dosenId, hari) {
+  const periode = await resolvePeriode({ isAdmin: true });
+  if (!periode) return false;
+  const jumlah = await JadwalDosen.count({
+    where: { dosen_id: dosenId },
+    include: [{ model: JadwalSesi, as: 'jadwalSesi', required: true, where: { periode_id: periode.id, hari } }],
+  });
+  return jumlah > 0;
 }
 
 exports.daftar = async (req, res, next) => {
@@ -123,9 +136,7 @@ exports.simpanPreferensi = async (req, res, next) => {
     }
     const { dosenNama, hariOff, alasan } = parsed.data;
 
-    const dosen = await Dosen.findOne({
-      where: { nama: { [Op.iLike]: escapeLike(dosenNama) } },
-    });
+    const dosen = await Dosen.findOne({ where: { nama: { [Op.iLike]: escapeLike(dosenNama) } } });
     if (!dosen) {
       return res.status(404).json({ sukses: false, pesan: `Dosen '${dosenNama}' tidak ditemukan.` });
     }
@@ -136,15 +147,15 @@ exports.simpanPreferensi = async (req, res, next) => {
     }
 
     // Terakomodir bila dosen belum punya sesi di hari tersebut pada jadwal periode aktif.
-    const masihMengajar = await jadwalService.dosenMasihMengajarDiHari(dosen.id, hariOff);
+    const terakomodasi = !(await masihMengajarDiHari(dosen.id, hariOff));
 
     const { soft, notifikasiDibuat } = await sequelize.transaction(async (t) => {
       const [row] = await ConstraintSoft.findOrCreate({
         where: { dosen_id: dosen.id },
-        defaults: { hari_off: hariOff, alasan, is_accommodated: !masihMengajar },
+        defaults: { hari_off: hariOff, alasan, is_accommodated: terakomodasi },
         transaction: t,
       });
-      await row.update({ hari_off: hariOff, alasan, is_accommodated: !masihMengajar }, { transaction: t });
+      await row.update({ hari_off: hariOff, alasan, is_accommodated: terakomodasi }, { transaction: t });
       const dibuat = await notifikasiService.catatPreferensi({ dosen, hariOff, alasan, transaction: t });
       return { soft: row, notifikasiDibuat: dibuat };
     });
