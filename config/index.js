@@ -8,5 +8,7 @@ module.exports = {
   appUrl: process.env.APP_URL || `http://localhost:${process.env.PORT || 3000}`,
   logDir: path.join(__dirname, '..', process.env.LOG_DIR || 'logs'),
   logFile: process.env.LOG_FILE || 'logger.md',
+  geminiApiKey: process.env.GEMINI_API_KEY || '',
+  geminiModel: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
 };
 
