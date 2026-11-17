@@ -3,6 +3,7 @@ const { Dosen, MataKuliah, Ruangan, Mahasiswa } = require('../models');
 const MasterModel = require('../models/masterModel');
 const JadwalModel = require('../models/jadwalModel');
 const ConstraintModel = require('../models/constraintModel');
+const aiSolverService = require('../services/aiSolverService');
 const config = require('../config');
 
 const preferensiSchema = z.object({
@@ -334,7 +335,7 @@ exports.updateDosen = async (req, res) => {
       await dosen.save();
       dbUpdated = dosen;
     }
-  } catch (e) {}
+  } catch (e) { }
 
   const memUpdated = MasterModel.updateDosen(id, parsed.data);
   const result = dbUpdated || memUpdated;
@@ -361,7 +362,7 @@ exports.deleteDosen = async (req, res) => {
   try {
     const deleted = await Dosen.destroy({ where: { id } });
     if (deleted > 0) dbSuccess = true;
-  } catch (e) {}
+  } catch (e) { }
 
   const memSuccess = MasterModel.deleteDosen(id);
 
@@ -401,7 +402,7 @@ exports.updateMatkul = async (req, res) => {
       await mk.save();
       dbUpdated = mk;
     }
-  } catch (e) {}
+  } catch (e) { }
 
   const memUpdated = MasterModel.updateMataKuliah(identifier, parsed.data);
   const result = dbUpdated || memUpdated;
@@ -429,7 +430,7 @@ exports.deleteMatkul = async (req, res) => {
     const whereClause = isNaN(Number(identifier)) ? { kode: identifier.toUpperCase() } : { id: Number(identifier) };
     const deleted = await MataKuliah.destroy({ where: whereClause });
     if (deleted > 0) dbSuccess = true;
-  } catch (e) {}
+  } catch (e) { }
 
   const memSuccess = MasterModel.deleteMataKuliah(identifier);
 
@@ -470,7 +471,7 @@ exports.updateRuangan = async (req, res) => {
       await ruang.save();
       dbUpdated = ruang;
     }
-  } catch (e) {}
+  } catch (e) { }
 
   const memUpdated = MasterModel.updateRuangan(id, parsed.data);
   const result = dbUpdated || memUpdated;
@@ -498,7 +499,7 @@ exports.deleteRuangan = async (req, res) => {
     const whereClause = isNaN(Number(id)) ? { kode: id } : { id: Number(id) };
     const deleted = await Ruangan.destroy({ where: whereClause });
     if (deleted > 0) dbSuccess = true;
-  } catch (e) {}
+  } catch (e) { }
 
   const memSuccess = MasterModel.deleteRuangan(id);
 
@@ -539,7 +540,7 @@ exports.updateMahasiswa = async (req, res) => {
       await mhs.save();
       dbUpdated = mhs;
     }
-  } catch (e) {}
+  } catch (e) { }
 
   const memUpdated = MasterModel.updateMahasiswa(id, parsed.data);
   const result = dbUpdated || memUpdated;
@@ -567,7 +568,7 @@ exports.deleteMahasiswa = async (req, res) => {
     const whereClause = isNaN(Number(id)) ? { nim: id } : { id: Number(id) };
     const deleted = await Mahasiswa.destroy({ where: whereClause });
     if (deleted > 0) dbSuccess = true;
-  } catch (e) {}
+  } catch (e) { }
 
   const memSuccess = MasterModel.deleteMahasiswa(id);
 
@@ -634,13 +635,46 @@ exports.toggleConstraint = (req, res) => {
   });
 };
 
-exports.generate = (req, res) => {
-  const result = JadwalModel.generateAI();
-  res.json({
-    sukses: true,
-    result,
-    notifikasi: JadwalModel.getNotifikasi()
-  });
+exports.generate = async (req, res) => {
+  try {
+    const hasCustomPayload = req.body && typeof req.body === 'object' && Object.keys(req.body).length > 0;
+    const solverOutput = await aiSolverService.generateSchedule({
+      payload: hasCustomPayload ? req.body : undefined
+    });
+    const baseResult = JadwalModel.generateAI();
+    const totalKonflik = solverOutput.konflik.length;
+    const status = totalKonflik === 0 ? 'Terpublikasi' : 'Generated (Konflik)';
+
+    const result = {
+      ...baseResult,
+      success: solverOutput.sukses,
+      source: solverOutput.source,
+      model: solverOutput.model,
+      fallbackReason: solverOutput.fallbackReason,
+      message: solverOutput.source === 'gemini-api'
+        ? `Jadwal berhasil dioptimasi oleh Gemini AI (${solverOutput.model}) dalam ${solverOutput.evaluasi.durasiGenerateDetik} detik (${totalKonflik} bentrok).`
+        : `Jadwal dioptimasi menggunakan solver lokal (${totalKonflik} bentrok).`,
+      totalKonflik,
+      daftarKonflik: solverOutput.konflik,
+      labMatching: `${solverOutput.evaluasi.persenLabMatching}% Sesuai`,
+      kepuasanDosen: `${solverOutput.evaluasi.persenPreferensiDosenTerpenuhi}%`,
+      status,
+      evaluasi: solverOutput.evaluasi,
+      jadwal: solverOutput.jadwal,
+      timestamp: solverOutput.timestamp
+    };
+
+    return res.json({
+      sukses: true,
+      result,
+      notifikasi: JadwalModel.getNotifikasi()
+    });
+  } catch (err) {
+    return res.status(500).json({
+      sukses: false,
+      pesan: 'Gagal menjalankan AI Solver: ' + err.message
+    });
+  }
 };
 
 exports.backupPostgres = (req, res) => {
