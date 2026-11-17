@@ -44,77 +44,34 @@
         </div>
 
         <div class="space-y-4">
-          <!-- SC-01 -->
-          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="space-y-1">
-              <div class="flex items-center gap-2">
-                <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">SC-01: Preferensi Hari Bebas Dosen (Off Day)</span>
-                <span class="rounded bg-amber-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-amber-800 dark:bg-amber-950 dark:text-amber-300">Bobot Penalti: 8 (Tinggi)</span>
+          <% const scList = (typeof constraints !== 'undefined' && constraints?.softConstraints) ? constraints.softConstraints : []; %>
+          <% const dsnOpts = (typeof dosenList !== 'undefined' && Array.isArray(dosenList)) ? dosenList : []; %>
+          <% scList.forEach(function(sc) { %>
+            <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100"><%= sc.dosenNama %></span>
+                  <span class="rounded bg-amber-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                    <%= sc.hariOff ? ('Libur ' + sc.hariOff) : (sc.preferensiWaktu || 'Preferensi Waktu') %>
+                  </span>
+                </div>
+                <p class="text-xs text-zinc-600 dark:text-zinc-400">Alasan: <%= sc.alasan || '-' %></p>
               </div>
-              <p class="text-xs text-zinc-600 dark:text-zinc-400">
-                Upayakan dosen tidak dijadwalkan mengajar pada hari yang diajukan untuk riset, bimbingan, atau tugas luar.
-              </p>
-            </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <button type="button" onclick="openSoftDrawer('edit', 'SC-01: Preferensi Hari Bebas Dosen', 8, 'Upayakan dosen tidak dijadwalkan mengajar pada hari riset.')"
-                class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-3 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
-                <i class="ph ph-pencil-simple"></i>
-                <span>Edit</span>
-              </button>
-              <button type="button" onclick="window.showConfirmDialog('Hapus Constraint', 'Hapus aturan preferensi ini dari algoritma solver?', () => {}, 'Hapus')"
-                class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-rose-50 px-3 text-xs font-semibold text-rose-600 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-rose-950/40 dark:text-rose-400 transition-colors">
-                <i class="ph ph-trash"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- SC-02 -->
-          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="space-y-1">
-              <div class="flex items-center gap-2">
-                <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">SC-02: Batas Sesi Berturut-turut Dosen</span>
-                <span class="rounded bg-blue-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-blue-800 dark:bg-blue-950 dark:text-blue-300">Bobot Penalti: 5 (Sedang)</span>
+              <div class="flex items-center gap-2 shrink-0">
+                <button type="button" onclick="openSoftDrawer('edit', '<%= sc.dosenId || '' %>', '<%= sc.hariOff || 'Jumat' %>', '<%= (sc.alasan || '').replace(/'/g, "\\'") %>', '<%= sc.dbId || '' %>')"
+                  class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-3 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
+                  <i class="ph ph-pencil-simple"></i>
+                  <span>Edit</span>
+                </button>
+                <% if (sc.dbId) { %>
+                  <button type="button" onclick="deleteSoftConstraint(<%= sc.dbId %>, '<%= sc.dosenNama.replace(/'/g, "\\'") %>')"
+                    class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-rose-50 px-3 text-xs font-semibold text-rose-600 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-rose-950/40 dark:text-rose-400 transition-colors">
+                    <i class="ph ph-trash"></i>
+                  </button>
+                <% } %>
               </div>
-              <p class="text-xs text-zinc-600 dark:text-zinc-400">
-                Hindari dosen mengajar lebih dari 3 sesi kelas berturut-turut pada hari yang sama untuk menjaga performa pengajaran.
-              </p>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <button type="button" onclick="openSoftDrawer('edit', 'SC-02: Batas Sesi Berturut-turut Dosen', 5, 'Hindari dosen mengajar lebih dari 3 sesi kelas berturut-turut.')"
-                class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-3 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
-                <i class="ph ph-pencil-simple"></i>
-                <span>Edit</span>
-              </button>
-              <button type="button" onclick="window.showConfirmDialog('Hapus Constraint', 'Hapus aturan preferensi ini dari algoritma solver?', () => {}, 'Hapus')"
-                class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-rose-50 px-3 text-xs font-semibold text-rose-600 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-rose-950/40 dark:text-rose-400 transition-colors">
-                <i class="ph ph-trash"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- SC-03 -->
-          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div class="space-y-1">
-              <div class="flex items-center gap-2">
-                <span class="font-mono text-xs font-bold text-zinc-900 dark:text-zinc-100">SC-03: Distribusi Beban Merata Hari Perkuliahan</span>
-                <span class="rounded bg-blue-100 px-2 py-0.5 font-mono text-[10px] font-semibold text-blue-800 dark:bg-blue-950 dark:text-blue-300">Bobot Penalti: 4 (Sedang)</span>
-              </div>
-              <p class="text-xs text-zinc-600 dark:text-zinc-400">
-                Distribusikan perkuliahan secara seimbang antara hari Senin hingga Jumat agar ruangan tidak menumpuk hanya di awal pekan.
-              </p>
-            </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <button type="button" onclick="openSoftDrawer('edit', 'SC-03: Distribusi Beban Merata Hari Perkuliahan', 4, 'Distribusikan perkuliahan secara seimbang antara hari Senin hingga Jumat.')"
-                class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-3 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
-                <i class="ph ph-pencil-simple"></i>
-                <span>Edit</span>
-              </button>
-              <button type="button" onclick="window.showConfirmDialog('Hapus Constraint', 'Hapus aturan preferensi ini dari algoritma solver?', () => {}, 'Hapus')"
-                class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-rose-50 px-3 text-xs font-semibold text-rose-600 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-rose-950/40 dark:text-rose-400 transition-colors">
-                <i class="ph ph-trash"></i>
-              </button>
-            </div>
-          </div>
+          <% }); %>
         </div>
 
       </div>
@@ -143,24 +100,29 @@
 
     <form onsubmit="handleSaveSoft(event)" class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
       <div class="space-y-1">
-        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama Aturan Soft Constraint</label>
-        <input id="soft-input-name" type="text" required placeholder="Contoh: SC-04: Preferensi Ruang Dekat Dosen Senior"
-          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Dosen Pengampu</label>
+        <select id="soft-input-dosen" required class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+          <% dsnOpts.forEach(function(d) { %>
+            <option value="<%= d.id %>"><%= d.nama %> (<%= d.inisial %>)</option>
+          <% }); %>
+        </select>
       </div>
 
       <div class="space-y-1">
-        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nilai Bobot Penalti (1 s/d 10)</label>
-        <div class="flex items-center gap-3">
-          <input id="soft-input-penalty" type="range" min="1" max="10" value="5" oninput="document.getElementById('penalty-val').textContent = this.value"
-            class="flex-1">
-          <span id="penalty-val" class="font-mono font-bold text-sm text-[#0c2b5e] dark:text-amber-400 w-6 text-center">5</span>
-        </div>
-        <p class="text-[11px] text-zinc-400">Skor tinggi = AI solver akan berusaha keras menghindari pelanggaran.</p>
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Hari Bebas Mengajar (Off Day)</label>
+        <select id="soft-input-hari" required class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+          <option value="Senin">Senin</option>
+          <option value="Selasa">Selasa</option>
+          <option value="Rabu">Rabu</option>
+          <option value="Kamis">Kamis</option>
+          <option value="Jumat" selected>Jumat</option>
+          <option value="Sabtu">Sabtu</option>
+        </select>
       </div>
 
       <div class="space-y-1">
-        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Deskripsi Kebijakan</label>
-        <textarea id="soft-input-desc" rows="3" required placeholder="Jelaskan alasan dan kriteria penegakan preferensi..."
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Alasan / Kebijakan (Maks 80 Karakter)</label>
+        <textarea id="soft-input-desc" rows="3" required minlength="3" maxlength="80" placeholder="Contoh: Alokasi Waktu Riset Laboratorium"
           class="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"></textarea>
       </div>
 
@@ -181,20 +143,21 @@
 </div>
 
 <script>
-  function openSoftDrawer(mode, name = '', penalty = 5, desc = '') {
+  let editingSoftId = null;
+
+  function openSoftDrawer(mode, dosenId = '', hariOff = 'Jumat', desc = '', dbId = null) {
+    editingSoftId = dbId ? Number(dbId) : null;
     const overlay = document.getElementById('drawer-soft-overlay');
     const panel = document.getElementById('drawer-soft-panel');
     const title = document.getElementById('soft-drawer-title');
-    const inputName = document.getElementById('soft-input-name');
-    const inputPenalty = document.getElementById('soft-input-penalty');
-    const penaltyVal = document.getElementById('penalty-val');
+    const inputDosen = document.getElementById('soft-input-dosen');
+    const inputHari = document.getElementById('soft-input-hari');
     const inputDesc = document.getElementById('soft-input-desc');
 
     if (title) title.textContent = mode === 'create' ? 'Tambah Soft Constraint Baru' : 'Edit Soft Constraint';
-    if (inputName) inputName.value = name;
-    if (inputPenalty) inputPenalty.value = penalty;
-    if (penaltyVal) penaltyVal.textContent = penalty;
-    if (inputDesc) inputDesc.value = desc;
+    if (inputDosen && dosenId) inputDosen.value = dosenId;
+    if (inputHari) inputHari.value = hariOff || 'Jumat';
+    if (inputDesc) inputDesc.value = desc || '';
 
     if (overlay && panel) {
       overlay.classList.remove('opacity-0', 'pointer-events-none');
@@ -211,9 +174,45 @@
     }
   }
 
-  function handleSaveSoft(e) {
+  async function handleSaveSoft(e) {
     e.preventDefault();
-    closeSoftDrawer();
-    window.showConfirmDialog('Berhasil Disimpan', 'Aturan soft constraint dan bobot penalti telah diperbarui.', null, 'Selesai', true);
+    try {
+      const res = await fetch('/api/constraints/preferensi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...(editingSoftId ? { id: editingSoftId } : {}),
+          dosenId: Number(document.getElementById('soft-input-dosen')?.value),
+          hariOff: document.getElementById('soft-input-hari')?.value,
+          alasan: document.getElementById('soft-input-desc')?.value.trim()
+        })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menyimpan preferensi.');
+      closeSoftDrawer();
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+      setTimeout(() => window.location.reload(), 400);
+    } catch (err) {
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+    }
+  }
+
+  function deleteSoftConstraint(id, nama) {
+    const execDel = async () => {
+      try {
+        const res = await fetch(`/api/constraints/preferensi/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menghapus preferensi.');
+        if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+        setTimeout(() => window.location.reload(), 400);
+      } catch (err) {
+        if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+      }
+    };
+    if (window.showConfirmDialog) {
+      window.showConfirmDialog('Hapus Constraint', `Hapus preferensi untuk ${nama}?`, execDel, 'Hapus');
+    } else if (confirm(`Hapus preferensi ${nama}?`)) {
+      execDel();
+    }
   }
 </script>

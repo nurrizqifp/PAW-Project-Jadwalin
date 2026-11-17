@@ -14,21 +14,34 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING(20),
         allowNull: false,
         unique: true,
+        validate: {
+          is: /^[A-Z0-9]{5,8}$/,
+        },
       },
       nama: {
         type: DataTypes.STRING(150),
         allowNull: false,
+        validate: {
+          len: [3, 60],
+        },
       },
       sks: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: {
+          min: 1,
+          max: 6,
+        },
       },
       semester: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        validate: {
+          min: 1,
+          max: 8,
+        },
       },
       kategori: {
-        type: Sequelize => DataTypes.STRING(50),
         type: DataTypes.STRING(50),
         allowNull: true,
       },

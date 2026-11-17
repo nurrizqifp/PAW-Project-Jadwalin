@@ -19,7 +19,7 @@
             </p>
           </div>
 
-          <button type="button" onclick="openMasterDrawer('Tambah Dosen Baru', '', '', '', '12')"
+          <button type="button" onclick="openMasterDrawer('Tambah Dosen Baru', '', '', '', '', '12')"
             class="inline-flex min-h-[38px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
             <i class="ph ph-plus text-base text-amber-400"></i>
             <span>Tambah Dosen</span>
@@ -34,44 +34,30 @@
                   <th class="px-4 py-3 font-semibold">Kode</th>
                   <th class="px-4 py-3 font-semibold">Nama Lengkap & Gelar</th>
                   <th class="px-4 py-3 font-semibold">NIDN</th>
+                  <th class="px-4 py-3 font-semibold">Bidang Keahlian</th>
                   <th class="px-4 py-3 font-semibold">Target SKS</th>
                   <th class="px-4 py-3 font-semibold text-right">Aksi</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
-                <tr>
-                  <td class="px-4 py-3 font-mono font-semibold">D01</td>
-                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Dr. Ir. Bambang Triatmaja, M.Kom.</td>
-                  <td class="px-4 py-3 font-mono text-zinc-500">0512037501</td>
-                  <td class="px-4 py-3 font-mono">12 SKS</td>
-                  <td class="px-4 py-3 text-right">
-                    <button type="button" onclick="openMasterDrawer('Edit Dosen D01', 'D01', 'Dr. Ir. Bambang Triatmaja, M.Kom.', '0512037501', '12')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                      <i class="ph ph-pencil-simple text-base"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="px-4 py-3 font-mono font-semibold">D02</td>
-                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Hendra Prasetyo, Ph.D.</td>
-                  <td class="px-4 py-3 font-mono text-zinc-500">0524088002</td>
-                  <td class="px-4 py-3 font-mono">10 SKS</td>
-                  <td class="px-4 py-3 text-right">
-                    <button type="button" onclick="openMasterDrawer('Edit Dosen D02', 'D02', 'Hendra Prasetyo, Ph.D.', '0524088002', '10')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                      <i class="ph ph-pencil-simple text-base"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="px-4 py-3 font-mono font-semibold">D03</td>
-                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Dr. Nasy'an Taufiq, S.T., M.T.</td>
-                  <td class="px-4 py-3 font-mono text-zinc-500">0515068201</td>
-                  <td class="px-4 py-3 font-mono">12 SKS</td>
-                  <td class="px-4 py-3 text-right">
-                    <button type="button" onclick="openMasterDrawer('Edit Dosen D03', 'D03', 'Dr. Nasy\'an Taufiq, S.T., M.T.', '0515068201', '12')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                      <i class="ph ph-pencil-simple text-base"></i>
-                    </button>
-                  </td>
-                </tr>
+                <% const listDsn = (typeof dosenList !== 'undefined' && Array.isArray(dosenList)) ? dosenList : []; %>
+                <% listDsn.forEach(function(dsn) { %>
+                  <tr>
+                    <td class="px-4 py-3 font-mono font-semibold"><%= dsn.inisial %></td>
+                    <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100"><%= dsn.nama %></td>
+                    <td class="px-4 py-3 font-mono text-xs text-zinc-500"><%= dsn.nidn || '-' %></td>
+                    <td class="px-4 py-3 text-xs text-zinc-500"><%= dsn.keahlian || '-' %></td>
+                    <td class="px-4 py-3 font-mono"><%= dsn.bebanSks %> SKS</td>
+                    <td class="px-4 py-3 text-right space-x-1">
+                      <button type="button" onclick="openMasterDrawer('Edit Dosen <%= dsn.inisial %>', '<%= dsn.inisial %>', '<%= dsn.nama.replace(/'/g, "\\'") %>', '<%= (dsn.nidn || '').replace(/'/g, "\\'") %>', '<%= (dsn.keahlian || '').replace(/'/g, "\\'") %>', '<%= dsn.bebanSks %>', '<%= dsn.id %>')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1" title="Edit">
+                        <i class="ph ph-pencil-simple text-base"></i>
+                      </button>
+                      <button type="button" onclick="deleteDosen(<%= dsn.id %>, '<%= dsn.nama.replace(/'/g, "\\'") %>')" class="text-zinc-400 hover:text-rose-600 p-1" title="Hapus">
+                        <i class="ph ph-trash text-base"></i>
+                      </button>
+                    </td>
+                  </tr>
+                <% }); %>
               </tbody>
             </table>
           </div>
@@ -103,28 +89,34 @@
 
     <form onsubmit="handleSaveMaster(event)" class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
       <div class="space-y-1">
-        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Kode Dosen</label>
-        <input id="input-dosen-code" type="text" required placeholder="Contoh: D01"
-          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Kode Inisial Dosen (2–3 Huruf Kapital)</label>
+        <input id="input-dosen-code" type="text" required minlength="2" maxlength="3" pattern="[A-Za-z]{2,3}" title="2-3 huruf inisial dosen (contoh: AR, SBD)" placeholder="Contoh: AR"
+          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono uppercase text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
       </div>
 
       <div class="space-y-1">
-        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama Lengkap & Gelar</label>
-        <input id="input-dosen-name" type="text" required placeholder="Contoh: Dr. Ir. Bambang Triatmaja, M.Kom."
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama Lengkap & Gelar (Maks. 60 Karakter)</label>
+        <input id="input-dosen-name" type="text" required minlength="3" maxlength="60" placeholder="Contoh: Ir. Asroni, S.T., M.Eng"
           class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
       </div>
 
       <div class="grid grid-cols-2 gap-3">
         <div class="space-y-1">
-          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">NIDN</label>
-          <input id="input-dosen-nidn" type="text" required placeholder="0512037501"
+          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">NIDN PDDIKTI (10 Digit)</label>
+          <input id="input-dosen-nidn" type="text" minlength="10" maxlength="10" pattern="\d{10}" inputmode="numeric" title="NIDN wajib tepat 10 digit angka sesuai standar PDDIKTI" placeholder="0512087201"
             class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
         </div>
         <div class="space-y-1">
-          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Target Beban SKS</label>
+          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Target Beban SKS (2–24)</label>
           <input id="input-dosen-sks" type="number" required value="12" min="2" max="24"
             class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
         </div>
+      </div>
+
+      <div class="space-y-1">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Bidang Keahlian (Maks. 80 Karakter)</label>
+        <input id="input-dosen-keahlian" type="text" required minlength="3" maxlength="80" placeholder="Contoh: Rekayasa Web & Komputasi"
+          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
       </div>
 
       <div class="pt-4 flex items-center justify-end gap-2 border-t border-zinc-100 dark:border-zinc-800">
@@ -144,20 +136,25 @@
 </div>
 
 <script>
-  function openMasterDrawer(title, code, name, nidn, sks) {
+  let editingDosenId = null;
+
+  function openMasterDrawer(title, code, name, nidn, keahlian, sks, id = null) {
+    editingDosenId = id || null;
     const overlay = document.getElementById('drawer-master-overlay');
     const panel = document.getElementById('drawer-master-panel');
     const titleEl = document.getElementById('drawer-title');
     const codeEl = document.getElementById('input-dosen-code');
     const nameEl = document.getElementById('input-dosen-name');
     const nidnEl = document.getElementById('input-dosen-nidn');
+    const keahlianEl = document.getElementById('input-dosen-keahlian');
     const sksEl = document.getElementById('input-dosen-sks');
 
     if (titleEl) titleEl.textContent = title;
-    if (codeEl) codeEl.value = code;
-    if (nameEl) nameEl.value = name;
-    if (nidnEl) nidnEl.value = nidn;
-    if (sksEl) sksEl.value = sks;
+    if (codeEl) codeEl.value = code || '';
+    if (nameEl) nameEl.value = name || '';
+    if (nidnEl) nidnEl.value = nidn || '';
+    if (keahlianEl) keahlianEl.value = keahlian || '';
+    if (sksEl) sksEl.value = sks || '12';
 
     if (overlay && panel) {
       overlay.classList.remove('opacity-0', 'pointer-events-none');
@@ -174,9 +171,53 @@
     }
   }
 
-  function handleSaveMaster(e) {
+  async function handleSaveMaster(e) {
     e.preventDefault();
-    closeMasterDrawer();
-    window.showConfirmDialog('Data Dosen Disimpan', 'Data dosen berhasil disimpan ke database.', null, 'Selesai', true);
+    const nidnVal = document.getElementById('input-dosen-nidn')?.value.trim();
+    const payload = {
+      kategori: 'dosen',
+      inisial: document.getElementById('input-dosen-code')?.value.trim(),
+      nama: document.getElementById('input-dosen-name')?.value.trim(),
+      ...(nidnVal ? { nidn: nidnVal } : {}),
+      keahlian: document.getElementById('input-dosen-keahlian')?.value.trim(),
+      bebanSks: Number(document.getElementById('input-dosen-sks')?.value || 12)
+    };
+
+    try {
+      const url = editingDosenId ? `/api/master/dosen/${editingDosenId}` : '/api/master';
+      const method = editingDosenId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menyimpan data dosen.');
+      closeMasterDrawer();
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+      setTimeout(() => window.location.reload(), 400);
+    } catch (err) {
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+      else alert(err.message);
+    }
+  }
+
+  function deleteDosen(id, nama) {
+    const execDelete = async () => {
+      try {
+        const res = await fetch(`/api/master/dosen/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menghapus dosen.');
+        if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+        setTimeout(() => window.location.reload(), 400);
+      } catch (err) {
+        if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+      }
+    };
+    if (window.showConfirmDialog) {
+      window.showConfirmDialog('Hapus Dosen', `Yakin ingin menghapus ${nama} dari database?`, execDelete, 'Hapus');
+    } else if (confirm(`Hapus ${nama}?`)) {
+      execDelete();
+    }
   }
 </script>

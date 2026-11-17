@@ -40,34 +40,36 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
-                <tr>
-                  <td class="px-4 py-3 font-mono font-bold text-[#0c2b5e] dark:text-blue-300">TI26101</td>
-                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Fisika dan Elektronika TI</td>
-                  <td class="px-4 py-3 font-mono">2 SKS</td>
-                  <td class="px-4 py-3 font-mono">Semester 1</td>
-                  <td class="px-4 py-3">
-                    <span class="rounded bg-blue-100 px-2 py-0.5 font-mono text-[10px] text-blue-800 dark:bg-blue-950 dark:text-blue-300 font-semibold">Teori (RKB)</span>
-                  </td>
-                  <td class="px-4 py-3 text-right">
-                    <button type="button" onclick="openMatkulDrawer('Edit Mata Kuliah TI26101', 'TI26101', 'Fisika dan Elektronika TI', '2', '1', 'Teori')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                      <i class="ph ph-pencil-simple text-base"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="px-4 py-3 font-mono font-bold text-amber-600 dark:text-amber-400">TI26105</td>
-                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Pemrograman Berorientasi Objek</td>
-                  <td class="px-4 py-3 font-mono">3 SKS</td>
-                  <td class="px-4 py-3 font-mono">Semester 3</td>
-                  <td class="px-4 py-3">
-                    <span class="rounded bg-amber-100 px-2 py-0.5 font-mono text-[10px] text-amber-800 dark:bg-amber-950 dark:text-amber-300 font-semibold">Praktikum (Lab)</span>
-                  </td>
-                  <td class="px-4 py-3 text-right">
-                    <button type="button" onclick="openMatkulDrawer('Edit Mata Kuliah TI26105', 'TI26105', 'Pemrograman Berorientasi Objek', '3', '3', 'Praktikum')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                      <i class="ph ph-pencil-simple text-base"></i>
-                    </button>
-                  </td>
-                </tr>
+                <% const allMatkul = [...(typeof kurikulumList !== 'undefined' ? kurikulumList : []), ...(typeof peminatanList !== 'undefined' ? peminatanList : [])]; %>
+                <% allMatkul.forEach(function(mk) {
+                  const jenisMk = mk.jenis || (String(mk.nama || '').toLowerCase().includes('praktikum') ? 'Praktikum' : 'Teori');
+                  const isLab = jenisMk === 'Praktikum';
+                  const semMk = mk.semester || (mk.semesterPenawaran === 'Ganjil' ? 5 : 6);
+                %>
+                  <tr>
+                    <td class="px-4 py-3 font-mono font-bold <%= isLab ? 'text-amber-600 dark:text-amber-400' : 'text-[#0c2b5e] dark:text-blue-300' %>"><%= mk.kode %></td>
+                    <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100"><%= mk.nama %></td>
+                    <td class="px-4 py-3 font-mono"><%= mk.sks %> SKS</td>
+                    <td class="px-4 py-3 font-mono">Semester <%= semMk %></td>
+                    <td class="px-4 py-3">
+                      <% if (isLab) { %>
+                        <span class="rounded bg-amber-100 px-2 py-0.5 font-mono text-[10px] text-amber-800 dark:bg-amber-950 dark:text-amber-300 font-semibold">Praktikum (Lab)</span>
+                      <% } else { %>
+                        <span class="rounded bg-blue-100 px-2 py-0.5 font-mono text-[10px] text-blue-800 dark:bg-blue-950 dark:text-blue-300 font-semibold">Teori (RKB)</span>
+                      <% } %>
+                    </td>
+                    <td class="px-4 py-3 text-right space-x-1">
+                      <button type="button" onclick="openMatkulDrawer('Edit Mata Kuliah <%= mk.kode %>', '<%= mk.kode %>', '<%= mk.nama.replace(/'/g, "\\'") %>', '<%= mk.sks %>', '<%= semMk %>', '<%= jenisMk %>', '<%= mk.id || '' %>')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1" title="Edit">
+                        <i class="ph ph-pencil-simple text-base"></i>
+                      </button>
+                      <% if (mk.id) { %>
+                        <button type="button" onclick="deleteMatkul(<%= mk.id %>, '<%= mk.nama.replace(/'/g, "\\'") %>')" class="text-zinc-400 hover:text-rose-600 p-1" title="Hapus">
+                          <i class="ph ph-trash text-base"></i>
+                        </button>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }); %>
               </tbody>
             </table>
           </div>
@@ -99,14 +101,14 @@
 
     <form onsubmit="handleSaveMatkul(event)" class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
       <div class="space-y-1">
-        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Kode Mata Kuliah</label>
-        <input id="input-mk-code" type="text" required placeholder="Contoh: TI26105"
-          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Kode Mata Kuliah (5–8 Alfanumerik)</label>
+        <input id="input-mk-code" type="text" required minlength="5" maxlength="8" pattern="[A-Za-z0-9]{5,8}" title="5-8 karakter alfanumerik (contoh: TI501, PR001)" placeholder="Contoh: TI501"
+          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono uppercase text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
       </div>
 
       <div class="space-y-1">
-        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama Mata Kuliah</label>
-        <input id="input-mk-name" type="text" required placeholder="Contoh: Pemrograman Berorientasi Objek"
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama Mata Kuliah (Maks. 60 Karakter)</label>
+        <input id="input-mk-name" type="text" required minlength="3" maxlength="60" placeholder="Contoh: Pemrograman Berorientasi Objek"
           class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
       </div>
 
@@ -156,7 +158,10 @@
 </div>
 
 <script>
-  function openMatkulDrawer(title, code, name, sks, sem, type) {
+  let editingMatkulId = null;
+
+  function openMatkulDrawer(title, code, name, sks, sem, type, id = null) {
+    editingMatkulId = id ? Number(id) : null;
     const overlay = document.getElementById('drawer-matkul-overlay');
     const panel = document.getElementById('drawer-matkul-panel');
     const titleEl = document.getElementById('matkul-drawer-title');
@@ -167,11 +172,11 @@
     const typeEl = document.getElementById('input-mk-type');
 
     if (titleEl) titleEl.textContent = title;
-    if (codeEl) codeEl.value = code;
-    if (nameEl) nameEl.value = name;
-    if (sksEl) sksEl.value = sks;
-    if (semEl) semEl.value = sem;
-    if (typeEl) typeEl.value = type;
+    if (codeEl) codeEl.value = code || '';
+    if (nameEl) nameEl.value = name || '';
+    if (sksEl) sksEl.value = sks || '3';
+    if (semEl) semEl.value = sem || '1';
+    if (typeEl) typeEl.value = type || 'Teori';
 
     if (overlay && panel) {
       overlay.classList.remove('opacity-0', 'pointer-events-none');
@@ -188,9 +193,52 @@
     }
   }
 
-  function handleSaveMatkul(e) {
+  async function handleSaveMatkul(e) {
     e.preventDefault();
-    closeMatkulDrawer();
-    window.showConfirmDialog('Mata Kuliah Disimpan', 'Data mata kuliah kurikulum berhasil disimpan.', null, 'Selesai', true);
+    const payload = {
+      kategori: 'matkul',
+      kode: document.getElementById('input-mk-code')?.value.trim(),
+      nama: document.getElementById('input-mk-name')?.value.trim(),
+      sks: Number(document.getElementById('input-mk-sks')?.value || 3),
+      semester: Number(document.getElementById('input-mk-sem')?.value || 1),
+      jenis: document.getElementById('input-mk-type')?.value || 'Teori'
+    };
+
+    try {
+      const url = editingMatkulId ? `/api/master/matkul/${editingMatkulId}` : '/api/master';
+      const method = editingMatkulId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menyimpan mata kuliah.');
+      closeMatkulDrawer();
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+      setTimeout(() => window.location.reload(), 400);
+    } catch (err) {
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+      else alert(err.message);
+    }
+  }
+
+  function deleteMatkul(id, nama) {
+    const execDelete = async () => {
+      try {
+        const res = await fetch(`/api/master/matkul/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menghapus mata kuliah.');
+        if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+        setTimeout(() => window.location.reload(), 400);
+      } catch (err) {
+        if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+      }
+    };
+    if (window.showConfirmDialog) {
+      window.showConfirmDialog('Hapus Mata Kuliah', `Yakin ingin menghapus ${nama}?`, execDelete, 'Hapus');
+    } else if (confirm(`Hapus ${nama}?`)) {
+      execDelete();
+    }
   }
 </script>

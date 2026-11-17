@@ -29,6 +29,9 @@ module.exports = (sequelize) => {
       alasan: {
         type: DataTypes.TEXT,
         allowNull: true,
+        validate: {
+          len: [3, 80],
+        },
       },
       is_accommodated: {
         type: DataTypes.BOOLEAN,

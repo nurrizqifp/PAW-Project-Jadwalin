@@ -9,33 +9,68 @@
     <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
       <div class="max-w-7xl mx-auto space-y-6">
 
+  <% const prkAccess = (typeof prakrsAccess !== 'undefined' && prakrsAccess) ? prakrsAccess : { isOpen: true, deadline: '2026-12-31', reason: 'Pengisian Pra-KRS sedang dibuka.' }; %>
   <!-- Breadcrumb & Header Navigasi -->
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200/80 pb-5 dark:border-zinc-800">
-    <div class="space-y-1">
-      <div class="flex items-center gap-2 text-xs text-zinc-500">
-        <a href="/mahasiswa/dashboard" class="hover:text-zinc-900 dark:hover:text-zinc-200">Mahasiswa</a>
-        <span>/</span>
-        <span class="text-brand-blue dark:text-amber-400 font-semibold">Wizard Pra-KRS Cerdas</span>
-      </div>
-      <h1 class="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-        Perencanaan Pra-KRS & Rekomendasi Jadwal
+    <div class="space-y-0.5">
+      <h1 class="font-heading text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+        Pengisian Pra-KRS
       </h1>
-      <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-        Susun rencana studi dan dapatkan paket jadwal bebas bentrok 100% yang teroptimasi dengan kecerdasan buatan.
+      <p class="text-xs text-zinc-500 dark:text-zinc-400">
+        Susun paket mata kuliah bebas bentrok dan simpan ke jadwal pribadi.
       </p>
     </div>
 
     <!-- Quick Status Badge -->
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-brand-yellow/30 bg-brand-yellow/10 text-zinc-900 dark:text-amber-300 text-xs font-semibold">
-      <i class="ph ph-sparkle text-amber-500 text-sm"></i>
-      <span>AI Zero-Clash Optimizer Siap</span>
-    </div>
+    <% if (prkAccess.isOpen) { %>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 text-xs font-semibold">
+        <i class="ph ph-check-circle text-emerald-600 text-sm"></i>
+        <span>Terbuka s/d <%= prkAccess.deadline %></span>
+      </div>
+    <% } else { %>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-rose-300 bg-rose-50 text-rose-900 dark:border-rose-800 dark:bg-rose-950/50 dark:text-rose-300 text-xs font-semibold">
+        <i class="ph ph-lock-key text-rose-600 text-sm"></i>
+        <span>Pra-KRS Ditutup (<%= prkAccess.deadline %>)</span>
+      </div>
+    <% } %>
   </div>
 
-  <!-- Wizard 3-Step Indicator Tracker -->
+  <% if (!prkAccess.isOpen) { %>
+    <!-- STATE TERKUNCI: PRA-KRS SUDAH DITUTUP -->
+    <div class="rounded-2xl border border-rose-200 bg-white p-8 text-center shadow-sm dark:border-rose-900/60 dark:bg-zinc-900 space-y-4">
+      <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-100 text-rose-600 dark:bg-rose-950/70 dark:text-rose-400 border border-rose-200 dark:border-rose-800">
+        <i class="ph ph-lock-key text-3xl"></i>
+      </div>
+      <div class="space-y-1.5 max-w-lg mx-auto">
+        <span class="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2.5 py-0.5 font-mono text-[11px] font-bold text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+          AKSES PRA-KRS DITUTUP
+        </span>
+        <h2 class="font-heading text-xl font-bold text-zinc-900 dark:text-zinc-50 pt-1">
+          Periode Pengisian Pra-KRS Tidak Dapat Diakses
+        </h2>
+        <p class="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+          <%= prkAccess.reason %> Anda tidak dapat mengubah atau mengirim ulang pilihan mata kuliah pada periode ini.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+        <a href="/mahasiswa/jadwal" class="inline-flex min-h-[40px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-5 py-2 text-xs font-semibold text-white shadow-xs transition-colors">
+          <i class="ph ph-calendar-check text-base text-amber-400"></i>
+          <span>Lihat Jadwal Pribadi Saya</span>
+        </a>
+        <a href="/mahasiswa/dashboard" class="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-4 py-2 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
+          <i class="ph ph-arrow-left text-base"></i>
+          <span>Kembali ke Dashboard</span>
+        </a>
+      </div>
+    </div>
+  <% } %>
+
+  <div class="<%= !prkAccess.isOpen ? 'hidden pointer-events-none select-none' : 'space-y-6' %>">
+
+  <!-- Wizard 3-Step Indicator Tracker (Clickable Tabs) -->
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
     <!-- Step 1 Tab -->
-    <div id="step-nav-1" class="step-nav-item flex items-center gap-3 rounded-xl border border-brand-blue bg-brand-blue p-4 text-white shadow-sm transition-all">
+    <div id="step-nav-1" role="button" tabindex="0" class="step-nav-item cursor-pointer flex items-center gap-3 rounded-xl border border-brand-blue bg-brand-blue p-3.5 text-white shadow-sm transition-all">
       <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 font-mono text-sm font-bold text-white">
         1
       </div>
@@ -46,7 +81,7 @@
     </div>
 
     <!-- Step 2 Tab -->
-    <div id="step-nav-2" class="step-nav-item flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-4 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 transition-all">
+    <div id="step-nav-2" role="button" tabindex="0" class="step-nav-item cursor-pointer flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3.5 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 transition-all">
       <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 font-mono text-sm font-bold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
         2
       </div>
@@ -57,7 +92,7 @@
     </div>
 
     <!-- Step 3 Tab -->
-    <div id="step-nav-3" class="step-nav-item flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-4 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 transition-all">
+    <div id="step-nav-3" role="button" tabindex="0" class="step-nav-item cursor-pointer flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3.5 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 transition-all">
       <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 font-mono text-sm font-bold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
         3
       </div>
@@ -74,27 +109,31 @@
     <!-- ==================== LANGKAH 1: PROFIL & PREFERENSI ==================== -->
     <section id="wizard-step-1" class="wizard-pane space-y-6">
       <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-6">
-        <div class="border-b border-zinc-100 pb-4 dark:border-zinc-800 flex items-center justify-between">
-          <div>
-            <h2 class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-50">
-              Langkah 1: Profil Mahasiswa & Preferensi Belajar
-            </h2>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">
-              Sesuaikan data mahasiswa, pilihan kelas, dan peminatan keahlian untuk personalisasi penjadwalan.
-            </p>
-          </div>
-          <span class="hidden sm:inline-flex px-3 py-1 rounded-md bg-blue-50 text-brand-blue dark:bg-blue-950/60 dark:text-blue-300 font-semibold text-xs">
-            Angkatan 2024 Aktif
+        <div class="border-b border-zinc-100 pb-3 dark:border-zinc-800 flex items-center justify-between">
+          <h2 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">
+            Langkah 1: Profil & Preferensi
+          </h2>
+          <span class="hidden sm:inline-flex px-2.5 py-0.5 rounded-md bg-blue-50 text-brand-blue dark:bg-blue-950/60 dark:text-blue-300 font-semibold text-xs">
+            TI UMY
           </span>
         </div>
 
+        <%
+          const prkMhs = (typeof activeMahasiswa !== 'undefined' && activeMahasiswa) ? activeMahasiswa : { nim: '20240140001', nama: 'Mahasiswa TI', angkatan: 2024, semesterAktif: 5, kodePeminatan: 'SE' };
+          const prkNama = (typeof currentUser !== 'undefined' && currentUser?.nama) ? currentUser.nama : prkMhs.nama;
+          const prkNim = String((typeof currentUser !== 'undefined' && currentUser?.username) ? currentUser.username : prkMhs.nim || '20240140001');
+          const prkAngkatan = Number(prkMhs.angkatan) || 2024;
+          const prkNimSuffix = prkNim.slice(-3);
+          const prkSmt = Number(prkMhs.semesterAktif) || 5;
+          const prkPem = String(prkMhs.kodePeminatan || 'SE').toUpperCase();
+        %>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <!-- Nama Mahasiswa -->
           <div>
             <label for="input-nama" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
               Nama Lengkap Mahasiswa
             </label>
-            <input id="input-nama" type="text" value="Haidar Yahya Mudhofar" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
+            <input id="input-nama" type="text" minlength="3" maxlength="60" value="<%= prkNama %>" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
           </div>
 
           <!-- Angkatan & NIM Builder -->
@@ -103,36 +142,35 @@
               Tahun Angkatan
             </label>
             <select id="input-angkatan" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
-              <option value="2024" selected>2024 (Semester 5)</option>
-              <option value="2025">2025 (Semester 3)</option>
-              <option value="2026">2026 (Semester 1)</option>
-              <option value="2023">2023 (Semester 7)</option>
+              <% [2026, 2025, 2024, 2023, 2022].forEach(function(th) { %>
+                <option value="<%= th %>" <%= prkAngkatan === th ? 'selected' : '' %>><%= th %></option>
+              <% }); %>
             </select>
           </div>
 
           <!-- NIM Display / Suffix -->
           <div>
             <label for="input-nim-suffix" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-              Nomor Induk Mahasiswa (NIM)
+              Nomor Induk Mahasiswa (NIM 11 Digit)
             </label>
             <div class="flex items-center">
               <span id="nim-prefix" class="inline-flex min-h-[44px] items-center px-3 rounded-l-md border border-r-0 border-zinc-200 bg-zinc-100 text-xs font-mono text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800">
-                20240140
+                <%= prkAngkatan %>0140
               </span>
-              <input id="input-nim-suffix" type="text" maxlength="3" value="093" class="w-full min-h-[44px] rounded-r-md border border-zinc-200 bg-white px-3 py-2 text-xs font-mono font-bold text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
+              <input id="input-nim-suffix" type="text" minlength="3" maxlength="3" pattern="\d{3}" inputmode="numeric" value="<%= prkNimSuffix %>" class="w-full min-h-[44px] rounded-r-md border border-zinc-200 bg-white px-3 py-2 text-xs font-mono font-bold text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
             </div>
           </div>
 
-          <!-- Semester Aktif -->
+          <!-- Semester Aktif (Dikunci sesuai Periode Aktif Ganjil/Genap) -->
+          <% const activeTipePrk = (typeof activePeriode !== 'undefined' && activePeriode && activePeriode.semesterTipe) ? activePeriode.semesterTipe : 'Ganjil'; %>
           <div>
             <label for="input-semester" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-              Semester Berjalan
+              Semester Berjalan (Periode <%= activeTipePrk %>)
             </label>
             <select id="input-semester" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
-              <option value="5" selected>Semester 5 (Ganjil 2026/2027)</option>
-              <option value="3">Semester 3 (Ganjil 2026/2027)</option>
-              <option value="1">Semester 1 (Ganjil 2026/2027)</option>
-              <option value="7">Semester 7 (Ganjil 2026/2027)</option>
+              <% for (let s = 1; s <= 8; s++) { const tipeS = (s % 2 === 1) ? 'Ganjil' : 'Genap'; const isMatch = tipeS === activeTipePrk; %>
+                <option value="<%= s %>" <%= prkSmt === s ? 'selected' : '' %> <%= !isMatch ? 'disabled' : '' %>>Semester <%= s %> (<%= tipeS %><%= !isMatch ? ' - Tidak Aktif' : '' %>)</option>
+              <% } %>
             </select>
           </div>
         </div>
@@ -157,9 +195,8 @@
               Jalur Peminatan Keahlian
             </label>
             <select id="input-pref-peminatan" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
-              <option value="SE" selected>Software Engineering (SE)</option>
-              <option value="AI">Data & Artificial Intelligence (AI)</option>
-              <option value="NET">Network & Cyber Security (NET)</option>
+              <option value="SE" <%= prkPem === 'SE' ? 'selected' : '' %>>Software Engineering (SE)</option>
+              <option value="NS" <%= prkPem === 'NS' ? 'selected' : '' %>>Network &amp; Cyber Security (NS)</option>
             </select>
           </div>
 
@@ -191,44 +228,46 @@
       <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-6">
         
         <!-- SKS Dynamic Counter Bar -->
-        <div class="rounded-xl border border-blue-200 bg-blue-50/70 p-4 dark:border-blue-900/60 dark:bg-blue-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div class="space-y-1">
-            <div class="flex items-center gap-2">
-              <span class="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <h3 class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">
-                Kalkulasi Beban SKS Semester Ini
-              </h3>
-            </div>
-            <p class="text-xs text-zinc-600 dark:text-zinc-400">
-              Batas maksimum pengambilan mata kuliah adalah 24 SKS per semester.
-            </p>
+        <div class="rounded-xl border border-blue-200 bg-blue-50/70 p-3.5 dark:border-blue-900/60 dark:bg-blue-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <h3 class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">
+              Beban SKS (Maks. 24 SKS)
+            </h3>
           </div>
 
-          <div class="flex items-center gap-4">
+          <div class="flex flex-wrap items-center gap-4">
             <div class="text-right">
               <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Total SKS Terpilih</p>
               <p class="text-2xl font-bold font-mono text-brand-blue dark:text-amber-400">
                 <span id="current-sks-count">17</span> <span class="text-sm font-normal text-zinc-500">/ 24 SKS</span>
               </p>
             </div>
-            <div class="hidden sm:block w-32 bg-zinc-200 dark:bg-zinc-700 h-2.5 rounded-full overflow-hidden">
+            <div class="hidden sm:block w-28 bg-zinc-200 dark:bg-zinc-700 h-2.5 rounded-full overflow-hidden">
               <div id="sks-progress-bar" class="bg-brand-yellow h-full rounded-full transition-all duration-300" style="width: 70%;"></div>
             </div>
+            <button type="button" onclick="document.getElementById('btn-calculate-prakrs')?.click()"
+              class="inline-flex min-h-[38px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-xs transition-colors">
+              <i class="ph ph-sparkle text-amber-400"></i>
+              <span>Susun Jadwal (Langkah 3) →</span>
+            </button>
           </div>
         </div>
 
         <!-- Quick Selector Toolbar -->
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 pb-3 dark:border-zinc-800">
           <div>
-            <h2 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">
-              Daftar Mata Kuliah Semester 5 & Peminatan
+            <h2 id="matkul-period-heading" class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">
+              Daftar Mata Kuliah Periode Aktif
             </h2>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">Centang mata kuliah yang ingin Anda ambil dalam paket jadwal ini.</p>
+            <p id="matkul-period-subtitle" class="text-xs text-zinc-500 dark:text-zinc-400">
+              Menampilkan mata kuliah sesuai periode penawaran (Ganjil/Genap) dari database kurikulum TI UMY.
+            </p>
           </div>
           <div class="flex items-center gap-2">
             <button id="btn-select-all" type="button" class="text-xs font-semibold text-brand-blue dark:text-amber-400 hover:underline inline-flex items-center gap-1">
               <i class="ph ph-check-square"></i>
-              <span>Pilih Semua Paket Wajib</span>
+              <span>Pilih Paket Semester Ini</span>
             </button>
             <span class="text-zinc-300 dark:text-zinc-700">|</span>
             <button id="btn-unselect-all" type="button" class="text-xs font-medium text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 inline-flex items-center gap-1">
@@ -238,104 +277,8 @@
           </div>
         </div>
 
-        <!-- Course List Grid -->
-        <div id="matkul-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-xs">
-          <!-- Item 1: Web Dev -->
-          <label class="matkul-card flex items-start gap-3 p-4 rounded-xl border border-zinc-200 bg-zinc-50/50 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800/40 dark:hover:bg-zinc-800/80 cursor-pointer transition-all">
-            <input type="checkbox" checked data-kode="TI501" data-sks="3" class="matkul-checkbox mt-1 h-4 w-4 rounded border-zinc-300 text-brand-blue focus:ring-brand-blue">
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <span class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">Pengembangan Aplikasi Web</span>
-                <span class="font-mono font-bold text-xs text-brand-blue dark:text-amber-400">3 SKS</span>
-              </div>
-              <p class="text-zinc-500 text-[11px] mt-0.5">TI501 · Wajib Prodi · Teori & Praktikum</p>
-              <div class="mt-2 flex items-center gap-2 text-[10px] text-zinc-600 dark:text-zinc-400">
-                <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-300">Lab Komputer</span>
-                <span>Dosen: Ir. Asroni, S.T., M.Eng</span>
-              </div>
-            </div>
-          </label>
-
-          <!-- Item 2: Mobile Dev -->
-          <label class="matkul-card flex items-start gap-3 p-4 rounded-xl border border-zinc-200 bg-zinc-50/50 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800/40 dark:hover:bg-zinc-800/80 cursor-pointer transition-all">
-            <input type="checkbox" checked data-kode="TI502" data-sks="3" class="matkul-checkbox mt-1 h-4 w-4 rounded border-zinc-300 text-brand-blue focus:ring-brand-blue">
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <span class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">Pengembangan Aplikasi Mobile</span>
-                <span class="font-mono font-bold text-xs text-brand-blue dark:text-amber-400">3 SKS</span>
-              </div>
-              <p class="text-zinc-500 text-[11px] mt-0.5">TI502 · Wajib Prodi · Teori & Praktikum</p>
-              <div class="mt-2 flex items-center gap-2 text-[10px] text-zinc-600 dark:text-zinc-400">
-                <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-300">Lab Mobile</span>
-                <span>Dosen: Haris Setyawan, S.T., M.Eng.</span>
-              </div>
-            </div>
-          </label>
-
-          <!-- Item 3: Web Service -->
-          <label class="matkul-card flex items-start gap-3 p-4 rounded-xl border border-zinc-200 bg-zinc-50/50 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800/40 dark:hover:bg-zinc-800/80 cursor-pointer transition-all">
-            <input type="checkbox" checked data-kode="TI503" data-sks="3" class="matkul-checkbox mt-1 h-4 w-4 rounded border-zinc-300 text-brand-blue focus:ring-brand-blue">
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <span class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">Pengembangan Web Service</span>
-                <span class="font-mono font-bold text-xs text-brand-blue dark:text-amber-400">3 SKS</span>
-              </div>
-              <p class="text-zinc-500 text-[11px] mt-0.5">TI503 · Wajib Prodi · Teori</p>
-              <div class="mt-2 flex items-center gap-2 text-[10px] text-zinc-600 dark:text-zinc-400">
-                <span class="px-2 py-0.5 rounded bg-zinc-200 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200">Ruang Teori</span>
-                <span>Dosen: Qodri Aziz, S.Kom., M.Eng</span>
-              </div>
-            </div>
-          </label>
-
-          <!-- Item 4: WAN & Teknologi Jaringan -->
-          <label class="matkul-card flex items-start gap-3 p-4 rounded-xl border border-zinc-200 bg-zinc-50/50 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800/40 dark:hover:bg-zinc-800/80 cursor-pointer transition-all">
-            <input type="checkbox" checked data-kode="TI504" data-sks="2" class="matkul-checkbox mt-1 h-4 w-4 rounded border-zinc-300 text-brand-blue focus:ring-brand-blue">
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <span class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">WAN dan Teknologi Jaringan</span>
-                <span class="font-mono font-bold text-xs text-brand-blue dark:text-amber-400">2 SKS</span>
-              </div>
-              <p class="text-zinc-500 text-[11px] mt-0.5">TI504 · Wajib Prodi · Teori & Praktikum</p>
-              <div class="mt-2 flex items-center gap-2 text-[10px] text-zinc-600 dark:text-zinc-400">
-                <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-300">Lab Jaringan</span>
-                <span>Dosen: Ir. Eko Prasetyo, M.Eng., Ph.D.</span>
-              </div>
-            </div>
-          </label>
-
-          <!-- Item 5: Tata Kelola TI -->
-          <label class="matkul-card flex items-start gap-3 p-4 rounded-xl border border-zinc-200 bg-zinc-50/50 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800/40 dark:hover:bg-zinc-800/80 cursor-pointer transition-all">
-            <input type="checkbox" checked data-kode="TI505" data-sks="3" class="matkul-checkbox mt-1 h-4 w-4 rounded border-zinc-300 text-brand-blue focus:ring-brand-blue">
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <span class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">Tata Kelola Teknologi Informasi</span>
-                <span class="font-mono font-bold text-xs text-brand-blue dark:text-amber-400">3 SKS</span>
-              </div>
-              <p class="text-zinc-500 text-[11px] mt-0.5">TI505 · Wajib Prodi · Teori</p>
-              <div class="mt-2 flex items-center gap-2 text-[10px] text-zinc-600 dark:text-zinc-400">
-                <span class="px-2 py-0.5 rounded bg-zinc-200 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200">Ruang Teori</span>
-                <span>Dosen: Chayadi Oktomy N S, Ph.D.</span>
-              </div>
-            </div>
-          </label>
-
-          <!-- Item 6: Pilihan Peminatan Software Architecture -->
-          <label class="matkul-card flex items-start gap-3 p-4 rounded-xl border border-amber-200 bg-amber-50/30 hover:bg-amber-50/60 dark:border-amber-900/40 dark:bg-amber-950/20 dark:hover:bg-amber-950/40 cursor-pointer transition-all">
-            <input type="checkbox" checked data-kode="PR001" data-sks="3" class="matkul-checkbox mt-1 h-4 w-4 rounded border-zinc-300 text-brand-yellow focus:ring-brand-yellow">
-            <div class="flex-1">
-              <div class="flex items-center justify-between">
-                <span class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">Arsitektur Perangkat Lunak</span>
-                <span class="font-mono font-bold text-xs text-amber-600 dark:text-amber-400">3 SKS</span>
-              </div>
-              <p class="text-zinc-500 text-[11px] mt-0.5">PR001 · Pilihan Peminatan SE · Teori</p>
-              <div class="mt-2 flex items-center gap-2 text-[10px] text-zinc-600 dark:text-zinc-400">
-                <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300">Peminatan SE</span>
-                <span>Dosen: Dr. Ir. Dwijoko Purbohadi, M.T.</span>
-              </div>
-            </div>
-          </label>
-        </div>
+        <!-- Course List Grid (100% Dinamis dari PostgreSQL Kurikulum & Peminatan) -->
+        <div id="matkul-list-container" class="space-y-6 text-xs"></div>
 
         <!-- Action Step 2 -->
         <div class="flex items-center justify-between pt-4 border-t border-zinc-100 dark:border-zinc-800">
@@ -439,6 +382,7 @@
 
       </div>
     </section>
+  </div>
 
       </div>
     </main>
@@ -470,14 +414,19 @@
         <div class="w-7 h-7 rounded-full bg-blue-100 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-900">
           <i class="ph ph-robot text-sm"></i>
         </div>
-        <div class="bg-zinc-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm p-3 text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700/60 max-w-[85%]">
-          Halo! Saya asisten pintar Jadwalin. Ada yang bisa saya bantu terkait pemilihan mata kuliah, kuota kelas, atau simulasi jadwal Pra-KRS Anda?
+        <div class="bg-zinc-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm p-3 text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700/60 max-w-[85%] space-y-1">
+          <p>Halo! Saya Asisten Akademik Jadwalin. Ada yang bisa saya bantu seputar rencana studi, pilihan mata kuliah peminatan SE/NS, atau penyusunan Pra-KRS Anda?</p>
+          <% if (typeof aiConfigured !== 'undefined' && !aiConfigured) { %>
+            <p class="text-[11px] font-medium text-amber-700 dark:text-amber-400">
+              Layanan Asisten AI sedang tidak tersedia saat ini.
+            </p>
+          <% } %>
         </div>
       </div>
     </div>
 
     <div class="p-3 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 flex gap-2">
-      <input type="text" id="chat-input" placeholder="Ketik pertanyaan seputar KRS..." class="flex-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#0c2b5e] dark:focus:ring-amber-500">
+      <input type="text" id="chat-input" minlength="2" maxlength="160" placeholder="Ketik pertanyaan seputar KRS (maks. 160 karakter)..." class="flex-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#0c2b5e] dark:focus:ring-amber-500">
       <button type="button" id="chat-send" class="bg-[#0c2b5e] text-white hover:bg-[#092248] rounded-xl px-3.5 py-2 flex items-center justify-center shadow-xs transition-colors">
         <i class="ph ph-paper-plane-right text-base text-amber-400"></i>
       </button>
@@ -522,14 +471,136 @@
     const inputPrefPeminatan = document.getElementById('input-pref-peminatan');
     const inputPrefWaktu = document.getElementById('input-pref-waktu');
 
-    // SKS Elements
-    const matkulCheckboxes = document.querySelectorAll('.matkul-checkbox');
+    // Dataset Kurikulum & Peminatan Resmi dari PostgreSQL (Semester 1-8)
+    const KURIKULUM_DB = <%- JSON.stringify(typeof kurikulumList !== 'undefined' ? kurikulumList : []) %>;
+    const PEMINATAN_DB = <%- JSON.stringify(typeof peminatanList !== 'undefined' ? peminatanList : []) %>;
+
+    const matkulListContainer = document.getElementById('matkul-list-container');
+    const periodHeading = document.getElementById('matkul-period-heading');
+    const periodSubtitle = document.getElementById('matkul-period-subtitle');
     const currentSksCountEl = document.getElementById('current-sks-count');
     const sksProgressBar = document.getElementById('sks-progress-bar');
     const resultScheduleBody = document.getElementById('result-schedule-body');
     const resultSksLabel = document.getElementById('result-sks-label');
 
     let currentVariasiIndex = 0;
+
+    function getMatkulCheckboxes() {
+      return matkulListContainer.querySelectorAll('.matkul-checkbox');
+    }
+
+    function renderMatkulGrid() {
+      const targetSmt = parseInt(inputSemester.value, 10) || 1;
+      const isGanjil = targetSmt % 2 === 1;
+      const periodeLabel = isGanjil ? 'Ganjil' : 'Genap';
+      const selectedPem = (inputPrefPeminatan.value || 'SE').toUpperCase();
+
+      if (periodHeading) {
+        periodHeading.textContent = `Daftar Mata Kuliah Periode ${periodeLabel} (Semester ${isGanjil ? '1, 3, 5, 7' : '2, 4, 6, 8'})`;
+      }
+      if (periodSubtitle) {
+        periodSubtitle.textContent = `Hanya mata kuliah penawaran ${periodeLabel} yang ditampilkan. Paket Semester ${targetSmt} dicentang otomatis.`;
+      }
+
+      // Filter kurikulum hanya sesuai paritas (Ganjil: 1,3,5,7 | Genap: 2,4,6,8), urut dari semester awal -> akhir
+      const filteredKurikulum = KURIKULUM_DB
+        .filter(mk => (Number(mk.semester) % 2 === 1) === isGanjil)
+        .filter(mk => !String(mk.nama || '').toLowerCase().startsWith('mk pilihan'))
+        .sort((a, b) => Number(a.semester) - Number(b.semester) || String(a.kode).localeCompare(String(b.kode)));
+
+      const grouped = new Map();
+      filteredKurikulum.forEach(mk => {
+        const s = Number(mk.semester);
+        if (!grouped.has(s)) grouped.set(s, []);
+        grouped.get(s).push({ ...mk, isPeminatan: false });
+      });
+
+      // Tambahkan mata kuliah pilihan peminatan sesuai periode Ganjil/Genap langsung ke semester berjalan agar berada di atas
+      const filteredPem = PEMINATAN_DB.filter(p =>
+        String(p.kodePeminatan || '').toUpperCase() === selectedPem &&
+        String(p.semesterPenawaran || 'Ganjil').toLowerCase() === periodeLabel.toLowerCase()
+      );
+      if (filteredPem.length > 0) {
+        if (!grouped.has(targetSmt)) grouped.set(targetSmt, []);
+        filteredPem.forEach(p => {
+          grouped.get(targetSmt).push({
+            kode: p.kode,
+            nama: p.nama,
+            sks: p.sks,
+            semester: targetSmt,
+            kategori: `Pilihan Peminatan ${selectedPem}`,
+            jenis: String(p.nama || '').toLowerCase().includes('praktikum') ? 'Praktikum' : 'Teori',
+            isPeminatan: true
+          });
+        });
+      }
+
+      matkulListContainer.innerHTML = '';
+      if (grouped.size === 0) {
+        matkulListContainer.innerHTML = '<div class="rounded-xl border border-zinc-200 p-6 text-center text-zinc-500">Belum ada mata kuliah tersedia untuk periode ini.</div>';
+        recalculateSks();
+        return;
+      }
+
+      function buildSemesterSection(smt, items, isCurrentSmt) {
+        const section = document.createElement('div');
+        section.className = 'space-y-2.5';
+        section.innerHTML = `
+          <div class="flex items-center justify-between border-b border-zinc-100 pb-1.5 dark:border-zinc-800">
+            <span class="font-heading font-bold text-xs ${isCurrentSmt ? 'text-[#0c2b5e] dark:text-amber-400' : 'text-zinc-700 dark:text-zinc-300'}">
+              Semester ${smt} (${periodeLabel}) ${isCurrentSmt ? '· Paket Semester Berjalan & Pilihan Peminatan ' + selectedPem : ''}
+            </span>
+            <span class="font-mono text-[11px] text-zinc-400">${items.length} Mata Kuliah</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+        `;
+        const gridEl = section.querySelector('div.grid');
+        items.forEach((mk, idx) => {
+          const checked = isCurrentSmt && (!mk.isPeminatan || idx === items.findIndex(x => x.isPeminatan));
+          const isLab = String(mk.jenis || '').toLowerCase().includes('praktikum') || String(mk.nama || '').toLowerCase().includes('praktikum');
+          const card = document.createElement('label');
+          card.className = `matkul-card flex items-start gap-3 p-3.5 rounded-xl border ${mk.isPeminatan ? 'border-amber-200 bg-amber-50/30 hover:bg-amber-50/60 dark:border-amber-900/40 dark:bg-amber-950/20' : 'border-zinc-200 bg-zinc-50/50 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800/40'} cursor-pointer transition-all`;
+          card.innerHTML = `
+            <input type="checkbox" ${checked ? 'checked' : ''} data-kode="${mk.kode}" data-sks="${mk.sks}" data-semester="${smt}" class="matkul-checkbox mt-1 h-4 w-4 rounded border-zinc-300 text-brand-blue focus:ring-brand-blue">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <span class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100 truncate">${mk.nama}</span>
+                <span class="font-mono font-bold text-xs text-brand-blue dark:text-amber-400 shrink-0">${mk.sks} SKS</span>
+              </div>
+              <p class="text-zinc-500 text-[11px] mt-0.5">${mk.kode} · ${mk.kategori || 'Wajib Prodi'} · ${isLab ? 'Praktikum (Lab)' : 'Teori'}</p>
+            </div>
+          `;
+          gridEl.appendChild(card);
+        });
+        return section;
+      }
+
+      // Render Semester Aktif di paling atas (tanpa perlu scroll)
+      if (grouped.has(targetSmt)) {
+        matkulListContainer.appendChild(buildSemesterSection(targetSmt, grouped.get(targetSmt), true));
+      }
+
+      // Semester lainnya dimasukkan ke dalam accordion ringkas
+      const otherSemesters = Array.from(grouped.keys()).filter(s => s !== targetSmt).sort((a, b) => a - b);
+      if (otherSemesters.length > 0) {
+        const detailsEl = document.createElement('details');
+        detailsEl.className = 'rounded-xl border border-zinc-200 bg-zinc-50/50 p-3.5 dark:border-zinc-800 dark:bg-zinc-800/30';
+        detailsEl.innerHTML = `
+          <summary class="cursor-pointer font-heading text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex items-center justify-between">
+            <span>Ambil Mata Kuliah Lintas Semester (Semester ${otherSemesters.join(', ')})</span>
+            <span class="font-mono text-[11px] text-[#0c2b5e] dark:text-amber-400 underline">Buka Daftar</span>
+          </summary>
+          <div class="mt-4 space-y-5 pt-3 border-t border-zinc-200/80 dark:border-zinc-800" id="other-semesters-box"></div>
+        `;
+        const otherBox = detailsEl.querySelector('#other-semesters-box');
+        otherSemesters.forEach(smt => {
+          otherBox.appendChild(buildSemesterSection(smt, grouped.get(smt), false));
+        });
+        matkulListContainer.appendChild(detailsEl);
+      }
+
+      recalculateSks();
+    }
 
     // NIM Builder Sync
     inputAngkatan.addEventListener('change', () => {
@@ -544,17 +615,17 @@
       const allNavs = [stepNav1, stepNav2, stepNav3];
       allNavs.forEach((nav, idx) => {
         if (idx + 1 === stepNumber) {
-          nav.className = 'step-nav-item flex items-center gap-3 rounded-xl border border-brand-blue bg-brand-blue p-4 text-white shadow-sm transition-all';
+          nav.className = 'step-nav-item cursor-pointer flex items-center gap-3 rounded-xl border border-brand-blue bg-brand-blue p-3.5 text-white shadow-sm transition-all';
           nav.children[0].className = 'flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 font-mono text-sm font-bold text-white';
           nav.children[1].children[0].className = 'text-xs font-bold leading-tight text-white';
           nav.children[1].children[1].className = 'text-[11px] text-white/80 mt-0.5';
         } else if (idx + 1 < stepNumber) {
-          nav.className = 'step-nav-item flex items-center gap-3 rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200 transition-all';
+          nav.className = 'step-nav-item cursor-pointer flex items-center gap-3 rounded-xl border border-emerald-300 bg-emerald-50 p-3.5 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200 transition-all';
           nav.children[0].className = 'flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-200 font-mono text-sm font-bold text-emerald-800 dark:bg-emerald-800 dark:text-emerald-100';
           nav.children[1].children[0].className = 'text-xs font-semibold leading-tight text-emerald-900 dark:text-emerald-200';
           nav.children[1].children[1].className = 'text-[11px] text-emerald-700 dark:text-emerald-400 mt-0.5';
         } else {
-          nav.className = 'step-nav-item flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-4 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 transition-all';
+          nav.className = 'step-nav-item cursor-pointer flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3.5 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 transition-all';
           nav.children[0].className = 'flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 font-mono text-sm font-bold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400';
           nav.children[1].children[0].className = 'text-xs font-semibold text-zinc-900 dark:text-zinc-200 leading-tight';
           nav.children[1].children[1].className = 'text-[11px] text-zinc-500 mt-0.5';
@@ -570,7 +641,7 @@
     // Live SKS Counter
     function recalculateSks() {
       let total = 0;
-      matkulCheckboxes.forEach(cb => {
+      getMatkulCheckboxes().forEach(cb => {
         if (cb.checked) {
           total += parseInt(cb.getAttribute('data-sks') || '0', 10);
         }
@@ -589,17 +660,26 @@
       return total;
     }
 
-    matkulCheckboxes.forEach(cb => {
-      cb.addEventListener('change', recalculateSks);
+    matkulListContainer.addEventListener('change', (e) => {
+      if (e.target.classList.contains('matkul-checkbox')) {
+        recalculateSks();
+      }
     });
 
+    inputSemester.addEventListener('change', renderMatkulGrid);
+    inputPrefPeminatan.addEventListener('change', renderMatkulGrid);
+    renderMatkulGrid();
+
     btnSelectAll.addEventListener('click', () => {
-      matkulCheckboxes.forEach(cb => cb.checked = true);
+      const targetSmt = String(inputSemester.value);
+      getMatkulCheckboxes().forEach(cb => {
+        cb.checked = cb.getAttribute('data-semester') === targetSmt;
+      });
       recalculateSks();
     });
 
     btnUnselectAll.addEventListener('click', () => {
-      matkulCheckboxes.forEach(cb => cb.checked = false);
+      getMatkulCheckboxes().forEach(cb => cb.checked = false);
       recalculateSks();
     });
 
@@ -609,6 +689,7 @@
         JadwalinUI.toast.show('Harap isi nama lengkap mahasiswa.', 'error');
         return;
       }
+      renderMatkulGrid();
       setStep(2);
     });
 
@@ -618,7 +699,7 @@
     // Calculate Pra-KRS (Step 2 -> Step 3)
     async function fetchRekomendasi() {
       const selectedCodes = [];
-      matkulCheckboxes.forEach(cb => {
+      getMatkulCheckboxes().forEach(cb => {
         if (cb.checked) selectedCodes.push(cb.getAttribute('data-kode'));
       });
 
@@ -707,17 +788,55 @@
       fetchRekomendasi();
     });
 
+    const btnTopCalculate = document.getElementById('btn-top-calculate-prakrs');
+    if (btnTopCalculate) {
+      btnTopCalculate.addEventListener('click', () => btnCalculate.click());
+    }
+
+    if (stepNav1) stepNav1.addEventListener('click', () => setStep(1));
+    if (stepNav2) stepNav2.addEventListener('click', () => btnToStep2.click());
+    if (stepNav3) stepNav3.addEventListener('click', () => btnCalculate.click());
+
     btnMintaVariasi.addEventListener('click', () => {
       currentVariasiIndex += 1;
       fetchRekomendasi();
       JadwalinUI.toast.show(`Menghitung variasi paket alternatif #${currentVariasiIndex + 1}`, 'info');
     });
 
-    btnSimpan.addEventListener('click', () => {
-      JadwalinUI.toast.show('Rencana jadwal berhasil disimpan ke profil Anda!', 'success');
-      setTimeout(() => {
-        window.location.href = '/mahasiswa/jadwal';
-      }, 1200);
+    btnSimpan.addEventListener('click', async () => {
+      const selectedCodes = [];
+      getMatkulCheckboxes().forEach(cb => {
+        if (cb.checked) selectedCodes.push(cb.getAttribute('data-kode'));
+      });
+      if (selectedCodes.length === 0) {
+        JadwalinUI.toast.show('Pilih minimal satu mata kuliah sebelum menyimpan.', 'error');
+        return;
+      }
+
+      btnSimpan.disabled = true;
+      try {
+        const res = await JadwalinUI.apiFetch('/api/jadwal/prakrs/simpan', {
+          method: 'POST',
+          body: JSON.stringify({
+            semester: parseInt(inputSemester.value, 10),
+            kodePeminatan: inputPrefPeminatan.value,
+            prefKelas: inputPrefKelas.value,
+            prefWaktu: inputPrefWaktu.value,
+            kodeMatkulList: selectedCodes,
+            variasiIndex: currentVariasiIndex
+          })
+        });
+        if (!res || !res.sukses) {
+          throw new Error(res?.pesan || 'Gagal menyimpan Pra-KRS.');
+        }
+        JadwalinUI.toast.show(res.pesan || 'Rencana Pra-KRS berhasil disimpan!', 'success');
+        setTimeout(() => {
+          window.location.href = '/mahasiswa/dashboard';
+        }, 900);
+      } catch (err) {
+        JadwalinUI.toast.show(err.message || 'Gagal menyimpan Pra-KRS.', 'error');
+        btnSimpan.disabled = false;
+      }
     });
 
     // Initial check
@@ -748,12 +867,18 @@
 
     async function sendChat() {
       const msg = chatInput.value.trim();
-      if (!msg) return;
+      if (msg.length < 2 || msg.length > 400) {
+        JadwalinUI.toast.show('Pertanyaan harus antara 2 hingga 400 karakter.', 'warning');
+        return;
+      }
 
-      // Render bubble user
+      // Render bubble user secara aman (anti-XSS textContent)
       const userBubble = document.createElement('div');
       userBubble.className = 'flex gap-2.5 justify-end';
-      userBubble.innerHTML = `<div class="bg-[#0c2b5e] text-white rounded-2xl rounded-tr-sm p-3 max-w-[85%] shadow-xs">${msg}</div>`;
+      const userTextDiv = document.createElement('div');
+      userTextDiv.className = 'bg-[#0c2b5e] text-white rounded-2xl rounded-tr-sm p-3 max-w-[85%] shadow-xs';
+      userTextDiv.textContent = msg;
+      userBubble.appendChild(userTextDiv);
       chatMessages.appendChild(userBubble);
       chatInput.value = '';
       chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -767,59 +892,76 @@
         </div>
         <div class="bg-zinc-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm p-3 text-zinc-500 border border-zinc-200/60 dark:border-zinc-700/60 flex items-center gap-2">
           <i class="ph ph-spinner animate-spin text-sm text-[#0c2b5e] dark:text-amber-400"></i>
-          <span>Menganalisis opsi jadwal...</span>
+          <span>Memproses pertanyaan Anda...</span>
         </div>
       `;
       chatMessages.appendChild(loadingEl);
       chatMessages.scrollTop = chatMessages.scrollHeight;
 
+      function formatChatMarkdown(raw) {
+        const escaped = String(raw || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+        return escaped
+          .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-bold text-zinc-950 dark:text-white">$1</strong>')
+          .replace(/\*([^*\n]+)\*/g, '<em class="italic">$1</em>')
+          .replace(/`([^`\n]+)`/g, '<code class="px-1 py-0.5 rounded bg-zinc-200/80 dark:bg-zinc-700 font-mono text-[11px]">$1</code>')
+          .replace(/^[ \t]*[\*\-]\s+/gm, '• ');
+      }
+
+      const checkedMatkuls = Array.from(document.querySelectorAll('.matkul-checkbox:checked'))
+        .map(cb => cb.getAttribute('data-kode'))
+        .filter(Boolean);
+      const contextPayload = {
+        nama: document.getElementById('input-nama')?.value?.trim() || '',
+        nim: `${document.getElementById('nim-prefix')?.textContent?.trim() || ''}${document.getElementById('input-nim-suffix')?.value?.trim() || ''}`,
+        angkatan: Number(document.getElementById('input-angkatan')?.value || 2024),
+        semester: Number(document.getElementById('input-semester')?.value || 5),
+        peminatan: (document.getElementById('input-pref-peminatan')?.value || 'SE').toUpperCase(),
+        prefKelas: document.getElementById('input-pref-kelas')?.value || 'B',
+        prefWaktu: document.getElementById('input-pref-waktu')?.value || 'Semua',
+        matkulDipilih: checkedMatkuls
+      };
+
+      let reply = '';
+      let isError = false;
       try {
         const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: msg })
+          body: JSON.stringify({ message: msg, context: contextPayload })
         });
         const result = await response.json();
         loadingEl.remove();
 
-        let reply = '';
-        if (response.ok && result && result.success && result.data && result.data.reply) {
+        if (response.ok && result && result.sukses && result.connected && result.data && result.data.reply) {
           reply = result.data.reply;
         } else {
-          if (msg.toLowerCase().includes('sks') || msg.toLowerCase().includes('batas')) {
-            reply = 'Beban maksimal KRS per semester adalah 24 SKS. Usahakan seimbang antara beban teori dan praktikum agar terhindar dari bentrok ruang/waktu.';
-          } else if (msg.toLowerCase().includes('rekomendasi') || msg.toLowerCase().includes('matkul')) {
-            reply = 'Untuk paket semester ganjil, kami menyarankan: Pemrograman Web Lanjut (3 SKS), Kecerdasan Buatan (3 SKS), dan Rekayasa Perangkat Lunak (3 SKS).';
-          } else {
-            reply = 'Saran jadwal optimal: periksa tab Langkah 3 untuk melihat simulasi kombinasi jadwal otomatis yang bebas tabrakan!';
-          }
+          isError = true;
+          reply = result?.pesan || `Tidak dapat terhubung ke layanan AI (HTTP ${response.status}).`;
         }
-
-        const replyBubble = document.createElement('div');
-        replyBubble.className = 'flex gap-2.5';
-        replyBubble.innerHTML = `
-          <div class="w-7 h-7 rounded-full bg-blue-100 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-900">
-            <i class="ph ph-robot text-sm"></i>
-          </div>
-          <div class="bg-zinc-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm p-3 text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700/60 max-w-[85%]">
-            ${reply}
-          </div>
-        `;
-        chatMessages.appendChild(replyBubble);
       } catch (err) {
         loadingEl.remove();
-        const errBubble = document.createElement('div');
-        errBubble.className = 'flex gap-2.5';
-        errBubble.innerHTML = `
-          <div class="w-7 h-7 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-            <i class="ph ph-sparkle text-sm"></i>
-          </div>
-          <div class="bg-zinc-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm p-3 text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700/60 max-w-[85%]">
-            Rekomendasi AI lokal: Anda dapat memilih paket standar semester 5 dengan prioritas kelas pagi agar jadwal praktikum tidak bertabrakan.
-          </div>
-        `;
-        chatMessages.appendChild(errBubble);
+        isError = true;
+        reply = 'Tidak dapat terhubung ke layanan AI: server tidak merespons atau koneksi jaringan terputus.';
       }
+
+      const replyBubble = document.createElement('div');
+      replyBubble.className = 'flex gap-2.5';
+      const iconBox = document.createElement('div');
+      iconBox.className = `w-7 h-7 rounded-full flex items-center justify-center shrink-0 border ${isError ? 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800' : 'bg-blue-100 text-[#0c2b5e] border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-900'}`;
+      iconBox.innerHTML = `<i class="ph ${isError ? 'ph-warning-circle' : 'ph-robot'} text-sm"></i>`;
+
+      const textBox = document.createElement('div');
+      textBox.className = `rounded-2xl rounded-tl-sm p-3 border max-w-[85%] whitespace-pre-wrap leading-relaxed ${isError ? 'bg-amber-50 text-amber-950 border-amber-200 dark:bg-amber-950/40 dark:text-amber-200 dark:border-amber-900/60' : 'bg-zinc-100 text-zinc-800 border-zinc-200/60 dark:bg-zinc-800 dark:text-zinc-200 dark:border-zinc-700/60'}`;
+      textBox.innerHTML = formatChatMarkdown(reply);
+
+      replyBubble.appendChild(iconBox);
+      replyBubble.appendChild(textBox);
+      chatMessages.appendChild(replyBubble);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 

@@ -39,32 +39,27 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
-                <tr>
-                  <td class="px-4 py-3 font-mono font-bold text-amber-600 dark:text-amber-400">F4.LAB1</td>
-                  <td class="px-4 py-3 font-mono">Gedung F4 (Lt 2)</td>
-                  <td class="px-4 py-3">
-                    <span class="rounded bg-amber-100 px-2 py-0.5 font-mono text-[10px] text-amber-800 dark:bg-amber-950 dark:text-amber-300 font-semibold">Lab Komputer & Basis Data</span>
-                  </td>
-                  <td class="px-4 py-3 font-mono">35 PC</td>
-                  <td class="px-4 py-3 text-right">
-                    <button type="button" onclick="openRuanganDrawer('Edit Ruangan F4.LAB1', 'F4.LAB1', 'F4', 'Laboratorium Komputer', '35')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                      <i class="ph ph-pencil-simple text-base"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="px-4 py-3 font-mono font-bold text-[#0c2b5e] dark:text-blue-300">F6.001</td>
-                  <td class="px-4 py-3 font-mono">Gedung F6 (Lt Dasar)</td>
-                  <td class="px-4 py-3">
-                    <span class="rounded bg-blue-100 px-2 py-0.5 font-mono text-[10px] text-blue-800 dark:bg-blue-950 dark:text-blue-300 font-semibold">Ruang Kuliah Bersama (RKB)</span>
-                  </td>
-                  <td class="px-4 py-3 font-mono">80 Kursi</td>
-                  <td class="px-4 py-3 text-right">
-                    <button type="button" onclick="openRuanganDrawer('Edit Ruangan F6.001', 'F6.001', 'F6', 'Ruang Kuliah Bersama', '80')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                      <i class="ph ph-pencil-simple text-base"></i>
-                    </button>
-                  </td>
-                </tr>
+                <% const listRg = (typeof ruanganList !== 'undefined' && Array.isArray(ruanganList)) ? ruanganList : []; %>
+                <% listRg.forEach(function(rg) {
+                  const isLab = String(rg.tipe || '').toLowerCase().includes('lab');
+                %>
+                  <tr>
+                    <td class="px-4 py-3 font-mono font-bold <%= isLab ? 'text-amber-600 dark:text-amber-400' : 'text-[#0c2b5e] dark:text-blue-300' %>"><%= rg.kode %></td>
+                    <td class="px-4 py-3 font-mono">Gedung <%= rg.gedung || 'F6' %></td>
+                    <td class="px-4 py-3">
+                      <span class="rounded <%= isLab ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300' %> px-2 py-0.5 font-mono text-[10px] font-semibold"><%= rg.tipe %></span>
+                    </td>
+                    <td class="px-4 py-3 font-mono"><%= rg.kapasitas %> <%= isLab ? 'PC' : 'Kursi' %></td>
+                    <td class="px-4 py-3 text-right space-x-1">
+                      <button type="button" onclick="openRuanganDrawer('Edit Ruangan <%= rg.kode %>', '<%= rg.kode %>', '<%= rg.gedung || 'F6' %>', '<%= rg.tipe %>', '<%= rg.kapasitas %>', '<%= rg.id %>')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1" title="Edit">
+                        <i class="ph ph-pencil-simple text-base"></i>
+                      </button>
+                      <button type="button" onclick="deleteRuangan(<%= rg.id %>, '<%= rg.kode %>')" class="text-zinc-400 hover:text-rose-600 p-1" title="Hapus">
+                        <i class="ph ph-trash text-base"></i>
+                      </button>
+                    </td>
+                  </tr>
+                <% }); %>
               </tbody>
             </table>
           </div>
@@ -96,9 +91,9 @@
 
     <form onsubmit="handleSaveRuangan(event)" class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
       <div class="space-y-1">
-        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama / Kode Ruang</label>
-        <input id="input-ruang-code" type="text" required placeholder="Contoh: F4.LAB3 atau F4.004"
-          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama / Kode Ruang (Format F4/F6, Maks. 10 Karakter)</label>
+        <input id="input-ruang-code" type="text" required minlength="4" maxlength="10" pattern="F[46]\.[A-Za-z0-9]{2,6}" title="Format ruang wajib F4.xxx atau F6.xxx (contoh: F4.LAB1, F6.201)" placeholder="Contoh: F4.LAB3 atau F4.004"
+          class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono uppercase text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
       </div>
 
       <div class="grid grid-cols-2 gap-3">
@@ -119,9 +114,9 @@
       <div class="space-y-1">
         <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Tipe Fasilitas Ruangan</label>
         <select id="input-ruang-type" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
-          <option value="Laboratorium Komputer">Laboratorium Komputer (Khusus Praktikum)</option>
-          <option value="Ruang Kuliah Bersama">Ruang Kuliah Bersama (RKB Teori Kapasitas Besar)</option>
-          <option value="Kelas Reguler">Kelas Reguler (Teori Standar)</option>
+          <option value="Laboratorium">Laboratorium (Khusus Praktikum)</option>
+          <option value="Ruang Kuliah Besar">Ruang Kuliah Besar (RKB Teori Kapasitas Besar)</option>
+          <option value="Ruang Kuliah">Ruang Kuliah (Teori Standar)</option>
         </select>
       </div>
 
@@ -142,7 +137,10 @@
 </div>
 
 <script>
-  function openRuanganDrawer(title, code, building, type, cap) {
+  let editingRuanganId = null;
+
+  function openRuanganDrawer(title, code, building, type, cap, id = null) {
+    editingRuanganId = id ? Number(id) : null;
     const overlay = document.getElementById('drawer-ruangan-overlay');
     const panel = document.getElementById('drawer-ruangan-panel');
     const titleEl = document.getElementById('ruangan-drawer-title');
@@ -152,10 +150,10 @@
     const capEl = document.getElementById('input-ruang-cap');
 
     if (titleEl) titleEl.textContent = title;
-    if (codeEl) codeEl.value = code;
-    if (buildingEl) buildingEl.value = building;
-    if (typeEl) typeEl.value = type;
-    if (capEl) capEl.value = cap;
+    if (codeEl) codeEl.value = code || '';
+    if (buildingEl) buildingEl.value = building || 'F6';
+    if (typeEl) typeEl.value = type || 'Ruang Kuliah';
+    if (capEl) capEl.value = cap || '40';
 
     if (overlay && panel) {
       overlay.classList.remove('opacity-0', 'pointer-events-none');
@@ -172,9 +170,53 @@
     }
   }
 
-  function handleSaveRuangan(e) {
+  async function handleSaveRuangan(e) {
     e.preventDefault();
-    closeRuanganDrawer();
-    window.showConfirmDialog('Ruangan Disimpan', 'Data ruangan dan laboratorium berhasil diperbarui.', null, 'Selesai', true);
+    const kode = document.getElementById('input-ruang-code')?.value.trim();
+    const payload = {
+      kategori: 'ruangan',
+      kode,
+      nama: `Ruang ${kode}`,
+      gedung: document.getElementById('input-ruang-building')?.value || 'F6',
+      tipe: document.getElementById('input-ruang-type')?.value || 'Reguler',
+      kapasitas: Number(document.getElementById('input-ruang-cap')?.value || 40)
+    };
+
+    try {
+      const url = editingRuanganId ? `/api/master/ruangan/${editingRuanganId}` : '/api/master';
+      const method = editingRuanganId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menyimpan ruangan.');
+      closeRuanganDrawer();
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+      setTimeout(() => window.location.reload(), 400);
+    } catch (err) {
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+      else alert(err.message);
+    }
+  }
+
+  function deleteRuangan(id, kode) {
+    const execDelete = async () => {
+      try {
+        const res = await fetch(`/api/master/ruangan/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menghapus ruangan.');
+        if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+        setTimeout(() => window.location.reload(), 400);
+      } catch (err) {
+        if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+      }
+    };
+    if (window.showConfirmDialog) {
+      window.showConfirmDialog('Hapus Ruangan', `Yakin ingin menghapus ruang ${kode}?`, execDelete, 'Hapus');
+    } else if (confirm(`Hapus ruang ${kode}?`)) {
+      execDelete();
+    }
   }
 </script>

@@ -13,16 +13,13 @@
       <div class="max-w-6xl mx-auto space-y-6">
 
         <!-- Header Banner -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 pb-5 dark:border-zinc-800">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800">
           <div>
-            <span class="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
-              Pusat Kendali Jadwal
-            </span>
-            <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-1">
-              Dashboard Analitik Staf Akademik
+            <h1 class="font-heading text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+              Dashboard Staf Akademik
             </h1>
             <p class="text-xs text-zinc-500 dark:text-zinc-400">
-              Monitor distribusi beban ruang, jam dosen, kepatuhan constraint, dan optimasi jadwal otomatis.
+              Ringkasan ruang, dosen, dan status kepatuhan constraint jadwal.
             </p>
           </div>
 
@@ -38,6 +35,17 @@
           </div>
         </div>
 
+        <%
+          const admJadwal = (typeof jadwal !== 'undefined' && Array.isArray(jadwal)) ? jadwal : [];
+          const admSummary = (typeof masterSummary !== 'undefined' && masterSummary) ? masterSummary : { totalDosen: 21, totalMatkul: 77, totalRuangan: 12 };
+          const admRuang = (typeof ruanganList !== 'undefined' && Array.isArray(ruanganList)) ? ruanganList : [];
+          const labRoomCount = admRuang.filter(r => String(r.tipe || '').toLowerCase().includes('lab')).length;
+          const teoriRoomCount = admRuang.length - labRoomCount;
+          const hariOrderAdm = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+          const sesiPerHari = hariOrderAdm.map(h => admJadwal.filter(s => s.hari === h).length);
+          const sesiLabCount = admJadwal.filter(s => String(s.ruang || '').toUpperCase().includes('LAB') || String(s.jenis || '').toLowerCase().includes('praktikum')).length;
+          const sesiTeoriCount = admJadwal.length - sesiLabCount;
+        %>
         <!-- Metric Cards Grid (Shadcn KPI Style) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
@@ -45,8 +53,8 @@
               <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Dosen Pengampu Aktif</span>
               <i class="ph ph-chalkboard-teacher text-zinc-400 text-lg"></i>
             </div>
-            <p class="font-mono text-2xl font-bold text-zinc-900 dark:text-zinc-50 pt-2">21</p>
-            <p class="text-[11px] text-zinc-500 dark:text-zinc-400 pt-1">100% verifikasi NIDN & beban</p>
+            <p class="font-mono text-2xl font-bold text-zinc-900 dark:text-zinc-50 pt-2"><%= admSummary.totalDosen %></p>
+            <p class="text-[11px] text-zinc-500 dark:text-zinc-400 pt-1">Data dosen dari PostgreSQL</p>
           </div>
 
           <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
@@ -54,26 +62,29 @@
               <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Total Mata Kuliah</span>
               <i class="ph ph-book-open text-zinc-400 text-lg"></i>
             </div>
-            <p class="font-mono text-2xl font-bold text-zinc-900 dark:text-zinc-50 pt-2">77</p>
-            <p class="text-[11px] text-zinc-500 dark:text-zinc-400 pt-1">Kurikulum TI Berbasis OBE 2024</p>
+            <p class="font-mono text-2xl font-bold text-zinc-900 dark:text-zinc-50 pt-2"><%= admSummary.totalMatkul %></p>
+            <p class="text-[11px] text-zinc-500 dark:text-zinc-400 pt-1">Kurikulum TI Semester 1–8</p>
           </div>
 
           <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
             <div class="flex items-center justify-between">
-              <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Ruangan & Lab</span>
+              <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Ruangan &amp; Lab</span>
               <i class="ph ph-door text-zinc-400 text-lg"></i>
             </div>
-            <p class="font-mono text-2xl font-bold text-zinc-900 dark:text-zinc-50 pt-2">12</p>
-            <p class="text-[11px] text-zinc-500 dark:text-zinc-400 pt-1">4 Lab Komputer + 8 Ruang Teori</p>
+            <p class="font-mono text-2xl font-bold text-zinc-900 dark:text-zinc-50 pt-2"><%= admSummary.totalRuangan %></p>
+            <p class="text-[11px] text-zinc-500 dark:text-zinc-400 pt-1"><%= labRoomCount %> Lab Komputer + <%= teoriRoomCount %> Ruang Teori</p>
           </div>
 
-          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <% const admTotalKonflik = (typeof jadwalStatus !== 'undefined' && jadwalStatus?.totalKonflik) ? jadwalStatus.totalKonflik : 0; %>
+          <div class="rounded-xl border <%= admTotalKonflik > 0 ? 'border-rose-200 dark:border-rose-900/60' : 'border-zinc-200 dark:border-zinc-800' %> bg-white p-5 shadow-sm dark:bg-zinc-900">
             <div class="flex items-center justify-between">
               <span class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Status Hard Constraint</span>
-              <i class="ph ph-shield-check text-emerald-500 text-lg"></i>
+              <i class="ph <%= admTotalKonflik > 0 ? 'ph-warning-octagon text-rose-500' : 'ph-shield-check text-emerald-500' %> text-lg"></i>
             </div>
-            <p class="font-mono text-2xl font-bold text-emerald-600 dark:text-emerald-400 pt-2">Zero Clash</p>
-            <p class="text-[11px] text-zinc-500 dark:text-zinc-400 pt-1">0 bentrok ruangan & jam dosen</p>
+            <p class="font-mono text-2xl font-bold <%= admTotalKonflik > 0 ? 'text-rose-600 dark:text-rose-400' : 'text-emerald-600 dark:text-emerald-400' %> pt-2">
+              <%= admTotalKonflik > 0 ? (admTotalKonflik + ' Konflik') : 'Zero Clash' %>
+            </p>
+            <p class="text-[11px] text-zinc-500 dark:text-zinc-400 pt-1">Status: <%= (typeof jadwalStatus !== 'undefined' && jadwalStatus?.status) ? jadwalStatus.status : 'Terpublikasi' %></p>
           </div>
         </div>
 
@@ -94,7 +105,7 @@
                   </p>
                 </div>
                 <span class="font-mono text-[11px] bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 rounded text-zinc-600 dark:text-zinc-300">
-                  Total 111 Sesi
+                  Total <%= admJadwal.length %> Sesi
                 </span>
               </div>
               <div class="pt-4 h-64 relative">
@@ -103,7 +114,7 @@
             </div>
             <div class="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-500 font-mono">
               <span>Beban Puncak: Senin & Selasa</span>
-              <span>Jeda Dhuhur: 100% Terpenuhi</span>
+              <span>Status HC: <%= admTotalKonflik > 0 ? (admTotalKonflik + ' Pelanggaran Terdeteksi') : '100% Terpenuhi' %></span>
             </div>
           </div>
 
@@ -271,7 +282,7 @@
           labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'],
           datasets: [{
             label: 'Jumlah Sesi Perkuliahan',
-            data: [25, 23, 22, 19, 14, 8],
+            data: <%- JSON.stringify(sesiPerHari) %>,
             backgroundColor: '#0c2b5e',
             hoverBackgroundColor: '#1d4ed8',
             borderRadius: 6,
@@ -319,7 +330,7 @@
         data: {
           labels: ['Kuliah Teori', 'Praktikum Lab'],
           datasets: [{
-            data: [80, 31],
+            data: [<%= sesiTeoriCount %>, <%= sesiLabCount %>],
             backgroundColor: ['#0c2b5e', '#f59e0b'],
             borderColor: isDark ? '#18181b' : '#ffffff',
             borderWidth: 3,
