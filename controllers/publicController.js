@@ -2,6 +2,7 @@ const { getBaseData, config } = require('./baseDataHelper');
 
 /**
  * Controller untuk Halaman Publik & Autentikasi
+ * Khusus untuk Guest / Publik Umum tanpa meng-override antarmuka panel civitas
  */
 exports.index = (req, res) => {
   const data = getBaseData();
@@ -12,6 +13,17 @@ exports.index = (req, res) => {
     currentRole,
     activeMenu: 'beranda',
     activeView: 'view-mahasiswa'
+  });
+};
+
+exports.jadwal = (req, res) => {
+  const data = getBaseData();
+  const currentRole = req.cookies?.userRole || 'guest';
+  res.render('jadwal', {
+    ...data,
+    judul: `Jadwal Perkuliahan Resmi S1 TI UMY — ${config.appName}`,
+    currentRole,
+    activeMenu: 'jadwal'
   });
 };
 
