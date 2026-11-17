@@ -2701,7 +2701,13 @@ const jadwalKuliah = [
     "peminatanKode": null,
     "isLabValid": true
   }
-];
+]
+  .filter(s => !['DA', 'UX'].includes(s.peminatanKode) && !/^TI(DA|UX)/.test(s.kodeMatkul))
+  .map(s => ({
+    ...s,
+    kodeMatkul: String(s.kodeMatkul || '').replace(/^TIPR/, 'TISE').replace(/^TINE/, 'TINS'),
+    peminatanKode: s.peminatanKode === 'PR' ? 'SE' : (s.peminatanKode === 'NE' ? 'NS' : s.peminatanKode)
+  }));
 
 function keMenit(jamStr) {
   const [h, m] = String(jamStr || '00:00').split(':').map(Number);
@@ -2985,7 +2991,20 @@ const JadwalModel = {
       status: statusJadwal,
       timestamp: lastGeneratedAt
     };
+  },
+  setSavedPrakrs(username, data) {
+    if (!username) return;
+    savedPrakrsStore.set(String(username), {
+      ...data,
+      savedAt: new Date().toISOString()
+    });
+  },
+  getSavedPrakrs(username) {
+    if (!username) return null;
+    return savedPrakrsStore.get(String(username)) || null;
   }
 };
+
+const savedPrakrsStore = new Map();
 
 module.exports = JadwalModel;

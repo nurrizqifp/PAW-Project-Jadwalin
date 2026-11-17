@@ -67,27 +67,30 @@
                   </p>
                 </div>
 
-                <form onsubmit="event.preventDefault(); window.showConfirmDialog('Periode Akademik Diperbarui', 'Pengaturan semester aktif berhasil disinkronkan ke seluruh sistem.', null, 'Selesai', true);" class="space-y-4 text-xs">
+                <%
+                  const setPer = (typeof activePeriode !== 'undefined' && activePeriode) ? activePeriode : { id: 1, tahunAkademik: '2026/2027', semesterTipe: 'Ganjil', publishedAt: '2026-12-31', status: 'Terpublikasi' };
+                %>
+                <form onsubmit="handleSaveSettingsPeriode(event, <%= setPer.id || 1 %>)" class="space-y-4 text-xs">
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="space-y-1">
                       <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Tahun Akademik</label>
-                      <select class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
-                        <option value="2026/2027" selected>2026/2027</option>
-                        <option value="2025/2026">2025/2026</option>
+                      <select id="set-per-year" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+                        <option value="2026/2027" <%= setPer.tahunAkademik === '2026/2027' ? 'selected' : '' %>>2026/2027</option>
+                        <option value="2025/2026" <%= setPer.tahunAkademik === '2025/2026' ? 'selected' : '' %>>2025/2026</option>
                       </select>
                     </div>
 
                     <div class="space-y-1">
                       <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Semester Berjalan</label>
-                      <select class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
-                        <option value="Ganjil" selected>Semester Ganjil (Gasal)</option>
-                        <option value="Genap">Semester Genap</option>
+                      <select id="set-per-sem" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+                        <option value="Ganjil" <%= setPer.semesterTipe === 'Ganjil' ? 'selected' : '' %>>Semester Ganjil (Gasal)</option>
+                        <option value="Genap" <%= setPer.semesterTipe === 'Genap' ? 'selected' : '' %>>Semester Genap</option>
                       </select>
                     </div>
 
                     <div class="space-y-1">
-                      <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Batas Maksimal SKS</label>
-                      <input type="number" value="24" min="12" max="24"
+                      <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Batas Maksimal SKS (12–24)</label>
+                      <input id="set-per-sks" type="number" required value="24" min="12" max="24"
                         class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
                     </div>
                   </div>
@@ -95,14 +98,14 @@
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="space-y-1">
                       <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Batas Akhir Pra-KRS Mahasiswa</label>
-                      <input type="date" value="2026-09-01"
+                      <input id="set-per-date" type="date" required value="<%= setPer.publishedAt || '2026-12-31' %>"
                         class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
                     </div>
                     <div class="space-y-1">
                       <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Status Akses Mahasiswa</label>
-                      <select class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
-                        <option value="open" selected>Dibuka (Simulasi Pra-KRS Aktif)</option>
-                        <option value="locked">Terkunci (Hanya Mode Baca Jadwal)</option>
+                      <select id="set-per-status" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+                        <option value="Terpublikasi" <%= setPer.status !== 'Arsip' ? 'selected' : '' %>>Terpublikasi (Pengisian Pra-KRS Aktif)</option>
+                        <option value="Arsip" <%= setPer.status === 'Arsip' ? 'selected' : '' %>>Arsip (Terkunci / Hanya Baca Jadwal)</option>
                       </select>
                     </div>
                   </div>
@@ -322,10 +325,48 @@
     }
   }
 
-  function handleInstantToggle(checkbox, featureName) {
+  async function handleSaveSettingsPeriode(e, periodeId) {
+    e.preventDefault();
+    const payload = {
+      tahunAkademik: document.getElementById('set-per-year')?.value || '2026/2027',
+      semesterTipe: document.getElementById('set-per-sem')?.value || 'Ganjil',
+      batasWaktu: document.getElementById('set-per-date')?.value || '2026-12-31',
+      status: document.getElementById('set-per-status')?.value || 'Terpublikasi'
+    };
+    try {
+      const res = await fetch(`/api/master/periode/${periodeId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menyimpan periode.');
+      if (window.showConfirmDialog) {
+        window.showConfirmDialog('Periode Akademik Diperbarui', data.pesan, () => window.location.reload(), 'Selesai', true);
+      } else {
+        window.location.reload();
+      }
+    } catch (err) {
+      if (window.showConfirmDialog) window.showConfirmDialog('Gagal Menyimpan Periode', err.message, null, 'Tutup', true);
+      else alert(err.message);
+    }
+  }
+
+  async function handleInstantToggle(checkbox, featureName) {
     const toast = document.getElementById('toggle-toast-indicator');
     const msg = document.getElementById('toggle-toast-msg');
     const status = checkbox.checked ? 'diaktifkan' : 'dinonaktifkan';
+
+    const hcMatch = String(featureName).match(/HC-0[123]/);
+    if (hcMatch && typeof checkbox.checked === 'boolean') {
+      try {
+        await fetch('/api/constraints/hard', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: hcMatch[0], isActive: checkbox.checked })
+        });
+      } catch (_) {}
+    }
 
     if (toast && msg) {
       msg.innerHTML = `<i class="ph ph-check-circle text-base"></i> Aturan <strong>${featureName}</strong> berhasil <strong>${status}</strong>.`;

@@ -2,60 +2,85 @@
 <% const role=(typeof currentRole !=='undefined' ) ? currentRole : 'admin' ; %>
   <% const active=(typeof activeMenu !=='undefined' ) ? activeMenu : '' ; %>
 
+    <!-- Backdrop Mobile Sidebar (< 1024px) -->
+    <div id="mobile-sidebar-backdrop" onclick="window.toggleMobileSidebar ? window.toggleMobileSidebar(false) : null"
+      class="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs opacity-0 pointer-events-none lg:hidden transition-opacity duration-200"></div>
+
     <aside id="admin-sidebar"
-      class="w-64 sticky top-0 h-screen border-r border-zinc-200 bg-white p-4 flex flex-col justify-between shrink-0 dark:border-zinc-800 dark:bg-zinc-900 overflow-y-auto z-20 transition-all duration-200">
+      class="fixed inset-y-0 left-0 z-50 w-64 -translate-x-full lg:translate-x-0 lg:sticky lg:top-0 lg:z-20 h-screen border-r border-zinc-200 bg-white p-4 flex flex-col justify-between shrink-0 dark:border-zinc-800 dark:bg-zinc-900 overflow-y-auto transition-transform duration-200 ease-out">
       <div class="space-y-5">
 
-        <!-- 1. Brand Logo sesuai Role -->
-        <a href="<%= role === 'dosen' ? '/dosen/dashboard' : (role === 'mahasiswa' ? '/mahasiswa/dashboard' : '/admin/dashboard') %>"
-          class="flex items-center gap-2.5 px-2 py-1 group">
-          <img src="/logo.png" alt="Logo Jadwalin" class="h-8 w-auto object-contain">
-          <div class="flex flex-col">
-            <span class="text-sm font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-heading leading-none">
-              <%= typeof appName !=='undefined' ? appName : 'Jadwalin' %>
-            </span>
-            <span class="text-[10px] font-mono text-zinc-400 dark:text-zinc-500 mt-0.5">
-              <%= role==='dosen' ? 'Portal Dosen' : (role==='mahasiswa' ? 'Portal Mahasiswa' : 'Admin Portal' ) %>
-            </span>
-          </div>
-        </a>
+        <!-- 1. Brand Logo sesuai Role + Tombol Tutup Mobile -->
+        <div class="flex items-center justify-between px-2 py-1">
+          <a href="<%= role === 'dosen' ? '/dosen/dashboard' : (role === 'mahasiswa' ? '/mahasiswa/dashboard' : '/admin/dashboard') %>"
+            class="flex items-center gap-2.5 group">
+            <img src="/logo.png" alt="Logo Jadwalin" class="h-8 w-auto object-contain">
+            <div class="flex flex-col">
+              <span class="text-sm font-bold tracking-tight text-zinc-900 dark:text-zinc-100 font-heading leading-none">
+                <%= typeof appName !=='undefined' ? appName : 'Jadwalin' %>
+              </span>
+              <span class="text-[10px] font-mono text-zinc-400 dark:text-zinc-500 mt-0.5">
+                <%= role==='dosen' ? 'Portal Dosen' : (role==='mahasiswa' ? 'Portal Mahasiswa' : 'Admin Portal' ) %>
+              </span>
+            </div>
+          </a>
+          <button type="button" onclick="window.toggleMobileSidebar ? window.toggleMobileSidebar(false) : null" aria-label="Tutup Menu Navigasi"
+            class="lg:hidden flex h-8 w-8 items-center justify-center rounded-md text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800 transition-colors">
+            <i class="ph ph-x text-base"></i>
+          </button>
+        </div>
 
         <!-- 2. User Badge sesuai Role -->
-        <% if (role==='dosen' ) { %>
+        <%
+          const sbUser = (typeof currentUser !== 'undefined' && currentUser) ? currentUser : null;
+          const sbDosen = (typeof activeDosen !== 'undefined' && activeDosen) ? activeDosen : { inisial: 'AS', nama: 'Ir. Asroni, S.T., M.Eng' };
+          const sbMhs = (typeof activeMahasiswa !== 'undefined' && activeMahasiswa) ? activeMahasiswa : { nim: '-', nama: 'Mahasiswa TI', semesterAktif: 5 };
+        %>
+        <% if (role==='dosen' ) {
+          const dsnName = sbUser?.nama || sbDosen.nama;
+          const dsnIni = sbDosen.inisial || String(dsnName).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        %>
           <a href="/dosen/dashboard"
             class="flex items-center gap-3 px-2 py-1.5 rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors">
             <div
-              class="flex h-8 w-8 items-center justify-center rounded-md bg-[#0c2b5e] text-amber-300 font-bold text-xs shadow-sm">
-              BT
+              class="flex h-8 w-8 items-center justify-center rounded-md bg-[#0c2b5e] text-amber-300 font-bold text-xs shadow-sm shrink-0">
+              <%= dsnIni %>
             </div>
             <div class="overflow-hidden flex-1">
-              <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100 truncate">Dr. Bambang T., M.Kom.</p>
+              <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100 truncate"><%= dsnName %></p>
               <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">Dosen Tetap TI</p>
             </div>
             <i class="ph ph-caret-right text-xs text-zinc-400"></i>
           </a>
-          <% } else if (role==='mahasiswa' ) { %>
+          <% } else if (role==='mahasiswa' ) {
+            const mhsName = sbUser?.nama || sbMhs.nama;
+            const mhsNim = sbUser?.username || sbMhs.nim;
+            const mhsIni = String(mhsName).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+          %>
             <a href="/mahasiswa/dashboard"
               class="flex items-center gap-3 px-2 py-1.5 rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors">
               <div
-                class="flex h-8 w-8 items-center justify-center rounded-md bg-[#0c2b5e] text-white font-bold text-xs shadow-sm">
-                HD
+                class="flex h-8 w-8 items-center justify-center rounded-md bg-[#0c2b5e] text-white font-bold text-xs shadow-sm shrink-0">
+                <%= mhsIni %>
               </div>
               <div class="overflow-hidden flex-1">
-                <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100 truncate">Haidar</p>
-                <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">20220140001 (Smt 5)</p>
+                <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100 truncate"><%= mhsName %></p>
+                <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono"><%= mhsNim %> (Smt <%= sbMhs.semesterAktif || 5 %>)</p>
               </div>
               <i class="ph ph-caret-right text-xs text-zinc-400"></i>
             </a>
-            <% } else { %>
+            <% } else {
+              const admName = sbUser?.nama || 'Admin Akademik';
+              const admIni = String(admName).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+            %>
               <a href="/admin/profil"
                 class="flex items-center gap-3 px-2 py-1.5 rounded-lg bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800 border border-zinc-200/60 dark:border-zinc-700/60 transition-colors">
                 <div
-                  class="flex h-8 w-8 items-center justify-center rounded-md bg-[#0c2b5e] text-white font-semibold text-xs shadow-sm">
-                  RW
+                  class="flex h-8 w-8 items-center justify-center rounded-md bg-[#0c2b5e] text-white font-semibold text-xs shadow-sm shrink-0">
+                  <%= admIni %>
                 </div>
                 <div class="overflow-hidden flex-1">
-                  <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100 truncate">Rina Wulandari</p>
+                  <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100 truncate"><%= admName %></p>
                   <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Staf Akademik TI</p>
                 </div>
                 <i class="ph ph-caret-right text-xs text-zinc-400"></i>
@@ -267,11 +292,11 @@
       <div class="border-t border-zinc-200 pt-4 dark:border-zinc-800 space-y-2">
         <div class="flex items-center justify-between">
           <span class="font-mono text-[10px] text-zinc-400 dark:text-zinc-500">
-            <%= typeof appName !=='undefined' ? appName : 'Jadwalin' %> Core
+            <%= typeof appName !=='undefined' ? appName : 'Jadwalin' %>
           </span>
           <span
             class="rounded bg-blue-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-blue-800 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
-            <%= typeof appVersion !=='undefined' ? appVersion : 'v.21' %>
+            <%= typeof appVersion !=='undefined' ? appVersion : 'v1.0.0' %>
           </span>
         </div>
       </div>

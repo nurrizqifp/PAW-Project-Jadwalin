@@ -654,183 +654,93 @@ const kurikulumSemester = [
 ];
 const matkulPeminatan = [
   {
-    "kode": "TIPR01",
+    "kode": "TISE01",
     "nama": "Pengembangan Game",
     "sks": 3,
     "semesterPenawaran": "Ganjil",
-    "kodePeminatan": "PR",
-    "peminatan": "Programming",
+    "kodePeminatan": "SE",
+    "peminatan": "Software Engineering",
     "jenis": "Teori"
   },
   {
-    "kode": "TIPR02",
+    "kode": "TISE02",
     "nama": "Teknologi Multimedia",
     "sks": 3,
     "semesterPenawaran": "Ganjil",
-    "kodePeminatan": "PR",
-    "peminatan": "Programming",
+    "kodePeminatan": "SE",
+    "peminatan": "Software Engineering",
     "jenis": "Teori"
   },
   {
-    "kode": "TIDA01",
-    "nama": "Computer Vision",
-    "sks": 3,
-    "semesterPenawaran": "Ganjil",
-    "kodePeminatan": "DA",
-    "peminatan": "Data",
-    "jenis": "Teori"
-  },
-  {
-    "kode": "TIDA02",
-    "nama": "Kecerdasan Buatan Terapan",
-    "sks": 3,
-    "semesterPenawaran": "Ganjil",
-    "kodePeminatan": "DA",
-    "peminatan": "Data",
-    "jenis": "Teori"
-  },
-  {
-    "kode": "TINE01",
+    "kode": "TINS01",
     "nama": "Blockchain",
     "sks": 3,
     "semesterPenawaran": "Ganjil",
-    "kodePeminatan": "NE",
-    "peminatan": "Network",
+    "kodePeminatan": "NS",
+    "peminatan": "Network & Cyber Security",
     "jenis": "Teori"
   },
   {
-    "kode": "TINE02",
+    "kode": "TINS02",
     "nama": "CyberOps",
     "sks": 3,
     "semesterPenawaran": "Ganjil",
-    "kodePeminatan": "NE",
-    "peminatan": "Network",
+    "kodePeminatan": "NS",
+    "peminatan": "Network & Cyber Security",
     "jenis": "Teori"
   },
   {
-    "kode": "TIUX01",
-    "nama": "Serious Game",
-    "sks": 3,
-    "semesterPenawaran": "Ganjil",
-    "kodePeminatan": "UX",
-    "peminatan": "User Experience",
-    "jenis": "Teori"
-  },
-  {
-    "kode": "TIUX02",
-    "nama": "Prototyping",
-    "sks": 3,
-    "semesterPenawaran": "Ganjil",
-    "kodePeminatan": "UX",
-    "peminatan": "User Experience",
-    "jenis": "Teori"
-  },
-  {
-    "kode": "TIPR03",
+    "kode": "TISE03",
     "nama": "Pemrograman Web Framework",
     "sks": 3,
     "semesterPenawaran": "Genap",
-    "kodePeminatan": "PR",
-    "peminatan": "Programming",
+    "kodePeminatan": "SE",
+    "peminatan": "Software Engineering",
     "jenis": "Teori"
   },
   {
-    "kode": "TIPR04",
+    "kode": "TISE04",
     "nama": "Pengembangan Aplikasi Mobile Lanjut",
     "sks": 3,
     "semesterPenawaran": "Genap",
-    "kodePeminatan": "PR",
-    "peminatan": "Programming",
+    "kodePeminatan": "SE",
+    "peminatan": "Software Engineering",
     "jenis": "Teori"
   },
   {
-    "kode": "TIPR05",
+    "kode": "TISE05",
     "nama": "Pemrograman Internet of Things",
     "sks": 3,
     "semesterPenawaran": "Genap",
-    "kodePeminatan": "PR",
-    "peminatan": "Programming",
+    "kodePeminatan": "SE",
+    "peminatan": "Software Engineering",
     "jenis": "Teori"
   },
   {
-    "kode": "TIDA03",
-    "nama": "Analisis Big Data",
-    "sks": 3,
-    "semesterPenawaran": "Genap",
-    "kodePeminatan": "DA",
-    "peminatan": "Data",
-    "jenis": "Teori"
-  },
-  {
-    "kode": "TIDA04",
-    "nama": "Basis Data Awan",
-    "sks": 3,
-    "semesterPenawaran": "Genap",
-    "kodePeminatan": "DA",
-    "peminatan": "Data",
-    "jenis": "Teori"
-  },
-  {
-    "kode": "TIDA05",
-    "nama": "Pusat Data",
-    "sks": 3,
-    "semesterPenawaran": "Genap",
-    "kodePeminatan": "DA",
-    "peminatan": "Data",
-    "jenis": "Teori"
-  },
-  {
-    "kode": "TINE03",
+    "kode": "TINS03",
     "nama": "Core Network",
     "sks": 3,
     "semesterPenawaran": "Genap",
-    "kodePeminatan": "NE",
-    "peminatan": "Network",
+    "kodePeminatan": "NS",
+    "peminatan": "Network & Cyber Security",
     "jenis": "Teori"
   },
   {
-    "kode": "TINE04",
+    "kode": "TINS04",
     "nama": "Programmable Infrastructure",
     "sks": 3,
     "semesterPenawaran": "Genap",
-    "kodePeminatan": "NE",
-    "peminatan": "Network",
+    "kodePeminatan": "NS",
+    "peminatan": "Network & Cyber Security",
     "jenis": "Teori"
   },
   {
-    "kode": "TINE05",
+    "kode": "TINS05",
     "nama": "Routing Lanjut",
     "sks": 3,
     "semesterPenawaran": "Genap",
-    "kodePeminatan": "NE",
-    "peminatan": "Network",
-    "jenis": "Teori"
-  },
-  {
-    "kode": "TIUX03",
-    "nama": "Aplikasi Multimedia",
-    "sks": 3,
-    "semesterPenawaran": "Genap",
-    "kodePeminatan": "UX",
-    "peminatan": "User Experience",
-    "jenis": "Teori"
-  },
-  {
-    "kode": "TIUX04",
-    "nama": "Desain Game",
-    "sks": 3,
-    "semesterPenawaran": "Genap",
-    "kodePeminatan": "UX",
-    "peminatan": "User Experience",
-    "jenis": "Teori"
-  },
-  {
-    "kode": "TIUX05",
-    "nama": "Evaluasi Pengguna",
-    "sks": 3,
-    "semesterPenawaran": "Genap",
-    "kodePeminatan": "UX",
-    "peminatan": "User Experience",
+    "kodePeminatan": "NS",
+    "peminatan": "Network & Cyber Security",
     "jenis": "Teori"
   }
 ];
@@ -866,7 +776,7 @@ const MasterModel = {
     });
     return list;
   },
-  getMatkulForMahasiswa(semester = 5, kodePeminatan = 'PR') {
+  getMatkulForMahasiswa(semester = 5, kodePeminatan = 'SE') {
     const sem = Number(semester);
     const mkList = kurikulumSemester.filter(k => k.semester === sem);
     const resolved = [];

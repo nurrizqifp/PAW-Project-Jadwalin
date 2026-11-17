@@ -95,11 +95,11 @@
             </div>
             <div>
               <label for="ai-model" class="block font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Model AI Engine</label>
-              <input id="ai-model" type="text" value="gemini-1.5-flash (Google DeepMind)" readonly class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 font-mono text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
+              <input id="ai-model" type="text" value="gemini-1.5-flash (Google DeepMind)" readonly maxlength="40" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 font-mono text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
             </div>
             <div>
-              <label for="max-iterations" class="block font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Maksimal Upaya Repair</label>
-              <input id="max-iterations" type="number" value="3" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900">
+              <label for="max-iterations" class="block font-semibold text-zinc-700 dark:text-zinc-300 mb-1">Maksimal Upaya Repair (1–10)</label>
+              <input id="max-iterations" type="number" required value="3" min="1" max="10" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900">
             </div>
           </div>
         </div>
@@ -199,7 +199,7 @@
     }
   }
 
-  function startGenerationSimulation() {
+  async function startGenerationSimulation() {
     const card = document.getElementById('gen-progress-card');
     const bar = document.getElementById('gen-bar');
     const pct = document.getElementById('gen-pct');
@@ -207,37 +207,57 @@
     const consoleEl = document.getElementById('solver-console');
 
     if (card) card.classList.remove('hidden');
-    let currentPct = 0;
+    if (bar) bar.style.width = '25%';
+    if (pct) pct.textContent = '25%';
+    if (text) text.textContent = 'Mengirim payload master & constraints ke AI Solver (Gemini API)...';
+    consoleEl.innerHTML = '<p class="text-blue-400">[SOLVER START] Menginisialisasi penyusunan jadwal bebas bentrok...</p>';
+    consoleEl.innerHTML += '<p class="text-zinc-300">[API CALL] Memanggil POST /api/generate (temperature: 0.1, JSON mode)...</p>';
 
-    consoleEl.innerHTML = '<p class="text-blue-400">[SOLVER START] Menginisialisasi 111 sesi mata kuliah prodi TI...</p>';
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await response.json();
+      if (!response.ok || !data.sukses) {
+        throw new Error(data.pesan || 'Gagal menjalankan AI Solver.');
+      }
 
-    const interval = setInterval(() => {
-      currentPct += 20;
-      if (bar) bar.style.width = currentPct + '%';
-      if (pct) pct.textContent = currentPct + '%';
+      const r = data.result || {};
+      const ev = r.evaluasi || {};
+      if (bar) bar.style.width = '100%';
+      if (pct) pct.textContent = '100%';
+      if (text) {
+        text.textContent = r.totalKonflik === 0
+          ? 'Penyusunan jadwal selesai dengan status ZERO CLASH!'
+          : `Penyusunan selesai dengan ${r.totalKonflik} konflik terdeteksi.`;
+      }
 
-      if (currentPct === 40) {
-        text.textContent = 'Mengevaluasi Hard Constraints (Dosen, Ruang, Sholat Dhuhur)...';
-        consoleEl.innerHTML += '<p class="text-zinc-300">[HC-CHECK] Memvalidasi jeda sholat 11:30–12:10 WIB: PASS (0 bentrok)</p>';
-      } else if (currentPct === 60) {
-        text.textContent = 'Menyesuaikan 31 praktikum ke 4 Lab Komputer F4...';
-        consoleEl.innerHTML += '<p class="text-zinc-300">[LAB-MATCH] Alokasi F4.LAB1 s/d LAB4: PASS (100% valid)</p>';
-      } else if (currentPct === 80) {
-        text.textContent = 'Mengoptimalkan soft constraint hari riset dosen...';
-        consoleEl.innerHTML += '<p class="text-amber-400">[SC-OPTIM] Kepuasan preferensi dosen: 94.2%</p>';
-      } else if (currentPct >= 100) {
-        clearInterval(interval);
-        text.textContent = 'Penyusunan jadwal selesai dengan status ZERO CLASH!';
-        consoleEl.innerHTML += '<p class="text-emerald-400">[SUCCESS] Jadwal perkuliahan berhasil digenerate dalam 1.82 detik!</p>';
+      consoleEl.innerHTML += `<p class="text-zinc-300">[ENGINE] Sumber: ${r.source || 'ai-solver'} (${r.model || '-'})</p>`;
+      if (r.fallbackReason) {
+        consoleEl.innerHTML += `<p class="text-amber-400">[FALLBACK INFO] ${r.fallbackReason}</p>`;
+      }
+      consoleEl.innerHTML += `<p class="text-zinc-300">[HC-CHECK] Pelanggaran Hard Constraint: ${r.totalKonflik ?? 0}</p>`;
+      consoleEl.innerHTML += `<p class="text-zinc-300">[LAB-MATCH] Kesesuaian Lab: ${ev.persenLabMatching ?? 100}% · Preferensi Dosen: ${ev.persenPreferensiDosenTerpenuhi ?? 100}%</p>`;
+      consoleEl.innerHTML += `<p class="text-emerald-400">[SUCCESS] ${r.message} (${ev.totalSesi ?? 0} sesi dalam ${ev.durasiGenerateDetik ?? 0}s)</p>`;
+
+      if (window.showConfirmDialog) {
         setTimeout(() => {
           window.showConfirmDialog(
-            'Generate Jadwal Berhasil',
-            '111 Sesi perkuliahan berhasil disusun tanpa satupun bentrok. Buka halaman Preview & Publikasi?',
+            'Generate Jadwal Selesai',
+            `${ev.totalSesi ?? 0} sesi perkuliahan berhasil disusun (${r.totalKonflik ?? 0} bentrok). Buka halaman Preview & Publikasi?`,
             () => { window.location.href = '/admin/jadwal'; },
             'Buka Matriks Jadwal'
           );
-        }, 600);
+        }, 400);
       }
-    }, 400);
+    } catch (err) {
+      if (bar) bar.style.width = '100%';
+      if (text) text.textContent = 'Terjadi kesalahan saat menjalankan AI Solver.';
+      consoleEl.innerHTML += `<p class="text-rose-400">[ERROR] ${err.message}</p>`;
+      if (window.JadwalinUI && window.JadwalinUI.toast) {
+        window.JadwalinUI.toast.show('Gagal generate jadwal: ' + err.message, 'error');
+      }
+    }
   }
 </script>

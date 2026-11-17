@@ -19,7 +19,7 @@
             </p>
           </div>
 
-          <button type="button" onclick="openMahasiswaDrawer('Tambah Mahasiswa Baru', '', '', '5', '2024', 'A')"
+          <button type="button" onclick="openMahasiswaDrawer('Tambah Mahasiswa Baru', '', '', '5', '2024', 'SE')"
             class="inline-flex min-h-[38px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
             <i class="ph ph-plus text-base text-amber-400"></i>
             <span>Tambah Mahasiswa</span>
@@ -40,30 +40,30 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
-                <tr>
-                  <td class="px-4 py-3 font-mono font-bold text-zinc-900 dark:text-zinc-100">20240140093</td>
-                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Haidar Yahya Mudhofar</td>
-                  <td class="px-4 py-3 font-mono">Semester 5</td>
-                  <td class="px-4 py-3 font-mono">2024</td>
-                  <td class="px-4 py-3 font-mono">Kelas B</td>
-                  <td class="px-4 py-3 text-right">
-                    <button type="button" onclick="openMahasiswaDrawer('Edit Mahasiswa', '20240140093', 'Haidar Yahya Mudhofar', '5', '2024', 'B')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                      <i class="ph ph-pencil-simple text-base"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="px-4 py-3 font-mono font-bold text-zinc-900 dark:text-zinc-100">20240140089</td>
-                  <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">Bima Eka Setiawan</td>
-                  <td class="px-4 py-3 font-mono">Semester 5</td>
-                  <td class="px-4 py-3 font-mono">2024</td>
-                  <td class="px-4 py-3 font-mono">Kelas A</td>
-                  <td class="px-4 py-3 text-right">
-                    <button type="button" onclick="openMahasiswaDrawer('Edit Mahasiswa', '20240140089', 'Bima Eka Setiawan', '5', '2024', 'A')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1">
-                      <i class="ph ph-pencil-simple text-base"></i>
-                    </button>
-                  </td>
-                </tr>
+                <% const listMhs = (typeof mahasiswaList !== 'undefined' && Array.isArray(mahasiswaList)) ? mahasiswaList : []; %>
+                <% if (listMhs.length === 0) { %>
+                  <tr>
+                    <td colspan="6" class="px-4 py-6 text-center text-zinc-500">Belum ada data mahasiswa di database.</td>
+                  </tr>
+                <% } else { %>
+                  <% listMhs.forEach(function(mhs) { %>
+                    <tr>
+                      <td class="px-4 py-3 font-mono font-bold text-zinc-900 dark:text-zinc-100"><%= mhs.nim %></td>
+                      <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100"><%= mhs.nama %></td>
+                      <td class="px-4 py-3 font-mono">Semester <%= mhs.semesterAktif %></td>
+                      <td class="px-4 py-3 font-mono"><%= mhs.angkatan %></td>
+                      <td class="px-4 py-3 font-mono"><%= mhs.kodePeminatan || 'SE' %></td>
+                      <td class="px-4 py-3 text-right space-x-1">
+                        <button type="button" onclick="openMahasiswaDrawer('Edit Mahasiswa', '<%= mhs.nim %>', '<%= mhs.nama.replace(/'/g, "\\'") %>', '<%= mhs.semesterAktif %>', '<%= mhs.angkatan %>', '<%= mhs.kodePeminatan || 'SE' %>', '<%= mhs.id %>')" class="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 p-1" title="Edit">
+                          <i class="ph ph-pencil-simple text-base"></i>
+                        </button>
+                        <button type="button" onclick="deleteMahasiswa(<%= mhs.id %>, '<%= mhs.nama.replace(/'/g, "\\'") %>')" class="text-zinc-400 hover:text-rose-600 p-1" title="Hapus">
+                          <i class="ph ph-trash text-base"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  <% }); %>
+                <% } %>
               </tbody>
             </table>
           </div>
@@ -95,35 +95,33 @@
 
     <form onsubmit="handleSaveMahasiswa(event)" class="flex-1 overflow-y-auto p-5 space-y-4 text-xs">
       <div class="space-y-1">
-        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nomor Induk Mahasiswa (NIM)</label>
-        <input id="input-mhs-nim" type="text" required placeholder="Contoh: 20240140093"
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nomor Induk Mahasiswa / NIM (11 Digit Angka)</label>
+        <input id="input-mhs-nim" type="text" required minlength="11" maxlength="11" pattern="\d{11}" inputmode="numeric" title="NIM wajib tepat 11 digit angka standar TI UMY (contoh: 20240140056)" placeholder="Contoh: 20240140093"
           class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
       </div>
 
       <div class="space-y-1">
-        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama Lengkap Mahasiswa</label>
-        <input id="input-mhs-name" type="text" required placeholder="Contoh: Haidar Yahya Mudhofar"
+        <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Nama Lengkap Mahasiswa (Maks. 60 Karakter)</label>
+        <input id="input-mhs-name" type="text" required minlength="3" maxlength="60" placeholder="Contoh: Haidar Yahya Mudhofar"
           class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
       </div>
 
       <div class="grid grid-cols-3 gap-3">
         <div class="space-y-1">
-          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Semester</label>
-          <input id="input-mhs-sem" type="number" required value="5" min="1" max="8"
+          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Semester (<%= (typeof activePeriode !== 'undefined' && activePeriode) ? activePeriode.semesterTipe : 'Aktif' %>)</label>
+          <input id="input-mhs-sem" type="number" required value="<%= (typeof activePeriode !== 'undefined' && activePeriode && activePeriode.semesterTipe === 'Genap') ? 4 : 5 %>" min="1" max="8"
             class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
         </div>
         <div class="space-y-1">
-          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Angkatan</label>
-          <input id="input-mhs-ang" type="text" required value="2024"
+          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Angkatan (4 Digit)</label>
+          <input id="input-mhs-ang" type="number" required value="2024" min="2019" max="2030"
             class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 font-mono text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
         </div>
         <div class="space-y-1">
-          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Kelas Teori</label>
+          <label class="block font-semibold text-zinc-700 dark:text-zinc-300">Jalur Peminatan</label>
           <select id="input-mhs-cls" class="w-full min-h-[38px] rounded-lg border border-zinc-200 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
-            <option value="A">Kelas A</option>
-            <option value="B">Kelas B</option>
-            <option value="C">Kelas C</option>
-            <option value="D">Kelas D</option>
+            <option value="SE">SE (Software Engineering)</option>
+            <option value="NS">NS (Network &amp; Cyber Security)</option>
           </select>
         </div>
       </div>
@@ -145,7 +143,10 @@
 </div>
 
 <script>
-  function openMahasiswaDrawer(title, nim, name, sem, ang, cls) {
+  let editingMhsId = null;
+
+  function openMahasiswaDrawer(title, nim, name, sem, ang, cls, id = null) {
+    editingMhsId = id ? Number(id) : null;
     const overlay = document.getElementById('drawer-mhs-overlay');
     const panel = document.getElementById('drawer-mhs-panel');
     const titleEl = document.getElementById('mhs-drawer-title');
@@ -156,11 +157,11 @@
     const clsEl = document.getElementById('input-mhs-cls');
 
     if (titleEl) titleEl.textContent = title;
-    if (nimEl) nimEl.value = nim;
-    if (nameEl) nameEl.value = name;
-    if (semEl) semEl.value = sem;
-    if (angEl) angEl.value = ang;
-    if (clsEl) clsEl.value = cls;
+    if (nimEl) nimEl.value = nim || '';
+    if (nameEl) nameEl.value = name || '';
+    if (semEl) semEl.value = sem || '5';
+    if (angEl) angEl.value = ang || '2024';
+    if (clsEl) clsEl.value = cls || 'SE';
 
     if (overlay && panel) {
       overlay.classList.remove('opacity-0', 'pointer-events-none');
@@ -177,9 +178,52 @@
     }
   }
 
-  function handleSaveMahasiswa(e) {
+  async function handleSaveMahasiswa(e) {
     e.preventDefault();
-    closeMahasiswaDrawer();
-    window.showConfirmDialog('Mahasiswa Disimpan', 'Data mahasiswa berhasil diperbarui.', null, 'Selesai', true);
+    const payload = {
+      kategori: 'mahasiswa',
+      nim: document.getElementById('input-mhs-nim')?.value.trim(),
+      nama: document.getElementById('input-mhs-name')?.value.trim(),
+      semesterAktif: Number(document.getElementById('input-mhs-sem')?.value || 5),
+      angkatan: Number(document.getElementById('input-mhs-ang')?.value || 2024),
+      kodePeminatan: document.getElementById('input-mhs-cls')?.value || 'SE'
+    };
+
+    try {
+      const url = editingMhsId ? `/api/master/mahasiswa/${editingMhsId}` : '/api/master';
+      const method = editingMhsId ? 'PUT' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menyimpan mahasiswa.');
+      closeMahasiswaDrawer();
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+      setTimeout(() => window.location.reload(), 400);
+    } catch (err) {
+      if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+      else alert(err.message);
+    }
+  }
+
+  function deleteMahasiswa(id, nama) {
+    const execDelete = async () => {
+      try {
+        const res = await fetch(`/api/master/mahasiswa/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok || !data.sukses) throw new Error(data.pesan || 'Gagal menghapus mahasiswa.');
+        if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(data.pesan, 'success');
+        setTimeout(() => window.location.reload(), 400);
+      } catch (err) {
+        if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show(err.message, 'error');
+      }
+    };
+    if (window.showConfirmDialog) {
+      window.showConfirmDialog('Hapus Mahasiswa', `Yakin ingin menghapus ${nama}?`, execDelete, 'Hapus');
+    } else if (confirm(`Hapus ${nama}?`)) {
+      execDelete();
+    }
   }
 </script>

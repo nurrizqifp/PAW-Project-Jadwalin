@@ -6,109 +6,218 @@
   <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
     <%- include('../partials/admin-navbar') %>
 
-    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
-      <div class="max-w-7xl mx-auto space-y-8">
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 bg-zinc-50/50 dark:bg-zinc-950/50">
+      <div class="max-w-7xl mx-auto space-y-5">
         
-        <!-- Header & Live Countdown Card -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-          <div class="md:col-span-2 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
-            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 pb-4 dark:border-zinc-800">
-              <div>
-                <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-blue-900 dark:bg-blue-950/70 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
-                  <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  Semester Ganjil 2026/2027
+        <%
+          const mhsProfil = (typeof activeMahasiswa !== 'undefined' && activeMahasiswa) ? activeMahasiswa : { nim: '20240140001', nama: 'Mahasiswa TI', semesterAktif: 5, kodePeminatan: 'SE' };
+          const mhsNamaDisplay = (typeof currentUser !== 'undefined' && currentUser?.nama) ? currentUser.nama : mhsProfil.nama;
+          const mhsNimDisplay = (typeof currentUser !== 'undefined' && currentUser?.username) ? currentUser.username : mhsProfil.nim;
+          const prkAcc = (typeof prakrsAccess !== 'undefined' && prakrsAccess) ? prakrsAccess : { isOpen: true, deadline: '2026-12-31', reason: 'Pengisian Pra-KRS sedang dibuka.' };
+          const allPersonalList = (typeof defaultPrakrs !== 'undefined' && defaultPrakrs && Array.isArray(defaultPrakrs.rekomendasiSesi)) ? defaultPrakrs.rekomendasiSesi : [];
+          const totalPersonalSks = allPersonalList.reduce((sum, s) => sum + (Number(s.sks) || 0), 0);
+        %>
+
+        <!-- Banner Notifikasi Status Pra-KRS (Ringkas) -->
+        <div class="rounded-xl border px-3.5 py-2 text-xs flex flex-wrap items-center justify-between gap-2 shadow-2xs <%= prkAcc.isOpen ? 'border-emerald-200 bg-emerald-50/80 text-emerald-900 dark:border-emerald-900/60 dark:bg-emerald-950/30 dark:text-emerald-200' : 'border-rose-200 bg-rose-50/80 text-rose-900 dark:border-rose-900/60 dark:bg-rose-950/30 dark:text-rose-200' %>">
+          <div class="flex items-center gap-2">
+            <i class="ph <%= prkAcc.isOpen ? 'ph-bell-ringing text-emerald-600 dark:text-emerald-400' : 'ph-lock-key text-rose-600 dark:text-rose-400' %> text-base shrink-0"></i>
+            <span><strong><%= prkAcc.isOpen ? 'Pra-KRS Dibuka' : 'Pra-KRS Ditutup' %></strong> · Batas: <%= prkAcc.deadline || '-' %></span>
+          </div>
+          <a href="/mahasiswa/notifikasi" class="font-mono text-[11px] font-semibold underline shrink-0">Notifikasi →</a>
+        </div>
+
+        <!-- Compact Header & Live Countdown Card -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div class="lg:col-span-7 rounded-xl border border-zinc-200 bg-white p-4 sm:p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 flex flex-col justify-between gap-3">
+            <div class="space-y-1.5">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 rounded-md bg-blue-50 px-2 py-0.5 font-mono text-[11px] font-semibold text-blue-900 dark:bg-blue-950/70 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+                  <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                  Semester <%= mhsProfil.semesterAktif || 5 %> · Peminatan <%= mhsProfil.kodePeminatan || 'SE' %>
                 </span>
-                <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-2">
-                  Selamat Datang, <%= typeof user !== 'undefined' && user.nama ? user.nama : 'Haidar' %>
-                </h1>
-                <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">NIM: 20220140001 · S1 Teknologi Informasi UMY</p>
+                <span class="inline-flex items-center gap-1 rounded-md bg-zinc-100 px-2 py-0.5 font-mono text-[11px] font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                  <%= allPersonalList.length %> MK · <%= totalPersonalSks %> SKS
+                </span>
               </div>
+              <h1 class="font-heading text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                <%= mhsNamaDisplay %>
+              </h1>
             </div>
 
-            <!-- Quick Action Buttons with Brand Accents -->
-            <div class="flex flex-wrap gap-2.5 pt-2">
-              <a href="/mahasiswa/prakrs" class="inline-flex min-h-[40px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-sm border border-blue-900/40 transition-colors">
-                <i class="ph ph-file-text text-base text-amber-400"></i>
-                <span>Pengisian Pra-KRS</span>
-              </a>
-              <a href="/mahasiswa/jadwal" class="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-amber-300/80 bg-amber-50/70 hover:bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200 dark:hover:bg-amber-950/70 transition-colors shadow-sm">
-                <i class="ph ph-calendar text-base text-amber-600 dark:text-amber-400"></i>
-                <span>Lihat Jadwal Lengkap</span>
-              </a>
-              <a href="/simulasi" class="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 shadow-sm transition-colors">
-                <i class="ph ph-sparkle text-base text-amber-500"></i>
-                <span>Simulasi Bebas Tabrakan</span>
-              </a>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+              <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">NIM: <%= mhsNimDisplay %> · TI UMY</p>
+
+              <!-- Quick Action Buttons (Bersih & Terukur) -->
+              <div class="flex flex-wrap items-center gap-2 shrink-0">
+                <% if (prkAcc.isOpen) { %>
+                  <a href="/mahasiswa/prakrs" class="inline-flex min-h-[36px] items-center gap-1.5 rounded-md bg-[#0c2b5e] hover:bg-[#081d40] px-3 py-1.5 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
+                    <i class="ph ph-file-text text-sm text-amber-400"></i>
+                    <span>Pengisian Pra-KRS</span>
+                  </a>
+                <% } else { %>
+                  <span title="<%= prkAcc.reason %>" class="inline-flex min-h-[36px] items-center gap-1.5 rounded-md bg-zinc-200 dark:bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-zinc-500 dark:text-zinc-400 border border-zinc-300 dark:border-zinc-700 cursor-not-allowed">
+                    <i class="ph ph-lock-key text-sm text-rose-500"></i>
+                    <span>Pra-KRS Ditutup</span>
+                  </span>
+                <% } %>
+                <a href="/mahasiswa/jadwal" class="inline-flex min-h-[36px] items-center gap-1.5 rounded-md border border-zinc-200 bg-white hover:bg-zinc-50 px-3 py-1.5 text-xs font-semibold text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 transition-colors shadow-2xs">
+                  <i class="ph ph-calendar text-sm text-[#0c2b5e] dark:text-amber-400"></i>
+                  <span>Kalender Grid</span>
+                </a>
+              </div>
             </div>
           </div>
 
-          <!-- Live Countdown Timer -->
-          <div class="rounded-2xl border border-blue-900/20 bg-white p-6 shadow-sm dark:border-blue-900/30 dark:bg-zinc-900 flex flex-col justify-between space-y-4">
-            <div>
-              <div class="flex items-center justify-between">
-                <p class="font-mono text-[11px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Sesi Kuliah Aktif</p>
-                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-                  <i class="ph ph-radio-button text-xs"></i>
-                  Live
+          <!-- Live Countdown Timer (Compact, Full Title & Highlighted Ruang/Kelas) -->
+          <%
+            const nowObj = new Date();
+            const nowDayIdx = nowObj.getDay();
+            const nowMinutes = nowObj.getHours() * 60 + nowObj.getMinutes();
+            const parseMin = (hhmm) => {
+              const [hh, mm] = String(hhmm || '00:00').split(':').map(Number);
+              return (Number.isFinite(hh) ? hh : 0) * 60 + (Number.isFinite(mm) ? mm : 0);
+            };
+            const HARI_NAMES = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const todayName = HARI_NAMES[nowDayIdx];
+
+            let activeMhsSession = allPersonalList.find(s => s.hari === todayName && nowMinutes >= parseMin(s.jamMulai) && nowMinutes < parseMin(s.jamSelesai));
+            let sessionPhase = 'live';
+            if (!activeMhsSession && allPersonalList.length > 0) {
+              const sortedNext = [...allPersonalList].sort((a, b) => {
+                const daRaw = (HARI_NAMES.indexOf(a.hari) - nowDayIdx + 7) % 7;
+                const dbRaw = (HARI_NAMES.indexOf(b.hari) - nowDayIdx + 7) % 7;
+                const da = (daRaw === 0 && parseMin(a.jamMulai) <= nowMinutes) ? 7 : daRaw;
+                const db = (dbRaw === 0 && parseMin(b.jamMulai) <= nowMinutes) ? 7 : dbRaw;
+                return (da * 1440 + parseMin(a.jamMulai)) - (db * 1440 + parseMin(b.jamMulai));
+              });
+              activeMhsSession = sortedNext[0];
+              sessionPhase = 'upcoming';
+            }
+            if (!activeMhsSession) {
+              activeMhsSession = { mataKuliah: 'Belum Ada Sesi Terjadwal', ruang: '-', kelas: '-', hari: '-', jamMulai: '00:00', jamSelesai: '00:00', dosen: '-', sks: 0 };
+              sessionPhase = 'empty';
+            }
+          %>
+          <div class="lg:col-span-5 rounded-xl border border-zinc-200 bg-white p-4 sm:p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 flex flex-col justify-between gap-3">
+            <div class="flex items-center justify-between gap-2 pb-2.5 border-b border-zinc-100 dark:border-zinc-800">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-[11px] uppercase tracking-wider text-zinc-400 whitespace-nowrap">Sesi Terdekat</span>
+                <span id="next-session-hari" class="rounded bg-zinc-100 dark:bg-zinc-800 px-2 py-0.5 font-mono text-[11px] font-semibold text-zinc-700 dark:text-zinc-300">
+                  <%= activeMhsSession.hari %>
                 </span>
               </div>
-              <p class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-100 pt-1">Rekayasa Perangkat Lunak</p>
-              <p class="text-xs text-zinc-500 dark:text-zinc-400">Ruang F3-201 · Kelas B</p>
+              <div class="inline-flex items-center gap-1.5 rounded-md bg-blue-50/90 px-2.5 py-1 dark:bg-blue-950/60 border border-blue-200/70 dark:border-blue-900/60 shrink-0">
+                <span id="countdown-label" class="text-[10px] font-medium text-zinc-500 dark:text-zinc-400">
+                  <%= sessionPhase === 'live' ? 'Berakhir' : (sessionPhase === 'upcoming' ? 'Mulai dalam' : 'Status') %>
+                </span>
+                <span id="countdown-active-session"
+                  class="font-mono text-xs font-bold tracking-tight text-[#0c2b5e] dark:text-amber-400 tabular-nums">
+                  --:--:--
+                </span>
+              </div>
             </div>
 
-            <div class="rounded-xl bg-blue-50/60 p-4 dark:bg-blue-950/30 border border-blue-200/60 dark:border-blue-900/40 text-center">
-              <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mb-1">Waktu Sesi Berakhir</p>
-              <p id="countdown-active-session" class="font-mono text-2xl font-bold tracking-tight text-[#0c2b5e] dark:text-amber-400 tabular-nums">
-                01:45:00
+            <div class="space-y-2">
+              <p id="next-session-title" class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-100 leading-snug">
+                <%= activeMhsSession.mataKuliah %>
               </p>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span id="next-session-ruang" class="inline-flex items-center gap-1 rounded-md bg-amber-100 px-2 py-0.5 font-mono text-xs font-bold text-amber-900 dark:bg-amber-950/70 dark:text-amber-300 border border-amber-300/70 dark:border-amber-800">
+                  <i class="ph ph-door"></i> <%= activeMhsSession.ruang %>
+                </span>
+                <span id="next-session-kelas" class="inline-flex items-center rounded-md bg-blue-100 px-2 py-0.5 font-mono text-xs font-bold text-[#0c2b5e] dark:bg-blue-950/70 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                  Kelas <%= activeMhsSession.kelas %>
+                </span>
+                <span id="next-session-waktu" class="font-mono text-xs text-zinc-600 dark:text-zinc-300 ml-0.5">
+                  <%= activeMhsSession.jamMulai %>–<%= activeMhsSession.jamSelesai %> WIB
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-2 pt-2 border-t border-zinc-100 dark:border-zinc-800 text-[11px] font-mono text-zinc-500 dark:text-zinc-400">
+              <span id="next-session-dosen" class="truncate" title="<%= activeMhsSession.dosen || 'Dosen Pengampu TI' %>">
+                <i class="ph ph-chalkboard-teacher mr-1"></i><%= activeMhsSession.dosen || 'Dosen Pengampu TI' %>
+              </span>
+              <span id="next-session-sks" class="shrink-0 font-semibold text-zinc-700 dark:text-zinc-300">
+                <%= activeMhsSession.sks ? activeMhsSession.sks + ' SKS' : '-' %>
+              </span>
             </div>
           </div>
         </div>
 
-        <!-- Agenda Hari Ini -->
-        <div class="space-y-4">
-          <div class="flex items-center justify-between">
-            <h2 class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-50">
-              Jadwal Kuliah Hari Ini (Senin)
+        <!-- Jadwal Kuliah Pribadi Interaktif (Zero-Scroll Filter Hari Langsung di Dashboard) -->
+        <%
+          const HARI_SORT = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+          const sortedPersonal = [...allPersonalList].sort((a, b) => {
+            return HARI_SORT.indexOf(a.hari) - HARI_SORT.indexOf(b.hari) || String(a.jamMulai).localeCompare(String(b.jamMulai));
+          });
+          const hariLabel = typeof displayHari !== 'undefined' ? displayHari : 'Senin';
+        %>
+        <div class="space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 border-b border-zinc-200 pb-3 dark:border-zinc-800">
+            <h2 class="font-heading text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-50">
+              Jadwal Kuliah Minggu Ini
             </h2>
-            <a href="/mahasiswa/jadwal" class="text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 inline-flex items-center gap-1">
-              <span>Semua Hari</span>
-              <i class="ph ph-arrow-right"></i>
-            </a>
+
+            <!-- Interactive Day Filter Pills -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0" id="dash-day-pills">
+              <button type="button" data-dash-day="Semua"
+                class="dash-day-btn px-3 py-1.5 rounded-md text-xs font-semibold bg-[#0c2b5e] text-white shadow-2xs transition-colors shrink-0">
+                Semua Hari (<%= sortedPersonal.length %>)
+              </button>
+              <% HARI_SORT.forEach(function(h) {
+                const cnt = sortedPersonal.filter(s => s.hari === h).length;
+                if (cnt > 0) {
+              %>
+                <button type="button" data-dash-day="<%= h %>"
+                  class="dash-day-btn px-2.5 py-1.5 rounded-md text-xs font-medium border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors shrink-0">
+                  <%= h %> (<%= cnt %>)<%= h === hariLabel ? ' •' : '' %>
+                </button>
+              <% } }); %>
+            </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Item Praktikum Lab (Aksen Kuning Emas) -->
-            <div class="rounded-xl border border-amber-200 bg-amber-50/40 p-5 shadow-sm dark:border-amber-900/40 dark:bg-amber-950/20 space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="font-mono text-xs font-bold text-amber-700 dark:text-amber-400">08:00 - 09:40</span>
-                <span class="rounded bg-amber-100 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-900 dark:bg-amber-950 dark:text-amber-300">Kelas B · Lab</span>
+          <div id="dash-schedule-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            <% if (sortedPersonal.length === 0) { %>
+              <div class="col-span-full rounded-xl border border-zinc-200 bg-white p-6 text-center text-xs text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900">
+                Belum ada sesi perkuliahan terjadwal. Silakan susun rencana studi melalui Pengisian Pra-KRS.
               </div>
-              <div>
-                <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">Pemrograman Berorientasi Objek</h3>
-                <p class="text-xs text-zinc-500 dark:text-zinc-400">Dr. Ir. Bambang Triatmaja, M.Kom.</p>
-              </div>
-              <div class="flex items-center gap-2 pt-2 border-t border-amber-200/60 dark:border-amber-900/40 text-xs text-amber-800 dark:text-amber-300">
-                <i class="ph ph-flask text-sm"></i>
-                <span>Lab Komputer Multimedia</span>
-              </div>
-            </div>
-
-            <!-- Item Teori (Aksen Biru Navy) -->
-            <div class="rounded-xl border border-blue-200 bg-blue-50/40 p-5 shadow-sm dark:border-blue-900/40 dark:bg-blue-950/20 space-y-3">
-              <div class="flex items-center justify-between">
-                <span class="font-mono text-xs font-bold text-blue-700 dark:text-blue-400">10:00 - 11:40</span>
-                <span class="rounded bg-blue-100 px-2 py-0.5 font-mono text-[10px] font-bold text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300">Kelas B · Teori</span>
-              </div>
-              <div>
-                <h3 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">Kecerdasan Buatan</h3>
-                <p class="text-xs text-zinc-500 dark:text-zinc-400">Hendra Prasetyo, Ph.D.</p>
-              </div>
-              <div class="flex items-center gap-2 pt-2 border-t border-blue-200/60 dark:border-blue-900/40 text-xs text-blue-800 dark:text-blue-300">
-                <i class="ph ph-door text-sm"></i>
-                <span>Ruang F3-202</span>
-              </div>
-            </div>
+            <% } else { %>
+              <% sortedPersonal.forEach(function(sesi) {
+                const isLab = String(sesi.ruang || '').toUpperCase().includes('LAB') || String(sesi.jenis || '').toLowerCase().includes('praktikum');
+              %>
+                <div data-card-day="<%= sesi.hari %>"
+                  class="dash-sesi-card rounded-xl border p-4 shadow-2xs transition-colors space-y-2.5 <%= isLab ? 'border-amber-200 bg-amber-50/40 dark:border-amber-900/40 dark:bg-amber-950/20' : 'border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900' %>">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="inline-flex items-center gap-1.5 font-mono text-xs font-bold <%= isLab ? 'text-amber-800 dark:text-amber-300' : 'text-[#0c2b5e] dark:text-blue-300' %>">
+                      <span><%= sesi.hari %>,</span>
+                      <span><%= sesi.jamMulai %>–<%= sesi.jamSelesai %></span>
+                    </span>
+                    <span class="rounded px-2 py-0.5 font-mono text-[10px] font-bold <%= isLab ? 'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300' : 'bg-blue-50 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300' %>">
+                      Kls <%= sesi.kelas %> · <%= sesi.sks %> SKS
+                    </span>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-1.5">
+                      <span class="font-mono text-[10px] font-semibold text-zinc-400"><%= sesi.kodeMatkul %></span>
+                      <% if (sesi.hari === hariLabel) { %>
+                        <span class="rounded bg-emerald-100 dark:bg-emerald-950 px-1.5 py-0.2 font-mono text-[9px] font-bold text-emerald-700 dark:text-emerald-300">Hari Ini</span>
+                      <% } %>
+                    </div>
+                    <h3 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-50 leading-snug pt-0.5"><%= sesi.mataKuliah %></h3>
+                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400 truncate pt-0.5" title="<%= sesi.dosen %>"><%= sesi.dosen %></p>
+                  </div>
+                  <div class="flex items-center justify-between pt-2 border-t border-zinc-100 dark:border-zinc-800 text-[11px] font-mono">
+                    <span class="inline-flex items-center gap-1 rounded px-2 py-0.5 font-semibold <%= isLab ? 'bg-amber-100 text-amber-900 dark:bg-amber-950/70 dark:text-amber-300' : 'bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200' %>">
+                      <i class="ph <%= isLab ? 'ph-flask text-amber-600' : 'ph-door text-zinc-500' %>"></i>
+                      <%= sesi.ruang %>
+                    </span>
+                    <span class="font-semibold text-[#0c2b5e] dark:text-blue-300">Kelas <%= sesi.kelas %></span>
+                  </div>
+                </div>
+              <% }); %>
+            <% } %>
           </div>
         </div>
 
@@ -120,27 +229,114 @@
 </div>
 
 <script>
-  // Live Countdown Timer (Resya x Yuum)
+  // Live Countdown Timer mingguan (Hari · Jam : Menit : Detik menuju sesi berikutnya)
   (function() {
+    const PERSONAL_SESSIONS = <%- JSON.stringify(allPersonalList) %>;
     const el = document.getElementById("countdown-active-session");
-    if (!el) return;
+    const labelEl = document.getElementById("countdown-label");
+    const hariEl = document.getElementById("next-session-hari");
+    const titleEl = document.getElementById("next-session-title");
+    const ruangEl = document.getElementById("next-session-ruang");
+    const kelasEl = document.getElementById("next-session-kelas");
+    const waktuEl = document.getElementById("next-session-waktu");
+    const dosenEl = document.getElementById("next-session-dosen");
+    const sksEl = document.getElementById("next-session-sks");
+    if (!el || !Array.isArray(PERSONAL_SESSIONS) || PERSONAL_SESSIONS.length === 0) return;
 
-    // Target 1 jam 45 menit dari saat halaman dimuat
-    let totalSeconds = (1 * 3600) + (45 * 60);
+    const hariMap = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const parseHM = (hhmm) => {
+      const [h, m] = String(hhmm || '00:00').split(':').map(Number);
+      return [Number.isFinite(h) ? h : 0, Number.isFinite(m) ? m : 0];
+    };
+
+    const formatCountdown = (totalSec) => {
+      const s = Math.max(0, totalSec);
+      const days = Math.floor(s / 86400);
+      const hours = Math.floor((s % 86400) / 3600);
+      const minutes = Math.floor((s % 3600) / 60);
+      const seconds = s % 60;
+      const hms = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      return days > 0 ? `${days} Hari ${hms}` : hms;
+    };
 
     const updateTimer = () => {
-      if (totalSeconds <= 0) {
-        el.innerHTML = "<span class='text-emerald-600 dark:text-emerald-400'>SELESAI</span>";
-        return;
+      const now = new Date();
+      const nowDay = now.getDay();
+      const todayName = hariMap[nowDay];
+
+      let targetSession = null;
+      let targetDate = null;
+      let isLive = false;
+
+      // 1. Cek sesi yang sedang berlangsung sekarang
+      for (const s of PERSONAL_SESSIONS) {
+        if (s.hari !== todayName) continue;
+        const [sh, sm] = parseHM(s.jamMulai);
+        const [eh, em] = parseHM(s.jamSelesai);
+        const startDt = new Date(now); startDt.setHours(sh, sm, 0, 0);
+        const endDt = new Date(now); endDt.setHours(eh, em, 0, 0);
+        if (now >= startDt && now < endDt) {
+          targetSession = s;
+          targetDate = endDt;
+          isLive = true;
+          break;
+        }
       }
-      totalSeconds--;
-      const hours = Math.floor(totalSeconds / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = totalSeconds % 60;
-      el.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+      // 2. Cari sesi terdekat berikutnya dalam siklus 7 hari
+      if (!targetSession) {
+        let bestDiff = Infinity;
+        for (const s of PERSONAL_SESSIONS) {
+          const sDay = hariMap.indexOf(s.hari);
+          if (sDay < 0) continue;
+          const [sh, sm] = parseHM(s.jamMulai);
+          let dayDiff = (sDay - nowDay + 7) % 7;
+          const dt = new Date(now);
+          dt.setDate(now.getDate() + dayDiff);
+          dt.setHours(sh, sm, 0, 0);
+          if (dt <= now) dt.setDate(dt.getDate() + 7);
+          const diffMs = dt - now;
+          if (diffMs < bestDiff) {
+            bestDiff = diffMs;
+            targetSession = s;
+            targetDate = dt;
+          }
+        }
+      }
+
+      if (!targetSession || !targetDate) return;
+
+      const diffSec = Math.max(0, Math.floor((targetDate - now) / 1000));
+      if (labelEl) labelEl.textContent = isLive ? 'Berakhir:' : 'Mulai:';
+      el.textContent = formatCountdown(diffSec);
+
+      if (hariEl) hariEl.textContent = targetSession.hari;
+      if (titleEl) titleEl.textContent = targetSession.mataKuliah;
+      if (ruangEl) ruangEl.innerHTML = `<i class="ph ph-door"></i> ${targetSession.ruang}`;
+      if (kelasEl) kelasEl.textContent = `Kelas ${targetSession.kelas}`;
+      if (waktuEl) waktuEl.textContent = `${targetSession.jamMulai}–${targetSession.jamSelesai} WIB`;
+      if (dosenEl) dosenEl.innerHTML = `<i class="ph ph-chalkboard-teacher mr-1"></i>${targetSession.dosen || 'Dosen Pengampu TI'}`;
+      if (sksEl) sksEl.textContent = targetSession.sks ? `${targetSession.sks} SKS` : '-';
     };
 
     updateTimer();
     setInterval(updateTimer, 1000);
+
+    // Interactive Day Filter Pills pada Dashboard Mahasiswa
+    const dayBtns = document.querySelectorAll('.dash-day-btn');
+    const cards = document.querySelectorAll('.dash-sesi-card');
+    dayBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetDay = btn.getAttribute('data-dash-day');
+        dayBtns.forEach(b => {
+          b.className = 'dash-day-btn px-2.5 py-1.5 rounded-md text-xs font-medium border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors shrink-0';
+        });
+        btn.className = 'dash-day-btn px-3 py-1.5 rounded-md text-xs font-semibold bg-[#0c2b5e] text-white shadow-2xs transition-colors shrink-0';
+        cards.forEach(card => {
+          const cardDay = card.getAttribute('data-card-day');
+          card.style.display = (targetDay === 'Semua' || cardDay === targetDay) ? '' : 'none';
+        });
+      });
+    });
   })();
 </script>
