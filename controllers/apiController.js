@@ -2,7 +2,6 @@ const { z } = require('zod');
 const MasterModel = require('../models/masterModel');
 const JadwalModel = require('../models/jadwalModel');
 const ConstraintModel = require('../models/constraintModel');
-const ProdukModel = require('../models/produkModel');
 const aiSolverService = require('../services/aiSolverService');
 const config = require('../config');
 
@@ -351,11 +350,80 @@ exports.generate = async (req, res) => {
   }
 };
 
-exports.produk = (req, res) => {
-  const data = ProdukModel.getAll();
-  res.json({
-    sukses: true,
-    jumlah: data.length,
-    data
+exports.backupPostgres = (req, res) => {
+  const dosens = MasterModel.getDosen();
+  const matkuls = MasterModel.getMatkulForMahasiswa(5, 'ALL') || [];
+  const ruangans = MasterModel.getRuangan();
+  const jadwals = JadwalModel.getAll();
+  const constraints = ConstraintModel.getAll();
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+
+  let sqlDump = `-- ====================================================================\n`;
+  sqlDump += `-- Jadwalin PostgreSQL Database Backup Dump\n`;
+  sqlDump += `-- Database: jadwalin_db | Generated: ${new Date().toISOString()}\n`;
+  sqlDump += `-- Engine: PostgreSQL 16 Relational Schema\n`;
+  sqlDump += `-- ====================================================================\n\n`;
+  sqlDump += `BEGIN;\n\n`;
+
+  // 1. Dosen
+  sqlDump += `-- Table: dosens\n`;
+  sqlDump += `CREATE TABLE IF NOT EXISTS dosens (\n`;
+  sqlDump += `  id SERIAL PRIMARY KEY,\n`;
+  sqlDump += `  nama VARCHAR(150) NOT NULL,\n`;
+  sqlDump += `  inisial VARCHAR(10),\n`;
+  sqlDump += `  nidn VARCHAR(30),\n`;
+  sqlDump += `  keahlian VARCHAR(150),\n`;
+  sqlDump += `  beban_sks INTEGER DEFAULT 12,\n`;
+  sqlDump += `  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP\n`;
+  sqlDump += `);\n\n`;
+
+  dosens.forEach(d => {
+    const namaSafe = (d.nama || '').replace(/'/g, "''");
+    const keahlianSafe = (d.keahlian || '').replace(/'/g, "''");
+    sqlDump += `INSERT INTO dosens (nama, inisial, nidn, keahlian, beban_sks) VALUES ('${namaSafe}', '${d.inisial || ''}', '${d.nidn || ''}', '${keahlianSafe}', ${d.bebanSks || 12});\n`;
   });
+
+  // 2. Ruangan
+  sqlDump += `\n-- Table: ruangans\n`;
+  sqlDump += `CREATE TABLE IF NOT EXISTS ruangans (\n`;
+  sqlDump += `  id SERIAL PRIMARY KEY,\n`;
+  sqlDump += `  kode VARCHAR(30) NOT NULL UNIQUE,\n`;
+  sqlDump += `  nama VARCHAR(150) NOT NULL,\n`;
+  sqlDump += `  gedung VARCHAR(10),\n`;
+  sqlDump += `  kapasitas INTEGER DEFAULT 40,\n`;
+  sqlDump += `  tipe VARCHAR(50)\n`;
+  sqlDump += `);\n\n`;
+
+  ruangans.forEach(r => {
+    const namaSafe = (r.nama || '').replace(/'/g, "''");
+    sqlDump += `INSERT INTO ruangans (kode, nama, gedung, kapasitas, tipe) VALUES ('${r.kode}', '${namaSafe}', '${r.gedung || 'F4'}', ${r.kapasitas || 40}, '${r.tipe || 'Reguler'}') ON CONFLICT (kode) DO NOTHING;\n`;
+  });
+
+  // 3. Jadwal Perkuliahan
+  sqlDump += `\n-- Table: jadwal_sesis\n`;
+  sqlDump += `CREATE TABLE IF NOT EXISTS jadwal_sesis (\n`;
+  sqlDump += `  id SERIAL PRIMARY KEY,\n`;
+  sqlDump += `  kode_matkul VARCHAR(20),\n`;
+  sqlDump += `  mata_kuliah VARCHAR(150) NOT NULL,\n`;
+  sqlDump += `  kelas VARCHAR(10),\n`;
+  sqlDump += `  sks INTEGER DEFAULT 3,\n`;
+  sqlDump += `  dosen VARCHAR(150),\n`;
+  sqlDump += `  ruang VARCHAR(50),\n`;
+  sqlDump += `  hari VARCHAR(20),\n`;
+  sqlDump += `  jam_mulai VARCHAR(10),\n`;
+  sqlDump += `  jam_selesai VARCHAR(10),\n`;
+  sqlDump += `  jenis VARCHAR(30)\n`;
+  sqlDump += `);\n\n`;
+
+  jadwals.forEach(j => {
+    const mkSafe = (j.mataKuliah || '').replace(/'/g, "''");
+    const dosenSafe = (j.dosen || '').replace(/'/g, "''");
+    sqlDump += `INSERT INTO jadwal_sesis (kode_matkul, mata_kuliah, kelas, sks, dosen, ruang, hari, jam_mulai, jam_selesai, jenis) VALUES ('${j.kodeMatkul || 'TI261'}', '${mkSafe}', '${j.kelas}', ${j.sks}, '${dosenSafe}', '${j.ruang}', '${j.hari}', '${j.jamMulai}', '${j.jamSelesai}', '${j.jenis}');\n`;
+  });
+
+  sqlDump += `\nCOMMIT;\n`;
+
+  res.setHeader('Content-Type', 'application/sql');
+  res.setHeader('Content-Disposition', `attachment; filename="jadwalin_postgres_backup_${timestamp}.sql"`);
+  return res.send(sqlDump);
 };

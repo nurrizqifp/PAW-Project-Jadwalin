@@ -1,46 +1,35 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
+const dbConfigs = require('./config');
 
-const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432', 10),
-  database: process.env.DB_NAME || 'jadwalin_db',
-  username: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || '',
-  dialect: 'postgres',
-  logging: process.env.NODE_ENV === 'development' ? console.log : false,
-};
+const env = process.env.NODE_ENV || 'development';
+const currentConfig = dbConfigs[env] || dbConfigs.development;
 
-let sequelize = null;
-
-// Helper untuk inisialisasi koneksi database saat PostgreSQL diaktifkan
-const connectDatabase = async () => {
-  if (!sequelize) {
-    sequelize = new Sequelize(
-      dbConfig.database,
-      dbConfig.username,
-      dbConfig.password,
-      {
-        host: dbConfig.host,
-        port: dbConfig.port,
-        dialect: dbConfig.dialect,
-        logging: dbConfig.logging,
-      }
-    );
+const sequelize = new Sequelize(
+  currentConfig.database,
+  currentConfig.username,
+  currentConfig.password,
+  {
+    host: currentConfig.host,
+    port: currentConfig.port,
+    dialect: currentConfig.dialect,
+    logging: currentConfig.logging,
   }
+);
 
+const connectDatabase = async () => {
   try {
     await sequelize.authenticate();
-    console.log('Database PostgreSQL terhubung dengan sukses.');
+    console.log('[Database] PostgreSQL terhubung dengan sukses.');
     return sequelize;
   } catch (error) {
-    console.warn('Database belum aktif / tidak terhubung (menggunakan model statis memory):', error.message);
+    console.warn('[Database] Belum aktif / tidak terhubung (menggunakan fallback memori jika offline):', error.message);
     return null;
   }
 };
 
 module.exports = {
-  dbConfig,
+  dbConfig: currentConfig,
   connectDatabase,
   getSequelize: () => sequelize,
+  sequelize,
 };

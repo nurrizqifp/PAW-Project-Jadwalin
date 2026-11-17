@@ -1,0 +1,283 @@
+<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Form Preferensi Waktu Dosen — Jadwalin' }) %>
+
+<div class="flex-1 flex min-h-screen">
+  <%- include('../partials/admin-sidebar', { activeMenu: 'preferensi', currentRole: 'dosen' }) %>
+
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <%- include('../partials/admin-navbar') %>
+
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
+      <div class="max-w-4xl mx-auto space-y-6">
+
+        <!-- Header & Profile Info -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200/80 pb-5 dark:border-zinc-800">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 text-xs text-zinc-500 mb-1">
+              <a href="/dosen/dashboard" class="hover:text-zinc-900 dark:hover:text-zinc-200">Portal Dosen</a>
+              <span>/</span>
+              <span class="text-amber-600 dark:text-amber-400 font-semibold">Preferensi Waktu</span>
+            </div>
+            <h1 class="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+              Formulir Preferensi Hari & Jam Mengajar
+            </h1>
+            <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
+              Dr. Ir. Bambang Triatmaja, M.Kom. (NIDN: 0512037501) · Semester Ganjil 2026/2027
+            </p>
+          </div>
+
+          <!-- Counter Card Ringkas -->
+          <div class="inline-flex items-center gap-3 bg-white dark:bg-zinc-900 p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-xs shrink-0 text-xs">
+            <div class="flex items-center gap-1.5 font-semibold text-[#0c2b5e] dark:text-blue-300">
+              <i class="ph ph-calendar-check text-base text-amber-500"></i>
+              <span id="active-days-counter">5 Hari Bersedia</span>
+            </div>
+            <span class="text-zinc-300 dark:text-zinc-700">|</span>
+            <span class="text-zinc-500 font-mono text-[11px]">Beban: 12 SKS</span>
+          </div>
+        </div>
+
+        <form id="form-preferensi-dosen" class="space-y-6" onsubmit="handleFormSubmit(event)">
+
+          <!-- Section 1: Ketersediaan Hari & Pilihan Slot Waktu -->
+          <div class="rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-zinc-100 pb-3 dark:border-zinc-800">
+              <div>
+                <h2 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">
+                  Ketersediaan Hari & Pilihan Slot Waktu
+                </h2>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  Aktifkan hari mengajar dan tentukan preferensi slot jam (Pagi, Siang, atau Sore) pada masing-masing hari.
+                </p>
+              </div>
+              <span class="inline-flex items-center gap-1 rounded bg-amber-50 px-2 py-0.5 font-mono text-[10px] font-bold text-amber-900 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                Soft Constraint SC-01
+              </span>
+            </div>
+
+            <!-- Grid 6 Hari Interaktif (Senin s/d Sabtu) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-1" id="days-grid-container">
+
+              <% 
+                const daftarHari = [
+                  { hari: 'Senin', aktif: true, pagi: true, siang: true, sore: false },
+                  { hari: 'Selasa', aktif: true, pagi: true, siang: false, sore: false },
+                  { hari: 'Rabu', aktif: true, pagi: true, siang: true, sore: false },
+                  { hari: 'Kamis', aktif: true, pagi: true, siang: true, sore: true },
+                  { hari: 'Jumat', aktif: false, pagi: false, siang: false, sore: false },
+                  { hari: 'Sabtu', aktif: true, pagi: true, siang: false, sore: false }
+                ];
+              %>
+
+              <% daftarHari.forEach((d) => { %>
+                <div id="card-day-<%= d.hari.toLowerCase() %>" 
+                  class="day-card rounded-xl border p-4 transition-all duration-200 space-y-3 <%= d.aktif ? 'border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 shadow-xs' : 'border-zinc-200/60 bg-zinc-50/60 dark:border-zinc-800/50 dark:bg-zinc-900/40 opacity-70' %>">
+                  
+                  <!-- Card Header: Switch + Nama Hari + Status Badge -->
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" <%= d.aktif ? 'checked' : '' %> 
+                          id="toggle-<%= d.hari.toLowerCase() %>"
+                          onchange="toggleDayStatus('<%= d.hari.toLowerCase() %>')"
+                          class="sr-only peer">
+                        <div class="w-9 h-5 bg-zinc-200 peer-focus:outline-none rounded-full peer dark:bg-zinc-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-zinc-600 peer-checked:bg-[#0c2b5e]"></div>
+                      </label>
+                      <span class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">
+                        <%= d.hari %>
+                      </span>
+                    </div>
+
+                    <span id="badge-status-<%= d.hari.toLowerCase() %>"
+                      class="px-2 py-0.5 rounded font-mono text-[10px] font-bold <%= d.aktif ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400' %>">
+                      <%= d.aktif ? 'Bersedia' : 'Bebas Mengajar' %>
+                    </span>
+                  </div>
+
+                  <!-- Slot Time Selector per Hari -->
+                  <div id="slots-group-<%= d.hari.toLowerCase() %>" class="<%= d.aktif ? '' : 'pointer-events-none opacity-40' %> space-y-1.5 pt-1">
+                    <span class="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">Preferensi Jam:</span>
+                    <div class="flex flex-wrap gap-2 text-xs">
+                      <label class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 px-2.5 py-1 cursor-pointer hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 has-checked:border-blue-800 has-checked:bg-blue-50/70 dark:has-checked:bg-blue-950/40 dark:has-checked:border-blue-700 transition-colors">
+                        <input type="checkbox" <%= d.pagi ? 'checked' : '' %> class="h-3.5 w-3.5 rounded border-zinc-300 text-[#0c2b5e] focus:ring-blue-900 dark:border-zinc-600 dark:bg-zinc-800">
+                        <span class="text-[11px] font-medium text-zinc-700 dark:text-zinc-300">Pagi (07:00–11:30)</span>
+                      </label>
+                      <label class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 px-2.5 py-1 cursor-pointer hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 has-checked:border-blue-800 has-checked:bg-blue-50/70 dark:has-checked:bg-blue-950/40 dark:has-checked:border-blue-700 transition-colors">
+                        <input type="checkbox" <%= d.siang ? 'checked' : '' %> class="h-3.5 w-3.5 rounded border-zinc-300 text-[#0c2b5e] focus:ring-blue-900 dark:border-zinc-600 dark:bg-zinc-800">
+                        <span class="text-[11px] font-medium text-zinc-700 dark:text-zinc-300">Siang (12:10–14:40)</span>
+                      </label>
+                      <label class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 px-2.5 py-1 cursor-pointer hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 has-checked:border-blue-800 has-checked:bg-blue-50/70 dark:has-checked:bg-blue-950/40 dark:has-checked:border-blue-700 transition-colors">
+                        <input type="checkbox" <%= d.sore ? 'checked' : '' %> class="h-3.5 w-3.5 rounded border-zinc-300 text-[#0c2b5e] focus:ring-blue-900 dark:border-zinc-600 dark:bg-zinc-800">
+                        <span class="text-[11px] font-medium text-zinc-700 dark:text-zinc-300">Sore (14:50–17:20)</span>
+                      </label>
+                    </div>
+                  </div>
+
+                </div>
+              <% }); %>
+
+            </div>
+          </div>
+
+          <!-- Section 2: Batas Maksimal Jam Mengajar Harian (Fitur Resya dengan Custom Range Slider) -->
+          <div class="rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+            <div class="flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
+              <div>
+                <h2 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">
+                  Batas Maksimal Jam Mengajar Harian
+                </h2>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                  Tentukan kuota batas jam maksimal mengajar per hari agar beban mengajar Anda tidak menumpuk berlebihan.
+                </p>
+              </div>
+              <span id="jam-maksimal-label" class="font-mono font-bold text-xs px-2.5 py-1 rounded bg-blue-100 dark:bg-blue-950 text-[#0c2b5e] dark:text-amber-400 border border-blue-200 dark:border-blue-900">
+                4 Jam / Hari
+              </span>
+            </div>
+
+            <div class="space-y-3 pt-1">
+              <div class="flex items-center gap-4">
+                <input id="jamMaksimal" type="range" min="1" max="8" step="1" value="4"
+                  oninput="document.getElementById('jam-maksimal-label').textContent = this.value + ' Jam / Hari'"
+                  class="flex-1">
+                <span class="text-xs font-mono text-zinc-500 dark:text-zinc-400 font-semibold w-12 text-right">Max 8 Jam</span>
+              </div>
+              <p class="text-[11px] text-zinc-400">Rekomendasi prodi: 4 s/d 6 jam per hari untuk menjaga performa pengajaran.</p>
+            </div>
+          </div>
+
+          <!-- Section 3: Catatan Khusus & Quick Tag Alasan -->
+          <div class="rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+            <h2 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50 border-b border-zinc-100 pb-3 dark:border-zinc-800">
+              Catatan & Justifikasi Agenda Rutin Dosen
+            </h2>
+
+            <div class="space-y-3">
+              <div>
+                <label for="alasan-berhalangan" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1">
+                  Keterangan Hari Bebas Mengajar / Agenda Tetap
+                </label>
+                <textarea id="alasan-berhalangan" rows="3"
+                  placeholder="Contoh: Hari Jumat ada agenda rapat rutin senat fakultas dan pelaksanaan riset Laboratorium Jaringan..."
+                  class="w-full rounded-lg border border-zinc-200 bg-white p-3 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900">Hari Jumat difokuskan untuk agenda riset Cloud Computing dan pengabdian masyarakat.</textarea>
+              </div>
+
+              <!-- Quick Tag Badges -->
+              <div class="space-y-1.5">
+                <span class="text-[11px] text-zinc-400">Pilih cepat template alasan:</span>
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" onclick="appendCatatan('Rapat Senat Fakultas Teknik (Jumat Pagi)')"
+                    class="rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/80 px-2.5 py-1 text-[11px] text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors">
+                    + Rapat Senat
+                  </button>
+                  <button type="button" onclick="appendCatatan('Riset Laboratorium & Publikasi Ilmiah')"
+                    class="rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/80 px-2.5 py-1 text-[11px] text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors">
+                    + Riset Laboratorium
+                  </button>
+                  <button type="button" onclick="appendCatatan('Bimbingan Tesis Mahasiswa S1')"
+                    class="rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/80 px-2.5 py-1 text-[11px] text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors">
+                    + Bimbingan Tesis
+                  </button>
+                  <button type="button" onclick="appendCatatan('Pengabdian Masyarakat Mandiri')"
+                    class="rounded-md border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/80 px-2.5 py-1 text-[11px] text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors">
+                    + Pengabdian Masyarakat
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 4: Action Button Bar -->
+          <div class="flex items-center justify-between pt-2">
+            <span class="text-xs text-zinc-400 font-mono hidden sm:inline">
+              Data preferensi akan disinkronkan ke AI Solver Jadwalin.
+            </span>
+            <button type="submit" id="btn-submit-pref"
+              class="inline-flex min-h-[42px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-6 py-2.5 text-xs font-semibold text-white shadow-sm border border-blue-900/40 transition-colors">
+              <i class="ph ph-floppy-disk text-base text-amber-400"></i>
+              <span>Simpan Preferensi Mengajar</span>
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </main>
+
+    <%- include('../partials/admin-footer') %>
+  </div>
+</div>
+
+<script>
+  function toggleDayStatus(dayKey) {
+    const toggle = document.getElementById('toggle-' + dayKey);
+    const card = document.getElementById('card-day-' + dayKey);
+    const badge = document.getElementById('badge-status-' + dayKey);
+    const slotsGroup = document.getElementById('slots-group-' + dayKey);
+
+    if (!toggle || !card || !badge || !slotsGroup) return;
+
+    const isChecked = toggle.checked;
+
+    if (isChecked) {
+      card.className = 'day-card rounded-xl border p-4 transition-all duration-200 space-y-3 border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 shadow-xs';
+      badge.className = 'px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300';
+      badge.textContent = 'Bersedia';
+      slotsGroup.className = 'space-y-1.5 pt-1';
+    } else {
+      card.className = 'day-card rounded-xl border p-4 transition-all duration-200 space-y-3 border-zinc-200/60 bg-zinc-50/60 dark:border-zinc-800/50 dark:bg-zinc-900/40 opacity-70';
+      badge.className = 'px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400';
+      badge.textContent = 'Bebas Mengajar';
+      slotsGroup.className = 'pointer-events-none opacity-40 space-y-1.5 pt-1';
+    }
+
+    updateDayCounter();
+  }
+
+  function updateDayCounter() {
+    const allToggles = document.querySelectorAll('.day-card input[type="checkbox"][id^="toggle-"]');
+    let activeCount = 0;
+    allToggles.forEach(t => {
+      if (t.checked) activeCount++;
+    });
+
+    const counter = document.getElementById('active-days-counter');
+    if (counter) {
+      counter.textContent = activeCount + ' Hari Bersedia';
+    }
+  }
+
+  function appendCatatan(text) {
+    const ta = document.getElementById('alasan-berhalangan');
+    if (!ta) return;
+    if (ta.value.trim().length > 0) {
+      ta.value += '\n• ' + text;
+    } else {
+      ta.value = '• ' + text;
+    }
+  }
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btn-submit-pref');
+    if (btn) {
+      btn.innerHTML = '<i class="ph ph-circle-notch animate-spin text-base text-amber-400"></i> Menyimpan...';
+    }
+
+    setTimeout(() => {
+      if (btn) {
+        btn.innerHTML = '<i class="ph ph-check text-base text-emerald-400"></i> Preferensi Tersimpan';
+      }
+      if (window.JadwalinUI && window.JadwalinUI.toast) {
+        window.JadwalinUI.toast.show('Preferensi hari dan slot mengajar berhasil disimpan! Algoritma AI akan mengoptimasi jadwal Anda.', 'success');
+      } else if (window.toast) {
+        window.toast.success('Preferensi hari dan slot mengajar berhasil disimpan! Algoritma AI akan mengoptimasi jadwal Anda.');
+      }
+
+      setTimeout(() => {
+        if (btn) {
+          btn.innerHTML = '<i class="ph ph-floppy-disk text-base text-amber-400"></i> <span>Simpan Preferensi Mengajar</span>';
+        }
+      }, 2000);
+    }, 600);
+  }
+</script>

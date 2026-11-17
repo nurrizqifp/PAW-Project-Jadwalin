@@ -1,7 +1,11 @@
 const express = require('express');
 const apiController = require('../controllers/apiController');
+const authRoutes = require('./api/auth');
 
 const router = express.Router();
+
+// Autentikasi Pengguna & RBAC
+router.use('/auth', authRoutes);
 
 router.get('/status', apiController.status);
 router.get('/jadwal', apiController.jadwal);
@@ -16,6 +20,6 @@ router.get('/constraints', apiController.constraints);
 router.post('/constraints/preferensi', apiController.simpanPreferensiDosen);
 router.post('/constraints/hard', apiController.toggleConstraint);
 router.post('/generate', apiController.generate);
-router.get('/produk', apiController.produk);
+router.get('/admin/backup-postgres', apiController.backupPostgres);
 
 module.exports = router;

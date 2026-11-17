@@ -4,4 +4,5 @@ logs/*.md
 !logs/.gitkeep
 .DS_Store
 *.log
+.playwright-mcp/
 

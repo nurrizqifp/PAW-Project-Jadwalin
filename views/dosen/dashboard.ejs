@@ -1,0 +1,151 @@
+<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Portal Dosen — Jadwalin' }) %>
+
+<div class="flex-1 flex min-h-screen">
+  <%- include('../partials/admin-sidebar', { activeMenu: 'dashboard', currentRole: 'dosen' }) %>
+
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <%- include('../partials/admin-navbar') %>
+
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
+      <div class="max-w-7xl mx-auto space-y-8">
+
+        <!-- Dosen Profile & Stats Card -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div
+            class="md:col-span-2 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+            <div class="flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800">
+              <div>
+                <span
+                  class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-0.5 font-mono text-[11px] font-semibold text-blue-900 dark:bg-blue-950/70 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+                  <i class="ph ph-chalkboard-teacher"></i> Dosen Pengampu TI
+                </span>
+                <h1 class="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-2">
+                  Dr. Ir. Bambang Triatmaja, M.Kom.
+                </h1>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono">NIDN: 0512037501 · Total Beban: 12 SKS</p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-3 pt-2">
+              <a href="/dosen/preferensi"
+                class="inline-flex min-h-[40px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-sm border border-blue-900/40 transition-colors">
+                <i class="ph ph-sliders text-base text-amber-400"></i>
+                <span>Atur Preferensi Waktu</span>
+              </a>
+              <a href="/dosen/jadwal"
+                class="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-amber-300/80 bg-amber-50/70 hover:bg-amber-100 px-4 py-2 text-xs font-semibold text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200 dark:hover:bg-amber-950/70 transition-colors shadow-sm">
+                <i class="ph ph-calendar text-base text-amber-600 dark:text-amber-400"></i>
+                <span>Jadwal Mengajar Saya</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Active Sesi Card (Live Status) -->
+          <div
+            class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex flex-col justify-between space-y-4">
+            <div>
+              <p class="font-mono text-[11px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">Kelas Mengajar Hari Ini</p>
+              <p class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-100 pt-1">Pemrograman Berorientasi Objek</p>
+              <p class="text-xs text-zinc-500">Kelas B · 08:00 - 09:40 WIB</p>
+            </div>
+
+            <div
+              class="rounded-xl bg-zinc-50 p-4 dark:bg-zinc-800/60 border border-zinc-200/50 dark:border-zinc-700/50 text-center">
+              <p class="text-[11px] text-zinc-500 dark:text-zinc-400 mb-1">Status Kehadiran</p>
+              <span
+                class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 font-mono text-xs font-semibold text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                Terjadwal Tepat Waktu
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Kartu Ringkasan Aktivitas Mengajar (Fitur Resya dengan UI Jadwalin) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Metrik 1: Total SKS -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 border-l-4 border-l-[#0c2b5e] dark:border-l-blue-500 space-y-1">
+            <h6 class="text-zinc-500 dark:text-zinc-400 text-[11px] font-mono font-semibold uppercase tracking-wider">Total SKS Mengajar</h6>
+            <div class="flex items-baseline gap-2 pt-1">
+              <span class="text-3xl font-heading font-extrabold text-zinc-900 dark:text-zinc-50">12</span>
+              <span class="text-xs text-zinc-500 font-mono">SKS Terpenuhi</span>
+            </div>
+            <p class="text-[11px] text-zinc-400 pt-1">Beban ideal dosen tetap TI</p>
+          </div>
+
+          <!-- Metrik 2: Jadwal Hari Ini -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 border-l-4 border-l-emerald-600 dark:border-l-emerald-500 space-y-1">
+            <h6 class="text-zinc-500 dark:text-zinc-400 text-[11px] font-mono font-semibold uppercase tracking-wider">Jadwal Kelas Hari Ini</h6>
+            <div class="flex items-baseline gap-2 pt-1">
+              <span class="text-3xl font-heading font-extrabold text-zinc-900 dark:text-zinc-50">2</span>
+              <span class="text-xs text-zinc-500 font-mono">Kelas Aktif</span>
+            </div>
+            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium pt-1">0 Tabrakan Jam & Ruang</p>
+          </div>
+
+          <!-- Metrik 3: Status Preferensi Dosen -->
+          <div class="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 border-l-4 border-l-amber-500 space-y-1">
+            <h6 class="text-zinc-500 dark:text-zinc-400 text-[11px] font-mono font-semibold uppercase tracking-wider">Status Preferensi Waktu</h6>
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-lg font-heading font-bold text-emerald-700 dark:text-emerald-400">Telah Disetel</span>
+              <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Aktif</span>
+            </div>
+            <a href="/dosen/preferensi" class="text-xs font-semibold text-[#0c2b5e] dark:text-amber-400 hover:underline inline-flex items-center gap-1 pt-1">
+              <span>Perbarui Preferensi</span>
+              <i class="ph ph-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Agenda Mengajar Pekan Ini -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="font-heading text-lg font-bold text-zinc-900 dark:text-zinc-50">
+              Daftar Beban Mata Kuliah Semester Berjalan
+            </h2>
+            <a href="/dosen/jadwal" class="text-xs font-semibold text-[#0c2b5e] hover:underline dark:text-blue-400">
+              Lihat Kalender Lengkap &rarr;
+            </a>
+          </div>
+
+          <div
+            class="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead
+                  class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
+                  <tr>
+                    <th class="px-4 py-3 font-semibold">Kode & Matkul</th>
+                    <th class="px-4 py-3 font-semibold">Kelas</th>
+                    <th class="px-4 py-3 font-semibold">SKS</th>
+                    <th class="px-4 py-3 font-semibold">Hari & Waktu</th>
+                    <th class="px-4 py-3 font-semibold">Ruangan</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                  <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40">
+                    <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">TI26105 — Pemrograman Berorientasi Objek</td>
+                    <td class="px-4 py-3 font-mono">Kelas B</td>
+                    <td class="px-4 py-3 font-mono">3 SKS</td>
+                    <td class="px-4 py-3 font-mono">Senin, 08:00 - 09:40</td>
+                    <td class="px-4 py-3">Lab Multimedia</td>
+                  </tr>
+                  <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40">
+                    <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">TI26105 — Pemrograman Berorientasi Objek</td>
+                    <td class="px-4 py-3 font-mono">Kelas C</td>
+                    <td class="px-4 py-3 font-mono">3 SKS</td>
+                    <td class="px-4 py-3 font-mono">Rabu, 10:00 - 11:40</td>
+                    <td class="px-4 py-3">Lab Multimedia</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <%- include('../partials/admin-footer') %>
+  </div>
+</div>
