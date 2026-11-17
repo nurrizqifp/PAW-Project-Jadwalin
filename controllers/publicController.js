@@ -40,10 +40,17 @@ exports.jadwal = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
-    const role = req.user?.role || req.cookies?.userRole;
-    if (role === 'admin') return res.redirect('/admin/dashboard');
-    if (role === 'dosen') return res.redirect('/dosen/dashboard');
-    if (role === 'mahasiswa') return res.redirect('/mahasiswa/dashboard');
+    // Hanya redirect ke dashboard jika benar-benar sudah terautentikasi (JWT valid)
+    if (req.user?.role) {
+      if (req.user.role === 'admin') return res.redirect('/admin/dashboard');
+      if (req.user.role === 'dosen') return res.redirect('/dosen/dashboard');
+      if (req.user.role === 'mahasiswa') return res.redirect('/mahasiswa/dashboard');
+    }
+
+    // Bersihkan cookie role lawas jika tidak ada sesi otentikasi aktif
+    if (req.cookies?.userRole) {
+      res.clearCookie('userRole');
+    }
 
     res.render('auth/login', {
       appName: config.appName,
