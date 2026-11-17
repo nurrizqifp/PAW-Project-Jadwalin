@@ -2,6 +2,11 @@ const express = require('express');
 const apiController = require('../controllers/apiController');
 const authRoutes = require('./api/auth');
 
+// New Routes
+const jadwalRoutes = require('./api/jadwal');
+const constraintRoutes = require('./api/constraints');
+const notifikasiRoutes = require('./api/notifikasi');
+
 const router = express.Router();
 
 // Autentikasi Pengguna & RBAC
@@ -12,6 +17,11 @@ router.get('/jadwal', apiController.jadwal);
 router.post('/jadwal/prakrs', apiController.rekomendasiPrakrs);
 router.post('/jadwal/revisi', apiController.revisiJadwal);
 router.post('/jadwal/publish', apiController.publishJadwal);
+
+// New Route Post
+router.post('/jadwal/prakrs', apiController.rekomendasiPrakrs);
+
+
 router.get('/master', apiController.master);
 router.post('/master', apiController.tambahMaster);
 router.put('/master/dosen/:id', apiController.updateDosen);
@@ -21,5 +31,10 @@ router.post('/constraints/preferensi', apiController.simpanPreferensiDosen);
 router.post('/constraints/hard', apiController.toggleConstraint);
 router.post('/generate', apiController.generate);
 router.get('/admin/backup-postgres', apiController.backupPostgres);
+
+// New Routes Use
+router.use('/jadwal', jadwalRoutes);
+router.use('/constraints', constraintRoutes);
+router.use('/notifikasi', notifikasiRoutes);
 
 module.exports = router;
