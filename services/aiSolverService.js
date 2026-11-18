@@ -190,6 +190,12 @@ function validateGeneratedSchedule(jadwalList, payload, durationSeconds = 0) {
   const roomByKode = new Map((payload.ruangan || []).map(r => [String(r.kode).toUpperCase(), r]));
   const dosenByInisial = new Map((payload.dosen || []).map(d => [String(d.inisial).toUpperCase(), d]));
 
+  // Inisialisasi status konflik per sesi
+  jadwalList.forEach(item => {
+    item.isConflict = false;
+    item.conflictReasons = [];
+  });
+
   let praktikumCount = 0;
   let labMatchedCount = 0;
   let softEvaluated = 0;
@@ -200,17 +206,25 @@ function validateGeneratedSchedule(jadwalList, payload, durationSeconds = 0) {
 
     // HC-03: Jeda Ibadah Sholat (Dhuhur 11:30-12:10, Ashar 15:00-15:20)
     if (isTimeOverlap(a.jamMulai, a.jamSelesai, DHUHUR_WINDOW.start, DHUHUR_WINDOW.end)) {
+      a.isConflict = true;
+      a.conflictReasons.push(`Melanggar jeda ibadah Dhuhur (11:30-12:10) pada ${a.hari} ${a.jamMulai}-${a.jamSelesai}`);
       konflik.push({
         kode: 'HC-03',
         jenis: 'Pelanggaran Jeda Dhuhur',
+        sesiId: a.id,
+        sesi: `${a.kodeMatkul} (${a.kelas})`,
         deskripsi: `${a.kodeMatkul} (${a.kelas}) pada ${a.hari} ${a.jamMulai}-${a.jamSelesai} melanggar jeda Dhuhur (11:30-12:10).`,
         saran: 'Pindahkan sesi agar selesai <= 11:30 atau mulai >= 12:10.'
       });
     }
     if (isTimeOverlap(a.jamMulai, a.jamSelesai, ASHAR_WINDOW.start, ASHAR_WINDOW.end)) {
+      a.isConflict = true;
+      a.conflictReasons.push(`Melanggar jeda ibadah Ashar (15:00-15:20) pada ${a.hari} ${a.jamMulai}-${a.jamSelesai}`);
       konflik.push({
         kode: 'HC-03',
         jenis: 'Pelanggaran Jeda Ashar',
+        sesiId: a.id,
+        sesi: `${a.kodeMatkul} (${a.kelas})`,
         deskripsi: `${a.kodeMatkul} (${a.kelas}) pada ${a.hari} ${a.jamMulai}-${a.jamSelesai} melanggar jeda Ashar (15:00-15:20).`,
         saran: 'Pindahkan sesi agar tidak melewati 15:00-15:20.'
       });
@@ -223,9 +237,13 @@ function validateGeneratedSchedule(jadwalList, payload, durationSeconds = 0) {
       if (isLabRoom(room)) {
         labMatchedCount++;
       } else {
+        a.isConflict = true;
+        a.conflictReasons.push(`Praktikum di ruangan non-Laboratorium (${a.ruang})`);
         konflik.push({
           kode: 'HC-LAB',
           jenis: 'Ketidakcocokan Ruangan Praktikum',
+          sesiId: a.id,
+          sesi: `${a.kodeMatkul} (${a.kelas})`,
           deskripsi: `${a.kodeMatkul} (${a.kelas}) bertipe Praktikum namun ditempatkan di ruang ${a.ruang} (non-Laboratorium).`,
           saran: 'Pindahkan sesi praktikum ke ruangan bertipe Laboratorium.'
         });
@@ -253,18 +271,32 @@ function validateGeneratedSchedule(jadwalList, payload, durationSeconds = 0) {
       const dosenB = splitDosenInisial(b.dosenInisial);
       const shared = dosenA.filter(d => dosenB.includes(d));
       if (shared.length > 0) {
+        a.isConflict = true;
+        b.isConflict = true;
+        a.conflictReasons.push(`Bentrok dosen (${shared.join(', ')}) dengan ${b.kodeMatkul} (${b.kelas}) pada ${a.hari} ${a.jamMulai}-${a.jamSelesai}`);
+        b.conflictReasons.push(`Bentrok dosen (${shared.join(', ')}) dengan ${a.kodeMatkul} (${a.kelas}) pada ${b.hari} ${b.jamMulai}-${b.jamSelesai}`);
         konflik.push({
           kode: 'HC-01',
           jenis: 'Bentrok Dosen',
-          deskripsi: `Dosen (${shared.join(', ')}) terjadwal ganda pada ${a.hari} (${a.jamMulai}-${a.jamSelesai}) di ${a.kodeMatkul} dan ${b.kodeMatkul}.`,
+          sesiAId: a.id,
+          sesiBId: b.id,
+          sesiIds: [a.id, b.id],
+          deskripsi: `Dosen (${shared.join(', ')}) terjadwal ganda pada ${a.hari} (${a.jamMulai}-${a.jamSelesai}) di ${a.kodeMatkul} (${a.kelas}) dan ${b.kodeMatkul} (${b.kelas}).`,
           saran: `Geser salah satu sesi ke slot waktu lain di hari ${a.hari}.`
         });
       }
 
       if (String(a.ruang).toUpperCase() === String(b.ruang).toUpperCase()) {
+        a.isConflict = true;
+        b.isConflict = true;
+        a.conflictReasons.push(`Bentrok ruang ${a.ruang} dipakai bersamaan oleh ${b.kodeMatkul} (${b.kelas}) pada ${a.hari} ${a.jamMulai}-${a.jamSelesai}`);
+        b.conflictReasons.push(`Bentrok ruang ${b.ruang} dipakai bersamaan oleh ${a.kodeMatkul} (${a.kelas}) pada ${b.hari} ${b.jamMulai}-${b.jamSelesai}`);
         konflik.push({
           kode: 'HC-02',
           jenis: 'Bentrok Ruangan',
+          sesiAId: a.id,
+          sesiBId: b.id,
+          sesiIds: [a.id, b.id],
           deskripsi: `Ruangan ${a.ruang} dipakai bersamaan oleh ${a.kodeMatkul} (${a.kelas}) dan ${b.kodeMatkul} (${b.kelas}) pada ${a.hari}.`,
           saran: 'Pindahkan sesi ke ruangan kosong dengan tipe yang sesuai.'
         });

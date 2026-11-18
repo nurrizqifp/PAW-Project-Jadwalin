@@ -122,23 +122,23 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
             <span class="text-zinc-400 text-[10px] font-mono">M-01: Waktu Eksekusi</span>
-            <p class="font-mono text-xl font-bold text-zinc-900 dark:text-zinc-50 pt-1">1.82 Detik</p>
-            <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold pt-0.5">Sangat Cepat (&lt; 60s)</p>
+            <p id="metric-m01-val" class="font-mono text-xl font-bold text-zinc-900 dark:text-zinc-50 pt-1">1.82 Detik</p>
+            <p id="metric-m01-sub" class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold pt-0.5">Sangat Cepat (&lt; 60s)</p>
           </div>
           <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
             <span class="text-zinc-400 text-[10px] font-mono">M-02: Bentrok Hard Constraint</span>
-            <p class="font-mono text-xl font-bold text-emerald-600 dark:text-emerald-400 pt-1">0 Bentrok</p>
-            <p class="text-[11px] text-zinc-500 pt-0.5">100% Zero Tolerance</p>
+            <p id="metric-m02-val" class="font-mono text-xl font-bold text-emerald-600 dark:text-emerald-400 pt-1">0 Bentrok</p>
+            <p id="metric-m02-sub" class="text-[11px] text-zinc-500 pt-0.5">100% Zero Tolerance</p>
           </div>
           <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
             <span class="text-zinc-400 text-[10px] font-mono">M-03: Kepatuhan Lab</span>
-            <p class="font-mono text-xl font-bold text-zinc-900 dark:text-zinc-50 pt-1">100%</p>
-            <p class="text-[11px] text-zinc-500 pt-0.5">31/31 Sesi Lab Tepat</p>
+            <p id="metric-m03-val" class="font-mono text-xl font-bold text-zinc-900 dark:text-zinc-50 pt-1">100%</p>
+            <p id="metric-m03-sub" class="text-[11px] text-zinc-500 pt-0.5">31/31 Sesi Lab Tepat</p>
           </div>
           <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
             <span class="text-zinc-400 text-[10px] font-mono">M-04: Kepuasan Dosen</span>
-            <p class="font-mono text-xl font-bold text-amber-600 dark:text-amber-400 pt-1">94.2%</p>
-            <p class="text-[11px] text-zinc-500 pt-0.5">Soft Constraint Optimal</p>
+            <p id="metric-m04-val" class="font-mono text-xl font-bold text-amber-600 dark:text-amber-400 pt-1">94.2%</p>
+            <p id="metric-m04-sub" class="text-[11px] text-zinc-500 pt-0.5">Soft Constraint Optimal</p>
           </div>
         </div>
 
@@ -148,12 +148,69 @@
             <h2 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-50">
               Log Konsol Solver
             </h2>
-            <span class="font-mono text-[10px] text-zinc-400">Status: Idle (Siap Dijalankan)</span>
+            <span id="solver-status-badge" class="font-mono text-[10px] text-zinc-400">Status: Idle (Siap Dijalankan)</span>
           </div>
 
           <div id="solver-console" class="rounded-lg bg-zinc-950 p-4 font-mono text-xs text-zinc-300 space-y-1 h-44 overflow-y-auto border border-zinc-800">
             <p class="text-zinc-500">// Menunggu instruksi generate jadwal dari staf akademik...</p>
             <p class="text-zinc-500">// Tekan tombol "Mulai Generate Jadwal" di atas untuk memicu AI Solver.</p>
+          </div>
+        </div>
+
+        <!-- Pratinjau Langsung Hasil Solver Jadwal (Live Generated Preview) -->
+        <div id="gen-results-preview" class="hidden rounded-xl border border-zinc-200 bg-white p-6 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-zinc-100 pb-4 dark:border-zinc-800">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="font-heading text-sm font-bold text-zinc-900 dark:text-zinc-50">
+                  Pratinjau Hasil Sesi Kuliah Ter-generate
+                </h2>
+                <span id="preview-total-badge" class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-50 text-blue-900 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+                  0 Sesi
+                </span>
+                <span id="preview-conflict-badge" class="hidden px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-300 dark:border-rose-800 flex items-center gap-1">
+                  <i class="ph ph-warning-octagon"></i>
+                  <span id="preview-conflict-text">0 Konflik</span>
+                </span>
+              </div>
+              <p class="text-[11px] text-zinc-500 mt-0.5">
+                Sesi yang berkonflik diberi penanda merah di bawah ini untuk memudahkan peninjauan.
+              </p>
+            </div>
+
+            <!-- Toolbar Filter Sesi Hasil Generate -->
+            <div class="flex items-center gap-2">
+              <button type="button" id="btn-filter-all" onclick="filterGenView('all')"
+                class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#0c2b5e] text-white transition-all shadow-xs">
+                Semua Sesi
+              </button>
+              <button type="button" id="btn-filter-conflict" onclick="filterGenView('conflict')"
+                class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-rose-300 bg-rose-50 text-rose-800 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300 transition-all flex items-center gap-1">
+                <i class="ph ph-warning-octagon"></i>
+                <span>Hanya Konflik (<span id="btn-conflict-count">0</span>)</span>
+              </button>
+              <a href="/admin/jadwal"
+                class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold rounded-lg border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors shadow-xs">
+                <span>Buka Matriks Kalender</span>
+                <i class="ph ph-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Alert Callout Jika Ada Konflik -->
+          <div id="gen-conflict-alert" class="hidden rounded-lg border border-rose-200 bg-rose-50/90 p-3.5 text-xs text-rose-900 dark:border-rose-900/60 dark:bg-rose-950/40 dark:text-rose-200 space-y-1.5">
+            <div class="font-bold flex items-center gap-1.5">
+              <i class="ph ph-warning-octagon text-base text-rose-600"></i>
+              <span>Perhatian: Ditemukan sesi jadwal yang bertabrakan (Hard Constraint).</span>
+            </div>
+            <p class="text-[11px] leading-relaxed text-rose-800 dark:text-rose-300">
+              Sesi yang bertanda merah di bawah ini membutuhkan penyesuaian ruangan, jam, atau dosen sebelum jadwal dapat dipublikasikan secara resmi.
+            </p>
+          </div>
+
+          <!-- Cards Grid Hasil Solver -->
+          <div id="gen-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 max-h-[520px] overflow-y-auto p-1">
+            <!-- Diisi secara otomatis melalui script -->
           </div>
         </div>
 
@@ -199,17 +256,126 @@
     }
   }
 
+  let currentGeneratedJadwal = [];
+
+  function renderGeneratedCards(list) {
+    currentGeneratedJadwal = list || [];
+    const container = document.getElementById('gen-cards-container');
+    const totalBadge = document.getElementById('preview-total-badge');
+    const conflictBadge = document.getElementById('preview-conflict-badge');
+    const conflictText = document.getElementById('preview-conflict-text');
+    const btnConflictCount = document.getElementById('btn-conflict-count');
+    const alertBox = document.getElementById('gen-conflict-alert');
+    const previewWrapper = document.getElementById('gen-results-preview');
+
+    if (!container || !previewWrapper) return;
+    previewWrapper.classList.remove('hidden');
+
+    const totalCount = currentGeneratedJadwal.length;
+    const conflicts = currentGeneratedJadwal.filter(j => j.isConflict);
+    const conflictCount = conflicts.length;
+
+    if (totalBadge) totalBadge.textContent = totalCount + ' Sesi';
+    if (btnConflictCount) btnConflictCount.textContent = conflictCount;
+
+    if (conflictCount > 0) {
+      if (conflictBadge) conflictBadge.classList.remove('hidden');
+      if (conflictText) conflictText.textContent = conflictCount + ' Konflik';
+      if (alertBox) alertBox.classList.remove('hidden');
+    } else {
+      if (conflictBadge) conflictBadge.classList.add('hidden');
+      if (alertBox) alertBox.classList.add('hidden');
+    }
+
+    container.innerHTML = currentGeneratedJadwal.map(item => {
+      const isBentrok = Boolean(item.isConflict);
+      const reasons = item.conflictReasons || [];
+      const cardBg = isBentrok
+        ? 'border-rose-400 bg-rose-50/95 text-rose-950 dark:border-rose-700 dark:bg-rose-950/80 dark:text-rose-100 ring-2 ring-rose-500/40 shadow-sm'
+        : (item.jenis === 'Praktikum'
+            ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200'
+            : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200');
+
+      return `
+        <div class="gen-preview-card rounded-xl border p-3.5 space-y-2 shadow-xs transition-all ${cardBg}" data-conflict="${isBentrok ? 'true' : 'false'}">
+          <div class="flex items-center justify-between gap-1 text-xs">
+            <span class="font-mono text-[9px] font-bold px-1.5 py-0.5 rounded ${isBentrok ? 'bg-rose-600 text-white' : (item.jenis === 'Praktikum' ? 'bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200 text-blue-900 dark:bg-blue-900 dark:text-blue-200')}">
+              ${item.kodeMatkul || 'TI261'}
+            </span>
+            ${isBentrok
+              ? `<span class="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-rose-200 text-rose-900 dark:bg-rose-900 dark:text-rose-200 flex items-center gap-1">
+                   <i class="ph ph-warning-octagon"></i> KONFLIK
+                 </span>`
+              : `<span class="text-[10px] font-mono font-semibold opacity-85">Kls ${item.kelas || 'A'} · ${item.sks || 2} SKS</span>`
+            }
+          </div>
+          <h4 class="font-heading font-bold text-xs leading-snug line-clamp-1" title="${item.mataKuliah || '-'}">
+            ${item.mataKuliah || '-'}
+          </h4>
+          <div class="text-[11px] font-mono space-y-0.5 opacity-90">
+            <div class="flex items-center justify-between">
+              <span><i class="ph ph-calendar-blank"></i> ${item.hari || '-'}, ${item.jamMulai || '-'}-${item.jamSelesai || '-'}</span>
+              <span class="${isBentrok ? 'font-bold underline text-rose-700 dark:text-rose-300' : ''}"><i class="ph ph-door"></i> ${item.ruang || '-'}</span>
+            </div>
+            <div class="truncate text-[10px]" title="${item.dosen || '-'}">
+              <i class="ph ph-user"></i> ${item.dosen || '-'}
+            </div>
+          </div>
+          ${isBentrok && reasons.length > 0
+            ? `<div class="rounded bg-rose-100/90 dark:bg-rose-900/60 p-2 text-[10px] font-mono font-semibold text-rose-900 dark:text-rose-200 space-y-0.5 border border-rose-300 dark:border-rose-800">
+                 <div class="flex items-center gap-1 font-bold text-rose-700 dark:text-rose-300">
+                   <i class="ph ph-warning"></i> Penyebab Bentrok:
+                 </div>
+                 ${reasons.map(r => `<div>• ${r}</div>`).join('')}
+               </div>`
+            : ''
+          }
+        </div>
+      `;
+    }).join('');
+  }
+
+  function filterGenView(mode) {
+    const cards = document.querySelectorAll('.gen-preview-card');
+    const btnAll = document.getElementById('btn-filter-all');
+    const btnConflict = document.getElementById('btn-filter-conflict');
+
+    if (mode === 'conflict') {
+      if (btnConflict) btnConflict.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg bg-rose-600 text-white transition-all shadow-xs flex items-center gap-1';
+      if (btnAll) btnAll.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-all';
+      cards.forEach(card => {
+        card.style.display = card.getAttribute('data-conflict') === 'true' ? '' : 'none';
+      });
+    } else {
+      if (btnAll) btnAll.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#0c2b5e] text-white transition-all shadow-xs';
+      if (btnConflict) btnConflict.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg border border-rose-300 bg-rose-50 text-rose-800 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300 transition-all flex items-center gap-1';
+      cards.forEach(card => {
+        card.style.display = '';
+      });
+    }
+  }
+
   async function startGenerationSimulation() {
     const card = document.getElementById('gen-progress-card');
     const bar = document.getElementById('gen-bar');
     const pct = document.getElementById('gen-pct');
     const text = document.getElementById('gen-status-text');
     const consoleEl = document.getElementById('solver-console');
+    const statusBadge = document.getElementById('solver-status-badge');
+
+    const m01Val = document.getElementById('metric-m01-val');
+    const m01Sub = document.getElementById('metric-m01-sub');
+    const m02Val = document.getElementById('metric-m02-val');
+    const m02Sub = document.getElementById('metric-m02-sub');
+    const m03Val = document.getElementById('metric-m03-val');
+    const m04Val = document.getElementById('metric-m04-val');
 
     if (card) card.classList.remove('hidden');
     if (bar) bar.style.width = '25%';
     if (pct) pct.textContent = '25%';
     if (text) text.textContent = 'Mengirim payload master & constraints ke AI Solver (Gemini API)...';
+    if (statusBadge) statusBadge.textContent = 'Status: Memproses Solver...';
+
     consoleEl.innerHTML = '<p class="text-blue-400">[SOLVER START] Menginisialisasi penyusunan jadwal bebas bentrok...</p>';
     consoleEl.innerHTML += '<p class="text-zinc-300">[API CALL] Memanggil POST /api/generate (temperature: 0.1, JSON mode)...</p>';
 
@@ -225,31 +391,56 @@
 
       const r = data.result || {};
       const ev = r.evaluasi || {};
+      const totalKonflik = r.totalKonflik ?? 0;
+
       if (bar) bar.style.width = '100%';
       if (pct) pct.textContent = '100%';
       if (text) {
-        text.textContent = r.totalKonflik === 0
+        text.textContent = totalKonflik === 0
           ? 'Penyusunan jadwal selesai dengan status ZERO CLASH!'
-          : `Penyusunan selesai dengan ${r.totalKonflik} konflik terdeteksi.`;
+          : `Penyusunan selesai dengan ${totalKonflik} sesi konflik terdeteksi.`;
       }
+      if (statusBadge) {
+        statusBadge.textContent = totalKonflik === 0 ? 'Status: Selesai (0 Bentrok)' : `Status: Perlu Revisi (${totalKonflik} Bentrok)`;
+      }
+
+      // Update Metrik Cards Visual State
+      if (m01Val) m01Val.textContent = `${ev.durasiGenerateDetik ?? 1.2} Detik`;
+      if (m02Val) {
+        m02Val.textContent = `${totalKonflik} Bentrok`;
+        m02Val.className = totalKonflik === 0 
+          ? 'font-mono text-xl font-bold text-emerald-600 dark:text-emerald-400 pt-1'
+          : 'font-mono text-xl font-bold text-rose-600 dark:text-rose-400 pt-1';
+      }
+      if (m02Sub) {
+        m02Sub.textContent = totalKonflik === 0 ? '100% Zero Tolerance' : 'Terdeteksi Tabrakan Hard Constraint';
+        m02Sub.className = totalKonflik === 0 
+          ? 'text-[11px] text-zinc-500 pt-0.5' 
+          : 'text-[11px] text-rose-600 dark:text-rose-400 font-bold pt-0.5';
+      }
+      if (m03Val) m03Val.textContent = `${ev.persenLabMatching ?? 100}%`;
+      if (m04Val) m04Val.textContent = `${ev.persenPreferensiDosenTerpenuhi ?? 94.2}%`;
 
       consoleEl.innerHTML += `<p class="text-zinc-300">[ENGINE] Sumber: ${r.source || 'ai-solver'} (${r.model || '-'})</p>`;
       if (r.fallbackReason) {
         consoleEl.innerHTML += `<p class="text-amber-400">[FALLBACK INFO] ${r.fallbackReason}</p>`;
       }
-      consoleEl.innerHTML += `<p class="text-zinc-300">[HC-CHECK] Pelanggaran Hard Constraint: ${r.totalKonflik ?? 0}</p>`;
+      consoleEl.innerHTML += `<p class="${totalKonflik === 0 ? 'text-zinc-300' : 'text-rose-400 font-bold'}">[HC-CHECK] Pelanggaran Hard Constraint: ${totalKonflik}</p>`;
       consoleEl.innerHTML += `<p class="text-zinc-300">[LAB-MATCH] Kesesuaian Lab: ${ev.persenLabMatching ?? 100}% · Preferensi Dosen: ${ev.persenPreferensiDosenTerpenuhi ?? 100}%</p>`;
       consoleEl.innerHTML += `<p class="text-emerald-400">[SUCCESS] ${r.message} (${ev.totalSesi ?? 0} sesi dalam ${ev.durasiGenerateDetik ?? 0}s)</p>`;
+
+      // Render daftar sesi ke UI Pratinjau
+      renderGeneratedCards(r.jadwal || []);
 
       if (window.showConfirmDialog) {
         setTimeout(() => {
           window.showConfirmDialog(
             'Generate Jadwal Selesai',
-            `${ev.totalSesi ?? 0} sesi perkuliahan berhasil disusun (${r.totalKonflik ?? 0} bentrok). Buka halaman Preview & Publikasi?`,
+            `${ev.totalSesi ?? 0} sesi perkuliahan berhasil disusun (${totalKonflik} bentrok). ${totalKonflik > 0 ? 'Sesi yang bertabrakan ditandai dengan warna merah.' : ''} Buka halaman Preview Matriks Kalender?`,
             () => { window.location.href = '/admin/jadwal'; },
             'Buka Matriks Jadwal'
           );
-        }, 400);
+        }, 500);
       }
     } catch (err) {
       if (bar) bar.style.width = '100%';
