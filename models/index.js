@@ -13,11 +13,13 @@ const ConstraintHardModel = require('./ConstraintHard');
 const ConstraintSoftModel = require('./ConstraintSoft');
 const NotifikasiModel = require('./Notifikasi');
 const KonflikLogModel = require('./KonflikLog');
+const MahasiswaPrakrsModel = require('./MahasiswaPrakrs');
 
 // Inisialisasi Model
 const User = UserModel(sequelize);
 const Dosen = DosenModel(sequelize);
 const Mahasiswa = MahasiswaModel(sequelize);
+const MahasiswaPrakrs = MahasiswaPrakrsModel(sequelize);
 const MataKuliah = MataKuliahModel(sequelize);
 const Ruangan = RuanganModel(sequelize);
 const PeriodeJadwal = PeriodeJadwalModel(sequelize);
@@ -63,6 +65,10 @@ Notifikasi.belongsTo(PeriodeJadwal, { foreignKey: 'periode_id', as: 'periode' })
 PeriodeJadwal.hasMany(KonflikLog, { foreignKey: 'periode_id', as: 'konflikLogs' });
 KonflikLog.belongsTo(PeriodeJadwal, { foreignKey: 'periode_id', as: 'periode' });
 
+// 8. Mahasiswa & Rencana Pra-KRS
+Mahasiswa.hasOne(MahasiswaPrakrs, { foreignKey: 'mahasiswa_id', as: 'prakrs' });
+MahasiswaPrakrs.belongsTo(Mahasiswa, { foreignKey: 'mahasiswa_id', as: 'mahasiswa' });
+
 // Backward compatibility untuk model memori statis
 const MasterModel = require('./masterModel');
 const JadwalModel = require('./jadwalModel');
@@ -83,6 +89,7 @@ const db = {
   ConstraintSoft,
   Notifikasi,
   KonflikLog,
+  MahasiswaPrakrs,
   MasterModel,
   JadwalModel,
   ConstraintModel,

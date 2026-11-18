@@ -277,7 +277,29 @@ async function getBaseData(currentUser = null) {
     ? (mahasiswaList.find(m => m.id === currentUser.refId || m.nim === currentUser.username) || null)
     : null;
 
-  const rawSavedPrakrs = (isAuthenticated && currentUser?.username) ? JadwalModel.getSavedPrakrs(currentUser.username) : null;
+  let dbSavedPrakrs = null;
+  if (isAuthenticated && currentUser?.username && (await isDatabaseReady())) {
+    try {
+      const row = await db.MahasiswaPrakrs.findOne({
+        where: { nim: currentUser.username }
+      });
+      if (row) {
+        dbSavedPrakrs = {
+          semester: row.semester,
+          kodePeminatan: row.kode_peminatan,
+          prefKelas: row.pref_kelas,
+          kelasPerMatkul: typeof row.kelas_per_matkul === 'string' ? JSON.parse(row.kelas_per_matkul) : row.kelas_per_matkul,
+          rekomendasiSesi: typeof row.rekomendasi_sesi === 'string' ? JSON.parse(row.rekomendasi_sesi) : row.rekomendasi_sesi,
+          totalSks: row.total_sks
+        };
+        JadwalModel.setSavedPrakrs(currentUser.username, dbSavedPrakrs);
+      }
+    } catch (ePrk) {
+      console.warn('[baseDataHelper] Gagal membaca mahasiswa_prakrs dari DB:', ePrk.message);
+    }
+  }
+
+  const rawSavedPrakrs = dbSavedPrakrs || ((isAuthenticated && currentUser?.username) ? JadwalModel.getSavedPrakrs(currentUser.username) : null);
   const isGanjilActive = (activePeriode?.semesterTipe || 'Ganjil') === 'Ganjil';
   const savedPrakrs = (rawSavedPrakrs && ((Number(rawSavedPrakrs.semester) % 2 === 1) === isGanjilActive))
     ? rawSavedPrakrs
