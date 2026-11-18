@@ -683,9 +683,9 @@ exports.generate = async (req, res) => {
     const solverOutput = await aiSolverService.generateSchedule({
       payload: hasCustomPayload ? req.body : undefined
     });
-    const baseResult = JadwalModel.generateAI();
+    const baseResult = JadwalModel.generateAI(solverOutput.jadwal);
     const totalKonflik = solverOutput.konflik.length;
-    const status = totalKonflik === 0 ? 'Terpublikasi' : 'Generated (Konflik)';
+    const status = totalKonflik === 0 ? 'Terpublikasi' : 'Draft (Perlu Revisi)';
 
     const result = {
       ...baseResult,

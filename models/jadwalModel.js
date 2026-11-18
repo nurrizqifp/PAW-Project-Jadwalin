@@ -2980,17 +2980,33 @@ const JadwalModel = {
       timestamp: new Date().toISOString()
     };
   },
-  generateAI() {
+  replaceJadwal(newList) {
+    if (Array.isArray(newList) && newList.length > 0) {
+      jadwalKuliah.length = 0;
+      newList.forEach((item, idx) => {
+        jadwalKuliah.push({
+          id: item.id || (idx + 1),
+          ...item
+        });
+      });
+      lastGeneratedAt = new Date().toISOString();
+    }
+    return jadwalKuliah;
+  },
+  generateAI(newJadwalList = null) {
+    if (newJadwalList && Array.isArray(newJadwalList)) {
+      this.replaceJadwal(newJadwalList);
+    }
     daftarKonflik = cekKonflikJadwal(jadwalKuliah);
-    totalKonflik = 0; // AI solver menjamin 0 bentrok
-    statusJadwal = 'Terpublikasi';
+    totalKonflik = daftarKonflik.length;
+    statusJadwal = totalKonflik === 0 ? 'Terpublikasi' : 'Draft (Perlu Revisi)';
     lastGeneratedAt = new Date().toISOString();
 
     return {
       success: true,
-      message: 'Jadwal berhasil dioptimasi oleh AI solver dalam 1.2 detik (0 bentrok dosen & ruangan).',
-      totalKonflik: 0,
-      daftarKonflik: [],
+      message: `Jadwal berhasil dioptimasi oleh AI solver (${totalKonflik} bentrok).`,
+      totalKonflik,
+      daftarKonflik,
       labMatching: '100% Sesuai',
       kepuasanDosen: '92.4%',
       status: statusJadwal,
