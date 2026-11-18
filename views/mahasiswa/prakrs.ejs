@@ -305,7 +305,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     // Data Master Jadwal Terpublikasi dari PostgreSQL
     const MASTER_JADWAL = <%- JSON.stringify(typeof jadwal !== 'undefined' ? jadwal : []) %>;
-    const SAVED_PRAKRS_INITIAL = <%- JSON.stringify((typeof defaultPrakrs !== 'undefined' && defaultPrakrs && Array.isArray(defaultPrakrs.rekomendasiSesi)) ? defaultPrakrs.rekomendasiSesi : []) %>;
+    const SAVED_PRAKRS_INITIAL = <%- JSON.stringify((typeof defaultPrakrs !== 'undefined' && defaultPrakrs && Array.isArray(defaultPrakrs.rekomendasiSesi)) ? defaultPrakrs.rekomendasiSesi : (typeof defaultPrakrs !== 'undefined' && defaultPrakrs && Array.isArray(defaultPrakrs.rekomendasi_sesi)) ? defaultPrakrs.rekomendasi_sesi : []) %>;
     const INITIAL_SEMESTER = <%= mhsSemester %>;
     const INITIAL_PEMINATAN = '<%= mhsPeminatan %>';
 
@@ -332,7 +332,7 @@
       { start: '08:50', end: '11:30', label: '08:50 – 11:30' },
       { isBreak: true, start: '11:30', end: '12:10', label: '11:30 – 12:10' },
       { start: '12:10', end: '14:40', label: '12:10 – 14:40' },
-      { start: '14:45', end: '17:15', label: '14:45 – 17:15' }
+      { start: '14:45', end: '19:20', label: '14:45 – 19:20' }
     ];
     const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
@@ -519,9 +519,9 @@
             if (item.hari !== day) return false;
             const jMulai = item.jamMulai || '';
             if (slot.start === '07:00' && jMulai < '08:45') return true;
-            if (slot.start === '08:50' && jMulai >= '08:45' && jMulai < '11:30') return true;
-            if (slot.start === '12:10' && jMulai >= '12:00' && jMulai < '14:40') return true;
-            if (slot.start === '14:45' && jMulai >= '14:40') return true;
+            if (slot.start === '08:50' && jMulai >= '08:45' && jMulai < '11:45') return true;
+            if (slot.start === '12:10' && jMulai >= '11:45' && jMulai < '14:45') return true;
+            if (slot.start === '14:45' && jMulai >= '14:45') return true;
             return false;
           });
 
@@ -553,18 +553,24 @@
               }`;
 
               card.innerHTML = `
-                <div class="flex items-start justify-between gap-1">
-                  <span class="font-heading font-bold text-xs leading-tight line-clamp-1 ${isSelected ? 'text-[#0c2b5e] dark:text-blue-200' : 'text-zinc-900 dark:text-zinc-100'}" title="${item.mataKuliah}">
-                    ${item.mataKuliah}
-                  </span>
-                  ${isSelected 
-                    ? '<span class="inline-flex items-center justify-center h-4 w-4 rounded-full bg-[#0c2b5e] text-white shrink-0"><i class="ph ph-check text-[10px]"></i></span>' 
-                    : '<span class="inline-flex items-center justify-center h-4 w-4 rounded-full border border-zinc-300 group-hover:border-blue-600 shrink-0 text-transparent group-hover:text-blue-600 text-[10px]"><i class="ph ph-plus"></i></span>'
+                <!-- Card Header: Kode, Nama Matkul, & Status Icon -->
+                <div class="flex items-start justify-between gap-1.5">
+                  <div class="min-w-0 flex-1">
+                    <span class="font-mono text-[9px] font-semibold text-zinc-400 dark:text-zinc-500 block leading-tight">${item.kodeMatkul}</span>
+                    <span class="font-heading font-bold text-xs leading-snug line-clamp-2 ${isSelected ? (isClashing ? 'text-rose-700 dark:text-rose-300' : 'text-[#0c2b5e] dark:text-blue-200') : 'text-zinc-900 dark:text-zinc-100'}" title="${item.mataKuliah}">
+                      ${item.mataKuliah}
+                    </span>
+                  </div>
+                  ${isClashing 
+                    ? '<span class="inline-flex items-center justify-center h-4 w-4 rounded-full bg-rose-600 text-white shrink-0 shadow-xs" title="Bentrok Waktu Kuliah!"><i class="ph ph-warning text-[10px]"></i></span>'
+                    : isSelected 
+                      ? '<span class="inline-flex items-center justify-center h-4 w-4 rounded-full bg-[#0c2b5e] text-white shrink-0 shadow-xs" title="Kelas Terpilih"><i class="ph ph-check text-[10px]"></i></span>' 
+                      : '<span class="inline-flex items-center justify-center h-4 w-4 rounded-full border border-zinc-300 group-hover:border-blue-600 shrink-0 text-transparent group-hover:text-blue-600 text-[10px]"><i class="ph ph-plus"></i></span>'
                   }
                 </div>
 
                 <!-- Badges Row -->
-                <div class="mt-1 flex flex-wrap items-center gap-1 text-[10px]">
+                <div class="mt-1.5 flex flex-wrap items-center gap-1 text-[10px]">
                   <!-- Badge Kelas -->
                   <span class="px-1.5 py-0.5 rounded font-mono font-bold ${
                     isGabungan 
@@ -592,17 +598,6 @@
                 <!-- Dosen Pengampu -->
                 <div class="mt-0.5 text-[10px] text-zinc-500 dark:text-zinc-400 truncate" title="${item.dosen}">
                   ${item.dosenInisial || item.dosen}
-                </div>
-
-                <!-- Selection Status Indicator -->
-                <div class="mt-2 pt-1 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between text-[10px]">
-                  ${isClashing 
-                    ? '<span class="font-bold text-rose-600 dark:text-rose-400 inline-flex items-center gap-1"><i class="ph ph-warning"></i> Bentrok!</span>' 
-                    : isSelected 
-                      ? '<span class="font-bold text-emerald-700 dark:text-emerald-400 inline-flex items-center gap-1"><i class="ph ph-check-circle"></i> Terpilih</span>' 
-                      : '<span class="text-zinc-400 group-hover:text-zinc-700 dark:group-hover:text-zinc-300">Klik untuk pilih</span>'
-                  }
-                  <span class="text-[9px] font-mono opacity-70">${item.kodeMatkul}</span>
                 </div>
               `;
 
@@ -703,6 +698,16 @@
         return;
       }
 
+      const totalSks = selectedList.reduce((sum, s) => sum + (Number(s.sks) || 0), 0);
+      if (totalSks > 24) {
+        if (window.JadwalinUI?.toast) {
+          window.JadwalinUI.toast.show(`Penyimpanan ditolak: Total beban SKS (${totalSks} SKS) melebihi batas maksimal 24 SKS. Harap kurangi mata kuliah yang dipilih.`, 'error');
+        } else {
+          alert(`Penyimpanan ditolak: Total beban SKS (${totalSks} SKS) melebihi batas maksimal 24 SKS.`);
+        }
+        return;
+      }
+
       const clashes = detectClashes();
       if (clashes.length > 0) {
         if (window.JadwalinUI?.toast) {
@@ -714,8 +719,8 @@
       }
 
       btnSave.disabled = true;
-      const targetSmt = parseInt(filterSemester.value, 10) || INITIAL_SEMESTER;
-      const targetPem = filterPeminatan.value !== 'ALL' ? filterPeminatan.value : INITIAL_PEMINATAN;
+      const targetSmt = INITIAL_SEMESTER;
+      const targetPem = INITIAL_PEMINATAN;
 
       const kelasPerMatkul = {};
       selectedList.forEach(s => {
