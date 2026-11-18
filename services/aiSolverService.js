@@ -175,6 +175,7 @@ function buildPrompt(payload) {
     'ATURAN SOFT CONSTRAINTS (TARGET TERPENUHI >= 85%):',
     '1. SC-01 Hari Riset Dosen: Hindari menjadwalkan dosen pada field "hariOff" miliknya.',
     '2. SC-02 Preferensi Waktu: Prioritaskan rentang waktu sesuai preferensi dosen (pagi 07:00-12:00 atau siang).',
+    '3. SC-03 Distribusi Hari Seimbang: Distribusikan seluruh mata kuliah secara merata ke seluruh hari perkuliahan (Senin s/d Sabtu, target ~18-20 sesi per hari kerja dan ~12 sesi untuk Jumat & Sabtu). Dilarang menumpuk jadwal hanya pada hari Senin dan Selasa.',
     '',
     'DATA MASTER & SLOT TERSEDIA (INPUT):',
     JSON.stringify(payload),
@@ -415,19 +416,33 @@ function solveDeterministicFallback(payload) {
   });
 
   const placed = [];
+  const dayTarget = { 'Senin': 20, 'Selasa': 20, 'Rabu': 20, 'Kamis': 20, 'Jumat': 12, 'Sabtu': 12 };
 
   for (let idx = 0; idx < sortedMataKuliah.length; idx++) {
     const mk = sortedMataKuliah[idx];
     const isPrak = isPraktikumCourse(mk);
+    // Mata kuliah praktikum wajib ditempatkan di ruang bertipe Laboratorium
     const candidateRooms = isPrak ? (labRooms.length ? labRooms : payload.ruangan) : (regularRooms.length ? regularRooms : payload.ruangan);
     const defaultDosen = mk.dosenInisial || dosenList[idx % Math.max(dosenList.length, 1)]?.inisial || 'AS';
     const dosenInisials = splitDosenInisial(defaultDosen);
 
-    // Urutkan slot agar hariOff dosen ditaruh di belakang (SC-01)
+    // Hitung beban sesi saat ini per hari untuk Load Balancing antar hari kerja
+    const dayCount = { 'Senin': 0, 'Selasa': 0, 'Rabu': 0, 'Kamis': 0, 'Jumat': 0, 'Sabtu': 0 };
+    placed.forEach(p => {
+      if (dayCount[p.hari] !== undefined) dayCount[p.hari]++;
+    });
+
+    // Urutkan slot: SC-01 (hariOff di belakang) -> SC-03 (seimbangkan beban hari) -> Jam Mulai
     const orderedSlots = [...validSlots].sort((a, b) => {
       const aOff = dosenInisials.some(ini => dosenList.find(d => d.inisial === ini)?.hariOff === a.hari) ? 1 : 0;
       const bOff = dosenInisials.some(ini => dosenList.find(d => d.inisial === ini)?.hariOff === b.hari) ? 1 : 0;
-      return aOff - bOff;
+      if (aOff !== bOff) return aOff - bOff;
+
+      const aRatio = (dayCount[a.hari] || 0) / (dayTarget[a.hari] || 15);
+      const bRatio = (dayCount[b.hari] || 0) / (dayTarget[b.hari] || 15);
+      if (Math.abs(aRatio - bRatio) > 0.05) return aRatio - bRatio;
+
+      return a.jamMulai.localeCompare(b.jamMulai);
     });
 
     let chosen = null;
