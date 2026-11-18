@@ -27,8 +27,14 @@
         </div>
 
         <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <%- include('../../partials/table-pagination', {
+            tableId: 'table-dosen',
+            part: 'toolbar',
+            searchPlaceholder: 'Cari nama, kode inisial, NIDN, atau keahlian dosen...'
+          }) %>
+
           <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
+            <table id="table-dosen" class="w-full text-left text-xs paginated-table">
               <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
                 <tr>
                   <th class="px-4 py-3 font-semibold">Kode</th>
@@ -61,6 +67,12 @@
               </tbody>
             </table>
           </div>
+
+          <%- include('../../partials/table-pagination', {
+            tableId: 'table-dosen',
+            part: 'pagination',
+            defaultPageSize: 10
+          }) %>
         </div>
 
       </div>

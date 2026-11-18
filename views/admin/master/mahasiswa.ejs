@@ -27,8 +27,43 @@
         </div>
 
         <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <%- include('../../partials/table-pagination', {
+            tableId: 'table-mahasiswa',
+            part: 'toolbar',
+            searchPlaceholder: 'Cari mahasiswa berdasarkan nama atau NIM...',
+            filterOptions: [
+              {
+                id: 'filter-semester-mhs',
+                label: 'Semester',
+                dataAttr: 'semester',
+                options: [
+                  { value: 'Semua', text: 'Semua Semester' },
+                  { value: '1', text: 'Semester 1' },
+                  { value: '2', text: 'Semester 2' },
+                  { value: '3', text: 'Semester 3' },
+                  { value: '4', text: 'Semester 4' },
+                  { value: '5', text: 'Semester 5' },
+                  { value: '6', text: 'Semester 6' },
+                  { value: '7', text: 'Semester 7' },
+                  { value: '8', text: 'Semester 8' }
+                ]
+              },
+              {
+                id: 'filter-kelas-mhs',
+                label: 'Kelas',
+                dataAttr: 'kelas',
+                options: [
+                  { value: 'Semua', text: 'Semua Kelas' },
+                  { value: 'SE', text: 'Kelas SE' },
+                  { value: 'AI', text: 'Kelas AI' },
+                  { value: 'NET', text: 'Kelas NET' }
+                ]
+              }
+            ]
+          }) %>
+
           <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
+            <table id="table-mahasiswa" class="w-full text-left text-xs paginated-table">
               <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
                 <tr>
                   <th class="px-4 py-3 font-semibold">NIM</th>
@@ -42,12 +77,12 @@
               <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
                 <% const listMhs = (typeof mahasiswaList !== 'undefined' && Array.isArray(mahasiswaList)) ? mahasiswaList : []; %>
                 <% if (listMhs.length === 0) { %>
-                  <tr>
+                  <tr class="table-empty-row">
                     <td colspan="6" class="px-4 py-6 text-center text-zinc-500">Belum ada data mahasiswa di database.</td>
                   </tr>
                 <% } else { %>
                   <% listMhs.forEach(function(mhs) { %>
-                    <tr>
+                    <tr data-semester="<%= mhs.semesterAktif %>" data-kelas="<%= mhs.kodePeminatan || 'SE' %>">
                       <td class="px-4 py-3 font-mono font-bold text-zinc-900 dark:text-zinc-100"><%= mhs.nim %></td>
                       <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100"><%= mhs.nama %></td>
                       <td class="px-4 py-3 font-mono">Semester <%= mhs.semesterAktif %></td>
@@ -67,6 +102,12 @@
               </tbody>
             </table>
           </div>
+
+          <%- include('../../partials/table-pagination', {
+            tableId: 'table-mahasiswa',
+            part: 'pagination',
+            defaultPageSize: 10
+          }) %>
         </div>
 
       </div>

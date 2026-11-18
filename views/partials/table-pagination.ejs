@@ -1,0 +1,186 @@
+<%#
+  Unified Table Pagination & Filter Partial
+  Jadwalin Smart Scheduling System
+  Parameters:
+    - tableId: string (Required - ID elemen <table> target)
+    - part: string ('toolbar' | 'pagination' | 'both', default: 'both')
+    - searchPlaceholder: string (default: 'Cari data...')
+    - filterOptions: array of { id: string, label: string, columnIndex?: number, dataAttr?: string, options: [{ value: string, text: string }] }
+    - defaultPageSize: number (default: 10)
+    - pageSizeOptions: array of number (default: [10, 25, 50, -1])
+    - showPageSize: boolean (default: true)
+    - showInfo: boolean (default: true)
+    - extraActionsHtml: string (HTML opsional di sebelah kanan filter)
+%>
+<%
+  const targetId = typeof tableId !== 'undefined' ? tableId : 'table-data';
+  const currentPart = typeof part !== 'undefined' ? part : 'both';
+  const placeholder = typeof searchPlaceholder !== 'undefined' ? searchPlaceholder : 'Cari dalam tabel...';
+  const filters = (typeof filterOptions !== 'undefined' && Array.isArray(filterOptions)) ? filterOptions : [];
+  const initialPageSize = typeof defaultPageSize !== 'undefined' ? Number(defaultPageSize) : 10;
+  const sizeOptions = (typeof pageSizeOptions !== 'undefined' && Array.isArray(pageSizeOptions)) ? pageSizeOptions : [10, 25, 50, -1];
+  const withPageSize = typeof showPageSize !== 'undefined' ? Boolean(showPageSize) : true;
+  const withInfo = typeof showInfo !== 'undefined' ? Boolean(showInfo) : true;
+  const extraHtml = typeof extraActionsHtml !== 'undefined' ? extraActionsHtml : '';
+%>
+
+<% if (currentPart === 'toolbar' || currentPart === 'both') { %>
+<!-- Table Filter Toolbar (Top) -->
+<div class="table-toolbar-container px-4 py-3 border-b border-zinc-200/80 bg-zinc-50/60 dark:border-zinc-800 dark:bg-zinc-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs" data-for-table="<%= targetId %>">
+  <!-- Search and Dropdown Filters -->
+  <div class="flex flex-wrap items-center gap-2.5 flex-1">
+    <!-- Search Box -->
+    <div class="relative flex-1 min-w-[200px] max-w-sm">
+      <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm pointer-events-none"></i>
+      <input
+        type="text"
+        data-table-search="<%= targetId %>"
+        placeholder="<%= placeholder %>"
+        class="w-full pl-9 pr-8 py-1.5 text-xs rounded-lg border border-zinc-200 bg-white text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-1 focus:ring-[#0c2b5e] focus:border-[#0c2b5e] dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:ring-amber-400 dark:focus:border-amber-400 transition-colors shadow-2xs"
+      />
+      <button
+        type="button"
+        data-table-clear-search="<%= targetId %>"
+        class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 p-0.5"
+        title="Bersihkan pencarian"
+      >
+        <i class="ph ph-x text-xs"></i>
+      </button>
+    </div>
+
+    <!-- Additional Dropdown Filters -->
+    <% filters.forEach(function(f, idx) { %>
+      <div class="flex items-center gap-1.5">
+        <% if (f.label) { %>
+          <label class="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 hidden md:inline"><%= f.label %>:</label>
+        <% } %>
+        <select
+          data-table-filter="<%= targetId %>"
+          data-filter-idx="<%= idx %>"
+          <% if (typeof f.columnIndex !== 'undefined') { %> data-col-idx="<%= f.columnIndex %>" <% } %>
+          <% if (f.dataAttr) { %> data-filter-attr="<%= f.dataAttr %>" <% } %>
+          class="text-xs rounded-lg border border-zinc-200 bg-white text-zinc-800 px-2.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#0c2b5e] dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:focus:ring-amber-400 transition-colors shadow-2xs"
+        >
+          <% (f.options || []).forEach(function(opt) { %>
+            <option value="<%= opt.value %>"><%= opt.text %></option>
+          <% }); %>
+        </select>
+      </div>
+    <% }); %>
+
+    <!-- Reset Filter Button -->
+    <button
+      type="button"
+      data-table-reset="<%= targetId %>"
+      class="hidden inline-flex items-center gap-1 px-2.5 py-1.5 text-[11px] font-semibold text-zinc-600 hover:text-rose-600 dark:text-zinc-400 dark:hover:text-rose-400 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+      title="Reset semua filter"
+    >
+      <i class="ph ph-arrow-counter-clockwise text-xs"></i>
+      <span>Reset</span>
+    </button>
+  </div>
+
+  <!-- Right Side / Count Status Badge -->
+  <div class="flex items-center gap-3 shrink-0 self-end sm:self-center">
+    <% if (extraHtml) { %>
+      <%- extraHtml %>
+    <% } %>
+    <span
+      data-table-badge="<%= targetId %>"
+      class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-zinc-100 font-mono text-[11px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 border border-zinc-200/80 dark:border-zinc-700/80"
+    >
+      <i class="ph ph-rows text-zinc-400"></i>
+      <span data-badge-text="<%= targetId %>">Memuat data...</span>
+    </span>
+  </div>
+</div>
+<% } %>
+
+<% if (currentPart === 'pagination' || currentPart === 'both') { %>
+<!-- Table Pagination Controls (Bottom) -->
+<div class="table-pagination-container px-4 py-3 border-t border-zinc-200/80 bg-zinc-50/60 dark:border-zinc-800 dark:bg-zinc-800/40 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs" data-for-table="<%= targetId %>" data-page-size="<%= initialPageSize %>">
+  <!-- Info Text & Page Size Selector -->
+  <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
+    <% if (withInfo) { %>
+      <p class="text-xs text-zinc-500 dark:text-zinc-400 font-mono" data-table-info="<%= targetId %>">
+        Menampilkan <span class="font-bold text-zinc-900 dark:text-zinc-100" data-info-start="<%= targetId %>">0</span>–<span class="font-bold text-zinc-900 dark:text-zinc-100" data-info-end="<%= targetId %>">0</span> dari <span class="font-bold text-zinc-900 dark:text-zinc-100" data-info-total="<%= targetId %>">0</span> data
+      </p>
+    <% } %>
+
+    <% if (withPageSize) { %>
+      <div class="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+        <label for="page-size-<%= targetId %>" class="text-[11px]">Baris:</label>
+        <select
+          id="page-size-<%= targetId %>"
+          data-table-page-size="<%= targetId %>"
+          class="text-xs rounded-md border border-zinc-200 bg-white text-zinc-800 px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#0c2b5e] dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:focus:ring-amber-400 shadow-2xs"
+        >
+          <% sizeOptions.forEach(function(sz) { %>
+            <option value="<%= sz %>" <%= sz === initialPageSize ? 'selected' : '' %>>
+              <%= sz === -1 ? 'Semua' : sz %>
+            </option>
+          <% }); %>
+        </select>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Pagination Buttons Navigation -->
+  <nav class="flex items-center gap-1 w-full sm:w-auto justify-center sm:justify-end" aria-label="Navigasi Halaman" data-table-nav="<%= targetId %>">
+    <!-- First Page Button -->
+    <button
+      type="button"
+      data-table-page-btn="first"
+      data-target="<%= targetId %>"
+      disabled
+      class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors shadow-2xs"
+      title="Halaman Pertama"
+    >
+      <i class="ph ph-caret-double-left text-xs"></i>
+    </button>
+
+    <!-- Prev Page Button -->
+    <button
+      type="button"
+      data-table-page-btn="prev"
+      data-target="<%= targetId %>"
+      disabled
+      class="inline-flex h-8 items-center gap-1 px-2.5 rounded-lg border border-zinc-200 bg-white text-xs font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors shadow-2xs"
+      title="Halaman Sebelumnya"
+    >
+      <i class="ph ph-caret-left text-xs"></i>
+      <span class="hidden sm:inline">Sebelumnya</span>
+    </button>
+
+    <!-- Numeric Page Buttons Container -->
+    <div class="flex items-center gap-1 px-1" data-table-pages-list="<%= targetId %>">
+      <!-- Generated dynamically by table-pagination.js -->
+    </div>
+
+    <!-- Next Page Button -->
+    <button
+      type="button"
+      data-table-page-btn="next"
+      data-target="<%= targetId %>"
+      disabled
+      class="inline-flex h-8 items-center gap-1 px-2.5 rounded-lg border border-zinc-200 bg-white text-xs font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors shadow-2xs"
+      title="Halaman Selanjutnya"
+    >
+      <span class="hidden sm:inline">Selanjutnya</span>
+      <i class="ph ph-caret-right text-xs"></i>
+    </button>
+
+    <!-- Last Page Button -->
+    <button
+      type="button"
+      data-table-page-btn="last"
+      data-target="<%= targetId %>"
+      disabled
+      class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 disabled:opacity-40 disabled:cursor-not-allowed dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors shadow-2xs"
+      title="Halaman Terakhir"
+    >
+      <i class="ph ph-caret-double-right text-xs"></i>
+    </button>
+  </nav>
+</div>
+<% } %>

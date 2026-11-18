@@ -351,21 +351,51 @@
           </div>
 
           <!-- Schedule Grid Pratinjau -->
-          <div class="rounded-xl border border-zinc-200 bg-zinc-50/50 dark:border-zinc-800 dark:bg-zinc-900/50 overflow-x-auto">
-            <table class="w-full border-collapse text-left text-xs min-w-[700px]">
-              <thead>
-                <tr class="border-b border-zinc-200 bg-zinc-100/80 dark:border-zinc-800 dark:bg-zinc-800/80">
-                  <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Hari & Jam</th>
-                  <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Mata Kuliah</th>
-                  <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Ruangan</th>
-                  <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Kelas & SKS</th>
-                  <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Dosen Pengampu</th>
-                </tr>
-              </thead>
-              <tbody id="result-schedule-body" class="divide-y divide-zinc-200 dark:divide-zinc-800">
-                <!-- Diisi oleh JS -->
-              </tbody>
-            </table>
+          <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+            <%- include('../partials/table-pagination', {
+              tableId: 'table-prakrs-schedule',
+              part: 'toolbar',
+              searchPlaceholder: 'Cari jadwal matkul, dosen, ruang...',
+              filterOptions: [
+                {
+                  id: 'filter-hari-prakrs',
+                  label: 'Hari',
+                  dataAttr: 'hari',
+                  options: [
+                    { value: 'Semua', text: 'Semua Hari' },
+                    { value: 'Senin', text: 'Senin' },
+                    { value: 'Selasa', text: 'Selasa' },
+                    { value: 'Rabu', text: 'Rabu' },
+                    { value: 'Kamis', text: 'Kamis' },
+                    { value: 'Jumat', text: 'Jumat' },
+                    { value: 'Sabtu', text: 'Sabtu' }
+                  ]
+                }
+              ]
+            }) %>
+
+            <div class="overflow-x-auto">
+              <table id="table-prakrs-schedule" class="w-full border-collapse text-left text-xs min-w-[700px] paginated-table">
+                <thead>
+                  <tr class="border-b border-zinc-200 bg-zinc-100/80 dark:border-zinc-800 dark:bg-zinc-800/80 font-mono text-[11px] uppercase text-zinc-500">
+                    <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Hari & Jam</th>
+                    <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Mata Kuliah</th>
+                    <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Ruangan</th>
+                    <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Kelas & SKS</th>
+                    <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Dosen Pengampu</th>
+                  </tr>
+                </thead>
+                <tbody id="result-schedule-body" class="divide-y divide-zinc-200 dark:divide-zinc-800">
+                  <!-- Diisi oleh JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <%- include('../partials/table-pagination', {
+              tableId: 'table-prakrs-schedule',
+              part: 'pagination',
+              defaultPageSize: 10
+            }) %>
           </div>
         </div>
 
@@ -786,13 +816,15 @@
                       (item.jenis && item.jenis.toLowerCase().includes('praktikum'));
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors';
+        tr.setAttribute('data-hari', item.hari || '');
+        tr.setAttribute('data-search', `${item.kodeMatkul || ''} ${item.mataKuliah || ''} ${item.dosen || ''} ${item.ruang || ''} ${item.hari || ''}`.toLowerCase());
         tr.innerHTML = `
           <td class="px-4 py-3 font-semibold text-zinc-800 dark:text-zinc-200">
             ${item.hari}, ${item.jamMulai}–${item.jamSelesai}
           </td>
           <td class="px-4 py-3 font-medium text-zinc-900 dark:text-zinc-100">
             <div>${item.mataKuliah}</div>
-            <div class="text-[11px] text-zinc-400">${item.kodeMatkul}</div>
+            <div class="text-[11px] text-zinc-400 font-mono">${item.kodeMatkul}</div>
           </td>
           <td class="px-4 py-3">
             <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold ${isLab ? 'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300' : 'bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200'}">
@@ -809,6 +841,10 @@
         `;
         resultScheduleBody.appendChild(tr);
       });
+
+      if (window.JadwalinTablePagination) {
+        window.JadwalinTablePagination.bindTable('table-prakrs-schedule');
+      }
     }
 
     btnCalculate.addEventListener('click', () => {

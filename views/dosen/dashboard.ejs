@@ -132,8 +132,30 @@
 
           <div
             class="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+            <%- include('../partials/table-pagination', {
+              tableId: 'table-dosen-dashboard-matkul',
+              part: 'toolbar',
+              searchPlaceholder: 'Cari matkul, kode, atau ruang...',
+              filterOptions: [
+                {
+                  id: 'filter-hari-dashboard-dsn',
+                  label: 'Hari',
+                  dataAttr: 'hari',
+                  options: [
+                    { value: 'Semua', text: 'Semua Hari' },
+                    { value: 'Senin', text: 'Senin' },
+                    { value: 'Selasa', text: 'Selasa' },
+                    { value: 'Rabu', text: 'Rabu' },
+                    { value: 'Kamis', text: 'Kamis' },
+                    { value: 'Jumat', text: 'Jumat' },
+                    { value: 'Sabtu', text: 'Sabtu' }
+                  ]
+                }
+              ]
+            }) %>
+
             <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs">
+              <table id="table-dosen-dashboard-matkul" class="w-full text-left text-xs paginated-table">
                 <thead
                   class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
                   <tr>
@@ -146,12 +168,12 @@
                 </thead>
                 <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
                   <% if (dsnJadwal.length === 0) { %>
-                    <tr>
+                    <tr class="table-empty-row">
                       <td colspan="5" class="px-4 py-6 text-center text-zinc-500">Belum ada jadwal mengajar tercatat.</td>
                     </tr>
                   <% } else { %>
                     <% dsnJadwal.forEach(function(item) { %>
-                      <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40">
+                      <tr data-hari="<%= item.hari %>" class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40">
                         <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100"><%= item.kodeMatkul %> — <%= item.mataKuliah %></td>
                         <td class="px-4 py-3 font-mono">Kelas <%= item.kelas %></td>
                         <td class="px-4 py-3 font-mono"><%= item.sks %> SKS</td>
@@ -163,6 +185,12 @@
                 </tbody>
               </table>
             </div>
+
+            <%- include('../partials/table-pagination', {
+              tableId: 'table-dosen-dashboard-matkul',
+              part: 'pagination',
+              defaultPageSize: 5
+            }) %>
           </div>
         </div>
 
