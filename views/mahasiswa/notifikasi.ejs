@@ -23,8 +23,8 @@
               Informasi real-time perubahan ruangan, dosen pengganti, atau pemindahan jadwal kuliah.
             </p>
           </div>
-          <button type="button"
-            onclick="window.toast ? window.toast.success('Semua notifikasi mahasiswa ditandai telah dibaca.') : null"
+          <button type="button" id="btn-read-all-mhs"
+            onclick="handleTandaiSemuaDibacaMahasiswa(this)"
             class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 shadow-xs transition-colors">
             <i class="ph ph-check-double text-blue-900 dark:text-blue-400"></i>
             <span>Tandai Semua Dibaca</span>
@@ -55,9 +55,9 @@
             </div>
           <% } else { %>
             <% notifItems.forEach(function(item) { %>
-              <div class="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 flex items-start gap-4">
-                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200/60 dark:border-amber-800/60">
-                  <i class="ph ph-bell-ringing text-xl"></i>
+              <div class="notif-item-mhs rounded-xl border <%= (item.isRead === false) ? 'border-amber-300 bg-amber-50/40 dark:border-amber-800/60 dark:bg-amber-950/20' : 'border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900' %> p-4 shadow-sm flex items-start gap-4 transition-colors">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg <%= (item.isRead === false) ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800' : 'bg-blue-50 text-blue-600 dark:bg-blue-950/60 dark:text-blue-400 border border-blue-200/60 dark:border-blue-800/60' %>">
+                  <i class="ph <%= (item.isRead === false) ? 'ph-bell-ringing' : 'ph-calendar-check' %> text-xl"></i>
                 </div>
                 <div class="flex-1 space-y-1">
                   <div class="flex items-center justify-between gap-2">
@@ -92,3 +92,30 @@
     <%- include('../partials/admin-footer') %>
   </div>
 </div>
+
+<script>
+  async function handleTandaiSemuaDibacaMahasiswa(btn) {
+    if (btn) btn.disabled = true;
+    try {
+      const res = await fetch('/api/notifikasi/read-all', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await res.json();
+      if (data.sukses) {
+        if (window.JadwalinUI?.toast) {
+          window.JadwalinUI.toast.show(data.pesan || 'Semua notifikasi ditandai dibaca.', 'success');
+        }
+        const badge = document.getElementById('admin-notif-badge');
+        if (badge) badge.remove();
+        document.querySelectorAll('.notif-item-mhs').forEach(el => {
+          el.className = 'notif-item-mhs rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 p-4 shadow-sm flex items-start gap-4 transition-colors';
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+</script>

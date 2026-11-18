@@ -3,6 +3,7 @@ const MasterModel = require('../models/masterModel');
 const JadwalModel = require('../models/jadwalModel');
 const ConstraintModel = require('../models/constraintModel');
 const aiSolverService = require('../services/aiSolverService');
+const notifikasiService = require('../services/notifikasiService');
 const db = require('../models');
 const config = require('../config');
 
@@ -219,8 +220,16 @@ exports.revisiJadwal = async (req, res) => {
 
   try {
     const { id, hari, jamMulai, jamSelesai, ruang } = parsed.data;
-    const sesiRow = await db.JadwalSesi.findByPk(id);
+    const sesiRow = await db.JadwalSesi.findByPk(id, {
+      include: [
+        { model: db.MataKuliah, as: 'mataKuliah' },
+        { model: db.Ruangan, as: 'ruangan' },
+        { model: db.Dosen, as: 'dosens' }
+      ]
+    });
+    let infoLama = '';
     if (sesiRow) {
+      infoLama = `${sesiRow.hari} ${sesiRow.jam_mulai}-${sesiRow.jam_selesai} (${sesiRow.ruangan?.kode || 'Ruang ?'})`;
       let ruanganId = sesiRow.ruangan_id;
       if (ruang) {
         const rg = await db.Ruangan.findOne({ where: { kode: ruang.toUpperCase() } });
@@ -232,6 +241,39 @@ exports.revisiJadwal = async (req, res) => {
         ...(jamSelesai ? { jam_selesai: jamSelesai } : {}),
         ruangan_id: ruanganId
       });
+
+      // Catat ke notifikasi database PostgreSQL
+      try {
+        const activePeriode = await getActivePeriodeRecord();
+        const sesiUpdated = await db.JadwalSesi.findByPk(id, {
+          include: [
+            { model: db.MataKuliah, as: 'mataKuliah' },
+            { model: db.Ruangan, as: 'ruangan' },
+            { model: db.Dosen, as: 'dosens' }
+          ]
+        });
+        if (sesiUpdated && activePeriode?.id) {
+          const formatSesiObj = {
+            kodeMatkul: sesiUpdated.mataKuliah?.kode || 'TI-MK',
+            mataKuliah: sesiUpdated.mataKuliah?.nama || 'Mata Kuliah',
+            kelas: sesiUpdated.kelas || 'A',
+            semester: sesiUpdated.mataKuliah?.semester || 1,
+            isPilihan: sesiUpdated.is_pilihan,
+            peminatanKode: sesiUpdated.mataKuliah?.kode_peminatan,
+            dosenList: (sesiUpdated.dosens || []).map(d => ({ id: d.id, nama: d.nama }))
+          };
+          const infoBaru = `${sesiUpdated.hari} ${sesiUpdated.jam_mulai}-${sesiUpdated.jam_selesai} (${sesiUpdated.ruangan?.kode || ruang || '-'})`;
+          await notifikasiService.catatPerubahanSlot({
+            periode: activePeriode,
+            sesi: formatSesiObj,
+            lama: infoLama,
+            baru: infoBaru,
+            aktor: req.user?.username || 'Admin Akademik'
+          });
+        }
+      } catch (notifErr) {
+        console.warn('[revisiJadwal] Gagal mencatat notifikasi:', notifErr.message);
+      }
     }
     const hasil = JadwalModel.updateSesi(id, parsed.data) || { totalKonflik: 0, konflik: [], status: 'Terpublikasi' };
     const msg = hasil.totalKonflik > 0
@@ -267,6 +309,17 @@ exports.publishJadwal = async (req, res) => {
     const active = await getActivePeriodeRecord();
     if (active?.id) {
       await db.PeriodeJadwal.update({ status: 'Terpublikasi', published_at: new Date() }, { where: { id: active.id } });
+      try {
+        const versi = await notifikasiService.versiPublikasiBerikutnya(active.id);
+        const jumlahSesi = (await db.JadwalSesi.count({ where: { periode_id: active.id } })) || data.jadwal.length;
+        await notifikasiService.catatPublikasi({
+          periode: active,
+          versi,
+          jumlahSesi
+        });
+      } catch (notifErr) {
+        console.warn('[publishJadwal] Gagal mencatat notifikasi publikasi:', notifErr.message);
+      }
     }
     const okMsg = 'Jadwal perkuliahan bebas bentrok berhasil dipublikasikan.';
     return res.json({
@@ -631,6 +684,18 @@ exports.simpanPreferensiDosen = async (req, res) => {
     }
 
     const softConstraints = ConstraintModel.updateDosenPreference(targetDosen.nama, hariOff || 'Jumat', alasan);
+
+    // Catat notifikasi ke database PostgreSQL
+    try {
+      await notifikasiService.catatPreferensi({
+        dosen: targetDosen,
+        hariOff: hariOff || 'Jumat',
+        alasan
+      });
+    } catch (notifErr) {
+      console.warn('[simpanPreferensiDosen] Gagal mencatat notifikasi:', notifErr.message);
+    }
+
     return res.json({
       sukses: true,
       pesan: `Preferensi mengajar untuk ${targetDosen.nama} berhasil disimpan ke database.`,

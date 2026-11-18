@@ -2,6 +2,7 @@ const MasterModel = require('../models/masterModel');
 const JadwalModel = require('../models/jadwalModel');
 const ConstraintModel = require('../models/constraintModel');
 const aiSolverService = require('../services/aiSolverService');
+const notifikasiService = require('../services/notifikasiService');
 const db = require('../models');
 const config = require('../config');
 
@@ -32,6 +33,7 @@ async function getBaseData(currentUser = null) {
   let jadwal = JadwalModel.getAll();
   let jadwalStatus = JadwalModel.getStatus();
   let notifikasiList = JadwalModel.getNotifikasi();
+  let notifikasiBelumDibaca = 0;
   let masterSummary = MasterModel.getSummary();
   let dosenList = MasterModel.getDosen();
   let ruanganList = MasterModel.getRuangan();
@@ -171,14 +173,37 @@ async function getBaseData(currentUser = null) {
         }
       }
 
-      if (dbNotifs.length > 0) {
-        notifikasiList = dbNotifs.map(n => ({
-          id: n.id,
-          kodeMatkul: n.judul,
-          mataKuliah: n.target_role === 'all' ? 'Civitas TI UMY' : n.target_role,
-          perubahan: n.isi,
-          waktu: n.created_at ? new Date(n.created_at).toLocaleString('id-ID') : 'Terbaru'
-        }));
+      // Ambil notifikasi sesuai persona pengguna jika login, atau fallback ke seluruh notifikasi
+      try {
+        if (currentUser && currentUser.role) {
+          const userNotifs = await notifikasiService.daftarUntukPengguna({
+            pengguna: currentUser,
+            limit: 25
+          });
+          if (userNotifs && userNotifs.data) {
+            notifikasiList = userNotifs.data.map(n => ({
+              id: n.id,
+              kodeMatkul: n.judul,
+              mataKuliah: n.targetRole === 'all' ? 'Civitas TI UMY' : n.targetRole.toUpperCase(),
+              perubahan: n.isi,
+              isRead: n.isRead,
+              waktu: n.waktu || 'Terbaru'
+            }));
+            notifikasiBelumDibaca = userNotifs.belumDibaca || 0;
+          }
+        } else if (dbNotifs.length > 0) {
+          notifikasiList = dbNotifs.map(n => ({
+            id: n.id,
+            kodeMatkul: n.judul,
+            mataKuliah: n.target_role === 'all' ? 'Civitas TI UMY' : n.target_role,
+            perubahan: n.isi,
+            isRead: n.is_read,
+            waktu: n.created_at ? new Date(n.created_at).toLocaleString('id-ID') : 'Terbaru'
+          }));
+          notifikasiBelumDibaca = dbNotifs.filter(n => !n.is_read).length;
+        }
+      } catch (eNotif) {
+        console.warn('[baseDataHelper] Gagal memuat notifikasi pengguna:', eNotif.message);
       }
 
       if (dbHards.length > 0 || dbSofts.length > 0) {
@@ -301,6 +326,7 @@ async function getBaseData(currentUser = null) {
     jadwal,
     jadwalStatus,
     notifikasiList,
+    notifikasiBelumDibaca,
     masterSummary,
     dosenList,
     ruanganList,
