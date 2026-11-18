@@ -677,12 +677,131 @@ exports.toggleConstraint = async (req, res) => {
   }
 };
 
+async function syncScheduleToDatabase(jadwalList) {
+  if (!db || !db.sequelize || !Array.isArray(jadwalList) || jadwalList.length === 0) return;
+  try {
+    await db.sequelize.authenticate();
+  } catch {
+    return;
+  }
+
+  try {
+    const [dbMatkuls, dbRuangans, dbDosens, dbPeriodes] = await Promise.all([
+      db.MataKuliah.findAll(),
+      db.Ruangan.findAll(),
+      db.Dosen.findAll(),
+      db.PeriodeJadwal.findAll({ order: [['id', 'DESC']] })
+    ]);
+
+    const activePeriodeId = dbPeriodes[0]?.id || 1;
+
+    const mkMap = new Map();
+    dbMatkuls.forEach(m => {
+      mkMap.set(String(m.kode).toUpperCase(), m.id);
+      mkMap.set('TI26' + String(m.kode).slice(2).toUpperCase(), m.id);
+    });
+
+    const roomMap = new Map();
+    dbRuangans.forEach(r => {
+      roomMap.set(String(r.kode).toUpperCase(), r.id);
+    });
+
+    const dosenMap = new Map();
+    dbDosens.forEach(d => {
+      if (d.inisial) dosenMap.set(String(d.inisial).toUpperCase(), d.id);
+    });
+
+    await db.sequelize.transaction(async (t) => {
+      const oldSesis = await db.JadwalSesi.findAll({
+        where: { periode_id: activePeriodeId },
+        attributes: ['id'],
+        transaction: t
+      });
+      const oldIds = oldSesis.map(s => s.id);
+
+      if (oldIds.length > 0) {
+        await db.JadwalDosen.destroy({
+          where: { jadwal_sesi_id: oldIds },
+          transaction: t
+        });
+        await db.JadwalSesi.destroy({
+          where: { id: oldIds },
+          transaction: t
+        });
+      }
+
+      const newSesiRows = [];
+      const newPivotRows = [];
+
+      for (let i = 0; i < jadwalList.length; i++) {
+        const item = jadwalList[i];
+        const newId = i + 1;
+        item.id = newId;
+
+        const mkId = mkMap.get(String(item.kodeMatkul).toUpperCase()) || dbMatkuls[0]?.id || 1;
+        const roomId = roomMap.get(String(item.ruang).toUpperCase()) || null;
+
+        newSesiRows.push({
+          id: newId,
+          periode_id: activePeriodeId,
+          mata_kuliah_id: mkId,
+          ruangan_id: roomId,
+          hari: item.hari || 'Senin',
+          jam_mulai: item.jamMulai || '07:00',
+          jam_selesai: item.jamSelesai || '08:40',
+          kelas: item.kelas || 'A',
+          is_pilihan: Boolean(item.isPilihan),
+          is_lab_valid: item.isLabValid !== false,
+          melewati_istirahat: Boolean(item.melewatiIstirahat),
+          created_at: new Date(),
+          updated_at: new Date()
+        });
+
+        const inisials = (item.dosenInisial || '').split(';').map(x => x.trim().toUpperCase()).filter(Boolean);
+        const isTeam = inisials.length > 1;
+
+        inisials.forEach(ini => {
+          const dId = dosenMap.get(ini);
+          if (dId) {
+            newPivotRows.push({
+              jadwal_sesi_id: newId,
+              dosen_id: dId,
+              is_team_teaching: isTeam,
+              created_at: new Date(),
+              updated_at: new Date()
+            });
+          }
+        });
+      }
+
+      if (newSesiRows.length > 0) {
+        await db.JadwalSesi.bulkCreate(newSesiRows, { transaction: t });
+      }
+      if (newPivotRows.length > 0) {
+        await db.JadwalDosen.bulkCreate(newPivotRows, { transaction: t });
+      }
+
+      await db.PeriodeJadwal.update({
+        generated_at: new Date()
+      }, {
+        where: { id: activePeriodeId },
+        transaction: t
+      });
+    });
+  } catch (err) {
+    console.error('[Sync DB Error]:', err.message);
+  }
+}
+
 exports.generate = async (req, res) => {
   try {
     const hasCustomPayload = req.body && typeof req.body === 'object' && Object.keys(req.body).length > 0;
     const solverOutput = await aiSolverService.generateSchedule({
       payload: hasCustomPayload ? req.body : undefined
     });
+    
+    // Sinkronkan jadwal baru ke PostgreSQL dan memory model
+    await syncScheduleToDatabase(solverOutput.jadwal);
     const baseResult = JadwalModel.generateAI(solverOutput.jadwal);
     const totalKonflik = solverOutput.konflik.length;
     const status = totalKonflik === 0 ? 'Terpublikasi' : 'Draft (Perlu Revisi)';

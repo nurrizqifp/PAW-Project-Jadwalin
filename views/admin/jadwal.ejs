@@ -1,569 +1,736 @@
-<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Preview & Publikasi Jadwal — Jadwalin' }) %>
+<%- include('../partials/head', { judul: typeof judul !=='undefined' ? judul : 'Preview & Publikasi Jadwal — Jadwalin'
+  }) %>
 
-<div class="flex-1 flex min-h-screen">
-  <%- include('../partials/admin-sidebar', { activeMenu: 'jadwal' }) %>
+  <div class="flex-1 flex min-h-screen">
+    <%- include('../partials/admin-sidebar', { activeMenu: 'jadwal' }) %>
 
-  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-    <%- include('../partials/admin-navbar') %>
+      <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <%- include('../partials/admin-navbar') %>
 
-    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
-      <div class="max-w-7xl mx-auto space-y-6">
+          <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
+            <div class="max-w-7xl mx-auto space-y-6">
 
-        <!-- Header & Action Status Bar -->
-        <% const totalKonflik = (typeof jadwalStatus !== 'undefined' && jadwalStatus) ? (jadwalStatus.totalKonflik || 0) : 0; %>
-        <% const daftarKonflik = (typeof jadwalStatus !== 'undefined' && jadwalStatus && Array.isArray(jadwalStatus.daftarKonflik)) ? jadwalStatus.daftarKonflik : []; %>
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-zinc-200 pb-5 dark:border-zinc-800">
-          <div>
-            <div class="flex items-center gap-2">
-              <% if (totalKonflik > 0) { %>
-                <span class="rounded bg-rose-100 px-2 py-0.5 font-mono text-[10px] font-bold text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
-                  STATUS: <%= (jadwalStatus && jadwalStatus.status) ? jadwalStatus.status.toUpperCase() : 'PERLU REVISI (KONFLIK)' %>
-                </span>
-                <span class="text-xs text-rose-600 dark:text-rose-400 font-mono font-semibold flex items-center gap-1">
-                  <i class="ph ph-warning-octagon text-rose-500"></i> <%= totalKonflik %> Pelanggaran Hard Constraint
-                </span>
-              <% } else { %>
-                <span class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-                  STATUS: <%= (jadwalStatus && jadwalStatus.status) ? jadwalStatus.status.toUpperCase() : 'PUBLISHED' %> (<%= (jadwalStatus && jadwalStatus.versi) || 'v1.0' %>)
-                </span>
-                <span class="text-xs text-zinc-500 dark:text-zinc-400 font-mono flex items-center gap-1">
-                  <i class="ph ph-shield-check text-emerald-500"></i> 0 Konflik Hard Constraint
-                </span>
-              <% } %>
-            </div>
-            <h1 class="font-heading text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-1">
-              Matriks Jadwal Perkuliahan
-            </h1>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">
-              <%= jadwal ? jadwal.length : 0 %> sesi · <%= (typeof activePeriode !== 'undefined' && activePeriode) ? activePeriode.nama : 'Semester Aktif' %>
-            </p>
-          </div>
+              <!-- Header & Action Status Bar -->
+              <% const totalKonflik=(typeof jadwalStatus !=='undefined' && jadwalStatus) ? (jadwalStatus.totalKonflik ||
+                0) : 0; %>
+                <% const daftarKonflik=(typeof jadwalStatus !=='undefined' && jadwalStatus &&
+                  Array.isArray(jadwalStatus.daftarKonflik)) ? jadwalStatus.daftarKonflik : []; %>
+                  <div
+                    class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 border-b border-zinc-200 pb-5 dark:border-zinc-800">
+                    <div>
+                      <div class="flex items-center gap-2">
+                        <% if (totalKonflik> 0) { %>
+                          <span
+                            class="rounded bg-rose-100 px-2 py-0.5 font-mono text-[10px] font-bold text-rose-800 dark:bg-rose-950/80 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                            STATUS: <%= (jadwalStatus && jadwalStatus.status) ? jadwalStatus.status.toUpperCase()
+                              : 'PERLU REVISI (KONFLIK)' %>
+                          </span>
+                          <span
+                            class="text-xs text-rose-600 dark:text-rose-400 font-mono font-semibold flex items-center gap-1">
+                            <i class="ph ph-warning-octagon text-rose-500"></i>
+                            <%= totalKonflik %> Pelanggaran Hard Constraint
+                          </span>
+                          <% } else { %>
+                            <span
+                              class="rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                              STATUS: <%= (jadwalStatus && jadwalStatus.status) ? jadwalStatus.status.toUpperCase()
+                                : 'PUBLISHED' %> (<%= (jadwalStatus && jadwalStatus.versi) || 'v1.0' %>)
+                            </span>
+                            <span class="text-xs text-zinc-500 dark:text-zinc-400 font-mono flex items-center gap-1">
+                              <i class="ph ph-shield-check text-emerald-500"></i> 0 Konflik Hard Constraint
+                            </span>
+                            <% } %>
+                      </div>
+                      <h1
+                        class="font-heading text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 pt-1">
+                        Matriks Jadwal Perkuliahan
+                      </h1>
+                      <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                        <%= jadwal ? jadwal.length : 0 %> sesi · <%= (typeof activePeriode !=='undefined' &&
+                            activePeriode) ? activePeriode.nama : 'Semester Aktif' %>
+                      </p>
+                    </div>
 
-          <!-- Group CTA Kanan -->
-          <div class="flex items-center gap-3 shrink-0">
-            <button type="button"
-              onclick="window.showConfirmDialog('Export Matriks Jadwal', 'Unduh jadwal lengkap dalam format spreadsheet Excel (.xlsx)?', null, 'Unduh Excel', true)"
-              class="inline-flex h-9 items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 transition-colors shadow-xs">
-              <i class="ph ph-file-arrow-down text-base text-emerald-600 dark:text-emerald-400"></i>
-              <span>Export Excel</span>
-            </button>
-            <button type="button"
-              onclick="window.handlePublishJadwal()"
-              class="inline-flex h-9 items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
-              <i class="ph ph-broadcast text-amber-400 text-sm"></i>
-              <span>Publikasikan Jadwal</span>
-            </button>
-          </div>
-        </div>
+                    <!-- Group CTA Kanan -->
+                    <div class="flex items-center gap-3 shrink-0">
+                      <button type="button"
+                        onclick="window.showConfirmDialog('Export Matriks Jadwal', 'Unduh jadwal lengkap dalam format spreadsheet Excel (.xlsx)?', null, 'Unduh Excel', true)"
+                        class="inline-flex h-9 items-center gap-2 rounded-lg border border-zinc-200 bg-white px-3.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 transition-colors shadow-xs">
+                        <i class="ph ph-file-arrow-down text-base text-emerald-600 dark:text-emerald-400"></i>
+                        <span>Export Excel</span>
+                      </button>
+                      <button type="button" onclick="window.handlePublishJadwal()"
+                        class="inline-flex h-9 items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white shadow-xs border border-blue-900/40 transition-colors">
+                        <i class="ph ph-broadcast text-amber-400 text-sm"></i>
+                        <span>Publikasikan Jadwal</span>
+                      </button>
+                    </div>
+                  </div>
 
-        <% if (totalKonflik > 0) { %>
-          <details class="rounded-xl border border-rose-200 bg-rose-50/70 p-3.5 dark:border-rose-900/60 dark:bg-rose-950/30">
-            <summary class="cursor-pointer text-xs font-semibold text-rose-800 dark:text-rose-200 flex items-center justify-between">
-              <span class="flex items-center gap-2">
-                <i class="ph ph-warning-circle text-base text-rose-600"></i>
-                Ditemukan <%= totalKonflik %> pelanggaran constraint pada jadwal saat ini (Klik untuk melihat rincian)
-              </span>
-              <span class="font-mono text-[10px] underline">Lihat Daftar Konflik</span>
-            </summary>
-            <ul class="mt-2.5 max-h-40 overflow-y-auto space-y-1 border-t border-rose-200/70 pt-2 text-[11px] font-mono text-rose-900 dark:border-rose-900/50 dark:text-rose-200">
-              <% daftarKonflik.slice(0, 20).forEach(msg => { %>
-                <li>• <%= msg %></li>
-              <% }) %>
-              <% if (daftarKonflik.length > 20) { %>
-                <li class="italic text-rose-600 dark:text-rose-400">...dan <%= daftarKonflik.length - 20 %> pelanggaran lainnya. Jalankan ulang AI Generator untuk membersihkan bentrok.</li>
-              <% } %>
-            </ul>
-          </details>
-        <% } %>
+                  <% if (totalKonflik> 0) { %>
+                    <div
+                      class="rounded-xl border border-rose-300 bg-rose-50/90 p-4 dark:border-rose-900/80 dark:bg-rose-950/40 space-y-3 shadow-xs">
+                      <div
+                        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-rose-200/80 pb-2.5 dark:border-rose-900/60">
+                        <div class="flex items-center gap-2 text-rose-900 dark:text-rose-200 font-bold text-xs">
+                          <i class="ph ph-warning-octagon text-lg text-rose-600 shrink-0"></i>
+                          <span>Daftar <%= totalKonflik %> Pelanggaran Hard Constraint yang Ditemukan</span>
+                        </div>
+                        <button type="button" onclick="window.focusToConflicts ? window.focusToConflicts() : null"
+                          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold bg-rose-600 text-white hover:bg-rose-700 shadow-xs transition-colors shrink-0">
+                          <i class="ph ph-funnel"></i>
+                          <span>Saring Hanya Sesi Bentrok</span>
+                        </button>
+                      </div>
 
-        <!-- Filter, View Switcher & Search Toolbar -->
-        <div class="flex flex-col lg:flex-row items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-3 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
-          
-          <!-- View Switcher Segmented Control (Grid vs Tabel) -->
-          <div class="inline-flex w-full sm:w-auto rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800/80">
-            <button id="btn-view-grid" type="button"
-              class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-50 transition-all">
-              <i class="ph ph-calendar-blank text-sm text-[#0c2b5e] dark:text-blue-400"></i>
-              <span>Grid Mingguan</span>
-            </button>
-            <button id="btn-view-table" type="button"
-              class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
-              <i class="ph ph-table text-sm"></i>
-              <span>Tabel Rinci</span>
-            </button>
-          </div>
-
-          <!-- Search & Filter Options -->
-          <div class="flex flex-col sm:flex-row items-center gap-2.5 w-full lg:w-auto">
-            <div class="relative w-full sm:w-64">
-              <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></i>
-              <input id="jadwal-search-input" type="text" maxlength="40" placeholder="Cari kode MK, matkul, dosen..."
-                class="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
-            </div>
-
-            <div class="flex items-center gap-2 w-full sm:w-auto">
-              <select id="filter-hari-select"
-                class="flex-1 sm:flex-initial text-xs rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 px-2.5 py-1.5 focus:outline-none">
-                <option value="Semua">Semua Hari</option>
-                <option value="Senin">Senin</option>
-                <option value="Selasa">Selasa</option>
-                <option value="Rabu">Rabu</option>
-                <option value="Kamis">Kamis</option>
-                <option value="Jumat">Jumat</option>
-                <option value="Sabtu">Sabtu</option>
-              </select>
-
-              <select id="filter-tipe-select"
-                class="flex-1 sm:flex-initial text-xs rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 px-2.5 py-1.5 focus:outline-none">
-                <option value="Semua">Semua Jenis</option>
-                <option value="Teori">Teori (Kelas Reguler/RKB)</option>
-                <option value="Praktikum">Praktikum (Lab Komputer)</option>
-              </select>
-
-              <select id="filter-status-select"
-                class="flex-1 sm:flex-initial text-xs rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 px-2.5 py-1.5 focus:outline-none">
-                <option value="Semua">Semua Status</option>
-                <option value="Konflik">Hanya Konflik (<%= totalKonflik %>)</option>
-                <option value="Aman">Hanya Bebas Bentrok</option>
-              </select>
-              </select>
-
-              <span class="text-xs font-mono text-zinc-400 px-1 hidden xl:inline">
-                <strong class="text-zinc-700 dark:text-zinc-200"><%= jadwal ? jadwal.length : 0 %></strong> Sesi
-              </span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- ---------------------------------------------------- -->
-        <!-- VIEW 1: CALENDAR GRID VIEW (Presisi & Rapi)          -->
-        <!-- ---------------------------------------------------- -->
-        <div id="container-grid-view" class="space-y-4">
-          <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
-            <div class="overflow-x-auto">
-              <table class="table-fixed w-full min-w-[980px] border-collapse text-left">
-                <colgroup>
-                  <col class="w-24">
-                  <col class="w-[16%]">
-                  <col class="w-[16%]">
-                  <col class="w-[16%]">
-                  <col class="w-[16%]">
-                  <col class="w-[16%]">
-                  <col class="w-[16%]">
-                </colgroup>
-                <thead>
-                  <tr class="border-b border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-800/60 font-mono text-xs uppercase text-zinc-500">
-                    <th class="border-r border-zinc-200 bg-zinc-50/95 px-3 py-3 text-center dark:border-zinc-800 dark:bg-zinc-900/95">
-                      Waktu
-                    </th>
-                    <% const daysOfWeek = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']; %>
-                    <% daysOfWeek.forEach(d => { %>
-                      <th class="border-r border-zinc-200 px-3 py-3 text-center dark:border-zinc-800 last:border-r-0">
-                        <span class="font-bold text-zinc-800 dark:text-zinc-200"><%= d %></span>
-                      </th>
-                    <% }); %>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 text-xs">
-
-                  <!-- Slot 1: 07:00 - 08:40 -->
-                  <tr class="min-h-24">
-                    <td class="border-r border-zinc-200 bg-zinc-50/90 px-2 py-3 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
-                      <div class="font-semibold text-zinc-700 dark:text-zinc-300">07:00</div>
-                      <div class="text-[10px] text-zinc-400">08:40</div>
-                    </td>
-                    <% daysOfWeek.forEach(hari => { %>
-                      <% const slotJadwal = (jadwal || []).filter(j => j.hari === hari && j.jamMulai.startsWith('07:')); %>
-                      <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
-                        <div class="space-y-1.5">
-                          <% slotJadwal.forEach(item => { %>
-                            <% 
-                              const isBentrok = Boolean(item.isConflict);
-                              const cardBorderBg = isBentrok 
-                                ? 'border-rose-400 bg-rose-50/95 text-rose-950 dark:border-rose-700 dark:bg-rose-950/80 dark:text-rose-100 ring-2 ring-rose-500/40'
-                                : (item.jenis === 'Praktikum' 
-                                    ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' 
-                                    : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200');
-                            %>
-                            <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', '<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>')"
-                              class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
-                              data-hari="<%= item.hari %>"
-                              data-jenis="<%= item.jenis %>"
-                              data-conflict="<%= isBentrok ? 'true' : 'false' %>"
-                              data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
-                              <div class="flex items-center justify-between gap-1">
-                                <span class="font-mono text-[9px] font-bold px-1 rounded <%= isBentrok ? 'bg-rose-600 text-white' : (item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200') %>">
-                                  <%= item.kodeMatkul || 'TI261' %>
+                      <!-- List Rincian Konflik Interaktif -->
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 max-h-60 overflow-y-auto pr-1">
+                        <% daftarKonflik.forEach((k, idx)=> { %>
+                          <% const deskripsi=typeof k==='object' ? (k.deskripsi || k.jenis || JSON.stringify(k)) : k;
+                            const kode=typeof k==='object' ? (k.kode || 'HC' ) : 'HC' ; const saran=typeof k==='object'
+                            ? (k.saran || '' ) : '' ; const sesiKeyword=typeof k==='object' ? (k.sesi || '' ) : '' ; %>
+                            <div
+                              class="rounded-lg border border-rose-200 bg-white/95 p-3 text-xs dark:border-rose-900/60 dark:bg-zinc-900/90 space-y-1 shadow-xs">
+                              <div class="flex items-center justify-between">
+                                <span
+                                  class="font-mono text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                                  <%= kode %>
                                 </span>
-                                <% if (isBentrok) { %>
-                                  <span class="text-[9px] font-mono font-bold text-rose-700 dark:text-rose-300 flex items-center gap-0.5">
-                                    <i class="ph ph-warning-octagon"></i> KONFLIK
-                                  </span>
-                                <% } else { %>
-                                  <span class="text-[9px] font-mono font-semibold opacity-90">Kls <%= item.kelas %></span>
-                                <% } %>
+                                <% if (sesiKeyword) { %>
+                                  <button type="button"
+                                    onclick="window.filterJadwalByKeyword ? window.filterJadwalByKeyword(`<%= sesiKeyword.split(' ')[0] %>`) : null"
+                                    class="text-[10px] font-mono text-rose-700 dark:text-rose-300 hover:underline flex items-center gap-1 font-bold">
+                                    <span>Sorot di Jadwal</span>
+                                    <i class="ph ph-arrow-right"></i>
+                                  </button>
+                                  <% } %>
                               </div>
-                              <h4 class="font-heading font-semibold text-[11px] leading-tight pt-1 truncate" title="<%= item.mataKuliah %>"><%= item.mataKuliah %></h4>
-                              <% if (isBentrok && item.conflictReasons && item.conflictReasons.length > 0) { %>
-                                <p class="text-[9px] font-mono text-rose-700 dark:text-rose-300 font-semibold truncate pt-0.5" title="<%= item.conflictReasons.join(' | ') %>">
-                                  <i class="ph ph-warning"></i> <%= item.conflictReasons[0] %>
+                              <p class="font-semibold text-rose-950 dark:text-rose-100 text-[11px] leading-snug">
+                                <%= deskripsi %>
+                              </p>
+                              <% if (saran) { %>
+                                <p class="text-[10px] text-zinc-500 dark:text-zinc-400 italic">
+                                  Solusi: <%= saran %>
                                 </p>
-                              <% } %>
-                              <div class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
-                                <span class="<%= isBentrok ? 'font-bold underline text-rose-700 dark:text-rose-300' : '' %>"><%= item.ruang %></span>
-                                <span><%= item.sks %> SKS</span>
-                              </div>
-                            </div>
-                          <% }); %>
-                        </div>
-                      </td>
-                    <% }); %>
-                  </tr>
-
-                  <!-- Slot 2: 08:50 - 11:30 -->
-                  <tr class="min-h-24">
-                    <td class="border-r border-zinc-200 bg-zinc-50/90 px-2 py-3 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
-                      <div class="font-semibold text-zinc-700 dark:text-zinc-300">08:50</div>
-                      <div class="text-[10px] text-zinc-400">11:30</div>
-                    </td>
-                    <% daysOfWeek.forEach(hari => { %>
-                      <% const slotJadwal = (jadwal || []).filter(j => j.hari === hari && (j.jamMulai.startsWith('08:') || j.jamMulai.startsWith('09:') || j.jamMulai.startsWith('10:'))); %>
-                      <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
-                        <div class="space-y-1.5">
-                          <% slotJadwal.forEach(item => { %>
-                            <% 
-                              const isBentrok = Boolean(item.isConflict);
-                              const cardBorderBg = isBentrok 
-                                ? 'border-rose-400 bg-rose-50/95 text-rose-950 dark:border-rose-700 dark:bg-rose-950/80 dark:text-rose-100 ring-2 ring-rose-500/40'
-                                : (item.jenis === 'Praktikum' 
-                                    ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' 
-                                    : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200');
-                            %>
-                            <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', '<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>')"
-                              class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
-                              data-hari="<%= item.hari %>"
-                              data-jenis="<%= item.jenis %>"
-                              data-conflict="<%= isBentrok ? 'true' : 'false' %>"
-                              data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
-                              <div class="flex items-center justify-between gap-1">
-                                <span class="font-mono text-[9px] font-bold px-1 rounded <%= isBentrok ? 'bg-rose-600 text-white' : (item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200') %>">
-                                  <%= item.kodeMatkul || 'TI261' %>
-                                </span>
-                                <% if (isBentrok) { %>
-                                  <span class="text-[9px] font-mono font-bold text-rose-700 dark:text-rose-300 flex items-center gap-0.5">
-                                    <i class="ph ph-warning-octagon"></i> KONFLIK
-                                  </span>
-                                <% } else { %>
-                                  <span class="text-[9px] font-mono font-semibold opacity-90">Kls <%= item.kelas %></span>
                                 <% } %>
-                              </div>
-                              <h4 class="font-heading font-semibold text-[11px] leading-tight pt-1 truncate" title="<%= item.mataKuliah %>"><%= item.mataKuliah %></h4>
-                              <% if (isBentrok && item.conflictReasons && item.conflictReasons.length > 0) { %>
-                                <p class="text-[9px] font-mono text-rose-700 dark:text-rose-300 font-semibold truncate pt-0.5" title="<%= item.conflictReasons.join(' | ') %>">
-                                  <i class="ph ph-warning"></i> <%= item.conflictReasons[0] %>
-                                </p>
-                              <% } %>
-                              <div class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
-                                <span class="<%= isBentrok ? 'font-bold underline text-rose-700 dark:text-rose-300' : '' %>"><%= item.ruang %></span>
-                                <span><%= item.sks %> SKS</span>
-                              </div>
                             </div>
-                          <% }); %>
+                            <% }); %>
+                      </div>
+                    </div>
+                    <% } %>
+
+                      <!-- Filter, View Switcher & Search Toolbar -->
+                      <div
+                        class="flex flex-col lg:flex-row items-center justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-3 shadow-xs dark:border-zinc-800 dark:bg-zinc-900">
+
+                        <!-- View Switcher Segmented Control (Grid vs Tabel) -->
+                        <div
+                          class="inline-flex w-full sm:w-auto rounded-lg border border-zinc-200 bg-zinc-100 p-1 dark:border-zinc-800 dark:bg-zinc-800/80">
+                          <button id="btn-view-grid" type="button"
+                            class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-50 transition-all">
+                            <i class="ph ph-calendar-blank text-sm text-[#0c2b5e] dark:text-blue-400"></i>
+                            <span>Grid Mingguan</span>
+                          </button>
+                          <button id="btn-view-table" type="button"
+                            class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
+                            <i class="ph ph-table text-sm"></i>
+                            <span>Tabel Rinci</span>
+                          </button>
                         </div>
-                      </td>
-                    <% }); %>
-                  </tr>
 
-                  <!-- JEDA SHOLAT DHUHUR -->
-                  <tr class="bg-amber-50/60 dark:bg-amber-950/20 border-y border-amber-200/70 dark:border-amber-900/50">
-                    <td class="border-r border-zinc-200 bg-amber-50/80 px-2 py-2 font-mono text-zinc-600 text-center dark:border-zinc-800 dark:bg-amber-950/40 text-[11px]">
-                      11:30–12:10
-                    </td>
-                    <td colspan="6" class="px-4 py-2 text-center font-mono text-xs text-amber-900 dark:text-amber-300">
-                      <i class="ph ph-moon-stars mr-1.5 text-amber-500"></i> Jeda Sholat Dhuhur & Istirahat (Hard Constraint HC-03 Terpenuhi)
-                    </td>
-                  </tr>
+                        <!-- Search & Filter Options -->
+                        <div class="flex flex-col sm:flex-row items-center gap-2.5 w-full lg:w-auto">
+                          <div class="relative w-full sm:w-64">
+                            <i
+                              class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></i>
+                            <input id="jadwal-search-input" type="text" maxlength="40"
+                              placeholder="Cari kode MK, matkul, dosen..."
+                              class="w-full pl-9 pr-3 py-1.5 text-xs rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-blue-900">
+                          </div>
 
-                  <!-- Slot 3: 12:10 - 14:40 -->
-                  <tr class="min-h-24">
-                    <td class="border-r border-zinc-200 bg-zinc-50/90 px-2 py-3 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
-                      <div class="font-semibold text-zinc-700 dark:text-zinc-300">12:10</div>
-                      <div class="text-[10px] text-zinc-400">14:40</div>
-                    </td>
-                    <% daysOfWeek.forEach(hari => { %>
-                      <% const slotJadwal = (jadwal || []).filter(j => j.hari === hari && (j.jamMulai.startsWith('12:') || j.jamMulai.startsWith('13:'))); %>
-                      <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
-                        <div class="space-y-1.5">
-                          <% slotJadwal.forEach(item => { %>
-                            <% 
-                              const isBentrok = Boolean(item.isConflict);
-                              const cardBorderBg = isBentrok 
-                                ? 'border-rose-400 bg-rose-50/95 text-rose-950 dark:border-rose-700 dark:bg-rose-950/80 dark:text-rose-100 ring-2 ring-rose-500/40'
-                                : (item.jenis === 'Praktikum' 
-                                    ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' 
-                                    : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200');
-                            %>
-                            <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', '<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>')"
-                              class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
-                              data-hari="<%= item.hari %>"
-                              data-jenis="<%= item.jenis %>"
-                              data-conflict="<%= isBentrok ? 'true' : 'false' %>"
-                              data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
-                              <div class="flex items-center justify-between gap-1">
-                                <span class="font-mono text-[9px] font-bold px-1 rounded <%= isBentrok ? 'bg-rose-600 text-white' : (item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200') %>">
-                                  <%= item.kodeMatkul || 'TI261' %>
-                                </span>
-                                <% if (isBentrok) { %>
-                                  <span class="text-[9px] font-mono font-bold text-rose-700 dark:text-rose-300 flex items-center gap-0.5">
-                                    <i class="ph ph-warning-octagon"></i> KONFLIK
-                                  </span>
-                                <% } else { %>
-                                  <span class="text-[9px] font-mono font-semibold opacity-90">Kls <%= item.kelas %></span>
-                                <% } %>
-                              </div>
-                              <h4 class="font-heading font-semibold text-[11px] leading-tight pt-1 truncate" title="<%= item.mataKuliah %>"><%= item.mataKuliah %></h4>
-                              <% if (isBentrok && item.conflictReasons && item.conflictReasons.length > 0) { %>
-                                <p class="text-[9px] font-mono text-rose-700 dark:text-rose-300 font-semibold truncate pt-0.5" title="<%= item.conflictReasons.join(' | ') %>">
-                                  <i class="ph ph-warning"></i> <%= item.conflictReasons[0] %>
-                                </p>
-                              <% } %>
-                              <div class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
-                                <span class="<%= isBentrok ? 'font-bold underline text-rose-700 dark:text-rose-300' : '' %>"><%= item.ruang %></span>
-                                <span><%= item.sks %> SKS</span>
-                              </div>
-                            </div>
-                          <% }); %>
+                          <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <select id="filter-hari-select"
+                              class="flex-1 sm:flex-initial text-xs rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 px-2.5 py-1.5 focus:outline-none">
+                              <option value="Semua">Semua Hari</option>
+                              <option value="Senin">Senin</option>
+                              <option value="Selasa">Selasa</option>
+                              <option value="Rabu">Rabu</option>
+                              <option value="Kamis">Kamis</option>
+                              <option value="Jumat">Jumat</option>
+                              <option value="Sabtu">Sabtu</option>
+                            </select>
+
+                            <select id="filter-tipe-select"
+                              class="flex-1 sm:flex-initial text-xs rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 px-2.5 py-1.5 focus:outline-none">
+                              <option value="Semua">Semua Jenis</option>
+                              <option value="Teori">Teori (Kelas Reguler/RKB)</option>
+                              <option value="Praktikum">Praktikum (Lab Komputer)</option>
+                            </select>
+
+                            <select id="filter-status-select"
+                              class="flex-1 sm:flex-initial text-xs rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 px-2.5 py-1.5 focus:outline-none">
+                              <option value="Semua">Semua Status</option>
+                              <option value="Konflik">Hanya Konflik (<%= totalKonflik %>)</option>
+                              <option value="Aman">Hanya Bebas Bentrok</option>
+                            </select>
+
+                            <span class="text-xs font-mono text-zinc-400 px-1 hidden xl:inline">
+                              <strong class="text-zinc-700 dark:text-zinc-200">
+                                <%= jadwal ? jadwal.length : 0 %>
+                              </strong> Sesi
+                            </span>
+                          </div>
                         </div>
-                      </td>
-                    <% }); %>
-                  </tr>
 
-                  <!-- Slot 4: 14:50 - 17:20 -->
-                  <tr class="min-h-24">
-                    <td class="border-r border-zinc-200 bg-zinc-50/90 px-2 py-3 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
-                      <div class="font-semibold text-zinc-700 dark:text-zinc-300">14:50</div>
-                      <div class="text-[10px] text-zinc-400">17:20</div>
-                    </td>
-                    <% daysOfWeek.forEach(hari => { %>
-                      <% const slotJadwal = (jadwal || []).filter(j => j.hari === hari && (j.jamMulai.startsWith('14:') || j.jamMulai.startsWith('15:') || j.jamMulai.startsWith('16:'))); %>
-                      <td class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
-                        <div class="space-y-1.5">
-                          <% slotJadwal.forEach(item => { %>
-                            <% 
-                              const isBentrok = Boolean(item.isConflict);
-                              const cardBorderBg = isBentrok 
-                                ? 'border-rose-400 bg-rose-50/95 text-rose-950 dark:border-rose-700 dark:bg-rose-950/80 dark:text-rose-100 ring-2 ring-rose-500/40'
-                                : (item.jenis === 'Praktikum' 
-                                    ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200' 
-                                    : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200');
-                            %>
-                            <div onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', '<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>')"
-                              class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
-                              data-hari="<%= item.hari %>"
-                              data-jenis="<%= item.jenis %>"
-                              data-conflict="<%= isBentrok ? 'true' : 'false' %>"
-                              data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
-                              <div class="flex items-center justify-between gap-1">
-                                <span class="font-mono text-[9px] font-bold px-1 rounded <%= isBentrok ? 'bg-rose-600 text-white' : (item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200') %>">
-                                  <%= item.kodeMatkul || 'TI261' %>
-                                </span>
-                                <% if (isBentrok) { %>
-                                  <span class="text-[9px] font-mono font-bold text-rose-700 dark:text-rose-300 flex items-center gap-0.5">
-                                    <i class="ph ph-warning-octagon"></i> KONFLIK
-                                  </span>
-                                <% } else { %>
-                                  <span class="text-[9px] font-mono font-semibold opacity-90">Kls <%= item.kelas %></span>
-                                <% } %>
-                              </div>
-                              <h4 class="font-heading font-semibold text-[11px] leading-tight pt-1 truncate" title="<%= item.mataKuliah %>"><%= item.mataKuliah %></h4>
-                              <% if (isBentrok && item.conflictReasons && item.conflictReasons.length > 0) { %>
-                                <p class="text-[9px] font-mono text-rose-700 dark:text-rose-300 font-semibold truncate pt-0.5" title="<%= item.conflictReasons.join(' | ') %>">
-                                  <i class="ph ph-warning"></i> <%= item.conflictReasons[0] %>
-                                </p>
-                              <% } %>
-                              <div class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
-                                <span class="<%= isBentrok ? 'font-bold underline text-rose-700 dark:text-rose-300' : '' %>"><%= item.ruang %></span>
-                                <span><%= item.sks %> SKS</span>
-                              </div>
-                            </div>
-                          <% }); %>
+                      </div>
+
+                      <!-- ---------------------------------------------------- -->
+                      <!-- VIEW 1: CALENDAR GRID VIEW (Presisi & Rapi)          -->
+                      <!-- ---------------------------------------------------- -->
+                      <div id="container-grid-view" class="space-y-4">
+                        <div
+                          class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+                          <div class="overflow-x-auto">
+                            <table class="table-fixed w-full min-w-[980px] border-collapse text-left">
+                              <colgroup>
+                                <col class="w-24">
+                                <col class="w-[16%]">
+                                <col class="w-[16%]">
+                                <col class="w-[16%]">
+                                <col class="w-[16%]">
+                                <col class="w-[16%]">
+                                <col class="w-[16%]">
+                              </colgroup>
+                              <thead>
+                                <tr
+                                  class="border-b border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-800/60 font-mono text-xs uppercase text-zinc-500">
+                                  <th
+                                    class="border-r border-zinc-200 bg-zinc-50/95 px-3 py-3 text-center dark:border-zinc-800 dark:bg-zinc-900/95">
+                                    Waktu
+                                  </th>
+                                  <% const daysOfWeek=['Senin', 'Selasa' , 'Rabu' , 'Kamis' , 'Jumat' , 'Sabtu' ]; %>
+                                    <% daysOfWeek.forEach(d=> { %>
+                                      <th
+                                        class="border-r border-zinc-200 px-3 py-3 text-center dark:border-zinc-800 last:border-r-0">
+                                        <span class="font-bold text-zinc-800 dark:text-zinc-200">
+                                          <%= d %>
+                                        </span>
+                                      </th>
+                                      <% }); %>
+                                </tr>
+                              </thead>
+                              <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 text-xs">
+
+                                <!-- Slot 1: 07:00 - 08:40 -->
+                                <tr class="min-h-24">
+                                  <td
+                                    class="border-r border-zinc-200 bg-zinc-50/90 px-2 py-3 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
+                                    <div class="font-semibold text-zinc-700 dark:text-zinc-300">07:00</div>
+                                    <div class="text-[10px] text-zinc-400">08:40</div>
+                                  </td>
+                                  <% daysOfWeek.forEach(hari=> { %>
+                                    <% const slotJadwal=(jadwal || []).filter(j=> j.hari === hari &&
+                                      j.jamMulai.startsWith('07:')); %>
+                                      <td
+                                        class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
+                                        <div class="space-y-1.5">
+                                          <% slotJadwal.forEach(item=> { %>
+                                            <% const isBentrok=Boolean(item.isConflict); const cardBorderBg=isBentrok
+                                              ? 'border-rose-400 bg-rose-50/95 text-rose-950 dark:border-rose-700 dark:bg-rose-950/80 dark:text-rose-100 ring-2 ring-rose-500/40'
+                                              : (item.jenis==='Praktikum'
+                                              ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200'
+                                              : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200'
+                                              ); %>
+                                              <div
+                                                onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', `<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>`)"
+                                                class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
+                                                data-hari="<%= item.hari %>" data-jenis="<%= item.jenis %>"
+                                                data-conflict="<%= isBentrok ? 'true' : 'false' %>"
+                                                data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
+                                                <div class="flex items-center justify-between gap-1">
+                                                  <span
+                                                    class="font-mono text-[9px] font-bold px-1 rounded <%= isBentrok ? 'bg-rose-600 text-white' : (item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200') %>">
+                                                    <%= item.kodeMatkul || 'TI261' %>
+                                                  </span>
+                                                  <% if (isBentrok) { %>
+                                                    <span
+                                                      class="text-[9px] font-mono font-bold text-rose-700 dark:text-rose-300 flex items-center gap-0.5">
+                                                      <i class="ph ph-warning-octagon"></i> KONFLIK
+                                                    </span>
+                                                    <% } else { %>
+                                                      <span class="text-[9px] font-mono font-semibold opacity-90">Kls
+                                                        <%= item.kelas %>
+                                                      </span>
+                                                      <% } %>
+                                                </div>
+                                                <h4
+                                                  class="font-heading font-semibold text-[11px] leading-tight pt-1 truncate"
+                                                  title="<%= item.mataKuliah %>">
+                                                  <%= item.mataKuliah %>
+                                                </h4>
+                                                <% if (isBentrok && item.conflictReasons && item.conflictReasons.length>
+                                                  0) { %>
+                                                  <p class="text-[9px] font-mono text-rose-700 dark:text-rose-300 font-semibold truncate pt-0.5"
+                                                    title="<%= item.conflictReasons.join(' | ') %>">
+                                                    <i class="ph ph-warning"></i>
+                                                    <%= item.conflictReasons[0] %>
+                                                  </p>
+                                                  <% } %>
+                                                    <div
+                                                      class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
+                                                      <span
+                                                        class="<%= isBentrok ? 'font-bold underline text-rose-700 dark:text-rose-300' : '' %>">
+                                                        <%= item.ruang %>
+                                                      </span>
+                                                      <span>
+                                                        <%= item.sks %> SKS
+                                                      </span>
+                                                    </div>
+                                              </div>
+                                              <% }); %>
+                                        </div>
+                                      </td>
+                                      <% }); %>
+                                </tr>
+
+                                <!-- Slot 2: 08:50 - 11:30 -->
+                                <tr class="min-h-24">
+                                  <td
+                                    class="border-r border-zinc-200 bg-zinc-50/90 px-2 py-3 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
+                                    <div class="font-semibold text-zinc-700 dark:text-zinc-300">08:50</div>
+                                    <div class="text-[10px] text-zinc-400">11:30</div>
+                                  </td>
+                                  <% daysOfWeek.forEach(hari=> { %>
+                                    <% const slotJadwal=(jadwal || []).filter(j=> j.hari === hari &&
+                                      (j.jamMulai.startsWith('08:') || j.jamMulai.startsWith('09:') ||
+                                      j.jamMulai.startsWith('10:'))); %>
+                                      <td
+                                        class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
+                                        <div class="space-y-1.5">
+                                          <% slotJadwal.forEach(item=> { %>
+                                            <% const isBentrok=Boolean(item.isConflict); const cardBorderBg=isBentrok
+                                              ? 'border-rose-400 bg-rose-50/95 text-rose-950 dark:border-rose-700 dark:bg-rose-950/80 dark:text-rose-100 ring-2 ring-rose-500/40'
+                                              : (item.jenis==='Praktikum'
+                                              ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200'
+                                              : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200'
+                                              ); %>
+                                              <div
+                                                onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', `<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>`)"
+                                                class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
+                                                data-hari="<%= item.hari %>" data-jenis="<%= item.jenis %>"
+                                                data-conflict="<%= isBentrok ? 'true' : 'false' %>"
+                                                data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
+                                                <div class="flex items-center justify-between gap-1">
+                                                  <span
+                                                    class="font-mono text-[9px] font-bold px-1 rounded <%= isBentrok ? 'bg-rose-600 text-white' : (item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200') %>">
+                                                    <%= item.kodeMatkul || 'TI261' %>
+                                                  </span>
+                                                  <% if (isBentrok) { %>
+                                                    <span
+                                                      class="text-[9px] font-mono font-bold text-rose-700 dark:text-rose-300 flex items-center gap-0.5">
+                                                      <i class="ph ph-warning-octagon"></i> KONFLIK
+                                                    </span>
+                                                    <% } else { %>
+                                                      <span class="text-[9px] font-mono font-semibold opacity-90">Kls
+                                                        <%= item.kelas %>
+                                                      </span>
+                                                      <% } %>
+                                                </div>
+                                                <h4
+                                                  class="font-heading font-semibold text-[11px] leading-tight pt-1 truncate"
+                                                  title="<%= item.mataKuliah %>">
+                                                  <%= item.mataKuliah %>
+                                                </h4>
+                                                <% if (isBentrok && item.conflictReasons && item.conflictReasons.length>
+                                                  0) { %>
+                                                  <p class="text-[9px] font-mono text-rose-700 dark:text-rose-300 font-semibold truncate pt-0.5"
+                                                    title="<%= item.conflictReasons.join(' | ') %>">
+                                                    <i class="ph ph-warning"></i>
+                                                    <%= item.conflictReasons[0] %>
+                                                  </p>
+                                                  <% } %>
+                                                    <div
+                                                      class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
+                                                      <span
+                                                        class="<%= isBentrok ? 'font-bold underline text-rose-700 dark:text-rose-300' : '' %>">
+                                                        <%= item.ruang %>
+                                                      </span>
+                                                      <span>
+                                                        <%= item.sks %> SKS
+                                                      </span>
+                                                    </div>
+                                              </div>
+                                              <% }); %>
+                                        </div>
+                                      </td>
+                                      <% }); %>
+                                </tr>
+
+                                <!-- JEDA SHOLAT DHUHUR -->
+                                <tr
+                                  class="bg-amber-50/60 dark:bg-amber-950/20 border-y border-amber-200/70 dark:border-amber-900/50">
+                                  <td
+                                    class="border-r border-zinc-200 bg-amber-50/80 px-2 py-2 font-mono text-zinc-600 text-center dark:border-zinc-800 dark:bg-amber-950/40 text-[11px]">
+                                    11:30–12:10
+                                  </td>
+                                  <td colspan="6"
+                                    class="px-4 py-2 text-center font-mono text-xs text-amber-900 dark:text-amber-300">
+                                    <i class="ph ph-moon-stars mr-1.5 text-amber-500"></i> Jeda Sholat Dhuhur &
+                                    Istirahat (Hard Constraint HC-03 Terpenuhi)
+                                  </td>
+                                </tr>
+
+                                <!-- Slot 3: 12:10 - 14:40 -->
+                                <tr class="min-h-24">
+                                  <td
+                                    class="border-r border-zinc-200 bg-zinc-50/90 px-2 py-3 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
+                                    <div class="font-semibold text-zinc-700 dark:text-zinc-300">12:10</div>
+                                    <div class="text-[10px] text-zinc-400">14:40</div>
+                                  </td>
+                                  <% daysOfWeek.forEach(hari=> { %>
+                                    <% const slotJadwal=(jadwal || []).filter(j=> j.hari === hari &&
+                                      (j.jamMulai.startsWith('12:') || j.jamMulai.startsWith('13:'))); %>
+                                      <td
+                                        class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
+                                        <div class="space-y-1.5">
+                                          <% slotJadwal.forEach(item=> { %>
+                                            <% const isBentrok=Boolean(item.isConflict); const cardBorderBg=isBentrok
+                                              ? 'border-rose-400 bg-rose-50/95 text-rose-950 dark:border-rose-700 dark:bg-rose-950/80 dark:text-rose-100 ring-2 ring-rose-500/40'
+                                              : (item.jenis==='Praktikum'
+                                              ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200'
+                                              : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200'
+                                              ); %>
+                                              <div
+                                                onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', '<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>')"
+                                                class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
+                                                data-hari="<%= item.hari %>" data-jenis="<%= item.jenis %>"
+                                                data-conflict="<%= isBentrok ? 'true' : 'false' %>"
+                                                data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
+                                                <div class="flex items-center justify-between gap-1">
+                                                  <span
+                                                    class="font-mono text-[9px] font-bold px-1 rounded <%= isBentrok ? 'bg-rose-600 text-white' : (item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200') %>">
+                                                    <%= item.kodeMatkul || 'TI261' %>
+                                                  </span>
+                                                  <% if (isBentrok) { %>
+                                                    <span
+                                                      class="text-[9px] font-mono font-bold text-rose-700 dark:text-rose-300 flex items-center gap-0.5">
+                                                      <i class="ph ph-warning-octagon"></i> KONFLIK
+                                                    </span>
+                                                    <% } else { %>
+                                                      <span class="text-[9px] font-mono font-semibold opacity-90">Kls
+                                                        <%= item.kelas %>
+                                                      </span>
+                                                      <% } %>
+                                                </div>
+                                                <h4
+                                                  class="font-heading font-semibold text-[11px] leading-tight pt-1 truncate"
+                                                  title="<%= item.mataKuliah %>">
+                                                  <%= item.mataKuliah %>
+                                                </h4>
+                                                <% if (isBentrok && item.conflictReasons && item.conflictReasons.length>
+                                                  0) { %>
+                                                  <p class="text-[9px] font-mono text-rose-700 dark:text-rose-300 font-semibold truncate pt-0.5"
+                                                    title="<%= item.conflictReasons.join(' | ') %>">
+                                                    <i class="ph ph-warning"></i>
+                                                    <%= item.conflictReasons[0] %>
+                                                  </p>
+                                                  <% } %>
+                                                    <div
+                                                      class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
+                                                      <span
+                                                        class="<%= isBentrok ? 'font-bold underline text-rose-700 dark:text-rose-300' : '' %>">
+                                                        <%= item.ruang %>
+                                                      </span>
+                                                      <span>
+                                                        <%= item.sks %> SKS
+                                                      </span>
+                                                    </div>
+                                              </div>
+                                              <% }); %>
+                                        </div>
+                                      </td>
+                                      <% }); %>
+                                </tr>
+
+                                <!-- Slot 4: 14:50 - 17:20 -->
+                                <tr class="min-h-24">
+                                  <td
+                                    class="border-r border-zinc-200 bg-zinc-50/90 px-2 py-3 font-mono text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900/90 align-top text-center">
+                                    <div class="font-semibold text-zinc-700 dark:text-zinc-300">14:50</div>
+                                    <div class="text-[10px] text-zinc-400">17:20</div>
+                                  </td>
+                                  <% daysOfWeek.forEach(hari=> { %>
+                                    <% const slotJadwal=(jadwal || []).filter(j=> j.hari === hari &&
+                                      (j.jamMulai.startsWith('14:') || j.jamMulai.startsWith('15:') ||
+                                      j.jamMulai.startsWith('16:'))); %>
+                                      <td
+                                        class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
+                                        <div class="space-y-1.5">
+                                          <% slotJadwal.forEach(item=> { %>
+                                            <% const isBentrok=Boolean(item.isConflict); const cardBorderBg=isBentrok
+                                              ? 'border-rose-400 bg-rose-50/95 text-rose-950 dark:border-rose-700 dark:bg-rose-950/80 dark:text-rose-100 ring-2 ring-rose-500/40'
+                                              : (item.jenis==='Praktikum'
+                                              ? 'border-amber-300 bg-amber-50/90 text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-200'
+                                              : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200'
+                                              ); %>
+                                              <div
+                                                onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', '<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>')"
+                                                class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
+                                                data-hari="<%= item.hari %>" data-jenis="<%= item.jenis %>"
+                                                data-conflict="<%= isBentrok ? 'true' : 'false' %>"
+                                                data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
+                                                <div class="flex items-center justify-between gap-1">
+                                                  <span
+                                                    class="font-mono text-[9px] font-bold px-1 rounded <%= isBentrok ? 'bg-rose-600 text-white' : (item.jenis === 'Praktikum' ? 'bg-amber-200/80 text-amber-900 dark:bg-amber-900 dark:text-amber-200' : 'bg-blue-200/80 text-blue-900 dark:bg-blue-900 dark:text-blue-200') %>">
+                                                    <%= item.kodeMatkul || 'TI261' %>
+                                                  </span>
+                                                  <% if (isBentrok) { %>
+                                                    <span
+                                                      class="text-[9px] font-mono font-bold text-rose-700 dark:text-rose-300 flex items-center gap-0.5">
+                                                      <i class="ph ph-warning-octagon"></i> KONFLIK
+                                                    </span>
+                                                    <% } else { %>
+                                                      <span class="text-[9px] font-mono font-semibold opacity-90">Kls
+                                                        <%= item.kelas %>
+                                                      </span>
+                                                      <% } %>
+                                                </div>
+                                                <h4
+                                                  class="font-heading font-semibold text-[11px] leading-tight pt-1 truncate"
+                                                  title="<%= item.mataKuliah %>">
+                                                  <%= item.mataKuliah %>
+                                                </h4>
+                                                <% if (isBentrok && item.conflictReasons && item.conflictReasons.length>
+                                                  0) { %>
+                                                  <p class="text-[9px] font-mono text-rose-700 dark:text-rose-300 font-semibold truncate pt-0.5"
+                                                    title="<%= item.conflictReasons.join(' | ') %>">
+                                                    <i class="ph ph-warning"></i>
+                                                    <%= item.conflictReasons[0] %>
+                                                  </p>
+                                                  <% } %>
+                                                    <div
+                                                      class="mt-1 flex items-center justify-between text-[10px] font-mono opacity-80">
+                                                      <span
+                                                        class="<%= isBentrok ? 'font-bold underline text-rose-700 dark:text-rose-300' : '' %>">
+                                                        <%= item.ruang %>
+                                                      </span>
+                                                      <span>
+                                                        <%= item.sks %> SKS
+                                                      </span>
+                                                    </div>
+                                              </div>
+                                              <% }); %>
+                                        </div>
+                                      </td>
+                                      <% }); %>
+                                </tr>
+
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
-                      </td>
-                    <% }); %>
-                  </tr>
+                      </div>
 
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- ---------------------------------------------------- -->
-        <!-- VIEW 2: TABEL RINCI (Lengkap Kolom Kode MK)          -->
-        <!-- ---------------------------------------------------- -->
-        <div id="container-table-view" class="hidden space-y-4">
-          <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-xs" id="jadwal-data-table">
-                <thead class="border-b border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
-                  <tr>
-                    <th class="px-4 py-3 font-semibold">Kode MK</th>
-                    <th class="px-4 py-3 font-semibold">Mata Kuliah</th>
-                    <th class="px-4 py-3 font-semibold">Hari & Jam</th>
-                    <th class="px-4 py-3 font-semibold">Kelas & SKS</th>
-                    <th class="px-4 py-3 font-semibold">Dosen Pengampu</th>
-                    <th class="px-4 py-3 font-semibold">Ruangan</th>
-                    <th class="px-4 py-3 font-semibold">Kategori</th>
-                    <th class="px-4 py-3 font-semibold text-right">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800" id="jadwal-tbody">
-                  <% (jadwal || []).forEach(item => { %>
-                    <% const isBentrok = Boolean(item.isConflict); %>
-                    <tr class="jadwal-row transition-colors <%= isBentrok ? 'bg-rose-50/90 dark:bg-rose-950/40 border-l-4 border-l-rose-600 hover:bg-rose-100/70 dark:hover:bg-rose-900/40 text-rose-950 dark:text-rose-100' : 'hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40' %>"
-                      data-hari="<%= item.hari %>"
-                      data-jenis="<%= item.jenis %>"
-                      data-conflict="<%= isBentrok ? 'true' : 'false' %>"
-                      data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
-                      <td class="px-4 py-3 font-mono font-bold <%= isBentrok ? 'text-rose-700 dark:text-rose-300' : 'text-zinc-900 dark:text-zinc-100' %>">
-                        <%= item.kodeMatkul || 'TI261' %>
-                        <% if (isBentrok) { %>
-                          <span class="block text-[9px] font-mono font-bold text-rose-600 dark:text-rose-400">KONFLIK</span>
-                        <% } %>
-                      </td>
-                      <td class="px-4 py-3">
-                        <div class="font-semibold <%= isBentrok ? 'text-rose-900 dark:text-rose-100 font-bold' : 'text-zinc-900 dark:text-zinc-100' %>">
-                          <%= item.mataKuliah %>
-                        </div>
-                        <% if (isBentrok && item.conflictReasons && item.conflictReasons.length > 0) { %>
-                          <div class="text-[10px] font-mono text-rose-600 dark:text-rose-400 mt-0.5 flex items-center gap-1 font-semibold">
-                            <i class="ph ph-warning-octagon"></i>
-                            <span><%= item.conflictReasons.join('; ') %></span>
+                      <!-- ---------------------------------------------------- -->
+                      <!-- VIEW 2: TABEL RINCI (Lengkap Kolom Kode MK)          -->
+                      <!-- ---------------------------------------------------- -->
+                      <div id="container-table-view" class="hidden space-y-4">
+                        <div
+                          class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+                          <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs" id="jadwal-data-table">
+                              <thead
+                                class="border-b border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
+                                <tr>
+                                  <th class="px-4 py-3 font-semibold">Kode MK</th>
+                                  <th class="px-4 py-3 font-semibold">Mata Kuliah</th>
+                                  <th class="px-4 py-3 font-semibold">Hari & Jam</th>
+                                  <th class="px-4 py-3 font-semibold">Kelas & SKS</th>
+                                  <th class="px-4 py-3 font-semibold">Dosen Pengampu</th>
+                                  <th class="px-4 py-3 font-semibold">Ruangan</th>
+                                  <th class="px-4 py-3 font-semibold">Kategori</th>
+                                  <th class="px-4 py-3 font-semibold text-right">Aksi</th>
+                                </tr>
+                              </thead>
+                              <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800" id="jadwal-tbody">
+                                <% (jadwal || []).forEach(item=> { %>
+                                  <% const isBentrok=Boolean(item.isConflict); %>
+                                    <tr
+                                      class="jadwal-row transition-colors <%= isBentrok ? 'bg-rose-50/90 dark:bg-rose-950/40 border-l-4 border-l-rose-600 hover:bg-rose-100/70 dark:hover:bg-rose-900/40 text-rose-950 dark:text-rose-100' : 'hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40' %>"
+                                      data-hari="<%= item.hari %>" data-jenis="<%= item.jenis %>"
+                                      data-conflict="<%= isBentrok ? 'true' : 'false' %>"
+                                      data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
+                                      <td
+                                        class="px-4 py-3 font-mono font-bold <%= isBentrok ? 'text-rose-700 dark:text-rose-300' : 'text-zinc-900 dark:text-zinc-100' %>">
+                                        <%= item.kodeMatkul || 'TI261' %>
+                                          <% if (isBentrok) { %>
+                                            <span
+                                              class="block text-[9px] font-mono font-bold text-rose-600 dark:text-rose-400">KONFLIK</span>
+                                            <% } %>
+                                      </td>
+                                      <td class="px-4 py-3">
+                                        <div
+                                          class="font-semibold <%= isBentrok ? 'text-rose-900 dark:text-rose-100 font-bold' : 'text-zinc-900 dark:text-zinc-100' %>">
+                                          <%= item.mataKuliah %>
+                                        </div>
+                                        <% if (isBentrok && item.conflictReasons && item.conflictReasons.length> 0) { %>
+                                          <div
+                                            class="text-[10px] font-mono text-rose-600 dark:text-rose-400 mt-0.5 flex items-center gap-1 font-semibold">
+                                            <i class="ph ph-warning-octagon"></i>
+                                            <span>
+                                              <%= item.conflictReasons.join('; ') %></span>
                           </div>
                         <% } %>
                       </td>
-                      <td class="px-4 py-3 font-mono font-medium whitespace-nowrap <%= isBentrok ? 'text-rose-800 dark:text-rose-200' : 'text-zinc-700 dark:text-zinc-300' %>">
-                        <span class="inline-block w-14 font-semibold"><%= item.hari %>,</span>
-                        <span><%= item.jamMulai %> - <%= item.jamSelesai %></span>
-                      </td>
-                      <td class="px-4 py-3 font-mono <%= isBentrok ? 'text-rose-800 dark:text-rose-200' : 'text-zinc-600 dark:text-zinc-400' %>">
-                        Kls <%= item.kelas %> (<%= item.sks %> SKS)
-                      </td>
-                      <td class="px-4 py-3 <%= isBentrok ? 'text-rose-800 dark:text-rose-200' : 'text-zinc-700 dark:text-zinc-300' %> max-w-[200px] truncate" title="<%= item.dosen %>">
-                        <%= item.dosen %>
-                      </td>
-                      <td class="px-4 py-3 font-mono <%= isBentrok ? 'font-bold text-rose-700 dark:text-rose-300 underline' : 'text-zinc-700 dark:text-zinc-300' %>">
-                        <%= item.ruang %>
-                      </td>
-                      <td class="px-4 py-3">
-                        <% if (isBentrok) { %>
-                          <span class="inline-flex items-center gap-1 font-mono text-[10px] text-rose-700 dark:text-rose-300 bg-rose-100/80 dark:bg-rose-950/80 px-2 py-0.5 rounded border border-rose-300 dark:border-rose-800 font-bold">
-                            <i class="ph ph-warning-octagon"></i> Konflik Hard
-                          </span>
-                        <% } else if (item.jenis === 'Praktikum') { %>
-                          <span class="inline-flex items-center gap-1 font-mono text-[10px] text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800 font-semibold">
-                            <i class="ph ph-flask"></i> Praktikum
-                          </span>
-                        <% } else { %>
-                          <span class="inline-flex items-center gap-1 font-mono text-[10px] text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-900 font-semibold">
-                            <i class="ph ph-chalkboard"></i> Teori
-                          </span>
-                        <% } %>
-                      </td>
-                      <td class="px-4 py-3 text-right">
-                        <button type="button"
-                          onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', '<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>')"
-                          class="inline-flex items-center gap-1 <%= isBentrok ? 'text-rose-700 hover:text-rose-900 dark:text-rose-300 font-bold' : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100' %> px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-                          <i class="ph ph-pencil-simple text-sm"></i>
-                          <span>Edit</span>
-                        </button>
-                      </td>
-                    </tr>
-                  <% }); %>
-                </tbody>
-              </table>
+                      <td class="px-4 py-3 font-mono font-medium whitespace-nowrap <%= isBentrok ? ' text-rose-800
+                                                dark:text-rose-200' : 'text-zinc-700 dark:text-zinc-300' %>">
+                                                <span class="inline-block w-14 font-semibold">
+                                                  <%= item.hari %>,
+                                                </span>
+                                                <span>
+                                                  <%= item.jamMulai %> - <%= item.jamSelesai %>
+                                                </span>
+                                      </td>
+                                      <td
+                                        class="px-4 py-3 font-mono <%= isBentrok ? 'text-rose-800 dark:text-rose-200' : 'text-zinc-600 dark:text-zinc-400' %>">
+                                        Kls <%= item.kelas %> (<%= item.sks %> SKS)
+                                      </td>
+                                      <td
+                                        class="px-4 py-3 <%= isBentrok ? 'text-rose-800 dark:text-rose-200' : 'text-zinc-700 dark:text-zinc-300' %> max-w-[200px] truncate"
+                                        title="<%= item.dosen %>">
+                                        <%= item.dosen %>
+                                      </td>
+                                      <td
+                                        class="px-4 py-3 font-mono <%= isBentrok ? 'font-bold text-rose-700 dark:text-rose-300 underline' : 'text-zinc-700 dark:text-zinc-300' %>">
+                                        <%= item.ruang %>
+                                      </td>
+                                      <td class="px-4 py-3">
+                                        <% if (isBentrok) { %>
+                                          <span
+                                            class="inline-flex items-center gap-1 font-mono text-[10px] text-rose-700 dark:text-rose-300 bg-rose-100/80 dark:bg-rose-950/80 px-2 py-0.5 rounded border border-rose-300 dark:border-rose-800 font-bold">
+                                            <i class="ph ph-warning-octagon"></i> Konflik Hard
+                                          </span>
+                                          <% } else if (item.jenis==='Praktikum' ) { %>
+                                            <span
+                                              class="inline-flex items-center gap-1 font-mono text-[10px] text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800 font-semibold">
+                                              <i class="ph ph-flask"></i> Praktikum
+                                            </span>
+                                            <% } else { %>
+                                              <span
+                                                class="inline-flex items-center gap-1 font-mono text-[10px] text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded border border-blue-200 dark:border-blue-900 font-semibold">
+                                                <i class="ph ph-chalkboard"></i> Teori
+                                              </span>
+                                              <% } %>
+                                      </td>
+                                      <td class="px-4 py-3 text-right">
+                                        <button type="button"
+                                          onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', '<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>')"
+                                          class="inline-flex items-center gap-1 <%= isBentrok ? 'text-rose-700 hover:text-rose-900 dark:text-rose-300 font-bold' : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100' %> px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                                          <i class="ph ph-pencil-simple text-sm"></i>
+                                          <span>Edit</span>
+                                        </button>
+                                      </td>
+                                    </tr>
+                                    <% }); %>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+
             </div>
-          </div>
-        </div>
+          </main>
 
+          <%- include('../partials/admin-footer') %>
       </div>
-    </main>
-
-    <%- include('../partials/admin-footer') %>
   </div>
-</div>
 
-<script>
-  (function initJadwalSwitcher() {
-    const btnGrid = document.getElementById('btn-view-grid');
-    const btnTable = document.getElementById('btn-view-table');
-    const gridView = document.getElementById('container-grid-view');
-    const tableView = document.getElementById('container-table-view');
+  <script>
+    (function initJadwalSwitcher() {
+      const btnGrid = document.getElementById('btn-view-grid');
+      const btnTable = document.getElementById('btn-view-table');
+      const gridView = document.getElementById('container-grid-view');
+      const tableView = document.getElementById('container-table-view');
 
-    if (btnGrid && btnTable && gridView && tableView) {
-      btnGrid.addEventListener('click', () => {
-        gridView.classList.remove('hidden');
-        tableView.classList.add('hidden');
-        btnGrid.className = 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-50 transition-all';
-        btnTable.className = 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
-      });
+      if (btnGrid && btnTable && gridView && tableView) {
+        btnGrid.addEventListener('click', () => {
+          gridView.classList.remove('hidden');
+          tableView.classList.add('hidden');
+          btnGrid.className = 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-50 transition-all';
+          btnTable.className = 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+        });
 
-      btnTable.addEventListener('click', () => {
-        gridView.classList.add('hidden');
-        tableView.classList.remove('hidden');
-        btnTable.className = 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-50 transition-all';
-        btnGrid.className = 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
-      });
-    }
+        btnTable.addEventListener('click', () => {
+          gridView.classList.add('hidden');
+          tableView.classList.remove('hidden');
+          btnTable.className = 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-50 transition-all';
+          btnGrid.className = 'flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+        });
+      }
 
-    const searchInput = document.getElementById('jadwal-search-input');
-    const filterHari = document.getElementById('filter-hari-select');
-    const filterTipe = document.getElementById('filter-tipe-select');
-    const filterStatus = document.getElementById('filter-status-select');
-    const rows = document.querySelectorAll('.jadwal-row');
-    const gridCards = document.querySelectorAll('.grid-slot-card');
+      const searchInput = document.getElementById('jadwal-search-input');
+      const filterHari = document.getElementById('filter-hari-select');
+      const filterTipe = document.getElementById('filter-tipe-select');
+      const filterStatus = document.getElementById('filter-status-select');
+      const rows = document.querySelectorAll('.jadwal-row');
+      const gridCards = document.querySelectorAll('.grid-slot-card');
 
-    function applyFilter() {
-      const q = (searchInput?.value || '').toLowerCase().trim();
-      const hari = filterHari?.value || 'Semua';
-      const tipe = filterTipe?.value || 'Semua';
-      const status = filterStatus?.value || 'Semua';
+      function applyFilter() {
+        const q = (searchInput?.value || '').toLowerCase().trim();
+        const hari = filterHari?.value || 'Semua';
+        const tipe = filterTipe?.value || 'Semua';
+        const status = filterStatus?.value || 'Semua';
 
-      // Filter baris Tabel Rinci
-      rows.forEach(row => {
-        const text = row.getAttribute('data-search') || '';
-        const rowHari = row.getAttribute('data-hari') || '';
-        const rowTipe = row.getAttribute('data-jenis') || '';
-        const rowConflict = row.getAttribute('data-conflict') === 'true';
+        // Filter baris Tabel Rinci
+        rows.forEach(row => {
+          const text = row.getAttribute('data-search') || '';
+          const rowHari = row.getAttribute('data-hari') || '';
+          const rowTipe = row.getAttribute('data-jenis') || '';
+          const rowConflict = row.getAttribute('data-conflict') === 'true';
 
-        const matchSearch = !q || text.includes(q);
-        const matchHari = hari === 'Semua' || rowHari === hari;
-        const matchTipe = tipe === 'Semua' || rowTipe === tipe;
-        const matchStatus = status === 'Semua' || (status === 'Konflik' && rowConflict) || (status === 'Aman' && !rowConflict);
+          const matchSearch = !q || text.includes(q);
+          const matchHari = hari === 'Semua' || rowHari === hari;
+          const matchTipe = tipe === 'Semua' || rowTipe === tipe;
+          const matchStatus = status === 'Semua' || (status === 'Konflik' && rowConflict) || (status === 'Aman' && !rowConflict);
 
-        row.style.display = (matchSearch && matchHari && matchTipe && matchStatus) ? '' : 'none';
-      });
+          row.style.display = (matchSearch && matchHari && matchTipe && matchStatus) ? '' : 'none';
+        });
 
-      // Filter kartu di Kalender Grid Mingguan
-      gridCards.forEach(card => {
-        const text = card.getAttribute('data-search') || '';
-        const cardHari = card.getAttribute('data-hari') || '';
-        const cardTipe = card.getAttribute('data-jenis') || '';
-        const cardConflict = card.getAttribute('data-conflict') === 'true';
+        // Filter kartu di Kalender Grid Mingguan
+        gridCards.forEach(card => {
+          const text = card.getAttribute('data-search') || '';
+          const cardHari = card.getAttribute('data-hari') || '';
+          const cardTipe = card.getAttribute('data-jenis') || '';
+          const cardConflict = card.getAttribute('data-conflict') === 'true';
 
-        const matchSearch = !q || text.includes(q);
-        const matchHari = hari === 'Semua' || cardHari === hari;
-        const matchTipe = tipe === 'Semua' || cardTipe === tipe;
-        const matchStatus = status === 'Semua' || (status === 'Konflik' && cardConflict) || (status === 'Aman' && !cardConflict);
+          const matchSearch = !q || text.includes(q);
+          const matchHari = hari === 'Semua' || cardHari === hari;
+          const matchTipe = tipe === 'Semua' || cardTipe === tipe;
+          const matchStatus = status === 'Semua' || (status === 'Konflik' && cardConflict) || (status === 'Aman' && !cardConflict);
 
-        card.style.display = (matchSearch && matchHari && matchTipe && matchStatus) ? '' : 'none';
-      });
-    }
+          card.style.display = (matchSearch && matchHari && matchTipe && matchStatus) ? '' : 'none';
+        });
+      }
 
-    searchInput?.addEventListener('input', applyFilter);
-    filterHari?.addEventListener('change', applyFilter);
-    filterTipe?.addEventListener('change', applyFilter);
-    filterStatus?.addEventListener('change', applyFilter);
-  })();
-</script>
+      searchInput?.addEventListener('input', applyFilter);
+      filterHari?.addEventListener('change', applyFilter);
+      filterTipe?.addEventListener('change', applyFilter);
+      filterStatus?.addEventListener('change', applyFilter);
+
+      window.focusToConflicts = function () {
+        if (filterStatus) filterStatus.value = 'Konflik';
+        if (searchInput) searchInput.value = '';
+        applyFilter();
+        // Beralih ke Tabel Rinci agar baris merah langsung terlihat utuh
+        if (btnTable) btnTable.click();
+      };
+
+      window.filterJadwalByKeyword = function (keyword) {
+        if (searchInput) {
+          searchInput.value = keyword;
+          applyFilter();
+          if (btnTable) btnTable.click();
+        }
+      };
+    })();
+  </script>
