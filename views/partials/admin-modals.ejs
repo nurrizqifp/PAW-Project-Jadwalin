@@ -119,7 +119,7 @@
       </button>
       <button id="confirm-action-btn" type="button"
         class="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white shadow-sm transition-colors">
-        <i class="ph ph-check text-amber-400"></i>
+        <i id="confirm-action-icon" class="ph ph-check text-amber-400"></i>
         <span id="confirm-action-text">Ya, Lanjutkan</span>
       </button>
     </div>
@@ -221,8 +221,8 @@
     );
   };
 
-  // Dialog Konfirmasi Standar Sistem
-  window.showConfirmDialog = function(title, desc, onConfirm, actionText = 'Lanjutkan', isAlertOnly = false) {
+  // Dialog Konfirmasi Standar Sistem (Dukungan Konfirmasi Aksi Normal & Hapus/Destructive)
+  window.showConfirmDialog = function(title, desc, onConfirm, actionText = 'Lanjutkan', isAlertOnly = false, isDanger = false) {
     const overlay = document.getElementById('admin-confirm-modal-overlay');
     const panel = document.getElementById('admin-confirm-modal-panel');
     const titleEl = document.getElementById('confirm-modal-title');
@@ -230,12 +230,50 @@
     const actionBtn = document.getElementById('confirm-action-btn');
     const cancelBtn = document.getElementById('confirm-cancel-btn');
     const actionTextEl = document.getElementById('confirm-action-text');
+    const iconBox = document.getElementById('confirm-icon-box');
+    const iconEl = document.getElementById('confirm-icon');
+    const actionIcon = document.getElementById('confirm-action-icon');
 
     if (!overlay || !panel) return;
 
     if (titleEl) titleEl.textContent = title;
     if (descEl) descEl.textContent = desc;
     if (actionTextEl) actionTextEl.textContent = actionText;
+
+    // Deteksi otomatis apakah tindakan adalah hapus data / aksi destruktif berbahaya
+    const isDelete = Boolean(isDanger) ||
+      /hapus|delete/i.test(String(title || '')) ||
+      /hapus|delete/i.test(String(actionText || ''));
+
+    if (isDelete) {
+      // Tombol Aksi Warna Merah Khusus Hapus Data
+      if (actionBtn) {
+        actionBtn.className = 'inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 active:bg-rose-800 px-4 text-xs font-semibold text-white shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900 border border-rose-700/50';
+      }
+      if (actionIcon) {
+        actionIcon.className = 'ph ph-trash text-white text-sm';
+      }
+      if (iconBox) {
+        iconBox.className = 'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-600 dark:bg-rose-950/80 dark:text-rose-400 border border-rose-200 dark:border-rose-900';
+      }
+      if (iconEl) {
+        iconEl.className = 'ph ph-warning-octagon text-xl text-rose-600 dark:text-rose-400';
+      }
+    } else {
+      // Tombol Aksi Standar Warna Biru Brand
+      if (actionBtn) {
+        actionBtn.className = 'inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 text-xs font-semibold text-white shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-900';
+      }
+      if (actionIcon) {
+        actionIcon.className = 'ph ph-check text-amber-400 text-sm';
+      }
+      if (iconBox) {
+        iconBox.className = 'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300';
+      }
+      if (iconEl) {
+        iconEl.className = 'ph ph-info text-xl text-[#0c2b5e] dark:text-blue-300';
+      }
+    }
 
     if (isAlertOnly && cancelBtn) {
       cancelBtn.style.display = 'none';
