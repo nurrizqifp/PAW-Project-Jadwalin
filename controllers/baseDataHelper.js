@@ -271,14 +271,14 @@ async function getBaseData(currentUser = null) {
     status: realValidation.konflik.length > 0 ? 'Perlu Revisi (Konflik)' : (activePeriode?.status || 'Terpublikasi')
   };
 
-  // Least Privilege: Hanya muat profil mahasiswa/dosen jika pengguna telah terautentikasi (JWT valid)
+  // Least Privilege: Hanya muat profil mahasiswa/dosen jika pengguna telah terautentikasi (JWT valid) sesuai peran spesifiknya
   const isAuthenticated = Boolean(currentUser && currentUser.role);
-  const activeMahasiswa = isAuthenticated
+  const activeMahasiswa = (isAuthenticated && currentUser.role === 'mahasiswa')
     ? (mahasiswaList.find(m => m.id === currentUser.refId || m.nim === currentUser.username) || null)
     : null;
 
   let dbSavedPrakrs = null;
-  if (isAuthenticated && currentUser?.username && (await isDatabaseReady())) {
+  if (activeMahasiswa && currentUser?.username && (await isDatabaseReady())) {
     try {
       const row = await db.MahasiswaPrakrs.findOne({
         where: { nim: currentUser.username }
@@ -299,7 +299,7 @@ async function getBaseData(currentUser = null) {
     }
   }
 
-  const rawSavedPrakrs = dbSavedPrakrs || ((isAuthenticated && currentUser?.username) ? JadwalModel.getSavedPrakrs(currentUser.username) : null);
+  const rawSavedPrakrs = dbSavedPrakrs || ((activeMahasiswa && currentUser?.username) ? JadwalModel.getSavedPrakrs(currentUser.username) : null);
   const isGanjilActive = (activePeriode?.semesterTipe || 'Ganjil') === 'Ganjil';
   const savedPrakrs = (rawSavedPrakrs && ((Number(rawSavedPrakrs.semester) % 2 === 1) === isGanjilActive))
     ? rawSavedPrakrs
@@ -331,7 +331,7 @@ async function getBaseData(currentUser = null) {
     mahasiswaTodaySessions = prakrsSesi.filter(s => s.hari === displayHari);
   }
 
-  const activeDosen = isAuthenticated
+  const activeDosen = (isAuthenticated && currentUser.role === 'dosen')
     ? (dosenList.find(d => d.id === currentUser.refId || d.nama === currentUser.nama) || null)
     : null;
   const dosenJadwal = activeDosen

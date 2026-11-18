@@ -2761,7 +2761,7 @@ const JadwalModel = {
       if (ruang && !j.ruang.toLowerCase().includes(String(ruang).toLowerCase())) return false;
       if (kelas) {
         const kSearch = String(kelas).toUpperCase();
-        if (!j.kelasList.includes(kSearch) && j.kelas.toUpperCase() !== kSearch) return false;
+        if ((!Array.isArray(j.kelasList) || !j.kelasList.includes(kSearch)) && String(j.kelas || '').toUpperCase() !== kSearch) return false;
       }
       if (hari && hari !== 'Semua' && j.hari.toLowerCase() !== String(hari).toLowerCase()) return false;
       if (peminatan && j.isPilihan && j.peminatanKode && j.peminatanKode.toUpperCase() !== String(peminatan).toUpperCase()) return false;
@@ -2855,7 +2855,8 @@ const JadwalModel = {
       // Cari yang sesuai kelas target, hari, dan waktu jika memungkinkan
       const skorKandidat = kandidat.map(s => {
         let skor = 0;
-        if (s.kelasList.includes(specificClass) || s.kelas === specificClass) skor += 15;
+        const inKelasList = Array.isArray(s.kelasList) && s.kelasList.includes(specificClass);
+        if (inKelasList || s.kelas === specificClass) skor += 15;
         if (prefHari === 'Semua' || s.hari === prefHari) skor += 5;
         const jam = parseInt(s.jamMulai.split(':')[0], 10);
         if (prefWaktu === 'Pagi' && jam < 12) skor += 4;
@@ -2986,6 +2987,7 @@ const JadwalModel = {
       newList.forEach((item, idx) => {
         jadwalKuliah.push({
           id: item.id || (idx + 1),
+          kelasList: Array.isArray(item.kelasList) ? item.kelasList : (item.kelas ? [item.kelas] : []),
           ...item
         });
       });

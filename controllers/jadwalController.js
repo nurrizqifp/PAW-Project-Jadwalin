@@ -438,7 +438,7 @@ exports.revisi = async (req, res, next) => {
 
       // Re-check konflik seluruh periode (DoD: revisi memicu re-check konflik).
       const konflik = await hitungKonflik(periode.id, t);
-      const terkait = konflik.daftar.filter((k) => k.sesiIds.includes(id));
+      const terkait = konflik.daftar.filter((k) => Array.isArray(k.sesiIds) && k.sesiIds.includes(id));
 
       // Jadwal yang sudah terbit wajib tetap 0 bentrok (PRD M-02): revisi yang menimbulkan bentrok ditolak.
       if (periode.status === 'Terpublikasi' && terkait.length > 0) {
