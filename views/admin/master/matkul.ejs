@@ -27,8 +27,42 @@
         </div>
 
         <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <%- include('../../partials/table-pagination', {
+            tableId: 'table-matkul',
+            part: 'toolbar',
+            searchPlaceholder: 'Cari mata kuliah, kode MK...',
+            filterOptions: [
+              {
+                id: 'filter-jenis',
+                label: 'Jenis',
+                dataAttr: 'jenis',
+                options: [
+                  { value: 'Semua', text: 'Semua Tipe' },
+                  { value: 'Teori', text: 'Teori (RKB)' },
+                  { value: 'Praktikum', text: 'Praktikum (Lab)' }
+                ]
+              },
+              {
+                id: 'filter-semester',
+                label: 'Semester',
+                dataAttr: 'semester',
+                options: [
+                  { value: 'Semua', text: 'Semua Semester' },
+                  { value: '1', text: 'Semester 1' },
+                  { value: '2', text: 'Semester 2' },
+                  { value: '3', text: 'Semester 3' },
+                  { value: '4', text: 'Semester 4' },
+                  { value: '5', text: 'Semester 5' },
+                  { value: '6', text: 'Semester 6' },
+                  { value: '7', text: 'Semester 7' },
+                  { value: '8', text: 'Semester 8' }
+                ]
+              }
+            ]
+          }) %>
+
           <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
+            <table id="table-matkul" class="w-full text-left text-xs paginated-table">
               <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
                 <tr>
                   <th class="px-4 py-3 font-semibold">Kode MK</th>
@@ -46,7 +80,7 @@
                   const isLab = jenisMk === 'Praktikum';
                   const semMk = mk.semester || (mk.semesterPenawaran === 'Ganjil' ? 5 : 6);
                 %>
-                  <tr>
+                  <tr data-jenis="<%= jenisMk %>" data-semester="<%= semMk %>">
                     <td class="px-4 py-3 font-mono font-bold <%= isLab ? 'text-amber-600 dark:text-amber-400' : 'text-[#0c2b5e] dark:text-blue-300' %>"><%= mk.kode %></td>
                     <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100"><%= mk.nama %></td>
                     <td class="px-4 py-3 font-mono"><%= mk.sks %> SKS</td>
@@ -73,6 +107,12 @@
               </tbody>
             </table>
           </div>
+
+          <%- include('../../partials/table-pagination', {
+            tableId: 'table-matkul',
+            part: 'pagination',
+            defaultPageSize: 10
+          }) %>
         </div>
 
       </div>

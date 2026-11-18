@@ -33,8 +33,37 @@
         </div>
 
         <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <%- include('../../partials/table-pagination', {
+            tableId: 'table-periode',
+            part: 'toolbar',
+            searchPlaceholder: 'Cari kode periode atau tahun akademik...',
+            filterOptions: [
+              {
+                id: 'filter-semester-tipe',
+                label: 'Semester',
+                dataAttr: 'semester',
+                options: [
+                  { value: 'Semua', text: 'Semua Tipe' },
+                  { value: 'Ganjil', text: 'Ganjil' },
+                  { value: 'Genap', text: 'Genap' }
+                ]
+              },
+              {
+                id: 'filter-status-periode',
+                label: 'Status',
+                dataAttr: 'status',
+                options: [
+                  { value: 'Semua', text: 'Semua Status' },
+                  { value: 'Terpublikasi', text: 'Terpublikasi' },
+                  { value: 'Draf', text: 'Draf' },
+                  { value: 'Arsip', text: 'Arsip' }
+                ]
+              }
+            ]
+          }) %>
+
           <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
+            <table id="table-periode" class="w-full text-left text-xs paginated-table">
               <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
                 <tr>
                   <th class="px-4 py-3 font-semibold">Kode Periode</th>
@@ -50,7 +79,7 @@
                 <% listPer.forEach(function(per) {
                   const isActive = per.status !== 'Arsip';
                 %>
-                  <tr class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors <%= isActive ? '' : 'opacity-75' %>">
+                  <tr data-semester="<%= per.semesterTipe %>" data-status="<%= per.status %>" class="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors <%= isActive ? '' : 'opacity-75' %>">
                     <td class="px-4 py-3 font-mono font-bold <%= isActive ? 'text-[#0c2b5e] dark:text-blue-300' : 'text-zinc-500' %>"><%= per.kode %></td>
                     <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100"><%= per.tahunAkademik %></td>
                     <td class="px-4 py-3 font-semibold text-zinc-800 dark:text-zinc-200">
@@ -78,6 +107,12 @@
               </tbody>
             </table>
           </div>
+
+          <%- include('../../partials/table-pagination', {
+            tableId: 'table-periode',
+            part: 'pagination',
+            defaultPageSize: 10
+          }) %>
         </div>
 
       </div>

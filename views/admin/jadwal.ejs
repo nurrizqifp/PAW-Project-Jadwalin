@@ -98,7 +98,7 @@
                                 </span>
                                 <% if (sesiKeyword) { %>
                                   <button type="button"
-                                    onclick="window.filterJadwalByKeyword ? window.filterJadwalByKeyword(`<%= sesiKeyword.split(' ')[0] %>`) : null"
+                                    onclick="window.filterJadwalByKeyword ? window.filterJadwalByKeyword('<%= sesiKeyword.split(' ')[0] %>') : null"
                                     class="text-[10px] font-mono text-rose-700 dark:text-rose-300 hover:underline flex items-center gap-1 font-bold">
                                     <span>Sorot di Jadwal</span>
                                     <i class="ph ph-arrow-right"></i>
@@ -242,7 +242,7 @@
                                               : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200'
                                               ); %>
                                               <div
-                                                onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', `<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>`)"
+                                                onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', '<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>')"
                                                 class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
                                                 data-hari="<%= item.hari %>" data-jenis="<%= item.jenis %>"
                                                 data-conflict="<%= isBentrok ? 'true' : 'false' %>"
@@ -315,7 +315,7 @@
                                               : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200'
                                               ); %>
                                               <div
-                                                onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', `<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>`)"
+                                                onclick="openEditModal('<%= item.mataKuliah %> (Kelas <%= item.kelas %>)', '<%= item.dosen %>', '<%= item.ruang %>', '<%= item.hari %>', '<%= item.jamMulai %>', '<%= item.id %>', '<%= isBentrok ? (item.conflictReasons || []).join('; ') : '' %>')"
                                                 class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
                                                 data-hari="<%= item.hari %>" data-jenis="<%= item.jenis %>"
                                                 data-conflict="<%= isBentrok ? 'true' : 'false' %>"
@@ -537,8 +537,50 @@
                       <div id="container-table-view" class="hidden space-y-4">
                         <div
                           class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+                          <%- include('../partials/table-pagination', {
+                            tableId: 'jadwal-data-table',
+                            part: 'toolbar',
+                            searchPlaceholder: 'Cari mata kuliah, kode MK, dosen, ruang...',
+                            filterOptions: [
+                              {
+                                id: 'filter-hari-table',
+                                label: 'Hari',
+                                dataAttr: 'hari',
+                                options: [
+                                  { value: 'Semua', text: 'Semua Hari' },
+                                  { value: 'Senin', text: 'Senin' },
+                                  { value: 'Selasa', text: 'Selasa' },
+                                  { value: 'Rabu', text: 'Rabu' },
+                                  { value: 'Kamis', text: 'Kamis' },
+                                  { value: 'Jumat', text: 'Jumat' },
+                                  { value: 'Sabtu', text: 'Sabtu' }
+                                ]
+                              },
+                              {
+                                id: 'filter-jenis-table',
+                                label: 'Kategori',
+                                dataAttr: 'jenis',
+                                options: [
+                                  { value: 'Semua', text: 'Semua Tipe' },
+                                  { value: 'Teori', text: 'Kuliah Teori' },
+                                  { value: 'Praktikum', text: 'Praktikum Lab' }
+                                ]
+                              },
+                              {
+                                id: 'filter-status-table',
+                                label: 'Status',
+                                dataAttr: 'conflict',
+                                options: [
+                                  { value: 'Semua', text: 'Semua Jadwal' },
+                                  { value: 'true', text: 'Hanya Bentrok' },
+                                  { value: 'false', text: 'Hanya Valid (Tanpa Bentrok)' }
+                                ]
+                              }
+                            ]
+                          }) %>
+
                           <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs" id="jadwal-data-table">
+                            <table class="w-full text-left text-xs paginated-table" id="jadwal-data-table">
                               <thead
                                 class="border-b border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
                                 <tr>
@@ -582,8 +624,7 @@
                           </div>
                         <% } %>
                       </td>
-                      <td class="px-4 py-3 font-mono font-medium whitespace-nowrap <%= isBentrok ? ' text-rose-800
-                                                dark:text-rose-200' : 'text-zinc-700 dark:text-zinc-300' %>">
+                      <td class="px-4 py-3 font-mono font-medium whitespace-nowrap <%= isBentrok ? 'text-rose-800 dark:text-rose-200' : 'text-zinc-700 dark:text-zinc-300' %>">
                                                 <span class="inline-block w-14 font-semibold">
                                                   <%= item.hari %>,
                                                 </span>
@@ -635,6 +676,12 @@
                               </tbody>
                             </table>
                           </div>
+
+                          <%- include('../partials/table-pagination', {
+                            tableId: 'jadwal-data-table',
+                            part: 'pagination',
+                            defaultPageSize: 15
+                          }) %>
                         </div>
                       </div>
 
@@ -716,21 +763,5 @@
       filterHari?.addEventListener('change', applyFilter);
       filterTipe?.addEventListener('change', applyFilter);
       filterStatus?.addEventListener('change', applyFilter);
-
-      window.focusToConflicts = function () {
-        if (filterStatus) filterStatus.value = 'Konflik';
-        if (searchInput) searchInput.value = '';
-        applyFilter();
-        // Beralih ke Tabel Rinci agar baris merah langsung terlihat utuh
-        if (btnTable) btnTable.click();
-      };
-
-      window.filterJadwalByKeyword = function (keyword) {
-        if (searchInput) {
-          searchInput.value = keyword;
-          applyFilter();
-          if (btnTable) btnTable.click();
-        }
-      };
     })();
   </script>

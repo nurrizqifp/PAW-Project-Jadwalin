@@ -80,6 +80,11 @@
                 <i class="ph ph-list-dashes text-xs"></i>
                 <span>Agenda Harian</span>
               </button>
+              <button id="view-mode-table" type="button"
+                class="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
+                <i class="ph ph-table text-xs"></i>
+                <span>Tabel Rinci</span>
+              </button>
             </div>
           </div>
 
@@ -248,6 +253,68 @@
         </div>
       </div>
 
+      <!-- ==================== VIEW 3: TABEL RINCI MAHASISWA ==================== -->
+      <div id="view-table-container" class="hidden space-y-4">
+        <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <%- include('../partials/table-pagination', {
+            tableId: 'table-mahasiswa-jadwal',
+            part: 'toolbar',
+            searchPlaceholder: 'Cari mata kuliah, kode MK, dosen, ruang...',
+            filterOptions: [
+              {
+                id: 'filter-hari-mhs-tbl',
+                label: 'Hari',
+                dataAttr: 'hari',
+                options: [
+                  { value: 'Semua', text: 'Semua Hari' },
+                  { value: 'Senin', text: 'Senin' },
+                  { value: 'Selasa', text: 'Selasa' },
+                  { value: 'Rabu', text: 'Rabu' },
+                  { value: 'Kamis', text: 'Kamis' },
+                  { value: 'Jumat', text: 'Jumat' },
+                  { value: 'Sabtu', text: 'Sabtu' }
+                ]
+              },
+              {
+                id: 'filter-tipe-mhs-tbl',
+                label: 'Tipe',
+                dataAttr: 'jenis',
+                options: [
+                  { value: 'Semua', text: 'Semua Tipe' },
+                  { value: 'Teori', text: 'Kuliah Teori' },
+                  { value: 'Praktikum', text: 'Praktikum Lab' }
+                ]
+              }
+            ]
+          }) %>
+
+          <div class="overflow-x-auto">
+            <table id="table-mahasiswa-jadwal" class="w-full text-left text-xs paginated-table">
+              <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
+                <tr>
+                  <th class="px-4 py-3 font-semibold">Kode MK</th>
+                  <th class="px-4 py-3 font-semibold">Mata Kuliah</th>
+                  <th class="px-4 py-3 font-semibold">Hari & Jam</th>
+                  <th class="px-4 py-3 font-semibold">Kelas & SKS</th>
+                  <th class="px-4 py-3 font-semibold">Dosen Pengampu</th>
+                  <th class="px-4 py-3 font-semibold">Ruangan</th>
+                  <th class="px-4 py-3 font-semibold">Kategori</th>
+                </tr>
+              </thead>
+              <tbody id="mhs-table-body" class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                <!-- Diisi oleh JS renderTable -->
+              </tbody>
+            </table>
+          </div>
+
+          <%- include('../partials/table-pagination', {
+            tableId: 'table-mahasiswa-jadwal',
+            part: 'pagination',
+            defaultPageSize: 10
+          }) %>
+        </div>
+      </div>
+
       </div>
     </main>
 
@@ -347,8 +414,11 @@
 
         const viewGridBtn = document.getElementById('view-mode-grid');
         const viewAgendaBtn = document.getElementById('view-mode-agenda');
+        const viewTableBtn = document.getElementById('view-mode-table');
         const gridContainer = document.getElementById('view-grid-container');
         const agendaContainer = document.getElementById('view-agenda-container');
+        const tableContainer = document.getElementById('view-table-container');
+        const mhsTableBody = document.getElementById('mhs-table-body');
 
         const gridTableBody = document.getElementById('grid-table-body');
         const agendaCardsContainer = document.getElementById('agenda-cards-container');
@@ -589,28 +659,88 @@
           JadwalinUI.modal.open('modal-sesi-detail');
         }
 
+        // Render Tabel Rinci Mahasiswa
+        function renderTable(filtered) {
+          if (!mhsTableBody) return;
+          mhsTableBody.innerHTML = '';
+          if (filtered.length === 0) {
+            mhsTableBody.innerHTML = `
+              <tr class="table-empty-row">
+                <td colspan="7" class="px-4 py-8 text-center text-xs text-zinc-500 font-medium">Tidak ada jadwal kuliah yang cocok dengan filter atau pencarian.</td>
+              </tr>
+            `;
+            return;
+          }
+          filtered.forEach(item => {
+            const isLab = (item.ruang && item.ruang.toLowerCase().includes('lab')) ||
+              (item.tipeRuang && item.tipeRuang.toLowerCase().includes('lab')) ||
+              (item.jenis && item.jenis.toLowerCase().includes('praktikum'));
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-zinc-50/80 dark:hover:bg-zinc-800/40 transition-colors cursor-pointer';
+            tr.setAttribute('data-hari', item.hari || '');
+            tr.setAttribute('data-jenis', isLab ? 'Praktikum' : 'Teori');
+            tr.setAttribute('data-search', `${item.kodeMatkul || ''} ${item.mataKuliah || ''} ${item.dosen || ''} ${item.ruang || ''} ${item.hari || ''}`.toLowerCase());
+            tr.innerHTML = `
+              <td class="px-4 py-3 font-mono font-bold ${isLab ? 'text-amber-700 dark:text-amber-400' : 'text-blue-700 dark:text-blue-400'}">${item.kodeMatkul || '-'}</td>
+              <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-zinc-100">${item.mataKuliah}</td>
+              <td class="px-4 py-3 font-mono text-zinc-700 dark:text-zinc-300">${item.hari}, ${item.jamMulai} - ${item.jamSelesai}</td>
+              <td class="px-4 py-3 font-mono">Kelas ${item.kelas} (${item.sks} SKS)</td>
+              <td class="px-4 py-3 text-zinc-700 dark:text-zinc-300 max-w-[180px] truncate" title="${item.dosen}">${item.dosen}</td>
+              <td class="px-4 py-3 font-mono">${item.ruang}</td>
+              <td class="px-4 py-3">
+                <span class="inline-flex items-center gap-1 font-mono text-[10px] ${isLab ? 'text-amber-700 bg-amber-50 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800' : 'text-blue-700 bg-blue-50 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-900'} px-2 py-0.5 rounded font-semibold">
+                  ${isLab ? 'Praktikum Lab' : 'Kuliah Teori'}
+                </span>
+              </td>
+            `;
+            tr.addEventListener('click', () => openDetailModal(item));
+            mhsTableBody.appendChild(tr);
+          });
+
+          if (window.JadwalinTablePagination) {
+            window.JadwalinTablePagination.bindTable('table-mahasiswa-jadwal');
+          }
+        }
+
         // Update Function
         function updateViews() {
           const filtered = getFilteredData();
           renderGrid(filtered);
           renderAgenda(filtered);
+          renderTable(filtered);
         }
 
         // Switch View Mode
         viewGridBtn.addEventListener('click', () => {
           gridContainer.classList.remove('hidden');
           agendaContainer.classList.add('hidden');
-          viewGridBtn.className = 'inline-flex items-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100 transition-all';
-          viewAgendaBtn.className = 'inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+          if (tableContainer) tableContainer.classList.add('hidden');
+          viewGridBtn.className = 'inline-flex items-center gap-1.5 rounded bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-2xs dark:bg-zinc-900 dark:text-zinc-100 transition-all';
+          viewAgendaBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+          if (viewTableBtn) viewTableBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
         });
 
         viewAgendaBtn.addEventListener('click', () => {
           gridContainer.classList.add('hidden');
           agendaContainer.classList.remove('hidden');
-          viewAgendaBtn.className = 'inline-flex items-center gap-1.5 rounded-md bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100 transition-all';
-          viewGridBtn.className = 'inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+          if (tableContainer) tableContainer.classList.add('hidden');
+          viewAgendaBtn.className = 'inline-flex items-center gap-1.5 rounded bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-2xs dark:bg-zinc-900 dark:text-zinc-100 transition-all';
+          viewGridBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+          if (viewTableBtn) viewTableBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
           renderAgenda(getFilteredData());
         });
+
+        if (viewTableBtn && tableContainer) {
+          viewTableBtn.addEventListener('click', () => {
+            gridContainer.classList.add('hidden');
+            agendaContainer.classList.add('hidden');
+            tableContainer.classList.remove('hidden');
+            viewTableBtn.className = 'inline-flex items-center gap-1.5 rounded bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-2xs dark:bg-zinc-900 dark:text-zinc-100 transition-all';
+            viewGridBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+            viewAgendaBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+            renderTable(getFilteredData());
+          });
+        }
 
         // Agenda Tab Switching
         agendaDayTabs.forEach(tab => {

@@ -27,8 +27,36 @@
         </div>
 
         <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <%- include('../../partials/table-pagination', {
+            tableId: 'table-ruangan',
+            part: 'toolbar',
+            searchPlaceholder: 'Cari ruangan atau kode...',
+            filterOptions: [
+              {
+                id: 'filter-gedung',
+                label: 'Gedung',
+                dataAttr: 'gedung',
+                options: [
+                  { value: 'Semua', text: 'Semua Gedung' },
+                  { value: 'F4', text: 'Gedung F4' },
+                  { value: 'F6', text: 'Gedung F6' }
+                ]
+              },
+              {
+                id: 'filter-tipe',
+                label: 'Tipe',
+                dataAttr: 'tipe',
+                options: [
+                  { value: 'Semua', text: 'Semua Fasilitas' },
+                  { value: 'Lab', text: 'Laboratorium (PC)' },
+                  { value: 'Reguler', text: 'Kelas Reguler (Kursi)' }
+                ]
+              }
+            ]
+          }) %>
+
           <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
+            <table id="table-ruangan" class="w-full text-left text-xs paginated-table">
               <thead class="border-b border-zinc-200 bg-zinc-50/75 dark:border-zinc-800 dark:bg-zinc-800/50 font-mono text-[11px] uppercase text-zinc-500">
                 <tr>
                   <th class="px-4 py-3 font-semibold">Nama / Kode Ruang</th>
@@ -43,7 +71,7 @@
                 <% listRg.forEach(function(rg) {
                   const isLab = String(rg.tipe || '').toLowerCase().includes('lab');
                 %>
-                  <tr>
+                  <tr data-gedung="<%= rg.gedung || 'F6' %>" data-tipe="<%= isLab ? 'Lab' : 'Reguler' %>">
                     <td class="px-4 py-3 font-mono font-bold <%= isLab ? 'text-amber-600 dark:text-amber-400' : 'text-[#0c2b5e] dark:text-blue-300' %>"><%= rg.kode %></td>
                     <td class="px-4 py-3 font-mono">Gedung <%= rg.gedung || 'F6' %></td>
                     <td class="px-4 py-3">
@@ -63,6 +91,12 @@
               </tbody>
             </table>
           </div>
+
+          <%- include('../../partials/table-pagination', {
+            tableId: 'table-ruangan',
+            part: 'pagination',
+            defaultPageSize: 10
+          }) %>
         </div>
 
       </div>
