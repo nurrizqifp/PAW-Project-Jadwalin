@@ -229,17 +229,17 @@ const daftarRuangan = [
   {
     "id": 10,
     "kode": "F4.001",
-    "nama": "Ruang Kuliah F4.001",
+    "nama": "Laboratorium Komputer F4.001",
     "gedung": "F4",
-    "tipe": "Reguler",
+    "tipe": "Laboratorium",
     "kapasitas": 40
   },
   {
     "id": 11,
     "kode": "F4.002",
-    "nama": "Ruang Kuliah F4.002",
+    "nama": "Laboratorium Jaringan & Multimedia F4.002",
     "gedung": "F4",
-    "tipe": "Reguler",
+    "tipe": "Laboratorium",
     "kapasitas": 40
   },
   {
@@ -390,14 +390,16 @@ const kurikulumSemester = [
     "kode": "TI303",
     "nama": "Implementasi Basis Data",
     "sks": 3,
-    "kategori": "Teknologi Informasi"
+    "kategori": "Teknologi Informasi",
+    "jenis": "Praktikum"
   },
   {
     "semester": 3,
     "kode": "TI304",
     "nama": "Switching dan Wireless",
     "sks": 3,
-    "kategori": "Teknologi Informasi"
+    "kategori": "Teknologi Informasi",
+    "jenis": "Praktikum"
   },
   {
     "semester": 3,

@@ -32,7 +32,9 @@ const DEFAULT_SLOT_WAKTU = [
   { hari: 'Jumat', jamMulai: '12:30', jamSelesai: '14:50' },
   { hari: 'Jumat', jamMulai: '15:20', jamSelesai: '17:50' },
   { hari: 'Sabtu', jamMulai: '07:00', jamSelesai: '08:40' },
-  { hari: 'Sabtu', jamMulai: '08:50', jamSelesai: '11:30' }
+  { hari: 'Sabtu', jamMulai: '08:50', jamSelesai: '11:30' },
+  { hari: 'Sabtu', jamMulai: '12:10', jamSelesai: '14:50' },
+  { hari: 'Sabtu', jamMulai: '15:20', jamSelesai: '17:50' }
 ];
 
 const timeRegex = /^[0-2][0-9]:[0-5][0-9]$/;
@@ -78,8 +80,14 @@ function splitDosenInisial(raw) {
 }
 
 function isPraktikumCourse(item) {
-  return String(item.jenis || '').toLowerCase().includes('praktikum') ||
-    String(item.mataKuliah || item.nama || '').toLowerCase().includes('praktikum');
+  if (!item) return false;
+  const kode = String(item.kode || item.kodeMatkul || '').toUpperCase();
+  const nama = String(item.mataKuliah || item.nama || '').toLowerCase();
+  const jenis = String(item.jenis || '').toLowerCase();
+  if (jenis.includes('praktikum') || nama.includes('praktikum')) return true;
+  // Mata kuliah kurikulum TI UMY yang menggunakan laboratorium komputer
+  if (kode === 'TI303' || kode === 'TI304' || kode === 'TI26303' || kode === 'TI26304') return true;
+  return false;
 }
 
 function isLabRoom(room) {
@@ -384,10 +392,32 @@ function solveDeterministicFallback(payload) {
   const regularRooms = (payload.ruangan || []).filter(r => !isLabRoom(r));
   const dosenList = payload.dosen || [];
 
+  // CSP MRV (Most Constrained Variable First):
+  // Prioritaskan praktikum (lab terbatas) dan dosen dengan kelas terbanyak
+  const dosenLoad = {};
+  (payload.mataKuliah || []).forEach(m => {
+    const inisials = splitDosenInisial(m.dosenInisial || 'AS');
+    inisials.forEach(ini => {
+      dosenLoad[ini] = (dosenLoad[ini] || 0) + 1;
+    });
+  });
+
+  const sortedMataKuliah = [...(payload.mataKuliah || [])].sort((a, b) => {
+    const isPrakA = isPraktikumCourse(a) ? 1 : 0;
+    const isPrakB = isPraktikumCourse(b) ? 1 : 0;
+    if (isPrakA !== isPrakB) return isPrakB - isPrakA;
+
+    const iniA = splitDosenInisial(a.dosenInisial || 'AS');
+    const iniB = splitDosenInisial(b.dosenInisial || 'AS');
+    const maxLoadA = Math.max(...iniA.map(i => dosenLoad[i] || 0), 0);
+    const maxLoadB = Math.max(...iniB.map(i => dosenLoad[i] || 0), 0);
+    return maxLoadB - maxLoadA;
+  });
+
   const placed = [];
 
-  for (let idx = 0; idx < (payload.mataKuliah || []).length; idx++) {
-    const mk = payload.mataKuliah[idx];
+  for (let idx = 0; idx < sortedMataKuliah.length; idx++) {
+    const mk = sortedMataKuliah[idx];
     const isPrak = isPraktikumCourse(mk);
     const candidateRooms = isPrak ? (labRooms.length ? labRooms : payload.ruangan) : (regularRooms.length ? regularRooms : payload.ruangan);
     const defaultDosen = mk.dosenInisial || dosenList[idx % Math.max(dosenList.length, 1)]?.inisial || 'AS';
@@ -491,6 +521,15 @@ async function generateSchedule(options = {}) {
     fallbackReason = 'GEMINI_API_KEY belum dikonfigurasi pada environment.';
     rawSchedule = solveDeterministicFallback(payload);
   }
+
+  // Pastikan setiap sesi memiliki id dan representasi dosen yang lengkap
+  rawSchedule.forEach((item, idx) => {
+    if (!item.id) item.id = idx + 1;
+    if (!item.dosen && item.dosenInisial) {
+      const matchingDosen = (payload.dosen || []).find(x => x.inisial === item.dosenInisial);
+      item.dosen = matchingDosen ? matchingDosen.nama : item.dosenInisial;
+    }
+  });
 
   const durationSeconds = (Date.now() - startedAt) / 1000;
   const validation = validateGeneratedSchedule(rawSchedule, payload, durationSeconds);
