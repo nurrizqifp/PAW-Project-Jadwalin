@@ -171,6 +171,7 @@ function buildPrompt(payload) {
     '2. HC-02 Zero Clash Ruangan: Satu ruangan (Gedung F4 & F6) tidak boleh dipakai lebih dari satu sesi pada hari dan rentang jam yang tumpang tindih.',
     '3. HC-03 Jeda Waktu Ibadah Sholat: Rentang 11:30-12:10 WIB (Dhuhur) dan 15:00-15:20 WIB (Ashar) harus bebas dari perkuliahan.',
     '4. Lab Matching (100%): Mata kuliah bertipe "Praktikum" WAJIB ditempatkan di ruangan bertipe "Laboratorium".',
+    '5. HC-04 Alokasi Kapasitas & Kelas Gabungan: Mata kuliah dengan kelas gabungan (kolom kelas berisi tanda ";" seperti "A;B;C" atau "D;E;F") menampung gabungan mahasiswa dan WAJIB ditempatkan di ruangan bertipe "Ruang Kuliah Besar" (seperti F6.001 / kapasitas >= 80). Kelas reguler tunggal (contoh kelas "A") prioritaskan di ruang kelas reguler.',
     '',
     'ATURAN SOFT CONSTRAINTS (TARGET TERPENUHI >= 85%):',
     '1. SC-01 Hari Riset Dosen: Hindari menjadwalkan dosen pada field "hariOff" miliknya.',
@@ -390,6 +391,8 @@ function solveDeterministicFallback(payload) {
     !isTimeOverlap(slot.jamMulai, slot.jamSelesai, ASHAR_WINDOW.start, ASHAR_WINDOW.end)
   );
   const labRooms = (payload.ruangan || []).filter(isLabRoom);
+  const largeRooms = (payload.ruangan || []).filter(r => !isLabRoom(r) && (r.tipe === 'Ruang Kuliah Besar' || (r.kapasitas || 0) >= 80));
+  const standardRooms = (payload.ruangan || []).filter(r => !isLabRoom(r) && r.tipe !== 'Ruang Kuliah Besar' && (r.kapasitas || 0) < 80);
   const regularRooms = (payload.ruangan || []).filter(r => !isLabRoom(r));
   const dosenList = payload.dosen || [];
 
@@ -421,8 +424,15 @@ function solveDeterministicFallback(payload) {
   for (let idx = 0; idx < sortedMataKuliah.length; idx++) {
     const mk = sortedMataKuliah[idx];
     const isPrak = isPraktikumCourse(mk);
-    // Mata kuliah praktikum wajib ditempatkan di ruang bertipe Laboratorium
-    const candidateRooms = isPrak ? (labRooms.length ? labRooms : payload.ruangan) : (regularRooms.length ? regularRooms : payload.ruangan);
+    const isCombined = (mk.kelas || '').includes(';') || (mk.kelas || '').split(/[,;]/).length > 1;
+    let candidateRooms;
+    if (isPrak) {
+      candidateRooms = labRooms.length ? labRooms : payload.ruangan;
+    } else if (isCombined) {
+      candidateRooms = largeRooms.length ? largeRooms : regularRooms;
+    } else {
+      candidateRooms = standardRooms.length ? [...standardRooms, ...largeRooms] : regularRooms;
+    }
     const defaultDosen = mk.dosenInisial || dosenList[idx % Math.max(dosenList.length, 1)]?.inisial || 'AS';
     const dosenInisials = splitDosenInisial(defaultDosen);
 
