@@ -198,8 +198,9 @@
                     </div>
                     <div class="pt-1">
                       <input type="range" min="1000" max="15000" step="500" value="5000"
+                        class="w-full accent-[#0c2b5e] dark:accent-amber-400 cursor-pointer"
                         oninput="document.getElementById('iterasi-val').textContent = Number(this.value).toLocaleString('id-ID') + ' Siklus'"
-                        onchange="handleInstantToggle(this, 'Batas Iterasi Solver: ' + Number(this.value).toLocaleString('id-ID'))">
+                        onchange="handleInstantToggle(this, 'Batas Maksimal Siklus Iterasi')">
                     </div>
                   </div>
 
@@ -216,8 +217,9 @@
                     </div>
                     <div class="pt-1">
                       <input type="range" min="1" max="10" step="1" value="6"
+                        class="w-full accent-[#0c2b5e] dark:accent-amber-400 cursor-pointer"
                         oninput="document.getElementById('bobot-val').textContent = 'Tingkat ' + this.value + ' / 10'"
-                        onchange="handleInstantToggle(this, 'Bobot Penalti: ' + this.value)">
+                        onchange="handleInstantToggle(this, 'Bobot Penalti Pelanggaran')">
                     </div>
                   </div>
                 </div>
@@ -352,18 +354,27 @@
     }
   }
 
-  async function handleInstantToggle(checkbox, featureName) {
+  async function handleInstantToggle(element, featureName) {
     const toast = document.getElementById('toggle-toast-indicator');
     const msg = document.getElementById('toggle-toast-msg');
-    const status = checkbox.checked ? 'diaktifkan' : 'dinonaktifkan';
+
+    let status = '';
+    if (element.type === 'range') {
+      const valText = element.id === 'iterasi-val' || featureName.includes('Iterasi')
+        ? Number(element.value).toLocaleString('id-ID') + ' Siklus'
+        : 'Tingkat ' + element.value + ' / 10';
+      status = `disetel ke ${valText}`;
+    } else {
+      status = element.checked ? 'diaktifkan' : 'dinonaktifkan';
+    }
 
     const hcMatch = String(featureName).match(/HC-0[123]/);
-    if (hcMatch && typeof checkbox.checked === 'boolean') {
+    if (hcMatch && typeof element.checked === 'boolean') {
       try {
         await fetch('/api/constraints/hard', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: hcMatch[0], isActive: checkbox.checked })
+          body: JSON.stringify({ id: hcMatch[0], isActive: element.checked })
         });
       } catch (_) {}
     }
@@ -371,9 +382,14 @@
     if (toast && msg) {
       msg.innerHTML = `<i class="ph ph-check-circle text-base"></i> Aturan <strong>${featureName}</strong> berhasil <strong>${status}</strong>.`;
       toast.classList.remove('hidden');
-      setTimeout(() => {
+      if (window._toggleToastTimeout) clearTimeout(window._toggleToastTimeout);
+      window._toggleToastTimeout = setTimeout(() => {
         toast.classList.add('hidden');
       }, 3500);
+    }
+
+    if (window.JadwalinUI?.toast) {
+      window.JadwalinUI.toast.show(`Aturan ${featureName} berhasil ${status}.`, 'success');
     }
   }
 </script>
