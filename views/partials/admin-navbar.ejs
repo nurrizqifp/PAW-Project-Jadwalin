@@ -7,7 +7,8 @@
 
         <!-- Left: Mobile Sidebar Toggle + Breadcrumb / Scope Indicator -->
         <div class="flex items-center space-x-2 text-xs min-w-0">
-          <button type="button" onclick="window.toggleMobileSidebar ? window.toggleMobileSidebar() : null" aria-label="Buka Menu Navigasi"
+          <button type="button" onclick="window.toggleMobileSidebar ? window.toggleMobileSidebar() : null"
+            aria-label="Buka Menu Navigasi"
             class="lg:hidden flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 transition-colors">
             <i class="ph ph-list text-lg"></i>
           </button>
@@ -40,43 +41,52 @@
           <div
             class="hidden lg:inline-flex items-center gap-1.5 font-mono text-[11px] text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2.5 py-1 rounded-md">
             <i class="ph ph-calendar-blank text-zinc-600 dark:text-zinc-300"></i>
-            <span><%= (typeof activePeriode !== 'undefined' && activePeriode) ? (activePeriode.semesterTipe + ' ' + activePeriode.tahunAkademik) : 'Ganjil 2026/2027' %></span>
+            <span>
+              <%= (typeof activePeriode !=='undefined' && activePeriode) ? (activePeriode.semesterTipe + ' ' +
+                activePeriode.tahunAkademik) : 'Ganjil 2026/2027' %>
+            </span>
           </div>
 
           <!-- Tombol Drawer Notifikasi -->
-          <button id="admin-open-notif-btn" type="button" aria-label="Buka Notifikasi Sistem"
-            class="relative h-8 w-8 rounded-md border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition-colors">
-            <i class="ph ph-bell text-base"></i>
-            <span class="absolute top-1 right-1 flex h-2 w-2">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-              <span class="relative inline-flex h-2 w-2 rounded-full bg-amber-500"></span>
-            </span>
-          </button>
+          <% const unreadNotifs=(typeof notifikasiBelumDibaca !=='undefined' ) ? Number(notifikasiBelumDibaca) : 0; %>
+            <button id="admin-open-notif-btn" type="button" aria-label="Buka Notifikasi Sistem"
+              class="relative h-8 w-8 rounded-md border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition-colors">
+              <i class="ph ph-bell text-base"></i>
+              <% if (unreadNotifs> 0) { %>
+                <span id="admin-notif-badge"
+                  class="absolute -top-1 -right-1 flex h-4 min-w-[16px] px-1 items-center justify-center rounded-full bg-amber-500 text-[9px] font-mono font-bold text-white shadow-xs">
+                  <%= unreadNotifs> 99 ? '99+' : unreadNotifs %>
+                </span>
+                <% } %>
+            </button>
 
-          <!-- Dark Mode Toggle Button -->
-          <button id="admin-theme-toggle-btn" data-toggle-theme type="button"
-            onclick="window.toggleTheme ? window.toggleTheme() : (window.JadwalinUI ? window.JadwalinUI.theme.toggle() : document.documentElement.classList.toggle('dark'))"
-            aria-label="Ganti Mode Tampilan"
-            class="h-8 w-8 rounded-md border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition-colors">
-            <i id="admin-theme-icon" class="theme-toggle-icon ph ph-moon text-base"></i>
-          </button>
+            <!-- Dark Mode Toggle Button -->
+            <button id="admin-theme-toggle-btn" data-toggle-theme type="button"
+              onclick="window.toggleTheme ? window.toggleTheme() : (window.JadwalinUI ? window.JadwalinUI.theme.toggle() : document.documentElement.classList.toggle('dark'))"
+              aria-label="Ganti Mode Tampilan"
+              class="h-8 w-8 rounded-md border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 flex items-center justify-center transition-colors">
+              <i id="admin-theme-icon" class="theme-toggle-icon ph ph-moon text-base"></i>
+            </button>
 
-          <div class="h-4 w-px bg-zinc-200 dark:bg-zinc-800 hidden sm:block"></div>
+            <div class="h-4 w-px bg-zinc-200 dark:bg-zinc-800 hidden sm:block"></div>
 
-          <!-- User Profile Dropdown Menu -->
-          <div class="relative inline-block text-left" id="admin-user-menu-container">
-            <button id="admin-user-menu-btn" type="button" aria-expanded="false" aria-haspopup="true"
-              class="flex items-center gap-2 rounded-md border border-zinc-200 bg-white p-1 pr-2 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors">
-              <% const navDosen = (typeof activeDosen !== 'undefined' && activeDosen) ? activeDosen : { inisial: 'AS', nama: 'Ir. Asroni, S.T., M.Eng' }; %>
-              <% if (navRole==='dosen' ) { %>
-                <div
-                  class="flex h-6 w-6 items-center justify-center rounded bg-[#0c2b5e] text-amber-300 font-bold text-[10px]">
-                  <%= navDosen.inisial %>
-                </div>
-                <span class="hidden sm:inline font-medium text-xs text-zinc-800 dark:text-zinc-200"><%= navDosen.nama %></span>
-                <% } else if (navRole==='mahasiswa' ) {
-                  const mhsName = (typeof currentUser !== 'undefined' && currentUser?.nama) ? currentUser.nama : 'Mahasiswa TI';
-                  const mhsIni = String(mhsName).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+            <!-- User Profile Dropdown Menu -->
+            <div class="relative inline-block text-left" id="admin-user-menu-container">
+              <button id="admin-user-menu-btn" type="button" aria-expanded="false" aria-haspopup="true"
+                class="flex items-center gap-2 rounded-md border border-zinc-200 bg-white p-1 pr-2 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 transition-colors">
+                <% const navDosen=(typeof activeDosen !=='undefined' && activeDosen) ? activeDosen : { inisial: 'AS' ,
+                  nama: 'Ir. Asroni, S.T., M.Eng' }; %>
+                  <% if (navRole==='dosen' ) { %>
+                    <div
+                      class="flex h-6 w-6 items-center justify-center rounded bg-[#0c2b5e] text-amber-300 font-bold text-[10px]">
+                      <%= navDosen.inisial %>
+                    </div>
+                    <span class="hidden sm:inline font-medium text-xs text-zinc-800 dark:text-zinc-200">
+                      <%= navDosen.nama %>
+                    </span>
+                    <% } else if (navRole==='mahasiswa' ) { const mhsName=(typeof currentUser !=='undefined' &&
+                      currentUser?.nama) ? currentUser.nama : 'Mahasiswa TI' ; const
+                      mhsIni=String(mhsName).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
                 %>
                   <div
                     class="flex h-6 w-6 items-center justify-center rounded bg-[#0c2b5e] text-white font-bold text-[10px]">
@@ -84,8 +94,8 @@
                   </div>
                   <span class="hidden sm:inline font-medium text-xs text-zinc-800 dark:text-zinc-200"><%= mhsName %></span>
                   <% } else {
-                    const admName = (typeof currentUser !== 'undefined' && currentUser?.nama) ? currentUser.nama : 'Admin Akademik';
-                    const admIni = String(admName).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+                    const admName = (typeof currentUser !== ' undefined' && currentUser?.nama) ? currentUser.nama
+                      : 'Admin Akademik' ; const admIni=String(admName).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
                   %>
                     <div
                       class="flex h-6 w-6 items-center justify-center rounded bg-[#0c2b5e] text-white font-bold text-[10px]">
@@ -100,109 +110,115 @@
             <div id="admin-user-dropdown"
               class="hidden absolute right-0 mt-2 w-60 origin-top-right rounded-xl border border-zinc-200 bg-white p-1.5 shadow-lg ring-1 ring-black/5 dark:border-zinc-800 dark:bg-zinc-900 focus:outline-none z-50 transition-all">
 
-              <% if (navRole==='dosen' ) { %>
-                <div class="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800">
-                  <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100"><%= navDosen.nama %>
-                  </p>
-                  <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">Kode: <%= navDosen.inisial %> · Dosen TI</p>
-                </div>
-                <div class="py-1">
-                  <a href="/dosen/dashboard"
-                    class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
-                    <i class="ph ph-squares-four text-base text-[#0c2b5e] dark:text-blue-400"></i>
-                    <span>Dashboard Dosen</span>
-                  </a>
-                  <a href="/dosen/jadwal"
-                    class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
-                    <i class="ph ph-calendar-check text-base"></i>
-                    <span>Jadwal Mengajar Saya</span>
-                  </a>
-                  <a href="/dosen/preferensi"
-                    class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
-                    <i class="ph ph-sliders text-base"></i>
-                    <span>Atur Preferensi Waktu</span>
-                  </a>
-                  <a href="/"
-                    class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
-                    <i class="ph ph-arrow-square-out text-base"></i>
-                    <span>Lihat Portal Publik</span>
-                  </a>
-                </div>
-                <% } else if (navRole==='mahasiswa' ) {
-                  const mhsDropName = (typeof currentUser !== 'undefined' && currentUser?.nama) ? currentUser.nama : ((typeof activeMahasiswa !== 'undefined' && activeMahasiswa?.nama) ? activeMahasiswa.nama : 'Mahasiswa TI');
-                  const mhsDropNim = (typeof currentUser !== 'undefined' && currentUser?.username) ? currentUser.username : ((typeof activeMahasiswa !== 'undefined' && activeMahasiswa?.nim) ? activeMahasiswa.nim : '-');
-                  const mhsDropSmt = (typeof activeMahasiswa !== 'undefined' && activeMahasiswa?.semesterAktif) ? activeMahasiswa.semesterAktif : 5;
-                %>
-                  <div class="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800">
-                    <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100"><%= mhsDropName %></p>
-                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">NIM: <%= mhsDropNim %> · Smt <%= mhsDropSmt %> TI</p>
-                  </div>
-                  <div class="py-1">
-                    <a href="/mahasiswa/dashboard"
-                      class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
-                      <i class="ph ph-squares-four text-base text-[#0c2b5e] dark:text-blue-400"></i>
-                      <span>Dashboard Mahasiswa</span>
-                    </a>
-                    <a href="/mahasiswa/jadwal"
-                      class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
-                      <i class="ph ph-calendar-blank text-base"></i>
-                      <span>Jadwal Perkuliahan</span>
-                    </a>
-                    <a href="/mahasiswa/prakrs"
-                      class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
-                      <i class="ph ph-notebook text-base"></i>
-                      <span>Pra-KRS Terpandu</span>
-                    </a>
-                    <a href="/"
-                      class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
-                      <i class="ph ph-arrow-square-out text-base"></i>
-                      <span>Lihat Portal Publik</span>
-                    </a>
-                  </div>
-                  <% } else {
-                    const admDropName = (typeof currentUser !== 'undefined' && currentUser?.nama) ? currentUser.nama : 'Admin Akademik';
-                    const admDropUser = (typeof currentUser !== 'undefined' && currentUser?.username) ? currentUser.username : 'admin';
-                  %>
-                    <div class="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800">
-                      <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100"><%= admDropName %></p>
-                      <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">Akun: <%= admDropUser %> · Staf Akademik</p>
-                    </div>
-                    <div class="py-1">
-                      <a href="/admin/profil"
-                        class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
-                        <i class="ph ph-user text-base"></i>
-                        <span>Profil Staf</span>
-                      </a>
-                      <a href="/admin/settings"
-                        class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
-                        <i class="ph ph-gear text-base"></i>
-                        <span>Pengaturan Sistem</span>
-                      </a>
-                      <a href="/"
-                        class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
-                        <i class="ph ph-arrow-square-out text-base"></i>
-                        <span>Lihat Portal Publik</span>
-                      </a>
-                    </div>
-                    <% } %>
-
-                      <div
-                        class="border-t border-zinc-100 pt-1 dark:border-zinc-800 flex items-center justify-between px-3 py-1.5">
-                        <span class="font-mono text-[10px] text-zinc-400">
-                          <%= typeof appVersion !== 'undefined' ? appVersion : 'v.21' %>
-                        </span>
-                        <a href="/logout"
-                          class="inline-flex items-center gap-1.5 text-xs text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 font-medium transition-colors">
-                          <i class="ph ph-sign-out text-sm"></i>
-                          <span>Keluar (Logout)</span>
+              <% if (navRole===' dosen' ) { %>
+                      <div class="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800">
+                        <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+                          <%= navDosen.nama %>
+                        </p>
+                        <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">Kode: <%= navDosen.inisial %>
+                            · Dosen TI</p>
+                      </div>
+                      <div class="py-1">
+                        <a href="/dosen/dashboard"
+                          class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                          <i class="ph ph-squares-four text-base text-[#0c2b5e] dark:text-blue-400"></i>
+                          <span>Dashboard Dosen</span>
+                        </a>
+                        <a href="/dosen/jadwal"
+                          class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                          <i class="ph ph-calendar-check text-base"></i>
+                          <span>Jadwal Mengajar Saya</span>
+                        </a>
+                        <a href="/dosen/preferensi"
+                          class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                          <i class="ph ph-sliders text-base"></i>
+                          <span>Atur Preferensi Waktu</span>
+                        </a>
+                        <a href="/"
+                          class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                          <i class="ph ph-arrow-square-out text-base"></i>
+                          <span>Lihat Portal Publik</span>
                         </a>
                       </div>
-            </div>
-          </div>
+                      <% } else if (navRole==='mahasiswa' ) { const mhsDropName=(typeof currentUser !=='undefined' &&
+                        currentUser?.nama) ? currentUser.nama : ((typeof activeMahasiswa !=='undefined' &&
+                        activeMahasiswa?.nama) ? activeMahasiswa.nama : 'Mahasiswa TI' ); const mhsDropNim=(typeof
+                        currentUser !=='undefined' && currentUser?.username) ? currentUser.username : ((typeof
+                        activeMahasiswa !=='undefined' && activeMahasiswa?.nim) ? activeMahasiswa.nim : '-' ); const
+                        mhsDropSmt=(typeof activeMahasiswa !=='undefined' && activeMahasiswa?.semesterAktif) ?
+                        activeMahasiswa.semesterAktif : 5; %>
+                        <div class="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800">
+                          <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+                            <%= mhsDropName %>
+                          </p>
+                          <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">NIM: <%= mhsDropNim %> · Smt
+                              <%= mhsDropSmt %> TI</p>
+                        </div>
+                        <div class="py-1">
+                          <a href="/mahasiswa/dashboard"
+                            class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                            <i class="ph ph-squares-four text-base text-[#0c2b5e] dark:text-blue-400"></i>
+                            <span>Dashboard Mahasiswa</span>
+                          </a>
+                          <a href="/mahasiswa/jadwal"
+                            class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                            <i class="ph ph-calendar-blank text-base"></i>
+                            <span>Jadwal Perkuliahan</span>
+                          </a>
+                          <a href="/mahasiswa/prakrs"
+                            class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                            <i class="ph ph-notebook text-base"></i>
+                            <span>Pra-KRS Terpandu</span>
+                          </a>
+                          <a href="/"
+                            class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                            <i class="ph ph-arrow-square-out text-base"></i>
+                            <span>Lihat Portal Publik</span>
+                          </a>
+                        </div>
+                        <% } else { const admDropName=(typeof currentUser !=='undefined' && currentUser?.nama) ?
+                          currentUser.nama : 'Admin Akademik' ; const admDropUser=(typeof currentUser !=='undefined' &&
+                          currentUser?.username) ? currentUser.username : 'admin' ; %>
+                          <div class="px-3 py-2 border-b border-zinc-100 dark:border-zinc-800">
+                            <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+                              <%= admDropName %>
+                            </p>
+                            <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-mono">Akun: <%= admDropUser %> ·
+                                Staf Akademik</p>
+                          </div>
+                          <div class="py-1">
+                            <a href="/admin/profil"
+                              class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                              <i class="ph ph-user text-base"></i>
+                              <span>Profil Staf</span>
+                            </a>
+                            <a href="/admin/settings"
+                              class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                              <i class="ph ph-gear text-base"></i>
+                              <span>Pengaturan Sistem</span>
+                            </a>
+                            <a href="/"
+                              class="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors">
+                              <i class="ph ph-arrow-square-out text-base"></i>
+                              <span>Lihat Portal Publik</span>
+                            </a>
+                          </div>
+                          <% } %>
 
+                            <div
+                              class="border-t border-zinc-100 pt-1 dark:border-zinc-800 flex items-center justify-between px-3 py-1.5">
+                              <a href="/logout"
+                                class="inline-flex items-center py-2 gap-2.5 text-xs text-rose-600 hover:text-rose-700 dark:text-rose-400 dark:hover:text-rose-300 font-medium transition-colors">
+                                <i class="ph ph-sign-out text-sm"></i>
+                                <span>Keluar</span>
+                              </a>
+                            </div>
+            </div>
         </div>
 
       </div>
+
+    </div>
     </div>
   </header>
 
@@ -226,46 +242,66 @@
 
       <!-- Drawer Body / Alerts List -->
       <div class="flex-1 overflow-y-auto p-4 space-y-3">
-        <% const navPrkAcc = (typeof prakrsAccess !== 'undefined' && prakrsAccess) ? prakrsAccess : { isOpen: true, deadline: '2026-12-31', reason: 'Pengisian Pra-KRS sedang dibuka.' }; %>
-        <!-- Item Status Pra-KRS Aktif -->
-        <div class="rounded-xl border p-3.5 space-y-1 <%= navPrkAcc.isOpen ? 'border-emerald-200 bg-emerald-50/70 dark:border-emerald-900/60 dark:bg-emerald-950/30' : 'border-rose-200 bg-rose-50/70 dark:border-rose-900/60 dark:bg-rose-950/30' %>">
-          <div class="flex items-center justify-between text-xs">
-            <span class="inline-flex items-center gap-1 font-semibold <%= navPrkAcc.isOpen ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400' %>">
-              <i class="ph <%= navPrkAcc.isOpen ? 'ph-check-circle' : 'ph-lock-key' %>"></i>
-              <%= navPrkAcc.isOpen ? 'Pra-KRS Sedang Dibuka' : 'Pra-KRS Telah Ditutup' %>
-            </span>
-            <span class="font-mono text-[10px] text-zinc-400"><%= navPrkAcc.deadline %></span>
-          </div>
-          <p class="text-xs <%= navPrkAcc.isOpen ? 'text-emerald-950 dark:text-emerald-200' : 'text-rose-950 dark:text-rose-200' %>">
-            <%= navPrkAcc.reason %>
-          </p>
-        </div>
-
-        <% const navNotifs = (typeof notifikasiList !== 'undefined' && Array.isArray(notifikasiList)) ? notifikasiList.slice(0, 5) : []; %>
-        <% navNotifs.forEach(function(nf) { %>
-          <div class="rounded-xl border border-zinc-200 bg-zinc-50/80 p-3.5 dark:border-zinc-800 dark:bg-zinc-800/40 space-y-1">
+        <% const navPrkAcc=(typeof prakrsAccess !=='undefined' && prakrsAccess) ? prakrsAccess : { isOpen: true,
+          deadline: '2026-12-31' , reason: 'Pengisian Pra-KRS sedang dibuka.' }; %>
+          <!-- Item Status Pra-KRS Aktif -->
+          <div
+            class="rounded-xl border p-3.5 space-y-1 <%= navPrkAcc.isOpen ? 'border-emerald-200 bg-emerald-50/70 dark:border-emerald-900/60 dark:bg-emerald-950/30' : 'border-rose-200 bg-rose-50/70 dark:border-rose-900/60 dark:bg-rose-950/30' %>">
             <div class="flex items-center justify-between text-xs">
-              <span class="inline-flex items-center gap-1 font-semibold text-zinc-800 dark:text-zinc-200">
-                <i class="ph ph-bell-ringing text-amber-500"></i> <%= nf.kodeMatkul %>
+              <span
+                class="inline-flex items-center gap-1 font-semibold <%= navPrkAcc.isOpen ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400' %>">
+                <i class="ph <%= navPrkAcc.isOpen ? 'ph-check-circle' : 'ph-lock-key' %>"></i>
+                <%= navPrkAcc.isOpen ? 'Pra-KRS Sedang Dibuka' : 'Pra-KRS Telah Ditutup' %>
               </span>
-              <span class="font-mono text-[10px] text-zinc-400"><%= nf.waktu || 'Terbaru' %></span>
+              <span class="font-mono text-[10px] text-zinc-400">
+                <%= navPrkAcc.deadline %>
+              </span>
             </div>
-            <p class="text-xs text-zinc-600 dark:text-zinc-400">
-              <%= nf.perubahan %>
+            <p
+              class="text-xs <%= navPrkAcc.isOpen ? 'text-emerald-950 dark:text-emerald-200' : 'text-rose-950 dark:text-rose-200' %>">
+              <%= navPrkAcc.reason %>
             </p>
           </div>
-        <% }); %>
+
+          <% const navNotifs=(typeof notifikasiList !=='undefined' && Array.isArray(notifikasiList)) ?
+            notifikasiList.slice(0, 10) : []; %>
+            <% if (navNotifs.length===0) { %>
+              <div
+                class="rounded-xl border border-dashed border-zinc-200 dark:border-zinc-800 p-6 text-center text-xs text-zinc-400">
+                Belum ada notifikasi baru saat ini.
+              </div>
+              <% } else { %>
+                <% navNotifs.forEach(function(nf) { %>
+                  <div
+                    class="rounded-xl border <%= (nf.isRead === false) ? 'border-amber-300 bg-amber-50/50 dark:border-amber-800/60 dark:bg-amber-950/20' : 'border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-800/40' %> p-3.5 space-y-1 transition-colors">
+                    <div class="flex items-center justify-between text-xs">
+                      <span class="inline-flex items-center gap-1 font-semibold text-zinc-800 dark:text-zinc-200">
+                        <i
+                          class="ph ph-bell-ringing <%= (nf.isRead === false) ? 'text-amber-500' : 'text-zinc-400' %>"></i>
+                        <%= nf.kodeMatkul %>
+                      </span>
+                      <span class="font-mono text-[10px] text-zinc-400">
+                        <%= nf.waktu || 'Terbaru' %>
+                      </span>
+                    </div>
+                    <p class="text-xs text-zinc-600 dark:text-zinc-400">
+                      <%= nf.perubahan %>
+                    </p>
+                  </div>
+                  <% }); %>
+                    <% } %>
       </div>
 
       <!-- Drawer Footer -->
       <div
         class="border-t border-zinc-200 p-3.5 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950/50 flex justify-between items-center text-xs">
-        <button type="button"
-          onclick="window.showConfirmDialog ? window.showConfirmDialog('Tandai Semua Dibaca', 'Seluruh notifikasi perubahan jadwal dan preferensi dosen akan ditandai telah dibaca.', () => { closeAdminNotifDrawer(); }, 'Tandai Dibaca') : null"
+        <button type="button" onclick="window.tandaiSemuaNotifikasiDibaca ? window.tandaiSemuaNotifikasiDibaca() : null"
           class="font-medium text-[#0c2b5e] hover:underline dark:text-blue-400 transition-colors">
-          Tandai dibaca
+          Tandai semua dibaca
         </button>
-        <span class="font-mono text-[10px] text-zinc-400">3 Pembaruan</span>
+        <span id="admin-notif-unread-count" class="font-mono text-[10px] text-zinc-400">
+          <%= unreadNotifs %> Belum Dibaca
+        </span>
       </div>
 
     </div>
@@ -324,10 +360,34 @@
         window.openAdminNotifDrawer = openDrawer;
         window.closeAdminNotifDrawer = closeDrawer;
 
+        window.tandaiSemuaNotifikasiDibaca = async function () {
+          try {
+            const res = await fetch('/api/notifikasi/read-all', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            if (data.sukses) {
+              const badge = document.getElementById('admin-notif-badge');
+              if (badge) badge.remove();
+              const counter = document.getElementById('admin-notif-unread-count');
+              if (counter) counter.textContent = '0 Belum Dibaca';
+              document.querySelectorAll('.notif-unread-item').forEach(el => {
+                el.classList.remove('border-amber-300', 'bg-amber-50/50');
+              });
+              if (window.JadwalinUI?.toast) {
+                window.JadwalinUI.toast.show(data.pesan || 'Semua notifikasi ditandai dibaca.', 'success');
+              }
+            }
+          } catch (e) {
+            console.error('Gagal menandai notifikasi dibaca:', e);
+          }
+        };
+
         // 3. Mobile Sidebar Off-Canvas Drawer
         const sidebarEl = document.getElementById('admin-sidebar');
         const sidebarBackdrop = document.getElementById('mobile-sidebar-backdrop');
-        window.toggleMobileSidebar = function(forceOpen) {
+        window.toggleMobileSidebar = function (forceOpen) {
           if (!sidebarEl || !sidebarBackdrop) return;
           const isOpen = !sidebarEl.classList.contains('-translate-x-full');
           const nextOpen = typeof forceOpen === 'boolean' ? forceOpen : !isOpen;
