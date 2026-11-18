@@ -984,7 +984,7 @@ exports.backupPostgres = (req, res) => {
 const simpanPrakrsSchema = z.object({
   semester: z.coerce.number().int().min(1).max(8),
   kodePeminatan: z.enum(['SE', 'NS']).optional(),
-  prefKelas: z.enum(['A', 'B', 'C', 'D', 'E', 'F']).optional(),
+  prefKelas: z.string().max(20).optional(),
   prefWaktu: z.string().max(15).optional(),
   kodeMatkulList: z.array(z.string().trim().min(5).max(8)).min(1, 'Minimal 1 mata kuliah harus dipilih'),
   variasiIndex: z.coerce.number().int().min(0).max(20).optional(),
@@ -1041,6 +1041,35 @@ exports.simpanPrakrs = async (req, res) => {
         );
       } catch (dbErr) {
         console.warn('[SimpanPraKRS] Gagal update Mahasiswa di DB:', dbErr.message);
+      }
+    }
+
+    if (db.MahasiswaPrakrs) {
+      try {
+        const mhsId = req.user.role === 'mahasiswa' ? req.user.refId : null;
+        const nimKey = req.user.username;
+        const payloadPrakrs = {
+          mahasiswa_id: mhsId,
+          nim: nimKey,
+          semester: Math.min(semester, 8),
+          kode_peminatan: kodePeminatan || 'SE',
+          pref_kelas: prefKelas || 'Campuran',
+          kelas_per_matkul: kelasPerMatkul || {},
+          rekomendasi_sesi: rekomendasi.rekomendasiSesi || [],
+          total_sks: rekomendasi.totalSks || 0
+        };
+
+        const existingPrakrs = await db.MahasiswaPrakrs.findOne({
+          where: mhsId ? { [db.Sequelize.Op.or]: [{ mahasiswa_id: mhsId }, { nim: nimKey }] } : { nim: nimKey }
+        });
+
+        if (existingPrakrs) {
+          await existingPrakrs.update(payloadPrakrs);
+        } else {
+          await db.MahasiswaPrakrs.create(payloadPrakrs);
+        }
+      } catch (prakrsErr) {
+        console.warn('[SimpanPraKRS] Gagal persistensi MahasiswaPrakrs di DB:', prakrsErr.message);
       }
     }
   }
