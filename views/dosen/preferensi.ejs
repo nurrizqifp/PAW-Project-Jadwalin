@@ -20,7 +20,15 @@
             <h1 class="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
               Formulir Preferensi Hari & Jam Mengajar
             </h1>
-            <% const prefDosen = (typeof activeDosen !== 'undefined' && activeDosen) ? activeDosen : { inisial: 'AS', nama: 'Ir. Asroni, S.T., M.Eng', bebanSks: 12 }; %>
+            <% 
+              const prefDosen = (typeof activeDosen !== 'undefined' && activeDosen) ? activeDosen : { inisial: 'AS', nama: 'Ir. Asroni, S.T., M.Eng', bebanSks: 12 }; 
+              const activePref = (typeof prefRow !== 'undefined' && prefRow) 
+                ? prefRow 
+                : ((typeof constraints !== 'undefined' && constraints?.softConstraints) 
+                    ? constraints.softConstraints.find(sc => sc.dosenId === prefDosen.id || sc.dosenNama === prefDosen.nama) 
+                    : null);
+              const defaultAlasan = activePref ? activePref.alasan : 'Agenda riset Cloud Computing dan pengabdian masyarakat.';
+            %>
             <p class="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
               <%= prefDosen.nama %> (Kode: <%= prefDosen.inisial %>) · Semester Ganjil 2026/2027
             </p>
@@ -159,7 +167,7 @@
                 </label>
                 <textarea id="alasan-berhalangan" rows="3" required minlength="3" maxlength="80"
                   placeholder="Contoh: Rapat rutin senat fakultas & riset Laboratorium Jaringan..."
-                  class="w-full rounded-lg border border-zinc-200 bg-white p-3 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900"><%= prefRow ? prefRow.alasan : 'Agenda riset Cloud Computing dan pengabdian masyarakat.' %></textarea>
+                  class="w-full rounded-lg border border-zinc-200 bg-white p-3 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900"><%= defaultAlasan %></textarea>
               </div>
 
               <!-- Quick Tag Badges -->
