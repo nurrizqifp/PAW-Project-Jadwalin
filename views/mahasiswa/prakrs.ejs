@@ -335,7 +335,7 @@
 
         <!-- Pratinjau Jadwal Rekomendasi AI -->
         <div class="space-y-3">
-          <div class="flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 pb-3 dark:border-zinc-800">
             <div>
               <h3 class="font-heading font-bold text-base text-zinc-900 dark:text-zinc-50">
                 Susunan Jadwal Kuliah Paket Mahasiswa
@@ -343,15 +343,31 @@
               <p class="text-xs text-zinc-500 dark:text-zinc-400">Paket jadwal otomatis didistribusikan tanpa bentrok waktu, ruangan, maupun dosen.</p>
             </div>
             
-            <!-- Button Variasi Lain -->
-            <button id="btn-minta-variasi" type="button" class="inline-flex min-h-[38px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 shadow-sm transition-all">
-              <i class="ph ph-shuffle text-sm text-brand-blue dark:text-amber-400"></i>
-              <span>Minta Variasi Alternatif</span>
-            </button>
+            <div class="flex flex-wrap items-center gap-2">
+              <!-- Switcher Mode Tampilan: Tabel vs Kalender Grid -->
+              <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100/80 p-0.5 dark:border-zinc-700 dark:bg-zinc-800">
+                <button id="prakrs-view-mode-table" type="button" title="Tampilan Tabel Rinci"
+                  class="inline-flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100 transition-all">
+                  <i class="ph ph-table text-sm text-[#0c2b5e] dark:text-amber-400"></i>
+                  <span>Tabel</span>
+                </button>
+                <button id="prakrs-view-mode-grid" type="button" title="Tampilan Kalender Grid"
+                  class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
+                  <i class="ph ph-squares-four text-sm"></i>
+                  <span>Grid Kalender</span>
+                </button>
+              </div>
+
+              <!-- Button Variasi Lain -->
+              <button id="btn-minta-variasi" type="button" class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 shadow-sm transition-all">
+                <i class="ph ph-shuffle text-sm text-brand-blue dark:text-amber-400"></i>
+                <span>Minta Variasi Alternatif</span>
+              </button>
+            </div>
           </div>
 
-          <!-- Schedule Grid Pratinjau -->
-          <div class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+          <!-- VIEW 1: TABEL RINCI PAGINASI -->
+          <div id="prakrs-container-table" class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
             <%- include('../partials/table-pagination', {
               tableId: 'table-prakrs-schedule',
               part: 'toolbar',
@@ -396,6 +412,62 @@
               part: 'pagination',
               defaultPageSize: 10
             }) %>
+          </div>
+
+          <!-- VIEW 2: KALENDER GRID MINGGUAN -->
+          <div id="prakrs-container-grid" class="hidden rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden space-y-0">
+            <!-- Legend Sesi Grid -->
+            <div class="px-4 py-2.5 border-b border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/70 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div class="flex flex-wrap items-center gap-4">
+                <span class="text-zinc-500 font-semibold text-[11px]">Keterangan:</span>
+                <div class="inline-flex items-center gap-1.5">
+                  <span class="h-2.5 w-2.5 rounded bg-blue-100 border border-blue-300 dark:bg-blue-950/70 dark:border-blue-700"></span>
+                  <span class="text-zinc-700 dark:text-zinc-300 text-[11px]">Kuliah Teori</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5">
+                  <span class="h-2.5 w-2.5 rounded bg-amber-100 border border-amber-300 dark:bg-amber-950/70 dark:border-amber-700"></span>
+                  <span class="text-zinc-700 dark:text-zinc-300 text-[11px]">Praktikum Laboratorium</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5">
+                  <span class="h-2.5 w-2.5 rounded bg-zinc-200 border border-zinc-300 dark:bg-zinc-800 dark:border-zinc-700"></span>
+                  <span class="text-zinc-700 dark:text-zinc-300 text-[11px]">Jeda Shalat Dhuhur</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Responsive Table Matriks Grid -->
+            <div class="overflow-x-auto">
+              <table class="w-full border-collapse text-left text-xs min-w-[850px]">
+                <thead>
+                  <tr class="border-b border-zinc-200 bg-zinc-100/75 dark:border-zinc-800 dark:bg-zinc-800/80 font-mono text-[11px]">
+                    <th class="sticky left-0 z-10 w-24 border-r border-zinc-200 bg-zinc-100/90 px-3 py-2.5 font-semibold text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300 text-center">
+                      WAKTU
+                    </th>
+                    <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                      SENIN
+                    </th>
+                    <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                      SELASA
+                    </th>
+                    <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                      RABU
+                    </th>
+                    <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                      KAMIS
+                    </th>
+                    <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                      JUMAT
+                    </th>
+                    <th class="px-3 py-2.5 font-heading font-bold text-zinc-900 dark:text-zinc-100 text-center">
+                      SABTU
+                    </th>
+                  </tr>
+                </thead>
+                <tbody id="prakrs-grid-body" class="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans">
+                  <!-- Dynamic Content Rendered by Client-side JS -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -513,6 +585,23 @@
     const sksProgressBar = document.getElementById('sks-progress-bar');
     const resultScheduleBody = document.getElementById('result-schedule-body');
     const resultSksLabel = document.getElementById('result-sks-label');
+
+    // Calendar Grid View Switcher Elements
+    const btnModeTable = document.getElementById('prakrs-view-mode-table');
+    const btnModeGrid = document.getElementById('prakrs-view-mode-grid');
+    const containerTable = document.getElementById('prakrs-container-table');
+    const containerGrid = document.getElementById('prakrs-container-grid');
+    const prakrsGridBody = document.getElementById('prakrs-grid-body');
+
+    const prakrsTimeSlots = [
+      { start: '07:00', end: '08:40', label: '07:00 – 08:40' },
+      { start: '08:50', end: '11:30', label: '08:50 – 11:30' },
+      { isBreak: true, start: '11:30', end: '12:10', label: '11:30 – 12:10' },
+      { start: '12:10', end: '14:40', label: '12:10 – 14:40' },
+      { start: '14:45', end: '17:15', label: '14:45 – 17:15' }
+    ];
+    const prakrsDays = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    let latestSesiList = [];
 
     let currentVariasiIndex = 0;
 
@@ -798,7 +887,125 @@
       }
     }
 
+    function renderResultGrid(list) {
+      if (!prakrsGridBody) return;
+      prakrsGridBody.innerHTML = '';
+
+      prakrsTimeSlots.forEach(slot => {
+        const tr = document.createElement('tr');
+
+        // Break Row (Sholat Dhuhur)
+        if (slot.isBreak) {
+          tr.className = 'bg-zinc-100/90 dark:bg-zinc-800/60 border-y border-zinc-200 dark:border-zinc-700/60';
+          tr.innerHTML = `
+            <td class="sticky left-0 border-r border-zinc-200 bg-zinc-100 px-3 py-2 text-center text-zinc-500 dark:border-zinc-800 dark:bg-zinc-800 font-semibold text-[11px]">
+              ${slot.label}
+            </td>
+            <td colspan="6" class="px-4 py-2 text-center text-xs font-semibold text-zinc-600 dark:text-zinc-400">
+              <span class="inline-flex items-center gap-1.5">
+                <i class="ph ph-moon-stars text-amber-500"></i>
+                <span>Jeda Ibadah Shalat Dhuhur & Istirahat</span>
+              </span>
+            </td>
+          `;
+          prakrsGridBody.appendChild(tr);
+          return;
+        }
+
+        // Regular Time Slot Row
+        tr.className = 'min-h-[96px] items-stretch';
+
+        // Time Label Column
+        const timeTd = document.createElement('td');
+        timeTd.className = 'sticky left-0 border-r border-zinc-200 bg-zinc-50 px-2.5 py-2 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 align-top text-center font-medium text-[11px]';
+        timeTd.textContent = slot.label;
+        tr.appendChild(timeTd);
+
+        // Days Columns (Senin -> Sabtu)
+        prakrsDays.forEach(day => {
+          const td = document.createElement('td');
+          td.className = 'border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors';
+
+          const matches = (list || []).filter(item => {
+            if (item.hari !== day) return false;
+            const jMulai = item.jamMulai || '';
+            if (slot.start === '07:00' && jMulai < '08:45') return true;
+            if (slot.start === '08:50' && jMulai >= '08:45' && jMulai < '11:30') return true;
+            if (slot.start === '12:10' && jMulai >= '12:00' && jMulai < '14:40') return true;
+            if (slot.start === '14:45' && jMulai >= '14:40') return true;
+            return false;
+          });
+
+          if (matches.length === 0) {
+            td.innerHTML = '<div class="h-16"></div>';
+          } else {
+            const container = document.createElement('div');
+            container.className = 'space-y-1.5';
+
+            matches.forEach(item => {
+              const isLab = (item.ruang && item.ruang.toLowerCase().includes('lab')) ||
+                            (item.tipeRuang && item.tipeRuang.toLowerCase().includes('lab')) ||
+                            (item.jenis && item.jenis.toLowerCase().includes('praktikum'));
+
+              const card = document.createElement('div');
+              card.className = isLab
+                ? 'rounded-lg border border-amber-300 bg-amber-50/90 p-2 text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100 shadow-xs transition-all hover:border-amber-500'
+                : 'rounded-lg border border-blue-200 bg-blue-50/90 p-2 text-blue-950 dark:border-blue-900 dark:bg-blue-950/40 dark:text-blue-100 shadow-xs transition-all hover:border-brand-blue';
+
+              card.innerHTML = `
+                <div class="flex items-start justify-between gap-1">
+                  <span class="font-heading font-bold text-xs leading-tight line-clamp-1" title="${item.mataKuliah}">${item.mataKuliah}</span>
+                  ${isLab ? '<i class="ph ph-flask text-amber-600 dark:text-amber-400 shrink-0 text-xs" title="Praktikum Lab"></i>' : ''}
+                </div>
+                <div class="mt-1 flex items-center justify-between text-[10px] opacity-85">
+                  <span class="font-semibold">${item.ruang}</span>
+                  <span>Kls ${item.kelas} · ${item.sks} SKS</span>
+                </div>
+                <div class="mt-0.5 text-[10px] truncate opacity-75" title="${item.dosen}">
+                  ${item.dosenInisial || item.dosen}
+                </div>
+                <div class="mt-0.5 text-[9px] font-mono text-zinc-500 dark:text-zinc-400">
+                  ${item.jamMulai}–${item.jamSelesai}
+                </div>
+              `;
+              container.appendChild(card);
+            });
+
+            td.appendChild(container);
+          }
+
+          tr.appendChild(td);
+        });
+
+        prakrsGridBody.appendChild(tr);
+      });
+    }
+
+    // Toggle Mode Tampilan Tabel vs Kalender Grid
+    const ACTIVE_VIEW_CLS = 'inline-flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100 transition-all';
+    const INACTIVE_VIEW_CLS = 'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+
+    function setPrakrsViewMode(mode) {
+      if (!containerTable || !containerGrid) return;
+      if (mode === 'grid') {
+        containerTable.classList.add('hidden');
+        containerGrid.classList.remove('hidden');
+        if (btnModeGrid) btnModeGrid.className = ACTIVE_VIEW_CLS;
+        if (btnModeTable) btnModeTable.className = INACTIVE_VIEW_CLS;
+        renderResultGrid(latestSesiList);
+      } else {
+        containerTable.classList.remove('hidden');
+        containerGrid.classList.add('hidden');
+        if (btnModeTable) btnModeTable.className = ACTIVE_VIEW_CLS;
+        if (btnModeGrid) btnModeGrid.className = INACTIVE_VIEW_CLS;
+      }
+    }
+
+    if (btnModeTable) btnModeTable.addEventListener('click', () => setPrakrsViewMode('table'));
+    if (btnModeGrid) btnModeGrid.addEventListener('click', () => setPrakrsViewMode('grid'));
+
     function renderResultSchedule(list) {
+      latestSesiList = Array.isArray(list) ? list : [];
       resultScheduleBody.innerHTML = '';
       if (!list || list.length === 0) {
         resultScheduleBody.innerHTML = `
@@ -808,6 +1015,7 @@
             </td>
           </tr>
         `;
+        renderResultGrid([]);
         return;
       }
 
@@ -841,6 +1049,8 @@
         `;
         resultScheduleBody.appendChild(tr);
       });
+
+      renderResultGrid(list);
 
       if (window.JadwalinTablePagination) {
         window.JadwalinTablePagination.bindTable('table-prakrs-schedule');
@@ -912,6 +1122,16 @@
 
     // Initial check
     recalculateSks();
+
+    // Render initial saved Pra-KRS jika tersedia
+    const SAVED_PRAKRS_INITIAL = <%- JSON.stringify((typeof defaultPrakrs !== 'undefined' && defaultPrakrs && Array.isArray(defaultPrakrs.rekomendasiSesi)) ? defaultPrakrs.rekomendasiSesi : []) %>;
+    if (SAVED_PRAKRS_INITIAL.length > 0) {
+      renderResultSchedule(SAVED_PRAKRS_INITIAL);
+      const totalSks = SAVED_PRAKRS_INITIAL.reduce((sum, s) => sum + (s.sks || 0), 0);
+      if (resultSksLabel) {
+        resultSksLabel.textContent = `${totalSks} SKS · ${SAVED_PRAKRS_INITIAL.length} Mata Kuliah`;
+      }
+    }
   });
 </script>
 
