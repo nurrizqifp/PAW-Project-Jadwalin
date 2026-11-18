@@ -1,0 +1,390 @@
+================================================================================
+PANDUAN LENGKAP SIMULASI WAWANCARA & RESPONSI PROYEK JADWALIN
+MATA KULIAH: PENGEMBANGAN APLIKASI WEB (PAW) - TEKNOLOGI INFORMASI UMY
+TIM PENGEMBANG: KELOMPOK 5 (6 ANGGOTA)
+================================================================================
+
+DOKUMEN INI BERISI SIMULASI PERTANYAAN DOSEN PENGUJI DAN JAWABAN LENGKAP UNTUK
+SELURUH ANGGOTA TIM BERDASARKAN PEMBAGIAN TUGAS DAN FILE KODE YANG DIMILIKI.
+COCOK UNTUK DISALIN LANGSUNG KE GOOGLE DOCS SEBAGAI MATERI BELAJAR BERSAMA.
+
+DAFTAR ISI SIMULASI WAWANCARA PER ANGGOTA:
+1. Haidar Yahya Mudhofar (20240140093) - UI System, Layout, Routing & Interactive Frontend
+2. Nur Rizqi Febriansyah Putra (20240140056) - AI Integration & Backend Core Solver
+3. Nisrina Hanifah Ramadhani (20240140075) - Frontend Admin Panel & Master Data Management
+4. Bima Eka Setiawan (20240140089) - Database, Sequelize ORM, Auth & Seeder
+5. Resya Glamoda Suhendri (20240140091) - Frontend Portal Dosen, Mahasiswa & Pra-KRS
+6. A. Muh. Fadil Asytar (20240140133) - Jadwal, Notification Engine & Publication Flow
+
+================================================================================
+BAGIAN 1: HAIDAR YAHYA MUDHOFAR (NIM: 20240140093)
+ROLE: UI System, Layout, Web Routing, & Interactive Frontend Engineering
+================================================================================
+
+1. KONTRIBUSI NYATA
+Pertanyaan:
+"Apa saja kontribusi teknis utama yang kamu kerjakan di proyek ini?"
+
+Jawaban:
+"Kontribusi saya berfokus pada arsitektur antarmuka pengguna, tata letak global, sistem navigasi lintas peran, dan rekayasa komponen interaktif:
+a. Interactive Calendar Grid Picker pada Pra-KRS (views/mahasiswa/prakrs.ejs):
+   - Merombak halaman Pra-KRS dari sebelumnya bot chat menjadi Kalender Grid Interaktif mingguan (Senin-Sabtu).
+   - Menghapus fitur chatbot AI mengambang agar 100% patuh terhadap batasan PRD (AI hanya digunakan terpusat oleh Admin).
+   - Membangun live clash detection (deteksi bentrok jam seketika di client), counter batas 24 SKS, serta filter semester dan peminatan.
+   - Mengunci hak ambil semester di mana mahasiswa semester bawah tidak bisa melihat atau mengambil matkul semester atas.
+b. Fitur Drag-and-Drop pada Matriks Jadwal Admin (views/admin/jadwal.ejs):
+   - Memberikan kemampuan tarik-dan-lepas (HTML5 native Drag and Drop) pada kartu sesi jadwal admin untuk revisi jadwal manual tanpa generate ulang.
+   - Terintegrasi dengan endpoint POST /api/jadwal/revisi dan validasi bentrok seketika.
+c. Layout Global & Navigasi Peran (views/partials/admin-navbar.ejs, admin-sidebar.ejs):
+   - Memperbaiki tata letak header fixed sticky agar navbar tetap terkunci di atas saat halaman di-scroll.
+   - Menjaga konsistensi layout wrapper (overflow-hidden dan overflow-y-auto) di seluruh portal Admin, Dosen, dan Mahasiswa."
+
+2. ALUR WEB YANG DIKELOLA
+Pertanyaan:
+"Jelaskan alur web pada fitur-fitur yang kamu bangun!"
+
+Jawaban:
+"Alur Pra-KRS Mahasiswa:
+1. Mahasiswa login dan masuk ke rute /mahasiswa/prakrs.
+2. Sistem memuat master jadwal terpublikasi dan data jadwal yang tersimpan di PostgreSQL.
+3. Kalender mingguan menampilkan daftar kelas. Mahasiswa mengklik kartu kelas (A, B, C, atau kelas gabungan).
+4. Algoritma client mendeteksi bentrok jam dan menghitung batas SKS secara live.
+5. Mahasiswa menekan tombol Simpan. Data dikirim asinkron via Fetch ke backend dan disimpan ke tabel mahasiswa_prakrs, lalu dialihkan ke halaman Jadwal Kuliah Saya.
+
+Alur Drag-and-Drop Jadwal Admin:
+1. Admin membuka rute /admin/jadwal (Matriks Grid Mingguan).
+2. Admin menarik kartu mata kuliah ke sel hari atau jam lain.
+3. Sel target menyala biru (dragover). Saat kartu dilepas (drop), sistem memvalidasi posisi dan mengirim data ke POST /api/jadwal/revisi.
+4. Jika aman, sesi berpindah dan sistem notifikasi mencatat perubahan. Jika bentrok, sistem menolak dan mengembalikan posisi kartu."
+
+3. FUNGSI-FUNGSI KUNCI (FUNCTIONS CODE BREAKDOWN)
+Pertanyaan:
+"Sebutkan fungsi-fungsi JavaScript utama yang kamu buat dan jelaskan cara kerjanya!"
+
+Jawaban:
+"- isTimeOverlap(s1, e1, s2, e2): Fungsi boolean return (s1 < e2) && (s2 < e1); untuk mengecek apakah dua rentang jam kuliah saling bertabrakan.
+- detectClashes(): Melakukan iterasi berpasangan terhadap selectedSesisMap untuk mendeteksi apakah ada dua sesi di hari yang sama yang tabrakan waktu.
+- updateUI(): Memperbarui counter SKS, progress bar, badge bebas bentrok / alert konflik, dan memicu render ulang tabel serta kalender.
+- toggleSelectSesi(item): Menambah atau mengganti sesi terpilih di selectedSesisMap berdasarkan kodeMatkul.
+- getFilteredSessions(): Memfilter sesi yang digambar di kalender dengan aturan Always-Visible untuk kartu yang sedang dipilih agar tidak terjadi sesi bentrok tersembunyi.
+- initJadwalDragAndDrop(): Mengatur listener dragstart, dragover, dragleave, dan drop pada kartu sesi dan sel waktu admin."
+
+4. PEMANFAATAN FETCH API
+Pertanyaan:
+"Di mana saja kamu memakai Fetch API dan bagaimana penanganan error-nya?"
+
+Jawaban:
+"- POST /api/jadwal/prakrs/simpan: Mengirim payload JSON { semester, kodePeminatan, selectedSesis, kelasPerMatkul } dari halaman Pra-KRS.
+- POST /api/jadwal/revisi: Mengirim payload { id, hari, jamMulai, ruang } saat admin melakukan drag-and-drop kartu sesi.
+- Penanganan error: Menggunakan blok try-catch, validasi (!res.ok), parsing pesan error JSON backend, dan menampilkan umpan balik visual melalui window.JadwalinUI.toast."
+
+5. PERTANYAAN JEBAKAN & STRATEGI MENJAWAB
+Pertanyaan:
+"Kemarin ada bug di akun Haidar: di kalender tidak ada kartu merah tapi statusnya terdeteksi 1 bentrok jam. Kenapa itu terjadi?"
+
+Jawaban:
+"Akar masalahnya ada pada logika pencocokan sesi lama yang menyertakan operator ID (j.id === savedItem.id). Ketika master jadwal di-seed ulang, ID bergeser sehingga sesi semester 5 salah terhubung ke sesi semester 1 dan 3 yang kebetulan jamnya bertabrakan di hari Kamis. Karena dropdown sedang memfilter semester 5, kartu semester 1 dan 3 tidak digambar di layar tapi bentroknya tetap terhitung di latar belakang.
+Saya memperbaikinya dengan: 1) Mengunci pencocokan mutlak berdasarkan kodeMatkul dan kelas, dan 2) Menambahkan aturan Always-Visible pada getFilteredSessions() sehingga sesi terpilih pasti terlihat di layar."
+
+================================================================================
+BAGIAN 2: NUR RIZQI FEBRIANSYAH PUTRA (NIM: 20240140056)
+ROLE: AI Integration & Backend Core Solver
+================================================================================
+
+1. KONTRIBUSI NYATA
+Pertanyaan:
+"Apa saja kontribusi teknis utamamu di proyek Jadwalin?"
+
+Jawaban:
+"Fokus utama saya adalah membangun mesin penjadwalan cerdas (AI Solver Core) dan validator kendala:
+a. Integrasi Google Gemini API (services/aiSolverService.js):
+   - Merancang prompt engineering deterministik berbasis aturan PRD dengan format luaran JSON ketat (responseMimeType: application/json) dan suhu rendah (temperature: 0.1).
+b. Deterministic Fallback Solver (Greedy Constraint Satisfaction Problem / CSP):
+   - Membangun algoritma cadangan lokal jika API key Gemini tidak tersedia atau limit kuota habis.
+   - Menerapkan heuristik MRV (Most Constrained Variable First): memprioritaskan mata kuliah praktikum lab dan dosen dengan jam mengajar terbanyak.
+   - Menerapkan load balancing beban hari kerja (Senin-Sabtu) agar jadwal tidak menumpuk di hari Senin-Selasa saja.
+c. Validasi Hard & Soft Constraints Post-Generate:
+   - Validasi HC-01 (Zero clash dosen), HC-02 (Zero clash ruangan), HC-03 (Jeda ibadah Dhuhur & Ashar), HC-04 (Alokasi Ruang Kuliah Besar untuk kelas gabungan), dan Lab Matching 100%.
+   - Menghitung metrik keberhasilan PRD (M-01 sampai M-04)."
+
+2. ALUR WEB YANG DIKELOLA
+Pertanyaan:
+"Bagaimana alur dari saat admin menekan tombol Generate sampai jadwal keluar?"
+
+Jawaban:
+"1. Admin menekan tombol Generate di /admin/generate.
+2. Endpoint POST /api/generate menerima permintaan.
+3. Sistem mengumpulkan snapshot data master: dosen (beserta preferensi waktu dan hari off), ruangan (tipe dan kapasitas), serta mata kuliah (SKS, jenis, kelas).
+4. Payload dikirim ke callGeminiApi(). Jika gagal atau offline, dialihkan ke solveDeterministicFallback().
+5. Hasil jadwal divalidasi oleh validateGeneratedSchedule().
+6. Jadwal yang valid disinkronkan ke PostgreSQL melalui syncScheduleToDatabase() dan disimpan di memori JadwalModel.
+7. Laporan konflik, durasi generate, dan persentase kepuasan preferensi dikembalikan ke antarmuka admin."
+
+3. FUNGSI-FUNGSI KUNCI (FUNCTIONS CODE BREAKDOWN)
+Pertanyaan:
+"Sebutkan fungsi-fungsi backend paling krusial yang kamu tulis!"
+
+Jawaban:
+"- generateJadwal(options): Fungsi orkestrator utama yang menyiapkan data, memanggil Gemini / fallback, memvalidasi hasil, dan menghitung durasi generate.
+- buildPrompt(payload): Membangun instruksi prompt sistem terstruktur yang mendefinisikan aturan HC-01 hingga HC-04 dan format JSON luaran yang wajib dipatuhi model AI.
+- solveDeterministicFallback(payload): Algoritma CSP lokal yang menempatkan sesi kuliah ke slot waktu yang valid, membagi slot lab, dan menempatkan kelas gabungan di Ruang Kuliah Besar.
+- validateGeneratedSchedule(jadwalList, payload, durationSeconds): Memeriksa setiap pasangan sesi untuk memastikan tidak ada dosen mengajar di dua tempat atau ruangan terpakai bersamaan."
+
+4. PEMANFAATAN FETCH API / ENDPOINT BACKEND
+Pertanyaan:
+"Endpoint apa saja yang kamu buat dan bagaimana komunikasi datanya?"
+
+Jawaban:
+"- POST /api/generate: Endpoint utama untuk memicu pembuatan jadwal otomatis. Menerima opsi overrides dan mengembalikan { sukses, jadwal, evaluasi: { totalSesi, pelanggaranHardConstraint, persenPreferensiDosenTerpenuhi, persenLabMatching, durasiGenerateDetik } }.
+- fetch() ke Google Gemini API endpoint (https://generativelanguage.googleapis.com/v1beta/models/...) menggunakan method POST dengan AbortController untuk timeout 45 detik."
+
+5. PERTANYAAN JEBAKAN & STRATEGI MENJAWAB
+Pertanyaan:
+"Kenapa tidak pakai AI langsung untuk menjawab pertanyaan mahasiswa (chatbot)?"
+
+Jawaban:
+"Berdasarkan dokumen PRD bab Non-Goals, AI pada Jadwalin secara eksplisit dibatasi hanya untuk optimasi penjadwalan terpusat (resource allocation solver), bukan sebagai chatbot percakapan umum. Menggunakan AI sebagai chatbot di luar lingkup fungsional dan berisiko mengalami halusinasi informasi jadwal."
+
+================================================================================
+BAGIAN 3: NISRINA HANIFAH RAMADHANI / NANA (NIM: 20240140075)
+ROLE: Frontend Admin Panel & Master Data Management
+================================================================================
+
+1. KONTRIBUSI NYATA
+Pertanyaan:
+"Apa saja kontribusi yang kamu buat di bagian Admin Panel?"
+
+Jawaban:
+"Saya bertanggung jawab atas perancangan antarmuka seluruh portal administrasi akademik (/admin/*):
+a. Manajemen Data Master (views/admin/master/*):
+   - Halaman pengelolaan Dosen, Mata Kuliah, Ruangan, dan Mahasiswa.
+   - Komponen tabel data dinamis dilengkapi pencarian, pagination, dan counter jumlah data.
+   - Modal form tambah data, edit data, dan konfirmasi hapus data.
+b. Antarmuka Pengaturan Kendala (views/admin/constraints/*):
+   - Halaman Hard Constraints: sakelar (toggle switch) aktif/non-aktif kendala mutlak (zero clash dosen, ruangan, lab matching, jeda sholat).
+   - Halaman Soft Constraints: tabel daftar preferensi dosen (hari off dan waktu mengajar).
+c. Antarmuka Generate Jadwal AI (views/admin/generate.ejs):
+   - Panel kontrol generate, visualisasi progress, dan kartu ringkasan metrik jadwal.
+d. Preview Jadwal Admin (views/admin/jadwal.ejs):
+   - Segmented view switcher untuk beralih antara tampilan Kalender Mingguan dan Tabel Rinci."
+
+2. ALUR WEB YANG DIKELOLA
+Pertanyaan:
+"Bagaimana alur seorang staf akademik dalam mengelola data master dan memantau jadwal?"
+
+Jawaban:
+"1. Staf login dan diarahkan ke /admin/dashboard untuk melihat ringkasan statistik (jumlah ruang, dosen, dan status kepatuhan constraint).
+2. Staf membuka menu Data Master (misal /admin/master/ruangan) untuk mengecek ketersediaan lab dan Ruang Kuliah Besar F6.001.
+3. Staf membuka /admin/constraints/hard untuk memastikan aturan mutlak aktif sebelum jadwal disusun.
+4. Di halaman /admin/generate, staf menekan Generate dan melihat progress.
+5. Jika ada sesi yang bentrok, staf membuka laporan konflik di halaman preview /admin/jadwal dan melakukan penyesuaian sebelum mempublikasikan jadwal."
+
+3. FUNGSI-FUNGSI KUNCI (FUNCTIONS CODE BREAKDOWN)
+Pertanyaan:
+"Jelaskan fungsi-fungsi penting yang ada di halaman admin buatanmu!"
+
+Jawaban:
+"- initJadwalSwitcher(): Mengatur peralihan tampilan antara kalender grid mingguan dan tabel rincian data tanpa reload halaman.
+- applyFilter(): Mengambil nilai input pencarian, dropdown hari, tipe kuliah, dan status konflik, lalu menyaring baris tabel dan kartu grid secara instan di client.
+- openModal(modalId) & closeModal(modalId): Mengatur buka-tutup jendela modal form dengan transisi scale dan opacity Tailwind CSS.
+- focusToConflicts(): Tombol cepat untuk memfilter tampilan kalender agar hanya menyorot sesi-sesi yang memiliki status pelanggaran hard constraint."
+
+4. PEMANFAATAN FETCH API
+Pertanyaan:
+"Bagaimana antarmuka admin berkomunikasi dengan backend via Fetch?"
+
+Jawaban:
+"- Pemanggilan GET /api/master/* untuk memuat dan menyegarkan data tabel master.
+- Pemanggilan POST/PUT/DELETE ke endpoint API master saat staf menambah, mengedit, atau menghapus record dosen/ruangan/matkul.
+- Pemanggilan POST /api/generate saat tombol generate diklik untuk menerima data jadwal hasil optimasi dan laporan konflik secara asinkron."
+
+5. PERTANYAAN JEBAKAN & STRATEGI MENJAWAB
+Pertanyaan:
+"Bagaimana jika staf akademik salah memasukkan kapasitas ruangan menjadi 0 atau negatif?"
+
+Jawaban:
+"Di form modal ruangan, input kapasitas memiliki atribut type='number' min='10' max='200' dan required pada sisi HTML5. Selain itu, di sisi backend terdapat validasi skema Zod / Sequelize validator yang akan menolak input di luar batas integer yang wajar dengan pesan error."
+
+================================================================================
+BAGIAN 4: BIMA EKA SETIAWAN / BIMS (NIM: 20240140089)
+ROLE: Database Architecture, Sequelize ORM, Authentication & Seeders
+================================================================================
+
+1. KONTRIBUSI NYATA
+Pertanyaan:
+"Apa saja kontribusi teknismu dalam hal arsitektur database dan keamanan?"
+
+Jawaban:
+"Saya memegang fondasi data dan sistem otentikasi proyek Jadwalin:
+a. Desain Skema & Migrasi Database PostgreSQL (models/* dan migrations/*):
+   - Merancang 12 model Sequelize: User, Dosen, MataKuliah, Ruangan, Mahasiswa, PeriodeJadwal, JadwalSesi, JadwalDosen (relasi team teaching many-to-many), ConstraintHard, ConstraintSoft, Notifikasi, dan MahasiswaPrakrs.
+   - Mengatur relasi asosiasi antar tabel (belongsTo, hasMany, belongsToMany).
+b. Sistem Autentikasi & Otorisasi Berbasis Peran (RBAC):
+   - Login berbasis username/NIM/NIDN dengan enkripsi password menggunakan bcrypt.
+   - Pengelolaan sesi login dan token JWT serta middleware pengecekan peran (Admin, Dosen, Mahasiswa).
+c. Database Seeder Realistis (seeders/*):
+   - Menyusun data seeder: 21 dosen tetap TI UMY, daftar lengkap mata kuliah (Semester 1 s/d 8 beserta peminatan SE dan NS), kapasitas ruangan gedung F4 dan F6, dan contoh mahasiswa berbagai rombel."
+
+2. ALUR WEB YANG DIKELOLA
+Pertanyaan:
+"Jelaskan alur autentikasi dan siklus transaksi data di database!"
+
+Jawaban:
+"1. Pengguna membuka halaman login (/login) dan memasukkan kredensial.
+2. Endpoint POST /api/auth/login memeriksa apakah user terdaftar di tabel users.
+3. Sandi diverifikasi menggunakan bcrypt.compare().
+4. Jika valid, sesi login dibuat dan peran pengguna (role) disimpan di session / cookie.
+5. Setiap kali request masuk ke rute terproteksi, middleware autentikasi memeriksa session pengguna dan membatasi akses sesuai role.
+6. Saat penyimpanan jadwal berlangsung, Sequelize mengelola transaksi agar data jadwal_sesis dan relasi jadwal_dosens tersimpan secara konsisten (atomic)."
+
+3. FUNGSI-FUNGSI KUNCI (FUNCTIONS CODE BREAKDOWN)
+Pertanyaan:
+"Sebutkan fungsi-fungsi backend yang kamu bangun!"
+
+Jawaban:
+"- authController.login(req, res): Memvalidasi body request, mencari pengguna berdasarkan username, memeriksa password hash, dan mengembalikan sesi otentikasi.
+- authMiddleware(roles): Middleware bertingkat yang memeriksa apakah request memiliki token/sesi yang valid dan memastikan req.user.role berada dalam daftar peran yang diizinkan.
+- initModels(sequelize): Menginisialisasi seluruh model dan mendefinisikan relasi asosiasi (misalnya JadwalSesi.belongsTo(Ruangan) dan JadwalSesi.belongsToMany(Dosen, { through: JadwalDosen })).
+- syncTableSequence(): Mengatur sequence auto-increment PostgreSQL agar tidak terjadi bentrok primary key saat data di-seed atau di-generate ulang."
+
+4. PEMANFAATAN FETCH API / ENDPOINT BACKEND
+Pertanyaan:
+"Endpoint apa saja yang menjadi tanggung jawabmu?"
+
+Jawaban:
+"- POST /api/auth/login: Menerima kredensial login dan mengembalikan status autentikasi beserta profil peran pengguna.
+- POST /api/auth/logout: Menghancurkan session pengguna dan mengarahkan kembali ke portal publik.
+- GET /api/auth/me: Mengembalikan data profil pengguna yang sedang aktif (NIM/NIDN, nama lengkap, role, dan semester aktif jika mahasiswa)."
+
+5. PERTANYAAN JEBAKAN & STRATEGI MENJAWAB
+Pertanyaan:
+"Bagaimana database Jadwalin menangani dosen yang mengajar secara Team Teaching (lebih dari satu dosen dalam satu sesi kuliah)?"
+
+Jawaban:
+"Kami menggunakan tabel perantara (junction table) bernama jadwal_dosens yang menghubungkan jadwal_sesis dengan dosens secara many-to-many. Di tabel ini terdapat kolom is_team_teaching. Ketika satu sesi diampu oleh dua dosen (misalnya DP dan QA pada mata kuliah Pemrograman Web Service), sesi tersebut memiliki dua entri di jadwal_dosens sehingga kedua dosen terikat ke sesi tersebut dan AI solver dapat memastikan tidak ada satu pun dari kedua dosen tersebut yang mengalami bentrok waktu di kelas lain."
+
+================================================================================
+BAGIAN 5: RESYA GLAMODA SUHENDRI / RESYA (NIM: 20240140091)
+ROLE: Frontend Portal Dosen & Mahasiswa
+================================================================================
+
+1. KONTRIBUSI NYATA
+Pertanyaan:
+"Apa saja kontribusi utamamu pada portal dosen dan mahasiswa?"
+
+Jawaban:
+"Saya berfokus pada antarmuka pengguna di sisi civitas akademika:
+a. Portal Dosen (views/dosen/*):
+   - Halaman Dashboard Dosen: menampilkan ringkasan beban SKS mengajar dan jadwal mengajar hari ini.
+   - Form Pengisian Preferensi Waktu Mengajar (/dosen/preferensi): dosen dapat memilih hari riset (hariOff) dan waktu mengajar yang disukai (pagi atau siang) beserta catatan alasan.
+   - Halaman Jadwal Mengajar Dosen (/dosen/jadwal): tampilan agenda dan matriks jadwal khusus mata kuliah yang diampu oleh dosen yang sedang login.
+b. Portal Mahasiswa (views/mahasiswa/*):
+   - Halaman Dashboard Mahasiswa: kartu informasi akademik, ringkasan jadwal hari ini, dan widget hitung mundur (countdown) sesi kuliah berikutnya secara real-time.
+   - Halaman Jadwal Kuliah Saya (/mahasiswa/jadwal): tampilan jadwal studi personal mahasiswa yang rapi dan responsif mobile.
+c. Pusat Notifikasi (views/mahasiswa/notifikasi.ejs dan views/dosen/notifikasi.ejs):
+   - Daftar riwayat pemberitahuan perubahan jadwal kuliah dengan penanda status dibaca."
+
+2. ALUR WEB YANG DIKELOLA
+Pertanyaan:
+"Bagaimana alur dosen saat mengisi preferensi mengajar hingga masuk ke sistem?"
+
+Jawaban:
+"1. Dosen login ke /dosen/dashboard.
+2. Dosen memilih menu 'Preferensi Waktu'.
+3. Form menampilkan preferensi saat ini yang tersimpan di database.
+4. Dosen memilih hari libur mengajar (misal: hari Jumat untuk kegiatan riset), memilih preferensi jam (misal: pagi 07:00-11:30), dan mengisi alasan.
+5. Saat form disimpan, data dikirim ke backend dan tersimpan ke tabel constraint_softs.
+6. Saat admin menjalankan AI generate jadwal, solver membaca data ini dan berusaha 100% mengakomodasi agar dosen tidak dijadwalkan pada hari Jumat."
+
+3. FUNGSI-FUNGSI KUNCI (FUNCTIONS CODE BREAKDOWN)
+Pertanyaan:
+"Sebutkan fungsi JavaScript penting yang kamu buat di sisi client!"
+
+Jawaban:
+"- initCountdownWidget(): Menghitung selisih waktu antara waktu lokal saat ini dengan jamMulai sesi kuliah terdekat mahasiswa, lalu memperbarui teks hitung mundur (jam:menit:detik) setiap 1 detik menggunakan setInterval().
+- handleSavePreferensi(event): Menangkap form submit preferensi dosen, menyusun payload JSON, dan mengirimkannya ke endpoint API.
+- filterJadwalPersonal(): Menyaring jadwal kuliah pribadi mahasiswa berdasarkan hari perkuliahan (Senin-Sabtu) pada tampilan smartphone."
+
+4. PEMANFAATAN FETCH API
+Pertanyaan:
+"Di mana saja Fetch API digunakan di portal dosen dan mahasiswa?"
+
+Jawaban:
+"- POST /api/dosen/preferensi: Mengirim data hari off dan preferensi jam mengajar dosen.
+- PUT /api/notifikasi/:id/read: Menandai notifikasi telah dibaca saat pengguna mengklik kartu notifikasi.
+- GET /api/mahasiswa/jadwal: Memuat jadwal kuliah personal mahasiswa secara asinkron saat beralih hari di tampilan mobile."
+
+5. PERTANYAAN JEBAKAN & STRATEGI MENJAWAB
+Pertanyaan:
+"Apakah preferensi dosen yang diisi dijamin 100% pasti terpenuhi oleh AI generator?"
+
+Jawaban:
+"Tidak dijamin 100% mutlak, karena preferensi dosen berstatus Soft Constraint (SC-01 dan SC-02). Berdasarkan PRD metrik M-04, target keberhasilan pemenuhan preferensi dosen adalah minimal 90%. Jika kapasitas ruangan atau slot waktu sangat padat, sistem memprioritaskan pemenuhan Hard Constraint terlebih dahulu (nol bentrok), namun tetap berusaha semaksimal mungkin mengakomodasi preferensi dosen."
+
+================================================================================
+BAGIAN 6: A. MUH. FADIL ASYTAR / FADIL (NIM: 20240140133)
+ROLE: Jadwal Distribution, Notification Engine & Publication Flow
+================================================================================
+
+1. KONTRIBUSI NYATA
+Pertanyaan:
+"Apa saja peran teknismu dalam hal publikasi jadwal dan notifikasi?"
+
+Jawaban:
+"Tanggung jawab saya mencakup penyebaran jadwal dan sistem komunikasi perubahan data:
+a. Alur Publikasi Jadwal (Publication Flow):
+   - Membangun endpoint dan logika verifikasi sebelum jadwal dipublikasikan (POST /api/jadwal/publish).
+   - Memastikan bahwa jadwal hanya bisa dipublikasikan jika total pelanggaran Hard Constraint adalah 0.
+   - Mengubah status periode akademik menjadi PUBLISHED.
+b. Notification Service & Dispatcher (services/notifikasiService.js):
+   - Membangun mekanisme pencatatan otomatis setiap kali ada pergeseran slot jadwal (ruang atau jam).
+   - Mendistribusikan notifikasi secara terarah ke peran yang terdampak (dosen pengampu dan mahasiswa yang mengambil mata kuliah terkait).
+c. API Controller Penjadwalan & Kendala (controllers/jadwalController.js & constraintController.js):
+   - Mengelola endpoint penyaringan jadwal dengan berbagai kombinasi filter (dosen, ruangan, kelas, semester, peminatan).
+   - Mengelola endpoint CRUD Hard Constraints dan Soft Constraints."
+
+2. ALUR WEB YANG DIKELOLA
+Pertanyaan:
+"Bagaimana alur kerja sistem notifikasi saat ada perubahan jadwal kuliah?"
+
+Jawaban:
+"1. Admin mengubah jadwal suatu mata kuliah (baik melalui modal edit form maupun aksi drag-and-drop di matriks jadwal).
+2. Controller memanggil notifikasiService.catatPerubahanSlot().
+3. Layanan notifikasi membuat baris baru di tabel notifikasis dengan rincian: mata kuliah yang berubah, waktu/ruangan lama, dan waktu/ruangan baru.
+4. Kolom target_role diisi 'dosen' atau 'mahasiswa', dan target_ref_id diisi sesuai ID pengguna yang bersangkutan.
+5. Saat dosen atau mahasiswa login, ikon lonceng di navbar menampilkan badge jumlah notifikasi belum dibaca (unread count).
+6. Pengguna membuka laci notifikasi atau halaman /notifikasi untuk membaca rincian perubahan tersebut."
+
+3. FUNGSI-FUNGSI KUNCI (FUNCTIONS CODE BREAKDOWN)
+Pertanyaan:
+"Jelaskan fungsi backend utama yang kamu buat!"
+
+Jawaban:
+"- catatPerubahanSlot({ periode, sesi, lama, baru, aktor }): Menyusun judul dan pesan deskriptif perubahan jadwal, lalu menyimpannya ke tabel Notifikasi di PostgreSQL.
+- publishJadwal(req, res): Memeriksa status evaluasi jadwal saat ini. Jika masih ada konflik, request ditolak dengan HTTP 400. Jika nol konflik, status periode diperbarui menjadi Terpublikasi dan tanggal published_at dicatat.
+- getDaftarJadwal(req, res): Mengambil data sesi kuliah aktif dari database dengan opsi filter dinamis (hari, ruangan, semester, kelas)."
+
+4. PEMANFAATAN FETCH API / ENDPOINT BACKEND
+Pertanyaan:
+"Endpoint apa saja yang kamu buat dan bagaimana pengujiannya?"
+
+Jawaban:
+"- POST /api/jadwal/publish: Endpoint penguncian jadwal dan pengubahan status ke PUBLISHED.
+- POST /api/jadwal/revisi: Endpoint pembaruan sesi jadwal yang mencatat log riwayat perubahan.
+- GET /api/notifikasi: Mengambil daftar notifikasi milik pengguna yang sedang login.
+- PUT /api/notifikasi/read-all: Menandai seluruh notifikasi milik pengguna menjadi is_read = true."
+
+5. PERTANYAAN JEBAKAN & STRATEGI MENJAWAB
+Pertanyaan:
+"Mengapa publikasi jadwal harus memblokir jika ada konflik? Kenapa tidak dibiarkan terbit saja lalu diperbaiki nanti?"
+
+Jawaban:
+"Sesuai Acceptance Criteria US-04 pada PRD, publikasi jadwal memiliki aturan ketat bahwa hanya jadwal yang benar-benar bebas dari pelanggaran Hard Constraint (0 bentrok dosen dan ruang) yang boleh dilihat oleh civitas akademika. Jika jadwal yang bentrok dipublikasikan, dosen dan mahasiswa akan datang ke ruangan yang sama di waktu yang sama, yang merusak kredibilitas sistem akademik."
+
+================================================================================
+RINGKASAN CEPAT STRATEGI MENGHADAPI WAWANCARA:
+1. Tetap tenang, dengarkan pertanyaan dosen sampai selesai sebelum menjawab.
+2. Jawab secara terstruktur: sebutkan nama fitur, file kodenya, dan alasan teknisnya.
+3. Selalu kaitkan jawaban dengan kepatuhan terhadap PRD (Product Requirements Document).
+4. Tunjukkan bahwa tim Anda saling terintegrasi dan memahami batas tugas masing-masing.
+================================================================================
