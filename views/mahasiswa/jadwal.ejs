@@ -51,53 +51,70 @@
         </div>
       </div>
 
-      <!-- Single-Row Unified Toolbar (Scope + View Switcher + Inline Search & Filter) -->
-      <div class="rounded-xl border border-zinc-200 bg-white p-2.5 sm:p-3 shadow-2xs dark:border-zinc-800 dark:bg-zinc-900 space-y-2.5">
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
-          <!-- Left: Scope & View Mode Segmented Controls -->
-          <div class="flex flex-wrap items-center gap-2">
-            <div class="inline-flex rounded-md border border-zinc-200 bg-zinc-100 p-0.5 dark:border-zinc-800 dark:bg-zinc-800">
-              <button id="scope-mode-personal" type="button"
-                class="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-semibold bg-[#0c2b5e] text-white shadow-2xs transition-all">
-                <i class="ph ph-user-check text-xs text-amber-400"></i>
-                <span>Jadwal Pribadi (<%= personalSesiList.length %>)</span>
-              </button>
-              <button id="scope-mode-all" type="button"
-                class="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
-                <i class="ph ph-buildings text-xs"></i>
-                <span>Seluruh Prodi (<%= (jadwal || []).length %>)</span>
-              </button>
-            </div>
+      <!-- Unified Toolbar & Filter Controls Panel -->
+      <div class="rounded-2xl border border-zinc-200 bg-white p-3.5 sm:p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
+        <!-- Baris 1: Scope Navigasi & Mode Tampilan -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-zinc-100 pb-3 dark:border-zinc-800/80">
+          
+          <!-- Kiri: Scope Switcher (Jadwal Pribadi vs Seluruh Prodi) -->
+          <div class="inline-flex items-center gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200/80 dark:border-zinc-700/60 w-fit">
+            <button id="scope-mode-personal" type="button"
+              class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold bg-[#0c2b5e] text-white shadow-xs transition-all">
+              <i class="ph ph-user-check text-sm text-amber-400"></i>
+              <span>Jadwal Pribadi (<%= personalSesiList.length %>)</span>
+            </button>
+            <button id="scope-mode-all" type="button"
+              class="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
+              <i class="ph ph-buildings text-sm"></i>
+              <span>Seluruh Prodi (<%= (jadwal || []).length %>)</span>
+            </button>
+          </div>
 
-            <div class="inline-flex rounded-md border border-zinc-200 bg-zinc-100 p-0.5 dark:border-zinc-800 dark:bg-zinc-800">
-              <button id="view-mode-grid" type="button"
-                class="inline-flex items-center gap-1.5 rounded bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-2xs dark:bg-zinc-900 dark:text-zinc-100 transition-all">
-                <i class="ph ph-squares-four text-xs text-[#0c2b5e] dark:text-amber-400"></i>
-                <span>Grid Mingguan</span>
+          <!-- Kanan: View Switcher (Grid, Agenda, Tabel) + Hasil Counter -->
+          <div class="flex flex-wrap items-center gap-2">
+            <span id="active-count-label" class="font-mono text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700">
+              Menampilkan <%= personalSesiList.length %> sesi
+            </span>
+
+            <div class="inline-flex items-center gap-1 p-1 rounded-xl bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200/80 dark:border-zinc-700/60">
+              <button id="view-mode-grid" type="button" title="Grid Mingguan"
+                class="inline-flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100 transition-all">
+                <i class="ph ph-squares-four text-sm text-[#0c2b5e] dark:text-amber-400"></i>
+                <span class="hidden sm:inline">Grid Mingguan</span>
               </button>
-              <button id="view-mode-agenda" type="button"
-                class="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
-                <i class="ph ph-list-dashes text-xs"></i>
-                <span>Agenda Harian</span>
+              <button id="view-mode-agenda" type="button" title="Agenda Harian"
+                class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
+                <i class="ph ph-calendar-blank text-sm"></i>
+                <span class="hidden sm:inline">Agenda Harian</span>
               </button>
-              <button id="view-mode-table" type="button"
-                class="inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
-                <i class="ph ph-table text-xs"></i>
-                <span>Tabel Rinci</span>
+              <button id="view-mode-table" type="button" title="Tabel Rinci"
+                class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
+                <i class="ph ph-table text-sm"></i>
+                <span class="hidden sm:inline">Tabel Rinci</span>
               </button>
             </div>
           </div>
 
-          <!-- Right: Compact Inline Search + Hari Filter + Reset -->
-          <div class="flex flex-wrap items-center gap-2">
-            <div class="relative flex-1 sm:flex-initial sm:w-52">
-              <input id="filter-cari" type="text" maxlength="40" placeholder="Cari matkul, dosen, ruang..."
-                class="w-full h-8 rounded-md border border-zinc-200 bg-zinc-50 pl-8 pr-2.5 text-xs text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:bg-white focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100">
-              <i class="ph ph-magnifying-glass absolute left-2.5 top-2 text-zinc-400 text-xs"></i>
-            </div>
+        </div>
 
+        <!-- Baris 2: Controls Filter & Pencarian Rapi Responsif -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-12 gap-2.5 items-center">
+          
+          <!-- Input Pencarian (4 kolom di layar lg) -->
+          <div class="relative sm:col-span-2 md:col-span-3 lg:col-span-4">
+            <input id="filter-cari" type="text" maxlength="40" placeholder="Cari mata kuliah, dosen, ruang..."
+              class="w-full h-9 rounded-lg border border-zinc-200 bg-zinc-50/80 pl-8 pr-8 text-xs text-zinc-900 placeholder-zinc-400 focus:border-blue-900 focus:bg-white focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-blue-500 transition-colors">
+            <i class="ph ph-magnifying-glass absolute left-2.5 top-2.5 text-zinc-400 text-sm"></i>
+            <button id="btn-clear-search" type="button" title="Hapus pencarian"
+              class="hidden absolute right-2 top-2 h-5 w-5 items-center justify-center rounded-full text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 hover:bg-zinc-200/60 dark:hover:bg-zinc-700 transition-colors">
+              <i class="ph ph-x text-xs"></i>
+            </button>
+          </div>
+
+          <!-- Filter Hari (2 kolom di layar lg) -->
+          <div class="lg:col-span-2">
             <select id="filter-hari" aria-label="Filter Hari"
-              class="h-8 rounded-md border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+              class="w-full h-9 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900">
               <option value="">Semua Hari</option>
               <option value="Senin">Senin</option>
               <option value="Selasa">Selasa</option>
@@ -106,44 +123,53 @@
               <option value="Jumat">Jumat</option>
               <option value="Sabtu">Sabtu</option>
             </select>
+          </div>
 
-            <span id="active-count-label" class="hidden xl:inline font-mono text-[11px] text-zinc-500"></span>
+          <!-- Filter Kelas (2 kolom di layar lg) -->
+          <div class="lg:col-span-2">
+            <select id="filter-kelas" aria-label="Filter Kelas"
+              class="w-full h-9 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900">
+              <option value="">Semua Kelas (A–F)</option>
+              <option value="A">Kelas A</option>
+              <option value="B">Kelas B</option>
+              <option value="C">Kelas C</option>
+              <option value="D">Kelas D</option>
+              <option value="E">Kelas E</option>
+              <option value="F">Kelas F</option>
+            </select>
+          </div>
 
-            <button id="btn-reset-filter" type="button" title="Reset Filter"
-              class="inline-flex h-8 items-center gap-1 rounded-md border border-zinc-200 px-2.5 text-xs font-medium text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800">
-              <i class="ph ph-arrow-counter-clockwise text-xs"></i>
-              <span>Reset</span>
+          <!-- Filter Tipe Ruangan / Sesi (2 kolom di layar lg) -->
+          <div class="lg:col-span-2">
+            <select id="filter-tipe-ruang" aria-label="Filter Kategori"
+              class="w-full h-9 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900">
+              <option value="">Semua Kategori</option>
+              <option value="reguler">Kuliah Teori</option>
+              <option value="lab">Praktikum Lab</option>
+            </select>
+          </div>
+
+          <!-- Filter Peminatan (1 kolom di layar lg) -->
+          <div class="lg:col-span-1">
+            <select id="filter-peminatan" aria-label="Filter Jalur"
+              class="w-full h-9 rounded-lg border border-zinc-200 bg-white px-2 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-blue-900">
+              <option value="">Jalur</option>
+              <option value="SE">SE</option>
+              <option value="NS">NS</option>
+            </select>
+          </div>
+
+          <!-- Tombol Reset (1 kolom di layar lg) -->
+          <div class="lg:col-span-1 flex items-center justify-end">
+            <button id="btn-reset-filter" type="button" title="Reset Semua Filter"
+              class="w-full h-9 inline-flex items-center justify-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs font-semibold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 transition-colors shadow-2xs">
+              <i class="ph ph-arrow-counter-clockwise text-sm"></i>
+              <span class="md:hidden lg:inline text-[11px]">Reset</span>
             </button>
           </div>
+
         </div>
 
-        <!-- Baris Filter Prodi Tambahan (Hanya Muncul Saat Tab "Seluruh Prodi" Aktif) -->
-        <div id="prodi-extra-filters" class="hidden pt-2 border-t border-zinc-100 dark:border-zinc-800 grid grid-cols-1 sm:grid-cols-3 gap-2">
-          <select id="filter-kelas" aria-label="Filter Kelas"
-            class="h-8 rounded-md border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-            <option value="">Semua Rombel (Kelas A–F)</option>
-            <option value="A">Kelas A</option>
-            <option value="B">Kelas B</option>
-            <option value="C">Kelas C</option>
-            <option value="D">Kelas D</option>
-            <option value="E">Kelas E</option>
-            <option value="F">Kelas F</option>
-          </select>
-
-          <select id="filter-tipe-ruang" aria-label="Filter Tipe Ruangan"
-            class="h-8 rounded-md border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-            <option value="">Semua Tipe Ruangan</option>
-            <option value="lab">Laboratorium Komputer</option>
-            <option value="reguler">Ruang Teori (Reguler)</option>
-          </select>
-
-          <select id="filter-peminatan" aria-label="Filter Peminatan"
-            class="h-8 rounded-md border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-            <option value="">Semua Jalur Peminatan</option>
-            <option value="SE">Software Engineering (SE)</option>
-            <option value="NS">Network &amp; Cyber Security (NS)</option>
-          </select>
-        </div>
       </div>
 
       <!-- ==================== VIEW 1: KALENDER GRID MINGGUAN ==================== -->
@@ -409,6 +435,7 @@
         const filterTipeRuang = document.getElementById('filter-tipe-ruang');
         const filterPeminatan = document.getElementById('filter-peminatan');
         const filterCari = document.getElementById('filter-cari');
+        const btnClearSearch = document.getElementById('btn-clear-search');
         const btnReset = document.getElementById('btn-reset-filter');
         const countLabel = document.getElementById('active-count-label');
 
@@ -705,28 +732,34 @@
         // Update Function
         function updateViews() {
           const filtered = getFilteredData();
+          if (countLabel) {
+            countLabel.textContent = `Menampilkan ${filtered.length} sesi`;
+          }
           renderGrid(filtered);
           renderAgenda(filtered);
           renderTable(filtered);
         }
 
         // Switch View Mode
+        const ACTIVE_VIEW_CLS = 'inline-flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100 transition-all';
+        const INACTIVE_VIEW_CLS = 'inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+
         viewGridBtn.addEventListener('click', () => {
           gridContainer.classList.remove('hidden');
           agendaContainer.classList.add('hidden');
           if (tableContainer) tableContainer.classList.add('hidden');
-          viewGridBtn.className = 'inline-flex items-center gap-1.5 rounded bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-2xs dark:bg-zinc-900 dark:text-zinc-100 transition-all';
-          viewAgendaBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
-          if (viewTableBtn) viewTableBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+          viewGridBtn.className = ACTIVE_VIEW_CLS;
+          viewAgendaBtn.className = INACTIVE_VIEW_CLS;
+          if (viewTableBtn) viewTableBtn.className = INACTIVE_VIEW_CLS;
         });
 
         viewAgendaBtn.addEventListener('click', () => {
           gridContainer.classList.add('hidden');
           agendaContainer.classList.remove('hidden');
           if (tableContainer) tableContainer.classList.add('hidden');
-          viewAgendaBtn.className = 'inline-flex items-center gap-1.5 rounded bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-2xs dark:bg-zinc-900 dark:text-zinc-100 transition-all';
-          viewGridBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
-          if (viewTableBtn) viewTableBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+          viewAgendaBtn.className = ACTIVE_VIEW_CLS;
+          viewGridBtn.className = INACTIVE_VIEW_CLS;
+          if (viewTableBtn) viewTableBtn.className = INACTIVE_VIEW_CLS;
           renderAgenda(getFilteredData());
         });
 
@@ -735,9 +768,9 @@
             gridContainer.classList.add('hidden');
             agendaContainer.classList.add('hidden');
             tableContainer.classList.remove('hidden');
-            viewTableBtn.className = 'inline-flex items-center gap-1.5 rounded bg-white px-2.5 py-1.5 text-xs font-semibold text-zinc-900 shadow-2xs dark:bg-zinc-900 dark:text-zinc-100 transition-all';
-            viewGridBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
-            viewAgendaBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+            viewTableBtn.className = ACTIVE_VIEW_CLS;
+            viewGridBtn.className = INACTIVE_VIEW_CLS;
+            viewAgendaBtn.className = INACTIVE_VIEW_CLS;
             renderTable(getFilteredData());
           });
         }
@@ -748,7 +781,7 @@
             agendaDayTabs.forEach(t => {
               t.className = 'agenda-tab inline-flex min-h-[38px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 transition-colors';
             });
-            tab.className = 'agenda-tab inline-flex min-h-[38px] items-center gap-1.5 rounded-lg bg-brand-blue px-4 py-2 text-xs font-semibold text-white shadow-sm dark:bg-amber-500 dark:text-zinc-900 transition-colors';
+            tab.className = 'agenda-tab inline-flex min-h-[38px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] px-4 py-2 text-xs font-semibold text-white shadow-sm dark:bg-amber-500 dark:text-zinc-900 transition-colors';
             currentSelectedAgendaDay = tab.getAttribute('data-day');
             renderAgenda(getFilteredData());
           });
@@ -756,26 +789,44 @@
 
         // Filter Listeners
         [filterHari, filterKelas, filterTipeRuang, filterPeminatan].forEach(el => {
-          el.addEventListener('change', updateViews);
+          if (el) el.addEventListener('change', updateViews);
         });
-        filterCari.addEventListener('input', updateViews);
 
-        const prodiExtraFilters = document.getElementById('prodi-extra-filters');
+        filterCari.addEventListener('input', () => {
+          if (btnClearSearch) {
+            if (filterCari.value.trim().length > 0) {
+              btnClearSearch.classList.remove('hidden');
+              btnClearSearch.classList.add('flex');
+            } else {
+              btnClearSearch.classList.add('hidden');
+              btnClearSearch.classList.remove('flex');
+            }
+          }
+          updateViews();
+        });
+
+        if (btnClearSearch) {
+          btnClearSearch.addEventListener('click', () => {
+            filterCari.value = '';
+            btnClearSearch.classList.add('hidden');
+            btnClearSearch.classList.remove('flex');
+            updateViews();
+            filterCari.focus();
+          });
+        }
+
         if (scopePersonalBtn && scopeAllBtn) {
           scopePersonalBtn.addEventListener('click', () => {
             currentScope = 'personal';
-            filterKelas.value = '';
-            if (prodiExtraFilters) prodiExtraFilters.classList.add('hidden');
-            scopePersonalBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-semibold bg-[#0c2b5e] text-white shadow-2xs transition-all';
-            scopeAllBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+            scopePersonalBtn.className = 'inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold bg-[#0c2b5e] text-white shadow-xs transition-all';
+            scopeAllBtn.className = 'inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
             updateViews();
           });
 
           scopeAllBtn.addEventListener('click', () => {
             currentScope = 'all';
-            if (prodiExtraFilters) prodiExtraFilters.classList.remove('hidden');
-            scopeAllBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-semibold bg-[#0c2b5e] text-white shadow-2xs transition-all';
-            scopePersonalBtn.className = 'inline-flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+            scopeAllBtn.className = 'inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold bg-[#0c2b5e] text-white shadow-xs transition-all';
+            scopePersonalBtn.className = 'inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
             updateViews();
           });
         }
@@ -786,8 +837,14 @@
           filterTipeRuang.value = '';
           filterPeminatan.value = '';
           filterCari.value = '';
+          if (btnClearSearch) {
+            btnClearSearch.classList.add('hidden');
+            btnClearSearch.classList.remove('flex');
+          }
           updateViews();
-          JadwalinUI.toast.show('Filter berhasil direset ke setelan awal', 'info');
+          if (window.JadwalinUI?.toast) {
+            window.JadwalinUI.toast.show('Filter berhasil dikembalikan ke setelan awal', 'info');
+          }
         });
 
         // Initial render
