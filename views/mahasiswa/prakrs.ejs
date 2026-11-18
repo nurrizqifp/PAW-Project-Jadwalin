@@ -1,4 +1,4 @@
-<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Onboarding & Wizard Pra-KRS — Jadwalin' }) %>
+<%- include('../partials/head', { judul: typeof judul !== 'undefined' ? judul : 'Perencanaan Pra-KRS — Jadwalin' }) %>
 
 <div class="flex-1 flex min-h-screen">
   <%- include('../partials/admin-sidebar', { activeMenu: 'prakrs', currentRole: 'mahasiswa' }) %>
@@ -9,534 +9,293 @@
     <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-zinc-50/50 dark:bg-zinc-950/50">
       <div class="max-w-7xl mx-auto space-y-6">
 
-  <% const prkAccess = (typeof prakrsAccess !== 'undefined' && prakrsAccess) ? prakrsAccess : { isOpen: true, deadline: '2026-12-31', reason: 'Pengisian Pra-KRS sedang dibuka.' }; %>
-  <!-- Breadcrumb & Header Navigasi -->
-  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200/80 pb-5 dark:border-zinc-800">
-    <div class="space-y-0.5">
-      <h1 class="font-heading text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-        Pengisian Pra-KRS
-      </h1>
-      <p class="text-xs text-zinc-500 dark:text-zinc-400">
-        Susun paket mata kuliah bebas bentrok dan simpan ke jadwal pribadi.
-      </p>
-    </div>
-
-    <!-- Quick Status Badge -->
-    <% if (prkAccess.isOpen) { %>
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 text-xs font-semibold">
-        <i class="ph ph-check-circle text-emerald-600 text-sm"></i>
-        <span>Terbuka s/d <%= prkAccess.deadline %></span>
-      </div>
-    <% } else { %>
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-rose-300 bg-rose-50 text-rose-900 dark:border-rose-800 dark:bg-rose-950/50 dark:text-rose-300 text-xs font-semibold">
-        <i class="ph ph-lock-key text-rose-600 text-sm"></i>
-        <span>Pra-KRS Ditutup (<%= prkAccess.deadline %>)</span>
-      </div>
-    <% } %>
-  </div>
-
-  <% if (!prkAccess.isOpen) { %>
-    <!-- STATE TERKUNCI: PRA-KRS SUDAH DITUTUP -->
-    <div class="rounded-2xl border border-rose-200 bg-white p-8 text-center shadow-sm dark:border-rose-900/60 dark:bg-zinc-900 space-y-4">
-      <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-100 text-rose-600 dark:bg-rose-950/70 dark:text-rose-400 border border-rose-200 dark:border-rose-800">
-        <i class="ph ph-lock-key text-3xl"></i>
-      </div>
-      <div class="space-y-1.5 max-w-lg mx-auto">
-        <span class="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2.5 py-0.5 font-mono text-[11px] font-bold text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
-          AKSES PRA-KRS DITUTUP
-        </span>
-        <h2 class="font-heading text-xl font-bold text-zinc-900 dark:text-zinc-50 pt-1">
-          Periode Pengisian Pra-KRS Tidak Dapat Diakses
-        </h2>
-        <p class="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          <%= prkAccess.reason %> Anda tidak dapat mengubah atau mengirim ulang pilihan mata kuliah pada periode ini.
-        </p>
-      </div>
-      <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-        <a href="/mahasiswa/jadwal" class="inline-flex min-h-[40px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-5 py-2 text-xs font-semibold text-white shadow-xs transition-colors">
-          <i class="ph ph-calendar-check text-base text-amber-400"></i>
-          <span>Lihat Jadwal Pribadi Saya</span>
-        </a>
-        <a href="/mahasiswa/dashboard" class="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-4 py-2 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
-          <i class="ph ph-arrow-left text-base"></i>
-          <span>Kembali ke Dashboard</span>
-        </a>
-      </div>
-    </div>
-  <% } %>
-
-  <div class="<%= !prkAccess.isOpen ? 'hidden pointer-events-none select-none' : 'space-y-6' %>">
-
-  <!-- Wizard 3-Step Indicator Tracker (Clickable Tabs) -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-    <!-- Step 1 Tab -->
-    <div id="step-nav-1" role="button" tabindex="0" class="step-nav-item cursor-pointer flex items-center gap-3 rounded-xl border border-brand-blue bg-brand-blue p-3.5 text-white shadow-sm transition-all">
-      <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 font-mono text-sm font-bold text-white">
-        1
-      </div>
-      <div>
-        <p class="text-xs font-bold leading-tight">Profil & Preferensi</p>
-        <p class="text-[11px] opacity-80 mt-0.5">Identitas, Rombel & Peminatan</p>
-      </div>
-    </div>
-
-    <!-- Step 2 Tab -->
-    <div id="step-nav-2" role="button" tabindex="0" class="step-nav-item cursor-pointer flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3.5 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 transition-all">
-      <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 font-mono text-sm font-bold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-        2
-      </div>
-      <div>
-        <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-200 leading-tight">Pilih Mata Kuliah</p>
-        <p class="text-[11px] mt-0.5">Paket Wajib & Counter SKS</p>
-      </div>
-    </div>
-
-    <!-- Step 3 Tab -->
-    <div id="step-nav-3" role="button" tabindex="0" class="step-nav-item cursor-pointer flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3.5 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 transition-all">
-      <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 font-mono text-sm font-bold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-        3
-      </div>
-      <div>
-        <p class="text-xs font-semibold text-zinc-900 dark:text-zinc-200 leading-tight">Rekomendasi Paket AI</p>
-        <p class="text-[11px] mt-0.5">Verifikasi Zero Clash & Simpan</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Wizard Forms Container -->
-  <div class="space-y-6">
-
-    <!-- ==================== LANGKAH 1: PROFIL & PREFERENSI ==================== -->
-    <section id="wizard-step-1" class="wizard-pane space-y-6">
-      <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-6">
-        <div class="border-b border-zinc-100 pb-3 dark:border-zinc-800 flex items-center justify-between">
-          <h2 class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">
-            Langkah 1: Profil & Preferensi
-          </h2>
-          <span class="hidden sm:inline-flex px-2.5 py-0.5 rounded-md bg-blue-50 text-brand-blue dark:bg-blue-950/60 dark:text-blue-300 font-semibold text-xs">
-            TI UMY
-          </span>
-        </div>
-
-        <%
-          const prkMhs = (typeof activeMahasiswa !== 'undefined' && activeMahasiswa) ? activeMahasiswa : { nim: '20240140001', nama: 'Mahasiswa TI', angkatan: 2024, semesterAktif: 5, kodePeminatan: 'SE' };
-          const prkNama = (typeof currentUser !== 'undefined' && currentUser?.nama) ? currentUser.nama : prkMhs.nama;
-          const prkNim = String((typeof currentUser !== 'undefined' && currentUser?.username) ? currentUser.username : prkMhs.nim || '20240140001');
-          const prkAngkatan = Number(prkMhs.angkatan) || 2024;
-          const prkNimSuffix = prkNim.slice(-3);
-          const prkSmt = Number(prkMhs.semesterAktif) || 5;
-          const prkPem = String(prkMhs.kodePeminatan || 'SE').toUpperCase();
-        %>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <!-- Nama Mahasiswa -->
-          <div>
-            <label for="input-nama" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-              Nama Lengkap Mahasiswa
-            </label>
-            <input id="input-nama" type="text" minlength="3" maxlength="60" value="<%= prkNama %>" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs font-medium text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
-          </div>
-
-          <!-- Angkatan & NIM Builder -->
-          <div>
-            <label for="input-angkatan" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-              Tahun Angkatan
-            </label>
-            <select id="input-angkatan" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
-              <% [2026, 2025, 2024, 2023, 2022].forEach(function(th) { %>
-                <option value="<%= th %>" <%= prkAngkatan === th ? 'selected' : '' %>><%= th %></option>
-              <% }); %>
-            </select>
-          </div>
-
-          <!-- NIM Display / Suffix -->
-          <div>
-            <label for="input-nim-suffix" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-              Nomor Induk Mahasiswa (NIM 11 Digit)
-            </label>
-            <div class="flex items-center">
-              <span id="nim-prefix" class="inline-flex min-h-[44px] items-center px-3 rounded-l-md border border-r-0 border-zinc-200 bg-zinc-100 text-xs font-mono text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800">
-                <%= prkAngkatan %>0140
-              </span>
-              <input id="input-nim-suffix" type="text" minlength="3" maxlength="3" pattern="\d{3}" inputmode="numeric" value="<%= prkNimSuffix %>" class="w-full min-h-[44px] rounded-r-md border border-zinc-200 bg-white px-3 py-2 text-xs font-mono font-bold text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
-            </div>
-          </div>
-
-          <!-- Semester Aktif (Dikunci sesuai Periode Aktif Ganjil/Genap) -->
-          <% const activeTipePrk = (typeof activePeriode !== 'undefined' && activePeriode && activePeriode.semesterTipe) ? activePeriode.semesterTipe : 'Ganjil'; %>
-          <div>
-            <label for="input-semester" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-              Semester Berjalan (Periode <%= activeTipePrk %>)
-            </label>
-            <select id="input-semester" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
-              <% for (let s = 1; s <= 8; s++) { const tipeS = (s % 2 === 1) ? 'Ganjil' : 'Genap'; const isMatch = tipeS === activeTipePrk; %>
-                <option value="<%= s %>" <%= prkSmt === s ? 'selected' : '' %> <%= !isMatch ? 'disabled' : '' %>>Semester <%= s %> (<%= tipeS %><%= !isMatch ? ' - Tidak Aktif' : '' %>)</option>
-              <% } %>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-          <!-- Preferensi Kelas -->
-          <div>
-            <label for="input-pref-kelas" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-0.5">
-              Rombel Asal (Rekomendasi Utama)
-            </label>
-            <p class="text-[11px] text-zinc-400 mb-1.5">Dapat disesuaikan per matkul di Langkah 2.</p>
-            <select id="input-pref-kelas" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
-              <option value="B" selected>Kelas B (Rombel Utama)</option>
-              <option value="A">Kelas A</option>
-              <option value="C">Kelas C</option>
-              <option value="D">Kelas D</option>
-            </select>
-          </div>
-
-          <!-- Jalur Peminatan -->
-          <div>
-            <label for="input-pref-peminatan" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-              Jalur Peminatan Keahlian
-            </label>
-            <select id="input-pref-peminatan" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
-              <option value="SE" <%= prkPem === 'SE' ? 'selected' : '' %>>Software Engineering (SE)</option>
-              <option value="NS" <%= prkPem === 'NS' ? 'selected' : '' %>>Network &amp; Cyber Security (NS)</option>
-            </select>
-          </div>
-
-          <!-- Preferensi Waktu -->
-          <div>
-            <label for="input-pref-waktu" class="block text-xs font-semibold text-zinc-700 dark:text-zinc-300 mb-1.5">
-              Distribusi Waktu Perkuliahan
-            </label>
-            <select id="input-pref-waktu" class="w-full min-h-[44px] rounded-md border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 dark:focus:border-zinc-100 dark:focus:ring-zinc-100 transition-colors">
-              <option value="Semua" selected>Fleksibel (Pagi & Siang Tersebar)</option>
-              <option value="Pagi">Diutamakan Sesi Pagi (07:00 – 11:30)</option>
-              <option value="Siang">Diutamakan Sesi Siang (12:10 – 17:15)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Action Step 1 -->
-        <div class="flex justify-end pt-4 border-t border-zinc-100 dark:border-zinc-800">
-          <button id="btn-to-step-2" type="button" class="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-brand-blue px-6 py-2.5 text-xs font-bold text-white hover:bg-brand-blueDark transition-colors shadow-sm">
-            <span>Lanjut ke Pemilihan Mata Kuliah</span>
-            <i class="ph ph-arrow-right text-base"></i>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==================== LANGKAH 2: PEMILIHAN MATA KULIAH ==================== -->
-    <section id="wizard-step-2" class="wizard-pane hidden space-y-6">
-      <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-6">
+        <% const prkAccess = (typeof prakrsAccess !== 'undefined' && prakrsAccess) ? prakrsAccess : { isOpen: true, deadline: '2026-12-31', reason: 'Pengisian Pra-KRS sedang dibuka.' }; %>
         
-        <!-- SKS Dynamic Counter Bar -->
-        <div class="rounded-xl border border-blue-200 bg-blue-50/70 p-3.5 dark:border-blue-900/60 dark:bg-blue-950/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
-            <span class="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <h3 class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">
-              Beban SKS (Maks. 24 SKS)
-            </h3>
-          </div>
-
-          <div class="flex flex-wrap items-center gap-4">
-            <div class="text-right">
-              <p class="text-[11px] text-zinc-500 dark:text-zinc-400">Total SKS Terpilih</p>
-              <p class="text-2xl font-bold font-mono text-brand-blue dark:text-amber-400">
-                <span id="current-sks-count">17</span> <span class="text-sm font-normal text-zinc-500">/ 24 SKS</span>
-              </p>
-            </div>
-            <div class="hidden sm:block w-28 bg-zinc-200 dark:bg-zinc-700 h-2.5 rounded-full overflow-hidden">
-              <div id="sks-progress-bar" class="bg-brand-yellow h-full rounded-full transition-all duration-300" style="width: 70%;"></div>
-            </div>
-            <button type="button" onclick="document.getElementById('btn-calculate-prakrs')?.click()"
-              class="inline-flex min-h-[38px] items-center gap-1.5 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-4 py-2 text-xs font-semibold text-white shadow-xs transition-colors">
-              <i class="ph ph-sparkle text-amber-400"></i>
-              <span>Susun Jadwal (Langkah 3) →</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Quick Selector Toolbar -->
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-100 pb-3 dark:border-zinc-800">
-          <div>
-            <h2 id="matkul-period-heading" class="font-heading text-base font-bold text-zinc-900 dark:text-zinc-50">
-              Daftar Mata Kuliah Periode Aktif
-            </h2>
-            <p id="matkul-period-subtitle" class="text-xs text-zinc-500 dark:text-zinc-400">
-              Menampilkan mata kuliah sesuai periode penawaran (Ganjil/Genap) dari database kurikulum TI UMY.
+        <!-- Header & Breadcrumb -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200/80 pb-5 dark:border-zinc-800">
+          <div class="space-y-0.5">
+            <h1 class="font-heading text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+              Perencanaan Pra-KRS Mahasiswa
+            </h1>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">
+              Pilih kelas mata kuliah langsung dari kalender perkuliahan mingguan untuk menyusun jadwal studi bebas bentrok.
             </p>
           </div>
-          <div class="flex items-center gap-2">
-            <button id="btn-select-all" type="button" class="text-xs font-semibold text-brand-blue dark:text-amber-400 hover:underline inline-flex items-center gap-1">
-              <i class="ph ph-check-square"></i>
-              <span>Pilih Paket Semester Ini</span>
-            </button>
-            <span class="text-zinc-300 dark:text-zinc-700">|</span>
-            <button id="btn-unselect-all" type="button" class="text-xs font-medium text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 inline-flex items-center gap-1">
-              <i class="ph ph-x-square"></i>
-              <span>Kosongkan</span>
-            </button>
-          </div>
+
+          <!-- Status Akses Pra-KRS -->
+          <% if (prkAccess.isOpen) { %>
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 text-xs font-semibold">
+              <i class="ph ph-check-circle text-emerald-600 text-sm"></i>
+              <span>Periode Terbuka s/d <%= prkAccess.deadline %></span>
+            </div>
+          <% } else { %>
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-rose-300 bg-rose-50 text-rose-900 dark:border-rose-800 dark:bg-rose-950/50 dark:text-rose-300 text-xs font-semibold">
+              <i class="ph ph-lock-key text-rose-600 text-sm"></i>
+              <span>Pra-KRS Ditutup (<%= prkAccess.deadline %>)</span>
+            </div>
+          <% } %>
         </div>
 
-        <!-- Course List Grid (100% Dinamis dari PostgreSQL Kurikulum & Peminatan) -->
-        <div id="matkul-list-container" class="space-y-6 text-xs"></div>
-
-        <!-- Action Step 2 -->
-        <div class="flex items-center justify-between pt-4 border-t border-zinc-100 dark:border-zinc-800">
-          <button id="btn-back-to-1" type="button" class="inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-5 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
-            <i class="ph ph-arrow-left text-base"></i>
-            <span>Kembali ke Profil</span>
-          </button>
-          <button id="btn-calculate-prakrs" type="button" class="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-brand-yellow px-6 py-2.5 text-xs font-bold text-zinc-900 hover:bg-brand-yellowGold transition-all shadow-sm">
-            <i class="ph ph-sparkle text-base"></i>
-            <span>Kalkulasi Rekomendasi Jadwal AI (Langkah 3)</span>
-          </button>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ==================== LANGKAH 3: REKOMENDASI PAKET JADWAL ==================== -->
-    <section id="wizard-step-3" class="wizard-pane hidden space-y-6">
-      <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-6">
-        
-        <!-- Result Summary & Metrics -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="rounded-xl border border-emerald-200 bg-emerald-50/70 p-4 dark:border-emerald-900/60 dark:bg-emerald-950/30 flex items-center gap-3">
-            <div class="h-10 w-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 flex items-center justify-center text-emerald-700 dark:text-emerald-300 shrink-0">
-              <i class="ph ph-check-circle text-2xl"></i>
+        <% if (!prkAccess.isOpen) { %>
+          <!-- State Terkunci: Pra-KRS Ditutup -->
+          <div class="rounded-2xl border border-rose-200 bg-white p-8 text-center shadow-sm dark:border-rose-900/60 dark:bg-zinc-900 space-y-4">
+            <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-100 text-rose-600 dark:bg-rose-950/70 dark:text-rose-400 border border-rose-200 dark:border-rose-800">
+              <i class="ph ph-lock-key text-3xl"></i>
             </div>
-            <div>
-              <p class="text-xs text-zinc-500 dark:text-zinc-400">Status Bentrok</p>
-              <p class="font-heading font-bold text-sm text-emerald-800 dark:text-emerald-200">Zero Clash (0 Konflik)</p>
+            <div class="space-y-1.5 max-w-lg mx-auto">
+              <span class="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2.5 py-0.5 font-mono text-[11px] font-bold text-rose-800 dark:bg-rose-950 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                AKSES PRA-KRS DITUTUP
+              </span>
+              <h2 class="font-heading text-xl font-bold text-zinc-900 dark:text-zinc-50 pt-1">
+                Periode Pengisian Pra-KRS Tidak Dapat Diakses
+              </h2>
+              <p class="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                <%= prkAccess.reason %> Anda tidak dapat mengubah pilihan jadwal pada periode ini.
+              </p>
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <a href="/mahasiswa/jadwal" class="inline-flex min-h-[40px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-5 py-2 text-xs font-semibold text-white shadow-xs transition-colors">
+                <i class="ph ph-calendar-check text-base text-amber-400"></i>
+                <span>Lihat Jadwal Pribadi Saya</span>
+              </a>
+              <a href="/mahasiswa/dashboard" class="inline-flex min-h-[40px] items-center gap-2 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 px-4 py-2 text-xs font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
+                <i class="ph ph-arrow-left text-base"></i>
+                <span>Kembali ke Dashboard</span>
+              </a>
             </div>
           </div>
+        <% } %>
 
-          <div class="rounded-xl border border-blue-200 bg-blue-50/70 p-4 dark:border-blue-900/60 dark:bg-blue-950/30 flex items-center gap-3">
-            <div class="h-10 w-10 rounded-lg bg-blue-100 dark:bg-blue-900/60 flex items-center justify-center text-brand-blue dark:text-blue-300 shrink-0">
-              <i class="ph ph-calendar-check text-2xl"></i>
-            </div>
-            <div>
-              <p class="text-xs text-zinc-500 dark:text-zinc-400">Total SKS Terjadwal</p>
-              <p id="result-sks-label" class="font-heading font-bold text-sm text-blue-900 dark:text-blue-100">17 SKS · 6 Mata Kuliah</p>
-            </div>
-          </div>
+        <div class="<%= !prkAccess.isOpen ? 'hidden pointer-events-none select-none' : 'space-y-6' %>">
 
-          <div class="rounded-xl border border-amber-200 bg-amber-50/70 p-4 dark:border-amber-900/60 dark:bg-amber-950/30 flex items-center gap-3">
-            <div class="h-10 w-10 rounded-lg bg-amber-100 dark:bg-amber-900/60 flex items-center justify-center text-amber-700 dark:text-amber-300 shrink-0">
-              <i class="ph ph-clock-user text-2xl"></i>
-            </div>
-            <div>
-              <p class="text-xs text-zinc-500 dark:text-zinc-400">Kesesuaian Preferensi</p>
-              <p class="font-heading font-bold text-sm text-amber-900 dark:text-amber-100">100% Sesuai Kelas B</p>
-            </div>
-          </div>
-        </div>
+          <%
+            const prkMhs = (typeof activeMahasiswa !== 'undefined' && activeMahasiswa) ? activeMahasiswa : { nim: '20240140001', nama: 'Mahasiswa TI', angkatan: 2024, semesterAktif: 5, kodePeminatan: 'SE' };
+            const mhsSemester = Number(prkMhs.semesterAktif) || 5;
+            const mhsPeminatan = String(prkMhs.kodePeminatan || 'SE').toUpperCase();
+          %>
 
-        <!-- Pratinjau Jadwal Rekomendasi AI -->
-        <div class="space-y-3">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 pb-3 dark:border-zinc-800">
-            <div>
-              <h3 class="font-heading font-bold text-base text-zinc-900 dark:text-zinc-50">
-                Susunan Jadwal Kuliah Paket Mahasiswa
-              </h3>
-              <p class="text-xs text-zinc-500 dark:text-zinc-400">Paket jadwal otomatis didistribusikan tanpa bentrok waktu, ruangan, maupun dosen.</p>
-            </div>
-            
-            <div class="flex flex-wrap items-center gap-2">
-              <!-- Switcher Mode Tampilan: Tabel vs Kalender Grid -->
-              <div class="inline-flex rounded-lg border border-zinc-200 bg-zinc-100/80 p-0.5 dark:border-zinc-700 dark:bg-zinc-800">
-                <button id="prakrs-view-mode-table" type="button" title="Tampilan Tabel Rinci"
-                  class="inline-flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100 transition-all">
-                  <i class="ph ph-table text-sm text-[#0c2b5e] dark:text-amber-400"></i>
-                  <span>Tabel</span>
-                </button>
-                <button id="prakrs-view-mode-grid" type="button" title="Tampilan Kalender Grid"
-                  class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all">
-                  <i class="ph ph-squares-four text-sm"></i>
-                  <span>Grid Kalender</span>
-                </button>
+          <!-- Profil Mahasiswa & Filter Kalender -->
+          <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <!-- Profil Ringkas Mahasiswa -->
+              <div class="flex items-center gap-3">
+                <div class="h-11 w-11 rounded-xl bg-blue-50 text-[#0c2b5e] dark:bg-blue-950/60 dark:text-blue-300 flex items-center justify-center font-bold text-base border border-blue-200 dark:border-blue-900 shrink-0">
+                  <i class="ph ph-student"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-50"><%= prkMhs.nama %></span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700"><%= prkMhs.nim %></span>
+                  </div>
+                  <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">
+                    Angkatan <%= prkMhs.angkatan %> · Semester <%= mhsSemester %> · Peminatan <%= mhsPeminatan === 'NS' ? 'Network Security (NS)' : 'Software Engineering (SE)' %>
+                  </p>
+                </div>
               </div>
 
-              <!-- Button Variasi Lain -->
-              <button id="btn-minta-variasi" type="button" class="inline-flex min-h-[34px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 shadow-sm transition-all">
-                <i class="ph ph-shuffle text-sm text-brand-blue dark:text-amber-400"></i>
-                <span>Minta Variasi Alternatif</span>
+              <!-- Filter Interaktif Kalender -->
+              <div class="flex flex-wrap items-center gap-2.5">
+                <!-- Filter Semester -->
+                <div class="flex items-center gap-1.5">
+                  <label for="filter-semester" class="text-xs font-semibold text-zinc-600 dark:text-zinc-400">Semester:</label>
+                  <select id="filter-semester" class="h-9 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs font-semibold text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-900">
+                    <% [1, 2, 3, 4, 5, 6, 7, 8].forEach(function(s) { %>
+                      <option value="<%= s %>" <%= s === mhsSemester ? 'selected' : '' %>>Semester <%= s %></option>
+                    <% }); %>
+                    <option value="ALL">Semua Semester</option>
+                  </select>
+                </div>
+
+                <!-- Filter Peminatan -->
+                <div class="flex items-center gap-1.5">
+                  <label for="filter-peminatan" class="text-xs font-semibold text-zinc-600 dark:text-zinc-400">Peminatan:</label>
+                  <select id="filter-peminatan" class="h-9 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs font-semibold text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-900">
+                    <option value="ALL">Semua Peminatan</option>
+                    <option value="SE" <%= mhsPeminatan === 'SE' ? 'selected' : '' %>>Software Engineering (SE)</option>
+                    <option value="NS" <%= mhsPeminatan === 'NS' ? 'selected' : '' %>>Network Security (NS)</option>
+                  </select>
+                </div>
+
+                <!-- Pencarian Cepat -->
+                <div class="relative">
+                  <i class="ph ph-magnifying-glass absolute left-2.5 top-2.5 text-zinc-400 text-xs"></i>
+                  <input id="filter-search" type="text" placeholder="Cari matkul / dosen / ruang..." class="h-9 w-44 sm:w-56 rounded-lg border border-zinc-200 bg-white pl-8 pr-2.5 text-xs text-zinc-800 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-zinc-900 placeholder-zinc-400">
+                </div>
+              </div>
+            </div>
+
+            <!-- Petunjuk Interaksi -->
+            <div class="rounded-xl border border-blue-100 bg-blue-50/50 p-3 dark:border-blue-900/40 dark:bg-blue-950/20 text-xs text-blue-900 dark:text-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <i class="ph ph-info text-base text-[#0c2b5e] dark:text-amber-400 shrink-0"></i>
+                <span>Klik pada salah satu <strong>kartu kelas</strong> di kalender untuk memilih atau mengganti kelas. Pilihan Anda akan langsung dihitung beban SKS-nya.</span>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-purple-800 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/60 px-2 py-0.5 rounded border border-purple-200 dark:border-purple-800">
+                  <i class="ph ph-users-three"></i> Kelas Gabungan
+                </span>
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-800 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-800">
+                  <i class="ph ph-flask"></i> Praktikum Lab
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sticky Status & Aksi Simpan Jadwal -->
+          <div class="sticky top-2 z-20 rounded-2xl border border-zinc-200 bg-white/95 p-4 shadow-md backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/95 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <!-- Counter SKS & Bentrok Status -->
+            <div class="flex flex-wrap items-center gap-4 sm:gap-6">
+              <!-- Total SKS -->
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-zinc-500 dark:text-zinc-400">Beban SKS:</span>
+                  <span id="selected-sks-label" class="font-mono text-base font-bold text-zinc-900 dark:text-zinc-50">0 / 24 SKS</span>
+                </div>
+                <div class="w-32 h-2 rounded-full bg-zinc-200 dark:bg-zinc-700 overflow-hidden">
+                  <div id="selected-sks-bar" class="h-full bg-brand-blue transition-all duration-300" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <!-- Total Matkul -->
+              <div class="border-l border-zinc-200 dark:border-zinc-700 pl-4 space-y-0.5">
+                <span class="text-xs text-zinc-500 dark:text-zinc-400">Total Terpilih:</span>
+                <p id="selected-matkul-count" class="font-mono text-sm font-bold text-zinc-800 dark:text-zinc-200">0 Mata Kuliah</p>
+              </div>
+
+              <!-- Status Bentrok Real-Time -->
+              <div class="border-l border-zinc-200 dark:border-zinc-700 pl-4">
+                <div id="clash-status-box" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 text-xs font-semibold">
+                  <i class="ph ph-shield-check text-emerald-600 text-sm"></i>
+                  <span id="clash-status-text">Bebas Bentrok (0 Konflik)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tombol Aksi -->
+            <div class="flex items-center gap-2.5 shrink-0 self-end md:self-center">
+              <button id="btn-reset-selection" type="button" class="inline-flex min-h-[40px] items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
+                <i class="ph ph-arrow-counter-clockwise text-sm"></i>
+                <span>Reset</span>
+              </button>
+              <button id="btn-save-prakrs" type="button" class="inline-flex min-h-[40px] items-center gap-2 rounded-lg bg-[#0c2b5e] hover:bg-[#081d40] px-5 py-2 text-xs font-bold text-white shadow-sm transition-all duration-200">
+                <i class="ph ph-floppy-disk text-base text-amber-400"></i>
+                <span>Simpan Jadwal Rencana Saya</span>
               </button>
             </div>
           </div>
 
-          <!-- VIEW 1: TABEL RINCI PAGINASI -->
-          <div id="prakrs-container-table" class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
-            <%- include('../partials/table-pagination', {
-              tableId: 'table-prakrs-schedule',
-              part: 'toolbar',
-              searchPlaceholder: 'Cari jadwal matkul, dosen, ruang...',
-              filterOptions: [
-                {
-                  id: 'filter-hari-prakrs',
-                  label: 'Hari',
-                  dataAttr: 'hari',
-                  options: [
-                    { value: 'Semua', text: 'Semua Hari' },
-                    { value: 'Senin', text: 'Senin' },
-                    { value: 'Selasa', text: 'Selasa' },
-                    { value: 'Rabu', text: 'Rabu' },
-                    { value: 'Kamis', text: 'Kamis' },
-                    { value: 'Jumat', text: 'Jumat' },
-                    { value: 'Sabtu', text: 'Sabtu' }
-                  ]
-                }
-              ]
-            }) %>
-
-            <div class="overflow-x-auto">
-              <table id="table-prakrs-schedule" class="w-full border-collapse text-left text-xs min-w-[700px] paginated-table">
-                <thead>
-                  <tr class="border-b border-zinc-200 bg-zinc-100/80 dark:border-zinc-800 dark:bg-zinc-800/80 font-mono text-[11px] uppercase text-zinc-500">
-                    <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Hari & Jam</th>
-                    <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Mata Kuliah</th>
-                    <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Ruangan</th>
-                    <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Kelas & SKS</th>
-                    <th class="px-4 py-3 font-semibold text-zinc-600 dark:text-zinc-400">Dosen Pengampu</th>
-                  </tr>
-                </thead>
-                <tbody id="result-schedule-body" class="divide-y divide-zinc-200 dark:divide-zinc-800">
-                  <!-- Diisi oleh JS -->
-                </tbody>
-              </table>
+          <!-- Alert Peringatan Bentrok Real-Time (Muncul jika ada tabrakan) -->
+          <div id="clash-alert-banner" class="hidden rounded-xl border border-rose-300 bg-rose-50 p-4 dark:border-rose-900/60 dark:bg-rose-950/40 text-xs text-rose-900 dark:text-rose-200 flex items-start gap-3">
+            <i class="ph ph-warning-circle text-rose-600 dark:text-rose-400 text-lg shrink-0 mt-0.5"></i>
+            <div class="space-y-1">
+              <h4 class="font-heading font-bold text-rose-900 dark:text-rose-100">Terdeteksi Bentrok Waktu Kuliah!</h4>
+              <p id="clash-alert-detail" class="text-rose-700 dark:text-rose-300 leading-relaxed"></p>
             </div>
-
-            <%- include('../partials/table-pagination', {
-              tableId: 'table-prakrs-schedule',
-              part: 'pagination',
-              defaultPageSize: 10
-            }) %>
           </div>
 
-          <!-- VIEW 2: KALENDER GRID MINGGUAN -->
-          <div id="prakrs-container-grid" class="hidden rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden space-y-0">
+          <!-- Interactive Calendar Grid Matriks -->
+          <div class="rounded-2xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden space-y-0">
             <!-- Legend Sesi Grid -->
-            <div class="px-4 py-2.5 border-b border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/70 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div class="px-5 py-3 border-b border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/70 flex flex-wrap items-center justify-between gap-3 text-xs">
               <div class="flex flex-wrap items-center gap-4">
-                <span class="text-zinc-500 font-semibold text-[11px]">Keterangan:</span>
+                <span class="text-zinc-500 font-semibold text-[11px]">Keterangan Kartu:</span>
                 <div class="inline-flex items-center gap-1.5">
-                  <span class="h-2.5 w-2.5 rounded bg-blue-100 border border-blue-300 dark:bg-blue-950/70 dark:border-blue-700"></span>
+                  <span class="h-3 w-3 rounded bg-blue-100 border border-blue-300 dark:bg-blue-950/70 dark:border-blue-700"></span>
                   <span class="text-zinc-700 dark:text-zinc-300 text-[11px]">Kuliah Teori</span>
                 </div>
                 <div class="inline-flex items-center gap-1.5">
-                  <span class="h-2.5 w-2.5 rounded bg-amber-100 border border-amber-300 dark:bg-amber-950/70 dark:border-amber-700"></span>
+                  <span class="h-3 w-3 rounded bg-amber-100 border border-amber-300 dark:bg-amber-950/70 dark:border-amber-700"></span>
                   <span class="text-zinc-700 dark:text-zinc-300 text-[11px]">Praktikum Laboratorium</span>
                 </div>
                 <div class="inline-flex items-center gap-1.5">
-                  <span class="h-2.5 w-2.5 rounded bg-zinc-200 border border-zinc-300 dark:bg-zinc-800 dark:border-zinc-700"></span>
-                  <span class="text-zinc-700 dark:text-zinc-300 text-[11px]">Jeda Shalat Dhuhur</span>
+                  <span class="h-3 w-3 rounded bg-purple-100 border border-purple-300 dark:bg-purple-950/70 dark:border-purple-700"></span>
+                  <span class="text-zinc-700 dark:text-zinc-300 text-[11px]">Kelas Gabungan (Kapasitas Besar)</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5">
+                  <span class="h-3 w-3 rounded bg-[#0c2b5e] border border-blue-900"></span>
+                  <span class="text-zinc-900 dark:text-zinc-100 font-bold text-[11px]">Kelas Terpilih</span>
+                </div>
+                <div class="inline-flex items-center gap-1.5">
+                  <span class="h-3 w-3 rounded bg-rose-500 border border-rose-600"></span>
+                  <span class="text-rose-700 dark:text-rose-300 font-bold text-[11px]">Bentrok Jam Kuliah</span>
                 </div>
               </div>
             </div>
 
-            <!-- Responsive Table Matriks Grid -->
+            <!-- Matriks Table Kalender -->
             <div class="overflow-x-auto">
-              <table class="w-full border-collapse text-left text-xs min-w-[850px]">
+              <table class="w-full border-collapse text-left text-xs min-w-[950px]">
                 <thead>
                   <tr class="border-b border-zinc-200 bg-zinc-100/75 dark:border-zinc-800 dark:bg-zinc-800/80 font-mono text-[11px]">
-                    <th class="sticky left-0 z-10 w-24 border-r border-zinc-200 bg-zinc-100/90 px-3 py-2.5 font-semibold text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300 text-center">
+                    <th class="sticky left-0 z-10 w-28 border-r border-zinc-200 bg-zinc-100/90 px-3.5 py-3 font-semibold text-zinc-700 dark:border-zinc-800 dark:bg-zinc-800 dark:text-zinc-300 text-center">
                       WAKTU
                     </th>
-                    <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                    <th class="border-r border-zinc-200 px-3 py-3 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
                       SENIN
                     </th>
-                    <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                    <th class="border-r border-zinc-200 px-3 py-3 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
                       SELASA
                     </th>
-                    <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                    <th class="border-r border-zinc-200 px-3 py-3 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
                       RABU
                     </th>
-                    <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                    <th class="border-r border-zinc-200 px-3 py-3 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
                       KAMIS
                     </th>
-                    <th class="border-r border-zinc-200 px-3 py-2.5 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
+                    <th class="border-r border-zinc-200 px-3 py-3 font-heading font-bold text-zinc-900 dark:border-zinc-800 dark:text-zinc-100 text-center">
                       JUMAT
                     </th>
-                    <th class="px-3 py-2.5 font-heading font-bold text-zinc-900 dark:text-zinc-100 text-center">
+                    <th class="px-3 py-3 font-heading font-bold text-zinc-900 dark:text-zinc-100 text-center">
                       SABTU
                     </th>
                   </tr>
                 </thead>
-                <tbody id="prakrs-grid-body" class="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans">
+                <tbody id="interactive-grid-body" class="divide-y divide-zinc-200 dark:divide-zinc-800 font-sans">
                   <!-- Dynamic Content Rendered by Client-side JS -->
                 </tbody>
               </table>
             </div>
           </div>
-        </div>
 
-        <!-- Action Step 3 -->
-        <div class="flex items-center justify-between pt-4 border-t border-zinc-100 dark:border-zinc-800">
-          <button id="btn-back-to-2" type="button" class="inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-5 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 transition-colors">
-            <i class="ph ph-arrow-left text-base"></i>
-            <span>Kembali ke Pilih Matkul</span>
-          </button>
-          <button id="btn-simpan-prakrs" type="button" class="inline-flex min-h-[44px] items-center gap-2 rounded-lg bg-brand-blue px-7 py-2.5 text-xs font-bold text-white hover:bg-brand-blueDark transition-colors shadow-sm">
-            <i class="ph ph-floppy-disk text-base"></i>
-            <span>Simpan & Terapkan Rencana Jadwal Ini</span>
-          </button>
-        </div>
+          <!-- Section Ringkasan Daftar Kelas Terpilih -->
+          <div class="rounded-2xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 space-y-3">
+            <div class="flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
+              <div>
+                <h3 class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100">
+                  Daftar Kelas yang Anda Pilih
+                </h3>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                  Periksa kembali daftar mata kuliah di bawah sebelum menekan tombol simpan jadwal.
+                </p>
+              </div>
+              <span id="summary-sks-badge" class="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-blue-50 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+                0 SKS Terpilih
+              </span>
+            </div>
 
-      </div>
-    </section>
-  </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs min-w-[700px]">
+                <thead>
+                  <tr class="border-b border-zinc-200 dark:border-zinc-800 text-zinc-500 font-mono text-[11px] uppercase">
+                    <th class="py-2.5 px-3">Kode & Mata Kuliah</th>
+                    <th class="py-2.5 px-3">Kelas & Tipe</th>
+                    <th class="py-2.5 px-3">Hari & Jam</th>
+                    <th class="py-2.5 px-3">Ruangan</th>
+                    <th class="py-2.5 px-3">Dosen Pengampu</th>
+                    <th class="py-2.5 px-3 text-right">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="summary-selected-body" class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                  <!-- Diisi oleh JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
 
       </div>
     </main>
-
-<!-- FLOATING AI ASSISTANT CHATBOT (Resya x Yuum) -->
-<div class="fixed bottom-6 right-6 z-50">
-  <button id="ai-chat-toggle" type="button" class="group flex h-14 w-14 items-center justify-center rounded-full bg-[#0c2b5e] text-white shadow-xl ring-4 ring-amber-400/30 hover:bg-[#092248] hover:scale-105 transition-all duration-200" title="Tanya AI Jadwalin">
-    <i class="ph ph-robot text-2xl text-amber-400 group-hover:rotate-12 transition-transform"></i>
-  </button>
-
-  <div id="ai-chat-window" class="hidden absolute bottom-16 right-0 w-80 sm:w-96 rounded-2xl border border-zinc-200 bg-white/95 backdrop-blur-md shadow-2xl dark:border-zinc-800 dark:bg-zinc-900/95 overflow-hidden flex flex-col z-50 animate-in fade-in zoom-in-95 duration-200" style="height: 480px;">
-    <div class="p-4 border-b border-zinc-200 bg-[#0c2b5e] text-white flex justify-between items-center">
-      <div class="flex items-center gap-2.5">
-        <div class="h-8 w-8 rounded-lg bg-amber-400/20 text-amber-400 flex items-center justify-center border border-amber-400/30">
-          <i class="ph ph-sparkle text-lg"></i>
-        </div>
-        <div>
-          <h4 class="font-heading text-sm font-bold tracking-tight text-white">AI Assistant Jadwal</h4>
-          <p class="text-[11px] text-blue-200/80">Konsultasi KRS & Penjadwalan</p>
-        </div>
-      </div>
-      <button type="button" id="ai-chat-close" class="text-zinc-300 hover:text-white rounded-lg p-1 hover:bg-white/10 transition-colors">
-        <i class="ph ph-x text-lg"></i>
-      </button>
-    </div>
-
-    <div id="chat-messages" class="flex-1 overflow-y-auto p-4 space-y-3.5 text-xs">
-      <div class="flex gap-2.5">
-        <div class="w-7 h-7 rounded-full bg-blue-100 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-900">
-          <i class="ph ph-robot text-sm"></i>
-        </div>
-        <div class="bg-zinc-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm p-3 text-zinc-800 dark:text-zinc-200 border border-zinc-200/60 dark:border-zinc-700/60 max-w-[85%] space-y-1">
-          <p>Halo! Saya Asisten Akademik Jadwalin. Ada yang bisa saya bantu seputar rencana studi, pilihan mata kuliah peminatan SE/NS, atau penyusunan Pra-KRS Anda?</p>
-          <% if (typeof aiConfigured !== 'undefined' && !aiConfigured) { %>
-            <p class="text-[11px] font-medium text-amber-700 dark:text-amber-400">
-              Layanan Asisten AI sedang tidak tersedia saat ini.
-            </p>
-          <% } %>
-        </div>
-      </div>
-    </div>
-
-    <div class="p-3 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 flex gap-2">
-      <input type="text" id="chat-input" minlength="2" maxlength="160" placeholder="Ketik pertanyaan seputar KRS (maks. 160 karakter)..." class="flex-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3.5 py-2 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#0c2b5e] dark:focus:ring-amber-500">
-      <button type="button" id="chat-send" class="bg-[#0c2b5e] text-white hover:bg-[#092248] rounded-xl px-3.5 py-2 flex items-center justify-center shadow-xs transition-colors">
-        <i class="ph ph-paper-plane-right text-base text-amber-400"></i>
-      </button>
-    </div>
-  </div>
-</div>
-
 
     <%- include('../partials/admin-footer') %>
   </div>
@@ -544,357 +303,187 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Nav elements
-    const stepNav1 = document.getElementById('step-nav-1');
-    const stepNav2 = document.getElementById('step-nav-2');
-    const stepNav3 = document.getElementById('step-nav-3');
+    // Data Master Jadwal Terpublikasi dari PostgreSQL
+    const MASTER_JADWAL = <%- JSON.stringify(typeof jadwal !== 'undefined' ? jadwal : []) %>;
+    const SAVED_PRAKRS_INITIAL = <%- JSON.stringify((typeof defaultPrakrs !== 'undefined' && defaultPrakrs && Array.isArray(defaultPrakrs.rekomendasiSesi)) ? defaultPrakrs.rekomendasiSesi : []) %>;
+    const INITIAL_SEMESTER = <%= mhsSemester %>;
+    const INITIAL_PEMINATAN = '<%= mhsPeminatan %>';
 
-    // Panes
-    const pane1 = document.getElementById('wizard-step-1');
-    const pane2 = document.getElementById('wizard-step-2');
-    const pane3 = document.getElementById('wizard-step-3');
+    // Elements
+    const filterSemester = document.getElementById('filter-semester');
+    const filterPeminatan = document.getElementById('filter-peminatan');
+    const filterSearch = document.getElementById('filter-search');
+    const gridBody = document.getElementById('interactive-grid-body');
+    const selectedSksLabel = document.getElementById('selected-sks-label');
+    const selectedSksBar = document.getElementById('selected-sks-bar');
+    const selectedMatkulCount = document.getElementById('selected-matkul-count');
+    const clashStatusBox = document.getElementById('clash-status-box');
+    const clashStatusText = document.getElementById('clash-status-text');
+    const clashAlertBanner = document.getElementById('clash-alert-banner');
+    const clashAlertDetail = document.getElementById('clash-alert-detail');
+    const summarySelectedBody = document.getElementById('summary-selected-body');
+    const summarySksBadge = document.getElementById('summary-sks-badge');
+    const btnSave = document.getElementById('btn-save-prakrs');
+    const btnReset = document.getElementById('btn-reset-selection');
 
-    // Buttons
-    const btnToStep2 = document.getElementById('btn-to-step-2');
-    const btnBackTo1 = document.getElementById('btn-back-to-1');
-    const btnCalculate = document.getElementById('btn-calculate-prakrs');
-    const btnBackTo2 = document.getElementById('btn-back-to-2');
-    const btnMintaVariasi = document.getElementById('btn-minta-variasi');
-    const btnSimpan = document.getElementById('btn-simpan-prakrs');
-    const btnSelectAll = document.getElementById('btn-select-all');
-    const btnUnselectAll = document.getElementById('btn-unselect-all');
-
-    // Form inputs
-    const inputAngkatan = document.getElementById('input-angkatan');
-    const nimPrefix = document.getElementById('nim-prefix');
-    const inputNimSuffix = document.getElementById('input-nim-suffix');
-    const inputNama = document.getElementById('input-nama');
-    const inputSemester = document.getElementById('input-semester');
-    const inputPrefKelas = document.getElementById('input-pref-kelas');
-    const inputPrefPeminatan = document.getElementById('input-pref-peminatan');
-    const inputPrefWaktu = document.getElementById('input-pref-waktu');
-
-    // Dataset Kurikulum & Peminatan Resmi dari PostgreSQL (Semester 1-8)
-    const KURIKULUM_DB = <%- JSON.stringify(typeof kurikulumList !== 'undefined' ? kurikulumList : []) %>;
-    const PEMINATAN_DB = <%- JSON.stringify(typeof peminatanList !== 'undefined' ? peminatanList : []) %>;
-
-    const matkulListContainer = document.getElementById('matkul-list-container');
-    const periodHeading = document.getElementById('matkul-period-heading');
-    const periodSubtitle = document.getElementById('matkul-period-subtitle');
-    const currentSksCountEl = document.getElementById('current-sks-count');
-    const sksProgressBar = document.getElementById('sks-progress-bar');
-    const resultScheduleBody = document.getElementById('result-schedule-body');
-    const resultSksLabel = document.getElementById('result-sks-label');
-
-    // Calendar Grid View Switcher Elements
-    const btnModeTable = document.getElementById('prakrs-view-mode-table');
-    const btnModeGrid = document.getElementById('prakrs-view-mode-grid');
-    const containerTable = document.getElementById('prakrs-container-table');
-    const containerGrid = document.getElementById('prakrs-container-grid');
-    const prakrsGridBody = document.getElementById('prakrs-grid-body');
-
-    const prakrsTimeSlots = [
+    // Slot Waktu Standar Kalender
+    const timeSlots = [
       { start: '07:00', end: '08:40', label: '07:00 – 08:40' },
       { start: '08:50', end: '11:30', label: '08:50 – 11:30' },
       { isBreak: true, start: '11:30', end: '12:10', label: '11:30 – 12:10' },
       { start: '12:10', end: '14:40', label: '12:10 – 14:40' },
       { start: '14:45', end: '17:15', label: '14:45 – 17:15' }
     ];
-    const prakrsDays = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-    let latestSesiList = [];
+    const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
-    let currentVariasiIndex = 0;
+    // State Sesi Terpilih: Map<kodeMatkul, sesiObject>
+    // Memastikan 1 mata kuliah hanya memiliki 1 kelas terpilih
+    const selectedSesisMap = new Map();
 
-    function getMatkulCheckboxes() {
-      return matkulListContainer.querySelectorAll('.matkul-checkbox');
+    // Inisialisasi dari saved Pra-KRS jika ada
+    if (SAVED_PRAKRS_INITIAL.length > 0) {
+      SAVED_PRAKRS_INITIAL.forEach(savedItem => {
+        // Cari sesi di MASTER_JADWAL yang paling cocok (berdasarkan kodeMatkul dan kelas)
+        const matched = MASTER_JADWAL.find(j => 
+          (j.kodeMatkul === savedItem.kodeMatkul || j.id === savedItem.id) &&
+          (j.kelas === savedItem.kelas || String(j.kelas).includes(savedItem.kelas))
+        ) || savedItem;
+        
+        const k = matched.kodeMatkul || matched.kode;
+        if (k) selectedSesisMap.set(k, matched);
+      });
     }
 
-    function renderMatkulGrid() {
-      const targetSmt = parseInt(inputSemester.value, 10) || 1;
-      const isGanjil = targetSmt % 2 === 1;
-      const periodeLabel = isGanjil ? 'Ganjil' : 'Genap';
-      const selectedPem = (inputPrefPeminatan.value || 'SE').toUpperCase();
-
-      if (periodHeading) {
-        periodHeading.textContent = `Daftar Mata Kuliah Periode ${periodeLabel} (Semester ${isGanjil ? '1, 3, 5, 7' : '2, 4, 6, 8'})`;
-      }
-      if (periodSubtitle) {
-        periodSubtitle.textContent = `Hanya mata kuliah penawaran ${periodeLabel} yang ditampilkan. Paket Semester ${targetSmt} dicentang otomatis.`;
-      }
-
-      // Filter kurikulum hanya sesuai paritas (Ganjil: 1,3,5,7 | Genap: 2,4,6,8), urut dari semester awal -> akhir
-      const filteredKurikulum = KURIKULUM_DB
-        .filter(mk => (Number(mk.semester) % 2 === 1) === isGanjil)
-        .filter(mk => !String(mk.nama || '').toLowerCase().startsWith('mk pilihan'))
-        .sort((a, b) => Number(a.semester) - Number(b.semester) || String(a.kode).localeCompare(String(b.kode)));
-
-      const grouped = new Map();
-      filteredKurikulum.forEach(mk => {
-        const s = Number(mk.semester);
-        if (!grouped.has(s)) grouped.set(s, []);
-        grouped.get(s).push({ ...mk, isPeminatan: false });
-      });
-
-      // Tambahkan mata kuliah pilihan peminatan sesuai periode Ganjil/Genap langsung ke semester berjalan agar berada di atas
-      const filteredPem = PEMINATAN_DB.filter(p =>
-        String(p.kodePeminatan || '').toUpperCase() === selectedPem &&
-        String(p.semesterPenawaran || 'Ganjil').toLowerCase() === periodeLabel.toLowerCase()
-      );
-      if (filteredPem.length > 0) {
-        if (!grouped.has(targetSmt)) grouped.set(targetSmt, []);
-        filteredPem.forEach(p => {
-          grouped.get(targetSmt).push({
-            kode: p.kode,
-            nama: p.nama,
-            sks: p.sks,
-            semester: targetSmt,
-            kategori: `Pilihan Peminatan ${selectedPem}`,
-            jenis: String(p.nama || '').toLowerCase().includes('praktikum') ? 'Praktikum' : 'Teori',
-            isPeminatan: true
-          });
-        });
-      }
-
-      matkulListContainer.innerHTML = '';
-      if (grouped.size === 0) {
-        matkulListContainer.innerHTML = '<div class="rounded-xl border border-zinc-200 p-6 text-center text-zinc-500">Belum ada mata kuliah tersedia untuk periode ini.</div>';
-        recalculateSks();
-        return;
-      }
-
-      function buildSemesterSection(smt, items, isCurrentSmt) {
-        const section = document.createElement('div');
-        section.className = 'space-y-2.5';
-        section.innerHTML = `
-          <div class="flex items-center justify-between border-b border-zinc-100 pb-1.5 dark:border-zinc-800">
-            <span class="font-heading font-bold text-xs ${isCurrentSmt ? 'text-[#0c2b5e] dark:text-amber-400' : 'text-zinc-700 dark:text-zinc-300'}">
-              Semester ${smt} (${periodeLabel}) ${isCurrentSmt ? '· Paket Semester Berjalan & Pilihan Peminatan ' + selectedPem : ''}
-            </span>
-            <span class="font-mono text-[11px] text-zinc-400">${items.length} Mata Kuliah</span>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
-        `;
-        const gridEl = section.querySelector('div.grid');
-        const defaultKelas = (inputPrefKelas && inputPrefKelas.value) ? inputPrefKelas.value : 'B';
-        items.forEach((mk, idx) => {
-          const checked = isCurrentSmt && (!mk.isPeminatan || idx === items.findIndex(x => x.isPeminatan));
-          const isLab = String(mk.jenis || '').toLowerCase().includes('praktikum') || String(mk.nama || '').toLowerCase().includes('praktikum');
-          const card = document.createElement('div');
-          card.className = `matkul-card flex flex-col p-3.5 rounded-xl border ${mk.isPeminatan ? 'border-amber-200 bg-amber-50/30 hover:bg-amber-50/60 dark:border-amber-900/40 dark:bg-amber-950/20' : 'border-zinc-200 bg-zinc-50/50 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800/40'} transition-all gap-2.5`;
-          card.innerHTML = `
-            <label class="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" ${checked ? 'checked' : ''} data-kode="${mk.kode}" data-sks="${mk.sks}" data-semester="${smt}" class="matkul-checkbox mt-1 h-4 w-4 rounded border-zinc-300 text-brand-blue focus:ring-brand-blue">
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center justify-between gap-2">
-                  <span class="font-heading font-bold text-sm text-zinc-900 dark:text-zinc-100 truncate">${mk.nama}</span>
-                  <span class="font-mono font-bold text-xs text-brand-blue dark:text-amber-400 shrink-0">${mk.sks} SKS</span>
-                </div>
-                <p class="text-zinc-500 text-[11px] mt-0.5">${mk.kode} · ${mk.kategori || 'Wajib Prodi'} · ${isLab ? 'Praktikum (Lab)' : 'Teori'}</p>
-              </div>
-            </label>
-            <div class="flex items-center justify-between pt-2 border-t border-zinc-200/60 dark:border-zinc-700/60 text-[11px]">
-              <span class="text-zinc-500 font-medium">Pilihan Kelas:</span>
-              <select data-matkul-kode="${mk.kode}" class="matkul-kelas-select rounded border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 px-2 py-0.5 text-xs font-bold text-zinc-800 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-amber-500">
-                <option value="A" ${defaultKelas === 'A' ? 'selected' : ''}>Kelas A</option>
-                <option value="B" ${defaultKelas === 'B' ? 'selected' : ''}>Kelas B</option>
-                <option value="C" ${defaultKelas === 'C' ? 'selected' : ''}>Kelas C</option>
-                <option value="D" ${defaultKelas === 'D' ? 'selected' : ''}>Kelas D</option>
-              </select>
-            </div>
-          `;
-          gridEl.appendChild(card);
-        });
-        return section;
-      }
-
-      // Render Semester Aktif di paling atas (tanpa perlu scroll)
-      if (grouped.has(targetSmt)) {
-        matkulListContainer.appendChild(buildSemesterSection(targetSmt, grouped.get(targetSmt), true));
-      }
-
-      // Semester lainnya dimasukkan ke dalam accordion ringkas
-      const otherSemesters = Array.from(grouped.keys()).filter(s => s !== targetSmt).sort((a, b) => a - b);
-      if (otherSemesters.length > 0) {
-        const detailsEl = document.createElement('details');
-        detailsEl.className = 'rounded-xl border border-zinc-200 bg-zinc-50/50 p-3.5 dark:border-zinc-800 dark:bg-zinc-800/30';
-        detailsEl.innerHTML = `
-          <summary class="cursor-pointer font-heading text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex items-center justify-between">
-            <span>Ambil Mata Kuliah Lintas Semester (Semester ${otherSemesters.join(', ')})</span>
-            <span class="font-mono text-[11px] text-[#0c2b5e] dark:text-amber-400 underline">Buka Daftar</span>
-          </summary>
-          <div class="mt-4 space-y-5 pt-3 border-t border-zinc-200/80 dark:border-zinc-800" id="other-semesters-box"></div>
-        `;
-        const otherBox = detailsEl.querySelector('#other-semesters-box');
-        otherSemesters.forEach(smt => {
-          otherBox.appendChild(buildSemesterSection(smt, grouped.get(smt), false));
-        });
-        matkulListContainer.appendChild(detailsEl);
-      }
-
-      recalculateSks();
+    // Helper: Cek apakah rentang jam bertabrakan
+    function isTimeOverlap(s1, e1, s2, e2) {
+      return (s1 < e2) && (s2 < e1);
     }
 
-    // NIM Builder Sync
-    inputAngkatan.addEventListener('change', () => {
-      nimPrefix.textContent = `${inputAngkatan.value}0140`;
-    });
+    // Deteksi Bentrok di antara sesi yang sedang dipilih
+    function detectClashes() {
+      const selectedList = Array.from(selectedSesisMap.values());
+      const clashes = [];
 
-    // Default Rombel Class Sync ke setiap mata kuliah
-    inputPrefKelas.addEventListener('change', () => {
-      const newKls = inputPrefKelas.value;
-      document.querySelectorAll('.matkul-kelas-select').forEach(sel => {
-        sel.value = newKls;
-      });
-    });
-
-    // Step Switcher Helper
-    function setStep(stepNumber) {
-      [pane1, pane2, pane3].forEach(p => p.classList.add('hidden'));
-
-      // Reset nav classes
-      const allNavs = [stepNav1, stepNav2, stepNav3];
-      allNavs.forEach((nav, idx) => {
-        if (idx + 1 === stepNumber) {
-          nav.className = 'step-nav-item cursor-pointer flex items-center gap-3 rounded-xl border border-brand-blue bg-brand-blue p-3.5 text-white shadow-sm transition-all';
-          nav.children[0].className = 'flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 font-mono text-sm font-bold text-white';
-          nav.children[1].children[0].className = 'text-xs font-bold leading-tight text-white';
-          nav.children[1].children[1].className = 'text-[11px] text-white/80 mt-0.5';
-        } else if (idx + 1 < stepNumber) {
-          nav.className = 'step-nav-item cursor-pointer flex items-center gap-3 rounded-xl border border-emerald-300 bg-emerald-50 p-3.5 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-200 transition-all';
-          nav.children[0].className = 'flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-200 font-mono text-sm font-bold text-emerald-800 dark:bg-emerald-800 dark:text-emerald-100';
-          nav.children[1].children[0].className = 'text-xs font-semibold leading-tight text-emerald-900 dark:text-emerald-200';
-          nav.children[1].children[1].className = 'text-[11px] text-emerald-700 dark:text-emerald-400 mt-0.5';
-        } else {
-          nav.className = 'step-nav-item cursor-pointer flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3.5 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 transition-all';
-          nav.children[0].className = 'flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 font-mono text-sm font-bold text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400';
-          nav.children[1].children[0].className = 'text-xs font-semibold text-zinc-900 dark:text-zinc-200 leading-tight';
-          nav.children[1].children[1].className = 'text-[11px] text-zinc-500 mt-0.5';
+      for (let i = 0; i < selectedList.length; i++) {
+        for (let j = i + 1; j < selectedList.length; j++) {
+          const a = selectedList[i];
+          const b = selectedList[j];
+          if (a.hari === b.hari && isTimeOverlap(a.jamMulai, a.jamSelesai, b.jamMulai, b.jamSelesai)) {
+            clashes.push({ a, b });
+          }
         }
-      });
-
-      if (stepNumber === 1) pane1.classList.remove('hidden');
-      if (stepNumber === 2) pane2.classList.remove('hidden');
-      if (stepNumber === 3) pane3.classList.remove('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return clashes;
     }
 
-    // Live SKS Counter
-    function recalculateSks() {
-      let total = 0;
-      getMatkulCheckboxes().forEach(cb => {
-        if (cb.checked) {
-          total += parseInt(cb.getAttribute('data-sks') || '0', 10);
-        }
-      });
+    // Toggle Seleksi Sesi
+    function toggleSelectSesi(item) {
+      const kode = item.kodeMatkul;
+      if (!kode) return;
 
-      currentSksCountEl.textContent = total;
-      const pct = Math.min(100, Math.round((total / 24) * 100));
-      sksProgressBar.style.width = `${pct}%`;
-
-      if (total > 24) {
-        currentSksCountEl.classList.add('text-rose-600');
-        JadwalinUI.toast.show('Peringatan: Beban SKS melebihi batas 24 SKS!', 'warning');
+      const current = selectedSesisMap.get(kode);
+      if (current && current.id === item.id) {
+        // Klik sesi yang sama -> Batalkan pilihan
+        selectedSesisMap.delete(kode);
       } else {
-        currentSksCountEl.classList.remove('text-rose-600');
+        // Pilih sesi ini (otomatis menggantikan kelas lain untuk matkul yang sama)
+        selectedSesisMap.set(kode, item);
       }
-      return total;
+
+      updateUI();
     }
 
-    matkulListContainer.addEventListener('change', (e) => {
-      if (e.target.classList.contains('matkul-checkbox')) {
-        recalculateSks();
-      }
-    });
+    // Hapus sesi dari ringkasan
+    window.removeSelectedSesi = function(kode) {
+      selectedSesisMap.delete(kode);
+      updateUI();
+    };
 
-    inputSemester.addEventListener('change', renderMatkulGrid);
-    inputPrefPeminatan.addEventListener('change', renderMatkulGrid);
-    renderMatkulGrid();
+    // Update Seluruh UI (Kalender, Stats, Alert, dan Ringkasan)
+    function updateUI() {
+      const selectedList = Array.from(selectedSesisMap.values());
+      const totalSks = selectedList.reduce((sum, s) => sum + (Number(s.sks) || 0), 0);
+      const clashes = detectClashes();
 
-    btnSelectAll.addEventListener('click', () => {
-      const targetSmt = String(inputSemester.value);
-      getMatkulCheckboxes().forEach(cb => {
-        cb.checked = cb.getAttribute('data-semester') === targetSmt;
-      });
-      recalculateSks();
-    });
+      // 1. Update SKS & Count
+      selectedSksLabel.textContent = `${totalSks} / 24 SKS`;
+      const pct = Math.min(100, Math.round((totalSks / 24) * 100));
+      selectedSksBar.style.width = `${pct}%`;
+      selectedMatkulCount.textContent = `${selectedList.length} Mata Kuliah`;
+      summarySksBadge.textContent = `${totalSks} SKS Terpilih (${selectedList.length} Matkul)`;
 
-    btnUnselectAll.addEventListener('click', () => {
-      getMatkulCheckboxes().forEach(cb => cb.checked = false);
-      recalculateSks();
-    });
-
-    // Step 1 -> Step 2
-    btnToStep2.addEventListener('click', () => {
-      if (!inputNama.value.trim()) {
-        JadwalinUI.toast.show('Harap isi nama lengkap mahasiswa.', 'error');
-        return;
-      }
-      renderMatkulGrid();
-      setStep(2);
-    });
-
-    btnBackTo1.addEventListener('click', () => setStep(1));
-    btnBackTo2.addEventListener('click', () => setStep(2));
-
-    // Calculate Pra-KRS (Step 2 -> Step 3)
-    async function fetchRekomendasi() {
-      const selectedCodes = [];
-      getMatkulCheckboxes().forEach(cb => {
-        if (cb.checked) selectedCodes.push(cb.getAttribute('data-kode'));
-      });
-
-      if (selectedCodes.length === 0) {
-        JadwalinUI.toast.show('Pilih minimal satu mata kuliah terlebih dahulu.', 'error');
-        return;
+      if (totalSks > 24) {
+        selectedSksLabel.className = 'font-mono text-base font-bold text-rose-600';
+        selectedSksBar.className = 'h-full bg-rose-600 transition-all duration-300';
+      } else {
+        selectedSksLabel.className = 'font-mono text-base font-bold text-zinc-900 dark:text-zinc-50';
+        selectedSksBar.className = 'h-full bg-brand-blue transition-all duration-300';
       }
 
-      const kelasPerMatkul = {};
-      document.querySelectorAll('.matkul-kelas-select').forEach(sel => {
-        const k = sel.getAttribute('data-matkul-kode');
-        if (k) kelasPerMatkul[k] = sel.value;
-      });
+      // 2. Update Clash Status
+      if (clashes.length > 0) {
+        clashStatusBox.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-rose-300 bg-rose-50 text-rose-900 dark:border-rose-800 dark:bg-rose-950/50 dark:text-rose-300 text-xs font-semibold animate-pulse';
+        clashStatusBox.innerHTML = `<i class="ph ph-warning text-rose-600 text-sm"></i><span>Terdeteksi ${clashes.length} Bentrok Jam!</span>`;
+        
+        clashAlertBanner.classList.remove('hidden');
+        const clashTextArr = clashes.map(c => `• <strong>${c.a.mataKuliah}</strong> (Kelas ${c.a.kelas}) bertabrakan dengan <strong>${c.b.mataKuliah}</strong> (Kelas ${c.b.kelas}) pada hari <strong>${c.a.hari} ${c.a.jamMulai}–${c.a.jamSelesai}</strong>.`);
+        clashAlertDetail.innerHTML = clashTextArr.join('<br>');
+      } else {
+        clashStatusBox.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 text-xs font-semibold';
+        clashStatusBox.innerHTML = `<i class="ph ph-shield-check text-emerald-600 text-sm"></i><span>Bebas Bentrok (0 Konflik)</span>`;
+        clashAlertBanner.classList.add('hidden');
+        clashAlertDetail.innerHTML = '';
+      }
 
-      const payload = {
-        semester: parseInt(inputSemester.value, 10),
-        angkatan: parseInt(inputAngkatan.value, 10),
-        nama: inputNama.value.trim(),
-        nimSuffix: inputNimSuffix.value.trim().padStart(3, '0'),
-        kodeMatkulList: selectedCodes,
-        prefKelas: inputPrefKelas.value,
-        prefHari: 'Semua',
-        prefWaktu: inputPrefWaktu.value,
-        variasiIndex: currentVariasiIndex,
-        kelasPerMatkul
-      };
+      // 3. Render Kalender Grid
+      renderCalendarGrid(clashes);
 
-      try {
-        const res = await JadwalinUI.apiFetch('/api/jadwal/prakrs', {
-          method: 'POST',
-          body: JSON.stringify(payload)
-        });
+      // 4. Render Ringkasan Tabel
+      renderSummaryTable();
+    }
 
-        if (res && res.sukses) {
-          const sesiList = res.rekomendasiSesi || res.jadwalTerpilih || [];
-          renderResultSchedule(sesiList);
-          const totalSks = sesiList.reduce((sum, s) => sum + (s.sks || 0), 0);
-          resultSksLabel.textContent = `${totalSks} SKS · ${sesiList.length} Mata Kuliah`;
-          setStep(3);
-          JadwalinUI.toast.show('Paket jadwal bebas bentrok berhasil disusun!', 'success');
+    // Filter Sesi untuk Kalender
+    function getFilteredSessions() {
+      const semVal = filterSemester.value;
+      const pemVal = filterPeminatan.value;
+      const qVal = filterSearch.value.trim().toLowerCase();
+
+      return MASTER_JADWAL.filter(item => {
+        // Filter Semester
+        if (semVal !== 'ALL' && String(item.semester) !== String(semVal)) {
+          return false;
         }
-      } catch (err) {
-        // Fallback local visual jika fetch terhambat
-        setStep(3);
-      }
+
+        // Filter Peminatan
+        if (pemVal !== 'ALL') {
+          if (item.peminatanKode && item.peminatanKode !== pemVal) return false;
+        }
+
+        // Filter Search
+        if (qVal) {
+          const haystack = `${item.mataKuliah} ${item.kodeMatkul} ${item.dosen} ${item.ruang} ${item.kelas}`.toLowerCase();
+          if (!haystack.includes(qVal)) return false;
+        }
+
+        return true;
+      });
     }
 
-    function renderResultGrid(list) {
-      if (!prakrsGridBody) return;
-      prakrsGridBody.innerHTML = '';
+    // Render Grid Kalender
+    function renderCalendarGrid(clashes) {
+      gridBody.innerHTML = '';
+      const visibleSessions = getFilteredSessions();
+      const clashingIds = new Set();
 
-      prakrsTimeSlots.forEach(slot => {
+      clashes.forEach(c => {
+        if (c.a?.id) clashingIds.add(c.a.id);
+        if (c.b?.id) clashingIds.add(c.b.id);
+      });
+
+      timeSlots.forEach(slot => {
         const tr = document.createElement('tr');
 
-        // Break Row (Sholat Dhuhur)
+        // Break Row (Dhuhur)
         if (slot.isBreak) {
           tr.className = 'bg-zinc-100/90 dark:bg-zinc-800/60 border-y border-zinc-200 dark:border-zinc-700/60';
           tr.innerHTML = `
@@ -908,25 +497,25 @@
               </span>
             </td>
           `;
-          prakrsGridBody.appendChild(tr);
+          gridBody.appendChild(tr);
           return;
         }
 
-        // Regular Time Slot Row
-        tr.className = 'min-h-[96px] items-stretch';
+        tr.className = 'min-h-[110px] items-stretch';
 
-        // Time Label Column
+        // Kolom Label Jam
         const timeTd = document.createElement('td');
-        timeTd.className = 'sticky left-0 border-r border-zinc-200 bg-zinc-50 px-2.5 py-2 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 align-top text-center font-medium text-[11px]';
+        timeTd.className = 'sticky left-0 border-r border-zinc-200 bg-zinc-50 px-2.5 py-2.5 text-zinc-500 dark:border-zinc-800 dark:bg-zinc-900 align-top text-center font-medium text-[11px]';
         timeTd.textContent = slot.label;
         tr.appendChild(timeTd);
 
-        // Days Columns (Senin -> Sabtu)
-        prakrsDays.forEach(day => {
+        // Kolom Hari (Senin s/d Sabtu)
+        days.forEach(day => {
           const td = document.createElement('td');
           td.className = 'border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors';
 
-          const matches = (list || []).filter(item => {
+          // Cari sesi yang pas di slot ini
+          const matches = visibleSessions.filter(item => {
             if (item.hari !== day) return false;
             const jMulai = item.jamMulai || '';
             if (slot.start === '07:00' && jMulai < '08:45') return true;
@@ -940,34 +529,84 @@
             td.innerHTML = '<div class="h-16"></div>';
           } else {
             const container = document.createElement('div');
-            container.className = 'space-y-1.5';
+            container.className = 'space-y-2';
 
             matches.forEach(item => {
-              const isLab = (item.ruang && item.ruang.toLowerCase().includes('lab')) ||
+              const isSelected = selectedSesisMap.get(item.kodeMatkul)?.id === item.id;
+              const isClashing = isSelected && clashingIds.has(item.id);
+              const isLab = (item.ruang && item.ruang.toLowerCase().includes('lab')) || 
                             (item.tipeRuang && item.tipeRuang.toLowerCase().includes('lab')) ||
                             (item.jenis && item.jenis.toLowerCase().includes('praktikum'));
+              const isGabungan = item.kelas.includes(';') || item.kelas.length > 2;
 
               const card = document.createElement('div');
-              card.className = isLab
-                ? 'rounded-lg border border-amber-300 bg-amber-50/90 p-2 text-amber-950 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-100 shadow-xs transition-all hover:border-amber-500'
-                : 'rounded-lg border border-blue-200 bg-blue-50/90 p-2 text-blue-950 dark:border-blue-900 dark:bg-blue-950/40 dark:text-blue-100 shadow-xs transition-all hover:border-brand-blue';
+              card.className = `group cursor-pointer rounded-xl p-2.5 transition-all select-none relative ${
+                isClashing
+                  ? 'border-2 border-rose-600 bg-rose-50/90 dark:border-rose-500 dark:bg-rose-950/60 shadow-md ring-2 ring-rose-400/30'
+                  : isSelected
+                    ? 'border-2 border-[#0c2b5e] bg-blue-50/95 dark:border-blue-500 dark:bg-blue-950/60 shadow-md ring-2 ring-blue-300/40'
+                    : isGabungan
+                      ? 'border border-purple-200 bg-purple-50/40 hover:border-purple-400 hover:bg-purple-50/80 dark:border-purple-900/60 dark:bg-purple-950/20'
+                      : isLab
+                        ? 'border border-amber-200 bg-amber-50/40 hover:border-amber-400 hover:bg-amber-50/80 dark:border-amber-900/60 dark:bg-amber-950/20'
+                        : 'border border-zinc-200 bg-white hover:border-zinc-400 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/90'
+              }`;
 
               card.innerHTML = `
                 <div class="flex items-start justify-between gap-1">
-                  <span class="font-heading font-bold text-xs leading-tight line-clamp-1" title="${item.mataKuliah}">${item.mataKuliah}</span>
-                  ${isLab ? '<i class="ph ph-flask text-amber-600 dark:text-amber-400 shrink-0 text-xs" title="Praktikum Lab"></i>' : ''}
+                  <span class="font-heading font-bold text-xs leading-tight line-clamp-1 ${isSelected ? 'text-[#0c2b5e] dark:text-blue-200' : 'text-zinc-900 dark:text-zinc-100'}" title="${item.mataKuliah}">
+                    ${item.mataKuliah}
+                  </span>
+                  ${isSelected 
+                    ? '<span class="inline-flex items-center justify-center h-4 w-4 rounded-full bg-[#0c2b5e] text-white shrink-0"><i class="ph ph-check text-[10px]"></i></span>' 
+                    : '<span class="inline-flex items-center justify-center h-4 w-4 rounded-full border border-zinc-300 group-hover:border-blue-600 shrink-0 text-transparent group-hover:text-blue-600 text-[10px]"><i class="ph ph-plus"></i></span>'
+                  }
                 </div>
-                <div class="mt-1 flex items-center justify-between text-[10px] opacity-85">
-                  <span class="font-semibold">${item.ruang}</span>
-                  <span>Kls ${item.kelas} · ${item.sks} SKS</span>
+
+                <!-- Badges Row -->
+                <div class="mt-1 flex flex-wrap items-center gap-1 text-[10px]">
+                  <!-- Badge Kelas -->
+                  <span class="px-1.5 py-0.5 rounded font-mono font-bold ${
+                    isGabungan 
+                      ? 'bg-purple-100 text-purple-900 dark:bg-purple-950 dark:text-purple-300 border border-purple-300 dark:border-purple-800' 
+                      : 'bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200'
+                  }">
+                    ${isGabungan ? 'Gabungan ' + item.kelas : 'Kls ' + item.kelas}
+                  </span>
+
+                  <!-- SKS -->
+                  <span class="px-1 py-0.5 rounded bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 font-mono">
+                    ${item.sks} SKS
+                  </span>
+
+                  <!-- Lab Indicator -->
+                  ${isLab ? '<span class="px-1 py-0.5 rounded bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300 font-semibold" title="Praktikum Laboratorium"><i class="ph ph-flask"></i> Lab</span>' : ''}
                 </div>
-                <div class="mt-0.5 text-[10px] truncate opacity-75" title="${item.dosen}">
+
+                <!-- Ruangan & Jam -->
+                <div class="mt-1.5 flex items-center justify-between text-[10px] font-medium text-zinc-600 dark:text-zinc-400">
+                  <span class="truncate font-semibold" title="${item.ruang}">${item.ruang}</span>
+                  <span class="font-mono text-zinc-500">${item.jamMulai}–${item.jamSelesai}</span>
+                </div>
+
+                <!-- Dosen Pengampu -->
+                <div class="mt-0.5 text-[10px] text-zinc-500 dark:text-zinc-400 truncate" title="${item.dosen}">
                   ${item.dosenInisial || item.dosen}
                 </div>
-                <div class="mt-0.5 text-[9px] font-mono text-zinc-500 dark:text-zinc-400">
-                  ${item.jamMulai}–${item.jamSelesai}
+
+                <!-- Selection Status Indicator -->
+                <div class="mt-2 pt-1 border-t border-zinc-100 dark:border-zinc-800/80 flex items-center justify-between text-[10px]">
+                  ${isClashing 
+                    ? '<span class="font-bold text-rose-600 dark:text-rose-400 inline-flex items-center gap-1"><i class="ph ph-warning"></i> Bentrok!</span>' 
+                    : isSelected 
+                      ? '<span class="font-bold text-emerald-700 dark:text-emerald-400 inline-flex items-center gap-1"><i class="ph ph-check-circle"></i> Terpilih</span>' 
+                      : '<span class="text-zinc-400 group-hover:text-zinc-700 dark:group-hover:text-zinc-300">Klik untuk pilih</span>'
+                  }
+                  <span class="text-[9px] font-mono opacity-70">${item.kodeMatkul}</span>
                 </div>
               `;
+
+              card.addEventListener('click', () => toggleSelectSesi(item));
               container.appendChild(card);
             });
 
@@ -977,290 +616,152 @@
           tr.appendChild(td);
         });
 
-        prakrsGridBody.appendChild(tr);
+        gridBody.appendChild(tr);
       });
     }
 
-    // Toggle Mode Tampilan Tabel vs Kalender Grid
-    const ACTIVE_VIEW_CLS = 'inline-flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1 text-xs font-semibold text-zinc-900 shadow-xs dark:bg-zinc-900 dark:text-zinc-100 transition-all';
-    const INACTIVE_VIEW_CLS = 'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-all';
+    // Render Ringkasan Tabel Bawah
+    function renderSummaryTable() {
+      summarySelectedBody.innerHTML = '';
+      const selectedList = Array.from(selectedSesisMap.values());
 
-    function setPrakrsViewMode(mode) {
-      if (!containerTable || !containerGrid) return;
-      if (mode === 'grid') {
-        containerTable.classList.add('hidden');
-        containerGrid.classList.remove('hidden');
-        if (btnModeGrid) btnModeGrid.className = ACTIVE_VIEW_CLS;
-        if (btnModeTable) btnModeTable.className = INACTIVE_VIEW_CLS;
-        renderResultGrid(latestSesiList);
-      } else {
-        containerTable.classList.remove('hidden');
-        containerGrid.classList.add('hidden');
-        if (btnModeTable) btnModeTable.className = ACTIVE_VIEW_CLS;
-        if (btnModeGrid) btnModeGrid.className = INACTIVE_VIEW_CLS;
-      }
-    }
-
-    if (btnModeTable) btnModeTable.addEventListener('click', () => setPrakrsViewMode('table'));
-    if (btnModeGrid) btnModeGrid.addEventListener('click', () => setPrakrsViewMode('grid'));
-
-    function renderResultSchedule(list) {
-      latestSesiList = Array.isArray(list) ? list : [];
-      resultScheduleBody.innerHTML = '';
-      if (!list || list.length === 0) {
-        resultScheduleBody.innerHTML = `
+      if (selectedList.length === 0) {
+        summarySelectedBody.innerHTML = `
           <tr>
-            <td colspan="5" class="px-4 py-6 text-center text-zinc-500">
-              Tidak ada data jadwal yang cocok.
+            <td colspan="6" class="py-6 text-center text-zinc-400">
+              Belum ada kelas yang dipilih. Silakan pilih kelas mata kuliah pada kalender di atas.
             </td>
           </tr>
         `;
-        renderResultGrid([]);
         return;
       }
 
-      list.forEach(item => {
-        const isLab = (item.ruang && item.ruang.toLowerCase().includes('lab')) || 
-                      (item.jenis && item.jenis.toLowerCase().includes('praktikum'));
+      // Urutkan berdasarkan hari & jam
+      const dayOrder = { 'Senin': 1, 'Selasa': 2, 'Rabu': 3, 'Kamis': 4, 'Jumat': 5, 'Sabtu': 6 };
+      selectedList.sort((a, b) => (dayOrder[a.hari] || 9) - (dayOrder[b.hari] || 9) || a.jamMulai.localeCompare(b.jamMulai));
+
+      selectedList.forEach(item => {
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors';
-        tr.setAttribute('data-hari', item.hari || '');
-        tr.setAttribute('data-search', `${item.kodeMatkul || ''} ${item.mataKuliah || ''} ${item.dosen || ''} ${item.ruang || ''} ${item.hari || ''}`.toLowerCase());
         tr.innerHTML = `
-          <td class="px-4 py-3 font-semibold text-zinc-800 dark:text-zinc-200">
+          <td class="py-2.5 px-3">
+            <span class="font-semibold text-zinc-900 dark:text-zinc-100">${item.mataKuliah}</span>
+            <div class="text-[10px] font-mono text-zinc-400">${item.kodeMatkul} · Semester ${item.semester || '-'}</div>
+          </td>
+          <td class="py-2.5 px-3">
+            <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200">
+              Kelas ${item.kelas}
+            </span>
+            <span class="text-[11px] text-zinc-500 ml-1">(${item.sks} SKS)</span>
+          </td>
+          <td class="py-2.5 px-3 font-medium text-zinc-800 dark:text-zinc-200">
             ${item.hari}, ${item.jamMulai}–${item.jamSelesai}
           </td>
-          <td class="px-4 py-3 font-medium text-zinc-900 dark:text-zinc-100">
-            <div>${item.mataKuliah}</div>
-            <div class="text-[11px] text-zinc-400 font-mono">${item.kodeMatkul}</div>
+          <td class="py-2.5 px-3">
+            <span class="font-medium text-zinc-800 dark:text-zinc-200">${item.ruang}</span>
+            <div class="text-[10px] text-zinc-400">${item.tipeRuang || 'Ruang Kuliah'}</div>
           </td>
-          <td class="px-4 py-3">
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold ${isLab ? 'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-300' : 'bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200'}">
-              ${isLab ? '<i class="ph ph-flask"></i>' : ''}
-              ${item.ruang}
-            </span>
-          </td>
-          <td class="px-4 py-3 font-mono font-semibold text-zinc-700 dark:text-zinc-300">
-            Kelas ${item.kelas} · ${item.sks} SKS
-          </td>
-          <td class="px-4 py-3 text-zinc-600 dark:text-zinc-400">
+          <td class="py-2.5 px-3 text-zinc-600 dark:text-zinc-400">
             ${item.dosen}
           </td>
+          <td class="py-2.5 px-3 text-right">
+            <button type="button" onclick="removeSelectedSesi('${item.kodeMatkul}')" class="text-rose-500 hover:text-rose-700 p-1" title="Batalkan Pilihan">
+              <i class="ph ph-trash text-sm"></i>
+            </button>
+          </td>
         `;
-        resultScheduleBody.appendChild(tr);
+        summarySelectedBody.appendChild(tr);
       });
+    }
 
-      renderResultGrid(list);
+    // Event Listeners Filter
+    filterSemester.addEventListener('change', () => updateUI());
+    filterPeminatan.addEventListener('change', () => updateUI());
+    filterSearch.addEventListener('input', () => updateUI());
 
-      if (window.JadwalinTablePagination) {
-        window.JadwalinTablePagination.bindTable('table-prakrs-schedule');
+    // Reset Pilihan
+    btnReset.addEventListener('click', () => {
+      if (selectedSesisMap.size === 0) return;
+      if (confirm('Kosongkan semua kelas yang telah dipilih di kalender?')) {
+        selectedSesisMap.clear();
+        updateUI();
+        if (window.JadwalinUI?.toast) {
+          window.JadwalinUI.toast.show('Seluruh pilihan kelas telah dikosongkan.', 'info');
+        }
       }
-    }
-
-    btnCalculate.addEventListener('click', () => {
-      currentVariasiIndex = 0;
-      fetchRekomendasi();
     });
 
-    const btnTopCalculate = document.getElementById('btn-top-calculate-prakrs');
-    if (btnTopCalculate) {
-      btnTopCalculate.addEventListener('click', () => btnCalculate.click());
-    }
-
-    if (stepNav1) stepNav1.addEventListener('click', () => setStep(1));
-    if (stepNav2) stepNav2.addEventListener('click', () => btnToStep2.click());
-    if (stepNav3) stepNav3.addEventListener('click', () => btnCalculate.click());
-
-    btnMintaVariasi.addEventListener('click', () => {
-      currentVariasiIndex += 1;
-      fetchRekomendasi();
-      JadwalinUI.toast.show(`Menghitung variasi paket alternatif #${currentVariasiIndex + 1}`, 'info');
-    });
-
-    btnSimpan.addEventListener('click', async () => {
-      const selectedCodes = [];
-      getMatkulCheckboxes().forEach(cb => {
-        if (cb.checked) selectedCodes.push(cb.getAttribute('data-kode'));
-      });
-      if (selectedCodes.length === 0) {
-        JadwalinUI.toast.show('Pilih minimal satu mata kuliah sebelum menyimpan.', 'error');
+    // Simpan Jadwal ke Database
+    btnSave.addEventListener('click', async () => {
+      const selectedList = Array.from(selectedSesisMap.values());
+      if (selectedList.length === 0) {
+        if (window.JadwalinUI?.toast) {
+          window.JadwalinUI.toast.show('Pilih minimal satu kelas perkuliahan sebelum menyimpan jadwal.', 'warning');
+        } else {
+          alert('Pilih minimal satu kelas perkuliahan sebelum menyimpan jadwal.');
+        }
         return;
       }
 
+      const clashes = detectClashes();
+      if (clashes.length > 0) {
+        if (window.JadwalinUI?.toast) {
+          window.JadwalinUI.toast.show(`Penyimpanan ditolak: Masih terdapat ${clashes.length} bentrok jam kuliah pada jadwal yang Anda pilih. Harap perbaiki bentrok terlebih dahulu.`, 'error');
+        } else {
+          alert(`Penyimpanan ditolak: Masih terdapat ${clashes.length} bentrok jam kuliah.`);
+        }
+        return;
+      }
+
+      btnSave.disabled = true;
+      const targetSmt = parseInt(filterSemester.value, 10) || INITIAL_SEMESTER;
+      const targetPem = filterPeminatan.value !== 'ALL' ? filterPeminatan.value : INITIAL_PEMINATAN;
+
       const kelasPerMatkul = {};
-      document.querySelectorAll('.matkul-kelas-select').forEach(sel => {
-        const k = sel.getAttribute('data-matkul-kode');
-        if (k) kelasPerMatkul[k] = sel.value;
+      selectedList.forEach(s => {
+        kelasPerMatkul[s.kodeMatkul] = s.kelas;
       });
 
-      btnSimpan.disabled = true;
       try {
         const res = await JadwalinUI.apiFetch('/api/jadwal/prakrs/simpan', {
           method: 'POST',
           body: JSON.stringify({
-            semester: parseInt(inputSemester.value, 10),
-            kodePeminatan: inputPrefPeminatan.value,
-            prefKelas: inputPrefKelas.value,
-            prefWaktu: inputPrefWaktu.value,
-            kodeMatkulList: selectedCodes,
-            variasiIndex: currentVariasiIndex,
-            kelasPerMatkul
+            semester: targetSmt,
+            kodePeminatan: targetPem,
+            prefKelas: 'Campuran',
+            kodeMatkulList: selectedList.map(s => s.kodeMatkul),
+            kelasPerMatkul,
+            selectedSesis: selectedList
           })
         });
+
         if (!res || !res.sukses) {
-          throw new Error(res?.pesan || 'Gagal menyimpan Pra-KRS.');
+          throw new Error(res?.pesan || 'Gagal menyimpan rencana Pra-KRS.');
         }
-        JadwalinUI.toast.show(res.pesan || 'Rencana Pra-KRS berhasil disimpan!', 'success');
-        setTimeout(() => {
-          window.location.href = '/mahasiswa/dashboard';
-        }, 900);
-      } catch (err) {
-        JadwalinUI.toast.show(err.message || 'Gagal menyimpan Pra-KRS.', 'error');
-        btnSimpan.disabled = false;
-      }
-    });
 
-    // Initial check
-    recalculateSks();
-
-    // Render initial saved Pra-KRS jika tersedia
-    const SAVED_PRAKRS_INITIAL = <%- JSON.stringify((typeof defaultPrakrs !== 'undefined' && defaultPrakrs && Array.isArray(defaultPrakrs.rekomendasiSesi)) ? defaultPrakrs.rekomendasiSesi : []) %>;
-    if (SAVED_PRAKRS_INITIAL.length > 0) {
-      renderResultSchedule(SAVED_PRAKRS_INITIAL);
-      const totalSks = SAVED_PRAKRS_INITIAL.reduce((sum, s) => sum + (s.sks || 0), 0);
-      if (resultSksLabel) {
-        resultSksLabel.textContent = `${totalSks} SKS · ${SAVED_PRAKRS_INITIAL.length} Mata Kuliah`;
-      }
-    }
-  });
-</script>
-
-<script>
-// --- INTEGRASI FITUR AI ASSISTANT (Resya x Yuum) ---
-  const chatToggle = document.getElementById('ai-chat-toggle');
-  const chatWindow = document.getElementById('ai-chat-window');
-  const chatClose = document.getElementById('ai-chat-close');
-  const chatInput = document.getElementById('chat-input');
-  const chatSend = document.getElementById('chat-send');
-  const chatMessages = document.getElementById('chat-messages');
-
-  if (chatToggle && chatWindow) {
-    chatToggle.addEventListener('click', () => {
-      chatWindow.classList.toggle('hidden');
-      if (!chatWindow.classList.contains('hidden')) {
-        chatInput.focus();
-      }
-    });
-
-    if (chatClose) {
-      chatClose.addEventListener('click', () => chatWindow.classList.add('hidden'));
-    }
-
-    async function sendChat() {
-      const msg = chatInput.value.trim();
-      if (msg.length < 2 || msg.length > 400) {
-        JadwalinUI.toast.show('Pertanyaan harus antara 2 hingga 400 karakter.', 'warning');
-        return;
-      }
-
-      // Render bubble user secara aman (anti-XSS textContent)
-      const userBubble = document.createElement('div');
-      userBubble.className = 'flex gap-2.5 justify-end';
-      const userTextDiv = document.createElement('div');
-      userTextDiv.className = 'bg-[#0c2b5e] text-white rounded-2xl rounded-tr-sm p-3 max-w-[85%] shadow-xs';
-      userTextDiv.textContent = msg;
-      userBubble.appendChild(userTextDiv);
-      chatMessages.appendChild(userBubble);
-      chatInput.value = '';
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-
-      // Loading bubble
-      const loadingEl = document.createElement('div');
-      loadingEl.className = 'flex gap-2.5';
-      loadingEl.innerHTML = `
-        <div class="w-7 h-7 rounded-full bg-blue-100 text-[#0c2b5e] dark:bg-blue-950 dark:text-blue-300 flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-900">
-          <i class="ph ph-robot text-sm"></i>
-        </div>
-        <div class="bg-zinc-100 dark:bg-zinc-800 rounded-2xl rounded-tl-sm p-3 text-zinc-500 border border-zinc-200/60 dark:border-zinc-700/60 flex items-center gap-2">
-          <i class="ph ph-spinner animate-spin text-sm text-[#0c2b5e] dark:text-amber-400"></i>
-          <span>Memproses pertanyaan Anda...</span>
-        </div>
-      `;
-      chatMessages.appendChild(loadingEl);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-
-      function formatChatMarkdown(raw) {
-        const escaped = String(raw || '')
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#39;');
-        return escaped
-          .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-bold text-zinc-950 dark:text-white">$1</strong>')
-          .replace(/\*([^*\n]+)\*/g, '<em class="italic">$1</em>')
-          .replace(/`([^`\n]+)`/g, '<code class="px-1 py-0.5 rounded bg-zinc-200/80 dark:bg-zinc-700 font-mono text-[11px]">$1</code>')
-          .replace(/^[ \t]*[\*\-]\s+/gm, '• ');
-      }
-
-      const checkedMatkuls = Array.from(document.querySelectorAll('.matkul-checkbox:checked'))
-        .map(cb => cb.getAttribute('data-kode'))
-        .filter(Boolean);
-      const contextPayload = {
-        nama: document.getElementById('input-nama')?.value?.trim() || '',
-        nim: `${document.getElementById('nim-prefix')?.textContent?.trim() || ''}${document.getElementById('input-nim-suffix')?.value?.trim() || ''}`,
-        angkatan: Number(document.getElementById('input-angkatan')?.value || 2024),
-        semester: Number(document.getElementById('input-semester')?.value || 5),
-        peminatan: (document.getElementById('input-pref-peminatan')?.value || 'SE').toUpperCase(),
-        prefKelas: document.getElementById('input-pref-kelas')?.value || 'B',
-        prefWaktu: document.getElementById('input-pref-waktu')?.value || 'Semua',
-        matkulDipilih: checkedMatkuls
-      };
-
-      let reply = '';
-      let isError = false;
-      try {
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: msg, context: contextPayload })
-        });
-        const result = await response.json();
-        loadingEl.remove();
-
-        if (response.ok && result && result.sukses && result.connected && result.data && result.data.reply) {
-          reply = result.data.reply;
+        if (window.showConfirmDialog) {
+          window.showConfirmDialog(
+            'Rencana Jadwal Berhasil Disimpan',
+            `${selectedList.length} mata kuliah (${selectedList.reduce((acc, s) => acc + (s.sks || 0), 0)} SKS) telah disimpan ke database sebagai jadwal perkuliahan pribadi Anda. Buka halaman Jadwal Saya?`,
+            () => { window.location.href = '/mahasiswa/jadwal'; },
+            'Buka Jadwal Saya',
+            true
+          );
         } else {
-          isError = true;
-          reply = result?.pesan || `Tidak dapat terhubung ke layanan AI (HTTP ${response.status}).`;
+          if (window.JadwalinUI?.toast) window.JadwalinUI.toast.show('Rencana jadwal berhasil disimpan!', 'success');
+          setTimeout(() => { window.location.href = '/mahasiswa/jadwal'; }, 800);
         }
       } catch (err) {
-        loadingEl.remove();
-        isError = true;
-        reply = 'Tidak dapat terhubung ke layanan AI: server tidak merespons atau koneksi jaringan terputus.';
+        if (window.JadwalinUI?.toast) {
+          window.JadwalinUI.toast.show(err.message || 'Gagal menyimpan rencana jadwal.', 'error');
+        } else {
+          alert(err.message || 'Gagal menyimpan rencana jadwal.');
+        }
+        btnSave.disabled = false;
       }
+    });
 
-      const replyBubble = document.createElement('div');
-      replyBubble.className = 'flex gap-2.5';
-      const iconBox = document.createElement('div');
-      iconBox.className = `w-7 h-7 rounded-full flex items-center justify-center shrink-0 border ${isError ? 'bg-amber-100 text-amber-800 border-amber-300 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800' : 'bg-blue-100 text-[#0c2b5e] border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-900'}`;
-      iconBox.innerHTML = `<i class="ph ${isError ? 'ph-warning-circle' : 'ph-robot'} text-sm"></i>`;
-
-      const textBox = document.createElement('div');
-      textBox.className = `rounded-2xl rounded-tl-sm p-3 border max-w-[85%] whitespace-pre-wrap leading-relaxed ${isError ? 'bg-amber-50 text-amber-950 border-amber-200 dark:bg-amber-950/40 dark:text-amber-200 dark:border-amber-900/60' : 'bg-zinc-100 text-zinc-800 border-zinc-200/60 dark:bg-zinc-800 dark:text-zinc-200 dark:border-zinc-700/60'}`;
-      textBox.innerHTML = formatChatMarkdown(reply);
-
-      replyBubble.appendChild(iconBox);
-      replyBubble.appendChild(textBox);
-      chatMessages.appendChild(replyBubble);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    if (chatSend) chatSend.addEventListener('click', sendChat);
-    if (chatInput) {
-      chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendChat();
-      });
-    }
-  }
+    // Initial render
+    updateUI();
+  });
 </script>
