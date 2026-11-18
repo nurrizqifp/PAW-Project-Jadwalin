@@ -185,6 +185,13 @@
                       <!-- VIEW 1: CALENDAR GRID VIEW (Presisi & Rapi)          -->
                       <!-- ---------------------------------------------------- -->
                       <div id="container-grid-view" class="space-y-4">
+                        <div class="flex items-center justify-between text-xs px-1 text-zinc-500 dark:text-zinc-400">
+                          <div class="inline-flex items-center gap-1.5 font-medium">
+                            <i class="ph ph-hand-grabbing text-blue-600 dark:text-blue-400"></i>
+                            <span>Fitur Kustomisasi: Tarik (<strong>drag-and-drop</strong>) kartu sesi ke slot hari & jam lain untuk revisi manual langsung.</span>
+                          </div>
+                          <span class="text-[11px] font-mono text-zinc-400">Klik kartu untuk edit detail via modal</span>
+                        </div>
                         <div
                           class="rounded-xl border border-zinc-200 bg-white shadow-xs dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
                           <div class="overflow-x-auto">
@@ -229,7 +236,8 @@
                                     <% const slotJadwal=(jadwal || []).filter(j=> j.hari === hari &&
                                       j.jamMulai.startsWith('07:')); %>
                                       <td
-                                        class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
+                                        class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 slot-drop-target <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>"
+                                        data-drop-hari="<%= hari %>" data-drop-jam="07:00">
                                         <div class="space-y-1.5">
                                           <% slotJadwal.forEach(item=> { %>
                                             <% const isBentrok=Boolean(item.isConflict); const cardBorderBg=isBentrok
@@ -239,8 +247,15 @@
                                               : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200'
                                               ); %>
                                               <div
+                                                draggable="true"
                                                 onclick="openEditModal('<%= escapeJsStr(item.mataKuliah) %> (Kelas <%= escapeJsStr(item.kelas) %>)', '<%= escapeJsStr(item.dosen) %>', '<%= escapeJsStr(item.ruang) %>', '<%= escapeJsStr(item.hari) %>', '<%= escapeJsStr(item.jamMulai) %>', '<%= escapeJsStr(item.id) %>', '<%= isBentrok ? escapeJsStr((item.conflictReasons || []).join("; ")) : "" %>')"
-                                                class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
+                                                class="grid-slot-card cursor-grab active:cursor-grabbing rounded-lg border p-2 shadow-xs transition-all hover:scale-[1.01] <%= cardBorderBg %>"
+                                                data-sesi-id="<%= item.id %>"
+                                                data-sesi-matkul="<%= escapeJsStr(item.mataKuliah) %>"
+                                                data-sesi-kelas="<%= escapeJsStr(item.kelas) %>"
+                                                data-sesi-hari="<%= item.hari %>"
+                                                data-sesi-jam="<%= item.jamMulai %>"
+                                                data-sesi-ruang="<%= item.ruang %>"
                                                 data-hari="<%= item.hari %>" data-jenis="<%= item.jenis %>"
                                                 data-conflict="<%= isBentrok ? 'true' : 'false' %>"
                                                 data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
@@ -301,7 +316,8 @@
                                       (j.jamMulai.startsWith('08:') || j.jamMulai.startsWith('09:') ||
                                       j.jamMulai.startsWith('10:'))); %>
                                       <td
-                                        class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
+                                        class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 slot-drop-target <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>"
+                                        data-drop-hari="<%= hari %>" data-drop-jam="08:50">
                                         <div class="space-y-1.5">
                                           <% slotJadwal.forEach(item=> { %>
                                             <% const isBentrok=Boolean(item.isConflict); const cardBorderBg=isBentrok
@@ -311,8 +327,15 @@
                                               : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200'
                                               ); %>
                                               <div
+                                                draggable="true"
                                                 onclick="openEditModal('<%= escapeJsStr(item.mataKuliah) %> (Kelas <%= escapeJsStr(item.kelas) %>)', '<%= escapeJsStr(item.dosen) %>', '<%= escapeJsStr(item.ruang) %>', '<%= escapeJsStr(item.hari) %>', '<%= escapeJsStr(item.jamMulai) %>', '<%= escapeJsStr(item.id) %>', '<%= isBentrok ? escapeJsStr((item.conflictReasons || []).join("; ")) : "" %>')"
-                                                class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
+                                                class="grid-slot-card cursor-grab active:cursor-grabbing rounded-lg border p-2 shadow-xs transition-all hover:scale-[1.01] <%= cardBorderBg %>"
+                                                data-sesi-id="<%= item.id %>"
+                                                data-sesi-matkul="<%= escapeJsStr(item.mataKuliah) %>"
+                                                data-sesi-kelas="<%= escapeJsStr(item.kelas) %>"
+                                                data-sesi-hari="<%= item.hari %>"
+                                                data-sesi-jam="<%= item.jamMulai %>"
+                                                data-sesi-ruang="<%= item.ruang %>"
                                                 data-hari="<%= item.hari %>" data-jenis="<%= item.jenis %>"
                                                 data-conflict="<%= isBentrok ? 'true' : 'false' %>"
                                                 data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
@@ -386,7 +409,8 @@
                                     <% const slotJadwal=(jadwal || []).filter(j=> j.hari === hari &&
                                       (j.jamMulai.startsWith('12:') || j.jamMulai.startsWith('13:'))); %>
                                       <td
-                                        class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
+                                        class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 slot-drop-target <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>"
+                                        data-drop-hari="<%= hari %>" data-drop-jam="12:10">
                                         <div class="space-y-1.5">
                                           <% slotJadwal.forEach(item=> { %>
                                             <% const isBentrok=Boolean(item.isConflict); const cardBorderBg=isBentrok
@@ -396,8 +420,15 @@
                                               : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200'
                                               ); %>
                                               <div
+                                                draggable="true"
                                                 onclick="openEditModal('<%= escapeJsStr(item.mataKuliah) %> (Kelas <%= escapeJsStr(item.kelas) %>)', '<%= escapeJsStr(item.dosen) %>', '<%= escapeJsStr(item.ruang) %>', '<%= escapeJsStr(item.hari) %>', '<%= escapeJsStr(item.jamMulai) %>', '<%= escapeJsStr(item.id) %>', '<%= isBentrok ? escapeJsStr((item.conflictReasons || []).join("; ")) : "" %>')"
-                                                class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
+                                                class="grid-slot-card cursor-grab active:cursor-grabbing rounded-lg border p-2 shadow-xs transition-all hover:scale-[1.01] <%= cardBorderBg %>"
+                                                data-sesi-id="<%= item.id %>"
+                                                data-sesi-matkul="<%= escapeJsStr(item.mataKuliah) %>"
+                                                data-sesi-kelas="<%= escapeJsStr(item.kelas) %>"
+                                                data-sesi-hari="<%= item.hari %>"
+                                                data-sesi-jam="<%= item.jamMulai %>"
+                                                data-sesi-ruang="<%= item.ruang %>"
                                                 data-hari="<%= item.hari %>" data-jenis="<%= item.jenis %>"
                                                 data-conflict="<%= isBentrok ? 'true' : 'false' %>"
                                                 data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
@@ -458,7 +489,8 @@
                                       (j.jamMulai.startsWith('14:') || j.jamMulai.startsWith('15:') ||
                                       j.jamMulai.startsWith('16:'))); %>
                                       <td
-                                        class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>">
+                                        class="border-r border-zinc-200 p-1.5 dark:border-zinc-800 align-top last:border-r-0 slot-drop-target <%= slotJadwal.length === 0 ? 'bg-zinc-50/20 dark:bg-zinc-950/20' : '' %>"
+                                        data-drop-hari="<%= hari %>" data-drop-jam="15:30">
                                         <div class="space-y-1.5">
                                           <% slotJadwal.forEach(item=> { %>
                                             <% const isBentrok=Boolean(item.isConflict); const cardBorderBg=isBentrok
@@ -468,8 +500,15 @@
                                               : 'border-blue-200 bg-blue-50/80 text-blue-950 dark:border-blue-900/60 dark:bg-blue-950/40 dark:text-blue-200'
                                               ); %>
                                               <div
+                                                draggable="true"
                                                 onclick="openEditModal('<%= escapeJsStr(item.mataKuliah) %> (Kelas <%= escapeJsStr(item.kelas) %>)', '<%= escapeJsStr(item.dosen) %>', '<%= escapeJsStr(item.ruang) %>', '<%= escapeJsStr(item.hari) %>', '<%= escapeJsStr(item.jamMulai) %>', '<%= escapeJsStr(item.id) %>', '<%= isBentrok ? escapeJsStr((item.conflictReasons || []).join("; ")) : "" %>')"
-                                                class="grid-slot-card cursor-pointer rounded-lg border p-2 shadow-xs transition-transform hover:scale-[1.01] <%= cardBorderBg %>"
+                                                class="grid-slot-card cursor-grab active:cursor-grabbing rounded-lg border p-2 shadow-xs transition-all hover:scale-[1.01] <%= cardBorderBg %>"
+                                                data-sesi-id="<%= item.id %>"
+                                                data-sesi-matkul="<%= escapeJsStr(item.mataKuliah) %>"
+                                                data-sesi-kelas="<%= escapeJsStr(item.kelas) %>"
+                                                data-sesi-hari="<%= item.hari %>"
+                                                data-sesi-jam="<%= item.jamMulai %>"
+                                                data-sesi-ruang="<%= item.ruang %>"
                                                 data-hari="<%= item.hari %>" data-jenis="<%= item.jenis %>"
                                                 data-conflict="<%= isBentrok ? 'true' : 'false' %>"
                                                 data-search="<%= ((item.kodeMatkul || '') + ' ' + item.mataKuliah + ' ' + item.dosen + ' ' + item.ruang + ' ' + item.kelas + (isBentrok ? ' bentrok konflik error' : '')).toLowerCase() %>">
@@ -756,5 +795,108 @@
       filterHari?.addEventListener('change', applyFilter);
       filterTipe?.addEventListener('change', applyFilter);
       filterStatus?.addEventListener('change', applyFilter);
+    })();
+
+    // Drag-and-Drop Sesi Jadwal (Penyesuaian Manual Admin Bebas Bentrok)
+    (function initJadwalDragAndDrop() {
+      let draggedData = null;
+
+      document.querySelectorAll('.grid-slot-card').forEach(card => {
+        card.addEventListener('dragstart', (e) => {
+          draggedData = {
+            id: card.getAttribute('data-sesi-id'),
+            matkul: card.getAttribute('data-sesi-matkul'),
+            kelas: card.getAttribute('data-sesi-kelas'),
+            hari: card.getAttribute('data-sesi-hari'),
+            jam: card.getAttribute('data-sesi-jam'),
+            ruang: card.getAttribute('data-sesi-ruang')
+          };
+          e.dataTransfer.setData('text/plain', JSON.stringify(draggedData));
+          e.dataTransfer.effectAllowed = 'move';
+          card.classList.add('opacity-40', 'scale-95');
+        });
+
+        card.addEventListener('dragend', () => {
+          card.classList.remove('opacity-40', 'scale-95');
+          document.querySelectorAll('.slot-drop-target').forEach(el => {
+            el.classList.remove('bg-blue-100/70', 'dark:bg-blue-900/40', 'ring-2', 'ring-blue-500', 'ring-inset');
+          });
+        });
+      });
+
+      document.querySelectorAll('.slot-drop-target').forEach(target => {
+        target.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          target.classList.add('bg-blue-100/70', 'dark:bg-blue-900/40', 'ring-2', 'ring-blue-500', 'ring-inset');
+        });
+
+        target.addEventListener('dragleave', (e) => {
+          if (!target.contains(e.relatedTarget)) {
+            target.classList.remove('bg-blue-100/70', 'dark:bg-blue-900/40', 'ring-2', 'ring-blue-500', 'ring-inset');
+          }
+        });
+
+        target.addEventListener('drop', async (e) => {
+          e.preventDefault();
+          target.classList.remove('bg-blue-100/70', 'dark:bg-blue-900/40', 'ring-2', 'ring-blue-500', 'ring-inset');
+
+          let data = draggedData;
+          if (!data) {
+            try {
+              data = JSON.parse(e.dataTransfer.getData('text/plain'));
+            } catch (err) {
+              return;
+            }
+          }
+          if (!data || !data.id) return;
+
+          const targetHari = target.getAttribute('data-drop-hari');
+          const targetJam = target.getAttribute('data-drop-jam');
+
+          // Jika posisi hari dan slot jam sama, abaikan
+          if (data.hari === targetHari && String(data.jam).startsWith(targetJam.slice(0, 2))) {
+            return;
+          }
+
+          try {
+            if (window.JadwalinUI?.toast) {
+              window.JadwalinUI.toast.show(`Memindahkan ${data.matkul} (${data.kelas}) ke ${targetHari} ${targetJam}...`, 'info');
+            }
+
+            const res = await fetch('/api/jadwal/revisi', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                id: Number(data.id),
+                hari: targetHari,
+                jamMulai: targetJam,
+                ruang: data.ruang
+              })
+            });
+
+            const resData = await res.json();
+            if (!res.ok || resData.status !== 'success') {
+              const errMsg = resData.pesan || resData.message || 'Pemindahan jadwal gagal karena melanggar constraint.';
+              if (window.JadwalinUI?.toast) {
+                window.JadwalinUI.toast.show(errMsg, 'error');
+              } else {
+                alert(errMsg);
+              }
+              return;
+            }
+
+            const successMsg = resData.pesan || `Sesi berhasil dipindahkan ke ${targetHari} ${targetJam}.`;
+            if (window.JadwalinUI?.toast) {
+              window.JadwalinUI.toast.show(successMsg, 'success');
+            }
+            setTimeout(() => window.location.reload(), 600);
+          } catch (err) {
+            if (window.JadwalinUI?.toast) {
+              window.JadwalinUI.toast.show('Terjadi kesalahan jaringan saat memindahkan sesi.', 'error');
+            }
+          }
+        });
+      });
     })();
   </script>
