@@ -986,9 +986,10 @@ const simpanPrakrsSchema = z.object({
   kodePeminatan: z.enum(['SE', 'NS']).optional(),
   prefKelas: z.string().max(20).optional(),
   prefWaktu: z.string().max(15).optional(),
-  kodeMatkulList: z.array(z.string().trim().min(5).max(8)).min(1, 'Minimal 1 mata kuliah harus dipilih'),
+  kodeMatkulList: z.array(z.string().trim().min(2).max(10)).optional(),
   variasiIndex: z.coerce.number().int().min(0).max(20).optional(),
-  kelasPerMatkul: z.record(z.string()).optional()
+  kelasPerMatkul: z.record(z.string()).optional(),
+  selectedSesis: z.array(z.any()).optional()
 });
 
 exports.simpanPrakrs = async (req, res) => {
@@ -1000,7 +1001,7 @@ exports.simpanPrakrs = async (req, res) => {
     });
   }
 
-  const { semester, kodePeminatan, prefKelas, prefWaktu, kodeMatkulList, variasiIndex, kelasPerMatkul } = parsed.data;
+  const { semester, kodePeminatan, prefKelas, prefWaktu, kodeMatkulList, variasiIndex, kelasPerMatkul, selectedSesis } = parsed.data;
   const accessErr = await validatePraKrsAccess();
   if (accessErr) {
     return res.status(403).json({
@@ -1012,14 +1013,30 @@ exports.simpanPrakrs = async (req, res) => {
   if (parityErr) {
     return res.status(422).json({ sukses: false, pesan: parityErr });
   }
-  const rekomendasi = JadwalModel.rekomendasiPraKrs({
-    kodeMatkulList,
-    prefKelas: prefKelas || 'B',
-    prefHari: 'Semua',
-    prefWaktu: prefWaktu || 'Semua',
-    variasiIndex: variasiIndex || 0,
-    kelasPerMatkul: kelasPerMatkul || {}
-  });
+
+  let rekomendasi;
+  if (Array.isArray(selectedSesis) && selectedSesis.length > 0) {
+    const totalSks = selectedSesis.reduce((sum, s) => sum + (Number(s.sks) || 0), 0);
+    const calculatedKelasPerMatkul = { ...(kelasPerMatkul || {}) };
+    selectedSesis.forEach(s => {
+      const k = s.kodeMatkul || s.kode;
+      if (k && s.kelas) calculatedKelasPerMatkul[k] = s.kelas;
+    });
+    rekomendasi = {
+      rekomendasiSesi: selectedSesis,
+      totalSks,
+      zeroClash: true
+    };
+  } else {
+    rekomendasi = JadwalModel.rekomendasiPraKrs({
+      kodeMatkulList: kodeMatkulList || [],
+      prefKelas: prefKelas || 'B',
+      prefHari: 'Semua',
+      prefWaktu: prefWaktu || 'Semua',
+      variasiIndex: variasiIndex || 0,
+      kelasPerMatkul: kelasPerMatkul || {}
+    });
+  }
 
   if (req.user?.username) {
     JadwalModel.setSavedPrakrs(req.user.username, {
